@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dragula Simulator</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css" />
+  <script src="../drag_race_data.js" defer></script>
+  <script src="maxi_challenges.js" defer></script>
+  <script src="runways_data.js" defer></script>
+  <script src="guest_judges_data.js" defer></script>
+  <script src="floor_shows_data.js" defer></script>
+  <script src="fright_feats_data.js" defer></script>
+  <script src="exterminations_data.js" defer></script>
+  <script src="cauldron_events_data.js" defer></script>
+  <script src="simulator.js" defer></script>
+</head>
+<body>
+  <div class="app-shell dragula-app">
+    <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
+    <div class="mesh mesh-a"></div>
+    <div class="mesh mesh-b"></div>
+    <div class="grain"></div>
+
+    <header class="hero-header">
+      <div class="logo-glow-wrap">
+        <div class="logo-kicker">SIMUVERSE PRESENTS</div>
+        <h1 class="logo-main">DRAGULA SIMULATOR</h1>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="screen is-active" id="setup-screen">
+        <div class="screen-head tight">
+          <div><p class="eyebrow">Season Setup</p><h2>Build the Nightmare</h2></div>
+          <div class="screen-action-row">
+            <button class="secondary-btn" id="resetSetupBtn" type="button">Reset</button>
+            <button class="primary-btn" id="toCastBtn" type="button">Continue</button>
+          </div>
+        </div>
+
+        <div class="setup-grid slick-setup-grid">
+          <article class="panel setup-card setup-card-wide">
+            <div class="panel-head"><div><p class="eyebrow">Format</p><h3>Season Structure</h3></div></div>
+            <div class="field-grid two-col">
+              <label class="field"><span>Season Format</span><select id="eliminationFormatSelect"><option value="regular">Regular</option><option value="titans">Titans</option><option value="resurrection">Resurrection</option></select><small class="field-help" id="eliminationFormatHelp"></small></label>
+              <label class="field"><span>Premiere Format</span><select id="premiereTypeSelect"><option value="regular">Regular</option><option value="late_entry">Late Entry</option><option value="fakeout_elim">Fakeout Elimination</option></select><small class="field-help" id="premiereHelp"></small></label>
+            </div>
+          </article>
+
+          <article class="panel setup-card">
+            <div class="panel-head"><div><p class="eyebrow">Amounts</p><h3>Cast & Finale</h3></div></div>
+            <div class="field-grid two-col">
+              <label class="field"><span>Contestants <strong class="range-pill" id="castSizeValue">12</strong></span><input type="range" id="castSize" min="8" max="16" step="1" value="12"><small class="field-help">Choose how many monsters compete.</small></label>
+              <label class="field"><span>Finalists <strong class="range-pill" id="finalistSizeValue">3</strong></span><input type="range" id="finalistSize" min="3" max="4" step="1" value="3"><small class="field-help">Choose whether the finale crowns from a Top 3 or Top 4.</small></label>
+            </div>
+          </article>
+
+          <article class="panel setup-card tournament-settings-card" id="tournamentSettingsCard" hidden>
+            <div class="panel-head"><div><p class="eyebrow">Unused</p><h3>Hidden Settings</h3></div></div>
+            <input id="tournamentBracketCount" type="hidden" value="2"><span id="tournamentBracketCountValue" hidden>2</span>
+            <input id="tournamentAdvancers" type="hidden" value="2"><span id="tournamentAdvancersValue" hidden>2</span>
+            <input id="tournamentMergeEpisodes" type="hidden" value="2"><span id="tournamentMergeEpisodesValue" hidden>2</span>
+            <input id="tournamentPreMergeWildcard" type="checkbox" hidden><input id="tournamentPreFinaleWildcard" type="checkbox" hidden>
+          </article>
+
+          <article class="panel setup-card">
+            <div class="panel-head"><div><p class="eyebrow">Twists</p><h3>Season Twists</h3></div></div>
+            <div class="check-grid">
+              <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Curses</span></label>
+              <label class="toggle-row"><input type="checkbox" id="twistChocolateRandom"><span>Key of Life & Death</span></label>
+              <label class="toggle-row"><input type="checkbox" id="twistSonicTransducer"><span>Sonic Transducer</span></label>
+              <label class="toggle-row"><input type="checkbox" id="twistHellboundShowdown"><span>Hellbound Showdown</span></label>
+            </div>
+          </article>
+
+          <article class="panel setup-card">
+            <div class="panel-head"><div><p class="eyebrow">Controls</p><h3>Production Controls</h3></div></div>
+            <div class="check-grid">
+              <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Riggory</span></label>
+              <label class="toggle-row"><input type="checkbox" id="disableNonElimination"><span>Disable Non-Extermination Episodes</span></label>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="cast-screen">
+        <div class="screen-head tight">
+          <div><p class="eyebrow">Cast Selection</p><h2>Select the Monsters</h2></div>
+          <div class="screen-action-row"><button class="secondary-btn" id="backToSetupBtn" type="button">Back</button><button class="secondary-btn" id="resetSeasonBtnCast" type="button">Reset Season</button><button class="primary-btn" id="toEpisodeBtn" type="button">Start Season</button></div>
+        </div>
+        <div class="cast-layout">
+          <aside class="panel roster-panel">
+            <div class="panel-head compact-head split"><div><p class="eyebrow">Browse Contestants</p><h3>Roster</h3></div><span class="meta-chip"><strong id="availableCount">0</strong> in pool</span></div>
+            <div class="field-grid roster-controls">
+              <div class="field compact filter-field"><span>Shows</span><div class="dropdown-checklist" id="showFilter" data-placeholder="All Shows"></div></div>
+              <div class="field compact filter-field"><span>Seasons</span><div class="dropdown-checklist" id="seasonFilter" data-placeholder="All Seasons"></div></div>
+              <label class="field compact search-field"><span>Search</span><input type="text" id="searchFilter" placeholder="Search a monster..."></label>
+            </div>
+            <div class="roster-grid" id="rosterGrid"></div>
+            <div class="roster-action-row"><button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button><button class="secondary-btn" id="randomContestantBtn" type="button">Random Monster</button><button class="secondary-btn" id="presetCastBtn" type="button">Pre-Set Cast</button><button class="secondary-btn" id="customContestantBtn" type="button">Custom Monster</button><button class="secondary-btn danger-lite" id="resetCastBtn" type="button">Reset Cast</button></div>
+          </aside>
+          <section class="panel selected-panel">
+            <div class="panel-head compact-head split"><div><p class="eyebrow">Lineup</p><h3>Selected Monsters</h3></div><span class="meta-chip"><strong id="selectedCount">0</strong>/<span id="slotCount">0</span> selected</span></div>
+            <div class="team-legend" id="teamLegend"></div><div class="selected-grid" id="selectedGrid"></div>
+            <div class="lineup-action-row"><button class="secondary-btn" id="viewAllSkillsBtn" type="button">View Skill Key</button><button class="secondary-btn" id="viewRelationshipKeyBtn" type="button">Relationship Key</button></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen" id="episode-screen">
+        <div class="episode-topbar"><div class="episode-title-stack"><h2 id="episodeTitle">Episode 1</h2><p class="episode-subline" id="episodeSubline">Status</p></div><div class="episode-controls"><select id="episodeSelect" class="episode-select"></select><button class="secondary-btn" id="backToCastBtnEpisode" type="button">Back to Cast</button><button class="secondary-btn" id="resetSeasonBtnEpisode" type="button">Reset Season</button><button class="primary-btn" id="toStatsBtn" type="button">Statistics</button></div></div>
+        <div class="section-toggle-row">
+          <button class="section-toggle" data-step="returnee">Wildcard Entry</button><button class="section-toggle is-active" data-step="status">Status</button><button class="section-toggle" data-step="guest">Guest Judge</button><button class="section-toggle" data-step="mini">Fright Feat</button><button class="section-toggle" data-step="teams">Curse / Power</button><button class="section-toggle" data-step="maxi">Floor Show</button><button class="section-toggle" data-step="judging">Judging</button><button class="section-toggle" data-step="placements">Placements</button><button class="section-toggle" data-step="cauldron">The Cauldron</button><button class="section-toggle" data-step="lipsync">Extermination</button><button class="section-toggle" data-step="results">Death Scene</button><button class="section-toggle" data-step="hellbound">Hellbound Showdown</button><button class="section-toggle" data-step="winner">Finale</button>
+        </div>
+        <div class="panel episode-panel-shell">
+          <section class="episode-panel" data-panel="returnee"><div class="section-title">Wildcard Entry</div><div class="event-stack" id="wildcardEntryStack"></div><div class="proceed-row"><button class="primary-btn proceed-btn" data-next="status">Proceed</button></div></section>
+          <section class="episode-panel is-active" data-panel="status"><div class="section-title">Remaining Monsters</div><div class="contestant-strip" id="remainingStrip"></div><div class="section-title section-gap" id="eliminatedTitle">Exterminated Monsters</div><div class="contestant-strip" id="eliminatedStrip"></div><div class="proceed-row"><button class="primary-btn proceed-btn" data-next="guest">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="guest"><div class="section-title">Guest Judge</div><div class="event-stack" id="guestJudgeStack"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="status">Back</button><button class="primary-btn proceed-btn" data-next="mini">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="mini"><div class="section-title">Fright Feat</div><div class="event-stack" id="miniChallengeStack"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="guest">Back</button><button class="primary-btn proceed-btn" data-next="teams">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="teams"><div class="section-title">Curse / Power</div><div class="event-stack" id="teamPickingStack"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="mini">Back</button><button class="primary-btn proceed-btn" data-next="maxi">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="maxi"><div class="section-title">Floor Show</div><div class="challenge-summary" id="challengeSummary"></div><div class="challenge-grid" id="challengeGrid"></div><div class="challenge-summary" id="runwaySummary" hidden></div><div class="challenge-grid" id="runwayGrid" hidden></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="teams">Back</button><button class="primary-btn proceed-btn" data-next="judging">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="judging"><div class="section-title">Judging</div><div class="judging-stack" id="judgingStack"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="maxi">Back</button><button class="primary-btn proceed-btn" data-next="placements">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="placements"><div class="section-title">Placements</div><div class="callout-grid" id="placementsGrid"></div><div class="bottom-two-box token-btm2" id="bottomTwoBox"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="judging">Back</button><button class="primary-btn proceed-btn" data-next="cauldron">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="cauldron"><div class="section-title">The Cauldron</div><div class="event-stack" id="cauldronStack"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="placements">Back</button><button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="lipsync"><div class="section-title">Extermination Challenge</div><div class="reveal-board" id="lipSyncBoard"></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="cauldron">Back</button><button class="primary-btn proceed-btn" data-next="results">Proceed</button></div></section>
+          <section class="episode-panel" data-panel="results"><div class="section-title" id="resultsSectionTitle">Death Scene</div><div class="reveal-board" id="revealBoard"></div><div class="crowning-message" id="crowningMessage"></div><div class="center-actions"><button class="primary-btn" id="revealResultsBtn" type="button">Reveal Death</button></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="lipsync">Back</button><button class="primary-btn proceed-btn results-to-hellbound-btn" data-next="hellbound" type="button">Proceed</button><button class="primary-btn next-episode-btn results-next-episode-btn" type="button">Next Episode</button></div></section><section class="episode-panel" data-panel="hellbound"><div class="section-title">Hellbound Showdown</div><div class="event-stack" id="hellboundStack"></div><div class="center-actions"><button class="primary-btn" id="revealHellboundBtn" type="button">Reveal Results</button><button class="primary-btn next-episode-btn hellbound-next-btn" type="button">Next Episode</button></div></section>
+          <section class="episode-panel" data-panel="winner"><div class="section-title">Grand Finale</div><div class="reveal-board" id="winnerBoard"></div><div class="crowning-message" id="winnerCrowningMessage"></div><div class="center-actions"><button class="primary-btn" id="revealCrownWinnerBtn" type="button">Reveal Winner</button></div><div class="proceed-row dual"><button class="secondary-btn proceed-btn" data-next="status">Back</button><button class="primary-btn" id="allWinnersFinalStatsBtn" type="button">Statistics</button></div></section>
+          <div hidden><div id="wildcardStack"></div><div id="rateQueenStack"></div><div id="luckyCowStack"></div><div id="goldenBeaverStack"></div><div id="rumocracyStack"></div><div id="qosdadhhBoard"></div><div id="lsftcBoard"></div><div id="badonkaDunkTankStack"></div><div id="s17LsfylBoard"></div><div id="s17LsfylResultsBoard"></div><div id="s17LsfylCrowningMessage"></div><button id="revealS17LsfylResultsBtn"></button><div id="untuckedStack"></div><button id="finishEpisodeBtn"></button><div id="pointCeremonyStack"></div><button id="finishPointCeremonyBtn"></button></div>
+        </div>
+      </section>
+
+      <section class="screen" id="stats-screen">
+        <div class="screen-head tight"><div><p class="eyebrow">Statistics</p><h2>Season Statistics</h2></div><div class="screen-action-row"><button class="secondary-btn" id="backToEpisodeBtn" type="button">Back to Episodes</button><button class="secondary-btn" id="backToCastBtnStats" type="button">Back to Cast</button><button class="secondary-btn" id="resetSeasonBtnStats" type="button">Reset Season</button></div></div>
+        <div class="stats-nav"><button class="stats-tab is-active" data-tab="track">Track Record</button><button class="stats-tab" data-tab="lipsyncs">Exterminations</button><button class="stats-tab" data-tab="floorshows">Floor Shows</button><button class="stats-tab" data-tab="records">Records</button></div>
+        <div class="stats-panel is-active" data-tab-panel="track"><div class="track-download-row"><button class="secondary-btn" id="downloadTrackBtn" type="button">Download</button></div><div class="table-wrap" id="trackWrap"></div><div class="legend-rows" id="trackLegend"></div></div>
+        <div class="stats-panel" data-tab-panel="lipsyncs"><div class="table-wrap" id="lipSyncStatsWrap"></div></div>
+        <div class="stats-panel" data-tab-panel="floorshows"><div class="table-wrap" id="floorShowsStatsWrap"></div></div>
+        <div class="stats-panel" data-tab-panel="records"><div class="records-grid compact" id="recordsGrid"></div></div>
+        <div hidden><div id="runwayStatsWrap"></div><div id="challengeStatsWrap"></div></div>
+        <div hidden><div id="starCountWrap"></div><div id="pointSummaryWrap"></div><div id="pointBracketWrap"></div><div id="popularityWrap"></div><div id="edgicWrap"></div><div id="votingStatsWrap"></div></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="skill-modal" id="skillModal"><form method="dialog" class="skill-form" id="skillForm"><div class="modal-head"><h3 id="modalContestantName">Monster Skills</h3><button type="button" class="icon-close" id="closeSkillModal">×</button></div><div class="modal-profile" id="modalProfile"></div><div class="skills-stack" id="skillsStack"></div></form></dialog>
+  <dialog class="preset-modal" id="presetCastModal">
+    <form method="dialog" class="preset-form" id="presetCastForm">
+      <div class="modal-head preset-modal-head">
+        <div>
+          <p class="eyebrow">Pre-Set Cast</p>
+          <h3>Choose a Show & Season</h3>
+        </div>
+        <button type="button" class="icon-close" id="closePresetCastModal">×</button>
+      </div>
+      <div class="field-grid two-col preset-cast-fields">
+        <label class="field">
+          <span>Show</span>
+          <select id="presetShowSelect"></select>
+        </label>
+        <label class="field">
+          <span>Season</span>
+          <select id="presetSeasonSelect"></select>
+        </label>
+      </div>
+      <div class="modal-actions preset-cast-actions">
+        <button type="button" class="secondary-btn" id="cancelPresetCastBtn">Cancel</button>
+        <button type="submit" class="primary-btn">Load Cast</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog class="custom-contestant-modal" id="customContestantModal">
+    <form method="dialog" class="custom-contestant-form" id="customContestantForm">
+      <div class="modal-head custom-modal-head">
+        <div>
+          <p class="eyebrow">Custom Monster</p>
+          <h3>Create or Edit Monster</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeCustomContestantModal">×</button>
+      </div>
+
+      <input type="hidden" id="customContestantId">
+
+      <div class="custom-contestant-builder">
+        <aside class="custom-preview-panel">
+          <div class="custom-preview-title">
+            <p class="eyebrow">Preview</p>
+            <span class="meta-chip">Custom</span>
+          </div>
+          <div class="modal-profile custom-image-preview" id="customImagePreview"></div>
+        </aside>
+
+        <section class="custom-edit-panel">
+          <div class="field-grid custom-contestant-fields">
+            <label class="field">
+              <span>Full Name</span>
+              <input type="text" id="customFullName" placeholder="e.g. Mother Rot" required>
+            </label>
+            <label class="field">
+              <span>Nickname</span>
+              <input type="text" id="customNickname" placeholder="e.g. Rot">
+            </label>
+            <label class="field custom-image-url-field">
+              <span>Photo URL</span>
+              <div class="custom-url-control">
+                <span class="custom-url-pill">URL</span>
+                <input type="url" id="customImageUrl" placeholder="https://example.com/photo.jpg">
+              </div>
+              <small class="field-help">Paste a direct image link. Empty or broken links use the default placeholder.</small>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <section class="custom-skills-card">
+        <div class="custom-skills-head">
+          <div>
+            <p class="eyebrow">Skills</p>
+            <small class="field-help">Set each skill from 1 to 15.</small>
+          </div>
+          <button type="button" class="secondary-btn custom-randomize-skills-btn" id="randomizeCustomSkillsBtn">Randomize Skills</button>
+        </div>
+        <div class="skills-stack custom-skills-stack" id="customSkillsStack"></div>
+      </section>
+
+      <div class="modal-actions custom-contestant-actions">
+        <button type="button" class="secondary-btn danger-lite" id="deleteCustomContestantBtn" hidden>Delete</button>
+        <button type="button" class="secondary-btn" id="cancelCustomContestantBtn">Cancel</button>
+        <button type="submit" class="primary-btn">Save Monster</button>
+      </div>
+    </form>
+  </dialog>
+<dialog class="relationship-modal" id="relationshipModal"><form method="dialog" class="skill-form"><div class="modal-head"><h3>Relationship Key</h3><button type="button" class="icon-close" id="closeRelationshipModal">×</button></div><div class="relationships-stack" id="relationshipsStack"></div></form></dialog>
+</body>
+</html>
