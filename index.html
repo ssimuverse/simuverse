@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIMUVERSE</title>  
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="soft-bg" aria-hidden="true">
+    <div class="blur-spot spot-one"></div>
+    <div class="blur-spot spot-two"></div>
+    <div class="blur-spot spot-three"></div>
+    <div class="grain"></div>
+  </div>
+
+  <div class="page-overlay" id="pageOverlay"></div>
+
+  <main class="main-page">
+    <header class="main-header">
+      <div class="brand-row" aria-label="SIMUVERSE home">
+        <span class="brand-mark">S</span>
+        <span class="brand-name">SIMUVERSE</span>
+      </div>
+
+      <div class="hero-copy">
+        <h1>SIMUVERSE</h1>
+        <p class="main-subtitle">Choose The Simulator</p>
+
+        <nav class="main-actions" aria-label="SIMUVERSE links">
+          <a class="main-action-btn" href="https://discord.gg/U6E6BJ2hsV">DISCORD</a>
+          <a class="main-action-btn" href="https://forms.gle/TvVrg3ENdn3gE9Cg6">SUGGESTIONS</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="shows-grid" id="showsGrid" aria-label="Simulator list"></section>
+  </main>
+
+  <script>
+    const shows = [
+      {
+        name: "Drag Race",
+        slug: "drag_race",
+        folder: "drag_race",
+        accent: "214, 42, 119",
+        accentDeep: "122, 12, 69",
+        description:
+          "Queens enter the werkroom ready to serve looks, shade, comedy, and charisma as they battle through challenges, runways, and lip-syncs."
+      },
+      {
+        name: "Dragula",
+        slug: "dragula",
+        folder: "dragula",
+        accent: "132, 28, 43",
+        accentDeep: "76, 10, 21",
+        description:
+          "Drag monsters compete in horror, filth, glamour, and extreme performance to prove they are the ultimate alternative drag icon."
+      }
+    ];
+
+    const showsGrid = document.getElementById("showsGrid");
+    const pageOverlay = document.getElementById("pageOverlay");
+
+    function buildCard(show, index) {
+      const aDur = 7 + (index % 4) * 0.7;
+      const bDur = 8.6 + (index % 5) * 0.55;
+      const aDelay = -index * 0.55;
+      const bDelay = -index * 0.8;
+
+      return `
+        <article
+          class="show-card"
+          tabindex="0"
+          role="button"
+          aria-label="Open ${show.name}"
+          aria-expanded="false"
+          data-index="${index}"
+          style="
+            --accent-rgb: ${show.accent};
+            --accent-deep-rgb: ${show.accentDeep};
+            --light-a-dur: ${aDur}s;
+            --light-b-dur: ${bDur}s;
+            --light-a-delay: ${aDelay}s;
+            --light-b-delay: ${bDelay}s;
+          "
+        >
+          <div class="card-bg" aria-hidden="true"></div>
+          <div class="box-lights" aria-hidden="true">
+            <span class="box-light light-one"></span>
+            <span class="box-light light-two"></span>
+            <span class="box-light light-three"></span>
+          </div>
+
+          <div class="compact-face">
+            <div class="logo-wrap">
+              <img
+                class="show-logo"
+                src="logos/${show.slug}.png"
+                alt="${show.name}"
+                loading="lazy"
+              />
+            </div>
+
+            <span class="open-dot" aria-hidden="true">+</span>
+          </div>
+
+          <div class="expanded-layer" aria-hidden="true">
+            <button class="close-btn" type="button" aria-label="Close ${show.name}">×</button>
+
+            <div class="expanded-copy">
+              <h2>${show.name}</h2>
+              <p>${show.description}</p>
+              <a class="start-btn" href="${show.folder}/index.html" tabindex="-1">Start</a>
+            </div>
+
+            <div class="preview-panel" aria-hidden="true">
+              <img
+                class="show-preview"
+                src="logos/${show.slug}_2.png"
+                alt=""
+                loading="lazy"
+              />
+              <div class="preview-fade"></div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    showsGrid.innerHTML = shows.map(buildCard).join("");
+
+    const cards = [...document.querySelectorAll(".show-card")];
+    let activeCard = null;
+    let activePlaceholder = null;
+    let isAnimating = false;
+
+    function getPopupRect() {
+      const isSmall = window.innerWidth <= 680;
+      const marginX = isSmall ? 18 : 42;
+      const marginY = isSmall ? 34 : 72;
+
+      const width = Math.min(isSmall ? 560 : 920, window.innerWidth - marginX * 2);
+      const height = Math.min(isSmall ? 560 : 440, window.innerHeight - marginY * 2);
+
+      return {
+        left: (window.innerWidth - width) / 2,
+        top: (window.innerHeight - height) / 2,
+        width,
+        height
+      };
+    }
+
+    function setFloatingRect(card, rect) {
+      card.style.left = `${rect.left}px`;
+      card.style.top = `${rect.top}px`;
+      card.style.width = `${rect.width}px`;
+      card.style.height = `${rect.height}px`;
+    }
+
+    function clearFloatingStyles(card) {
+      ["position", "left", "top", "width", "height", "margin", "z-index", "transform"].forEach(prop => {
+        card.style.removeProperty(prop);
+      });
+    }
+
+    function setExpandedState(card, active) {
+      const layer = card.querySelector(".expanded-layer");
+      const start = card.querySelector(".start-btn");
+      const close = card.querySelector(".close-btn");
+
+      card.setAttribute("aria-expanded", active ? "true" : "false");
+      layer.setAttribute("aria-hidden", active ? "false" : "true");
+      start.tabIndex = active ? 0 : -1;
+      close.tabIndex = active ? 0 : -1;
+    }
+
+    function openCard(card) {
+      if (isAnimating || activeCard) return;
+
+      isAnimating = true;
+      activeCard = card;
+
+      const cardRect = card.getBoundingClientRect();
+
+      activePlaceholder = document.createElement("div");
+      activePlaceholder.className = "show-placeholder";
+      activePlaceholder.style.height = `${cardRect.height}px`;
+
+      card.parentNode.insertBefore(activePlaceholder, card);
+
+      card.classList.add("is-transitioning");
+      card.style.position = "fixed";
+      card.style.margin = "0";
+      card.style.zIndex = "70";
+      card.style.transform = "none";
+
+      setFloatingRect(card, {
+        left: cardRect.left,
+        top: cardRect.top,
+        width: cardRect.width,
+        height: cardRect.height
+      });
+
+      card.offsetHeight;
+
+      pageOverlay.classList.add("is-active");
+      card.classList.add("is-active");
+      setExpandedState(card, true);
+
+      requestAnimationFrame(() => {
+        setFloatingRect(card, getPopupRect());
+      });
+
+      window.setTimeout(() => {
+        isAnimating = false;
+      }, 480);
+    }
+
+    function finishClose(card, placeholder) {
+      card.classList.remove("is-transitioning");
+      clearFloatingStyles(card);
+      setExpandedState(card, false);
+
+      if (placeholder && placeholder.parentNode) {
+        placeholder.parentNode.removeChild(placeholder);
+      }
+
+      activeCard = null;
+      activePlaceholder = null;
+      isAnimating = false;
+    }
+
+    function closeCard(immediate = false) {
+      if (!activeCard) return;
+
+      const card = activeCard;
+      const placeholder = activePlaceholder;
+      const targetRect = placeholder.getBoundingClientRect();
+
+      isAnimating = true;
+      pageOverlay.classList.remove("is-active");
+      card.classList.remove("is-active");
+      setExpandedState(card, false);
+
+      if (immediate) {
+        finishClose(card, placeholder);
+        return;
+      }
+
+      setFloatingRect(card, {
+        left: targetRect.left,
+        top: targetRect.top,
+        width: targetRect.width,
+        height: targetRect.height
+      });
+
+      window.setTimeout(() => {
+        finishClose(card, placeholder);
+      }, 450);
+    }
+
+    cards.forEach(card => {
+      setExpandedState(card, false);
+
+      card.addEventListener("click", event => {
+        const start = event.target.closest(".start-btn");
+        const close = event.target.closest(".close-btn");
+
+        if (start) {
+          if (!card.classList.contains("is-active")) event.preventDefault();
+          return;
+        }
+
+        if (close) {
+          event.stopPropagation();
+          closeCard();
+          return;
+        }
+
+        if (!card.classList.contains("is-active")) {
+          openCard(card);
+        }
+      });
+
+      card.addEventListener("keydown", event => {
+        if ((event.key === "Enter" || event.key === " ") && !card.classList.contains("is-active")) {
+          event.preventDefault();
+          openCard(card);
+        }
+
+        if (event.key === "Escape") {
+          closeCard();
+        }
+      });
+    });
+
+    pageOverlay.addEventListener("click", () => closeCard());
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeCard();
+    });
+
+    window.addEventListener("resize", () => {
+      if (!activeCard || isAnimating) return;
+      setFloatingRect(activeCard, getPopupRect());
+    });
+  </script>
+</body>
+</html>
