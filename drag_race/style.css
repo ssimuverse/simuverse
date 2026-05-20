@@ -2587,7 +2587,12 @@ dialog::backdrop { background: rgba(8,0,18,.62); backdrop-filter: blur(8px); }
   margin-inline: auto !important;
 }
 
-.mx-vote-card.is-top-vote,
+.mx-vote-card.is-top-vote {
+  background: rgba(255,255,255,.075) !important;
+  color: inherit !important;
+  border-color: rgba(255, 209, 102, .95) !important;
+  box-shadow: 0 10px 24px rgba(8,0,18,.18), 0 0 0 2px rgba(255, 209, 102, .38), var(--glow-gold) !important;
+}
 .weekly-voting-table .vote-top-vote,
 .voting-legend .vote-top-vote {
   background: #ffff00 !important;
@@ -5090,6 +5095,7 @@ body.checklist-dropdown-open #cast-screen .search-field {
 }
 
 .lip-sync-result-row,
+.all-stars-bottoms,
 .lalaparuza-inline-results,
 .reveal-board .contestant-strip.lip-sync-result-row {
   display: flex !important;
@@ -5103,6 +5109,7 @@ body.checklist-dropdown-open #cast-screen .search-field {
   grid-template-columns: none !important;
 }
 .lip-sync-result-row > .result-card,
+.all-stars-bottoms > .result-card,
 .lalaparuza-inline-results > .result-card,
 .reveal-board .lip-sync-result-row > .result-card {
   flex: 0 0 178px !important;
@@ -6541,16 +6548,6 @@ body.checklist-dropdown-open #cast-screen .search-field {
   text-shadow: none !important;
   pointer-events: none !important;
 }
-.track-table .track-challenge-row .track-challenge-type-head:first-child {
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.11), rgba(255,255,255,.04)),
-    rgba(43,10,68,.84) !important;
-  color: rgba(253,244,255,.84) !important;
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-  border-color: rgba(255,255,255,.13) !important;
-}
 .track-table thead th[rowspan="2"] {
   vertical-align: middle !important;
   min-width: 170px !important;
@@ -6748,3 +6745,227 @@ body.checklist-dropdown-open #cast-screen .search-field {
 .reveal-cunt-test-winner-btn {
   min-width: 190px;
 }
+
+
+.lip-sync-stats-table .ls-lalaparuza-r1,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r1 {
+  background: #dda0dd !important;
+  color: #111 !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-r2,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r2 {
+  background: #ee82ee !important;
+  color: #111 !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-r3,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r3 {
+  background: #ec5aec !important;
+  color: #111 !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-r4,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r4 {
+  background: #d32ad3 !important;
+  color: #fff !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-r5,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r5 {
+  background: #b816b8 !important;
+  color: #fff !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-final,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-final {
+  background: #d4af37 !important;
+  color: #111 !important;
+}
+.lip-sync-stats-table .ls-lalaparuza-r4 .stat-contestant,
+.lip-sync-stats-table .ls-lalaparuza-r5 .stat-contestant,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r4 .stat-contestant,
+.all-winners-lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r5 .stat-contestant {
+  color: #fff !important;
+}
+
+.episode-track-wrap {
+  margin-top: 12px;
+}
+.episode-track-note {
+  margin: 0 0 14px;
+  color: var(--ink-muted);
+  font-weight: 800;
+  text-align: center;
+}
+.episode-track-table th:first-child,
+.episode-track-table td:first-child {
+  min-width: 210px;
+}
+.episode-track-table .ppe-cell,
+.episode-track-table .ppe-col {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+}
+
+/* Final fixes: lip sync stats purpose column and Legacy chop spacing */
+.lip-sync-stats-table .lip-sync-purpose {
+  font-weight: 950 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+.lip-sync-stats-table .ls-purpose-crown {
+  background: rgba(212, 175, 55, .30) !important;
+  color: #fff7c2 !important;
+}
+.lip-sync-stats-table .ls-purpose-win {
+  background: rgba(238, 130, 238, .22) !important;
+  color: #ffd7ff !important;
+}
+.lip-sync-stats-table .ls-purpose-elim {
+  background: rgba(255, 71, 126, .18) !important;
+  color: #ffd5e0 !important;
+}
+.all-stars-elimination-reveal .all-stars-bottoms {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: stretch !important;
+  gap: 30px !important;
+  max-width: 760px !important;
+  margin: 22px auto 18px !important;
+}
+.all-stars-elimination-reveal .all-stars-bottoms > .result-card {
+  flex: 0 0 190px !important;
+  width: 190px !important;
+  max-width: 190px !important;
+  margin: 0 !important;
+}
+.all-stars-elimination-reveal .all-stars-bottoms > .result-card .avatar {
+  width: 118px !important;
+  height: 118px !important;
+}
+@media (max-width: 560px) {
+  .all-stars-elimination-reveal .all-stars-bottoms {
+    gap: 18px !important;
+  }
+  .all-stars-elimination-reveal .all-stars-bottoms > .result-card {
+    flex-basis: 160px !important;
+    width: 160px !important;
+    max-width: 160px !important;
+  }
+}
+
+
+.track-table .track-cell.tournament-elim-suffix {
+  box-shadow: none !important;
+}
+
+.track-table thead th[rowspan="2"],
+.track-table tbody th:first-child,
+.track-table td.ppe-cell {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.track-table tbody th:first-child .stat-contestant {
+  justify-content: center !important;
+  margin-inline: auto !important;
+}
+
+.track-table thead .ppe-col[rowspan="2"] {
+  height: 64px !important;
+  min-height: 64px !important;
+  padding: 7px 5px !important;
+}
+
+.lip-sync-stats-table .lip-sync-header-row th {
+  background:
+    linear-gradient(135deg, rgba(255,79,216,.30), rgba(255,209,102,.14)),
+    rgba(43,10,68,.94) !important;
+  color: var(--ink-strong) !important;
+  text-align: center !important;
+  border-radius: 14px !important;
+  letter-spacing: .055em !important;
+}
+
+.variable-lip-sync-stats-table tbody tr:first-child th {
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
+
+/* Targeted fixes for PPE width, centered headers, and first challenge-type cell consistency */
+.track-table thead th.ppe-col[rowspan="2"],
+.track-table th.ppe-col,
+.track-table td.ppe-cell,
+.episode-track-table .ppe-cell,
+.episode-track-table .ppe-col {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+.track-table thead th[rowspan="2"]:first-child {
+  min-width: 170px !important;
+  width: 170px !important;
+  max-width: 230px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+.track-table thead .track-challenge-row th.track-challenge-type-head,
+.track-table thead .track-challenge-row th.track-challenge-type-head:first-child {
+  background: rgba(255,255,255,.78) !important;
+  color: #303040 !important;
+  border: 1px solid rgba(40,40,70,.10) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07) !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+.track-table thead .track-challenge-row th.track-challenge-type-head .track-head-challenge,
+.track-table thead .track-challenge-row th.track-challenge-type-head:first-child .track-head-challenge {
+  color: #303040 !important;
+  opacity: .94 !important;
+}
+
+.track-table thead .track-challenge-row th.track-challenge-type-head,
+.track-table thead .track-challenge-row th.track-challenge-type-head:first-child {
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 5px 4px 5px !important;
+  background:
+    linear-gradient(135deg, rgba(255,79,216,.28), rgba(124,58,237,.22)),
+    rgba(35, 8, 54, .94) !important;
+  color: var(--ink-strong) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 5px 14px rgba(8,0,18,.14) !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+.track-table thead .track-challenge-row th.track-challenge-type-head .track-head-cell,
+.track-table thead .track-challenge-row th.track-challenge-type-head:first-child .track-head-cell {
+  min-height: 0 !important;
+}
+.track-table thead .track-challenge-row th.track-challenge-type-head .track-head-episode,
+.track-table thead .track-challenge-row th.track-challenge-type-head:first-child .track-head-episode {
+  color: var(--ink-strong) !important;
+  font-size: 8.5px !important;
+  font-weight: 950 !important;
+  line-height: 1.02 !important;
+  opacity: 1 !important;
+  white-space: normal !important;
+}
+.popularity-table .pop-super-high { background: #167a3f !important; color: #fff !important; }
+.popularity-table .pop-super-low { background: #640018 !important; color: #fff !important; }
+
+
+.popularity-table .pop-super-high { background: #056839 !important; color: #fff !important; }
+.popularity-table .pop-high { background: #2fbf71 !important; color: #10151f !important; }
+.popularity-table .pop-mid-high { background: #a7e46b !important; color: #10151f !important; }
+.popularity-table .pop-mid { background: #ffe66d !important; color: #10151f !important; }
+.popularity-table .pop-mid-low { background: #ffb347 !important; color: #10151f !important; }
+.popularity-table .pop-low { background: #ff7a00 !important; color: #10151f !important; }
+.popularity-table .pop-very-low { background: #d62828 !important; color: #fff !important; }
+.popularity-table .pop-super-low { background: #65000b !important; color: #fff !important; }
