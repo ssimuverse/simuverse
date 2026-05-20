@@ -543,6 +543,7 @@
     cuntTestPart3Stack: document.getElementById("cuntTestPart3Stack"),
 
     trackWrap: document.getElementById("trackWrap"),
+    episodeTrackWrap: document.getElementById("episodeTrackWrap"),
     trackLegend: document.getElementById("trackLegend"),
     downloadTrackRecordBtn: document.getElementById("downloadTrackRecordBtn"),
     lipSyncStatsWrap: document.getElementById("lipSyncStatsWrap"),
@@ -1791,7 +1792,7 @@
     $all(".screen").forEach((screen) => screen.classList.toggle("is-active", screen.id === id));
   }
 
-  const EPISODE_STEPS = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony"];
+  const EPISODE_STEPS = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
 
   function setEpisodeStep(step) {
     if (step === "__nextEpisode") {
@@ -1859,15 +1860,15 @@
   }
 
   function episodeStepOrder(ep = currentEpisode()) {
-    const base = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony"];
+    const base = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
     const format = ep?.comeback?.format || "none";
     const position = ep?.comeback?.position || comebackPosition(format);
-    if (ep?.type === "cunt_test") return ["status", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "lipsync", "results"];
-    if (ep?.type === "porkchop_premiere") return ["status", "maxi"];
-    if (format === "lalaparuza_comeback" || format === "game_within_a_game") return ["wildcard", "status", "comeback", "lipsync"];
-    if (position === "postMini") return ["wildcard", "status", "guest", "mini", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony"];
-    if (position === "preMaxi") return ["wildcard", "status", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony"];
-    if (position === "standalone") return ["wildcard", "status", "comeback", "maxi", "placements", "lipsync", "results"];
+    if (ep?.type === "cunt_test") return ["status", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "lipsync", "results", "trackrecord"];
+    if (ep?.type === "porkchop_premiere") return ["status", "maxi", "trackrecord"];
+    if (format === "lalaparuza_comeback" || format === "game_within_a_game") return ["wildcard", "status", "comeback", "lipsync", "trackrecord"];
+    if (position === "postMini") return ["wildcard", "status", "guest", "mini", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
+    if (position === "preMaxi") return ["wildcard", "status", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
+    if (position === "standalone") return ["wildcard", "status", "comeback", "maxi", "placements", "lipsync", "results", "trackrecord"];
     return base;
   }
 
@@ -2559,7 +2560,7 @@ Options: ${names}`, "") || "";
     const ids = (season.castOrder || []).slice();
     const count = Number(season.config.tournamentBracketCount || 2);
     const perBracket = ids.length / count;
-    const defaultColors = ["#3b82f6", "#facc15", "#ef4444", "#22c55e"];
+    const defaultColors = ["#F749E4", "#FB8212", "#B039CE", "#FFE500", "#A1EA0E"];
     const emptySlots = () => Array.from({ length: count }, () => Array.from({ length: perBracket }, () => ""));
     let slots = emptySlots();
     const allSelected = () => slots.flat().filter(Boolean);
@@ -3271,7 +3272,7 @@ Options: ${names}`, "") || "";
     if (!season.tournamentBrackets?.length) {
       const count = Number(season.config.tournamentBracketCount || 2);
       const per = season.castOrder.length / count;
-      season.tournamentBrackets = Array.from({ length: count }, (_, i) => ({ id: `bracket_${i + 1}`, name: `Bracket ${i + 1}`, color: ["#3b82f6", "#facc15", "#ef4444", "#22c55e"][i], ids: season.castOrder.slice(i * per, (i + 1) * per), episodeLabels: [] }));
+      season.tournamentBrackets = Array.from({ length: count }, (_, i) => ({ id: `bracket_${i + 1}`, name: `Bracket ${i + 1}`, color: ["#F749E4", "#FB8212", "#B039CE", "#FFE500", "#A1EA0E"][i] || "#F749E4", ids: season.castOrder.slice(i * per, (i + 1) * per), episodeLabels: [] }));
       season.tournamentPoints = Object.fromEntries(season.castOrder.map((id) => [id, 0]));
     }
     const merged = [];
@@ -3322,15 +3323,10 @@ Options: ${names}`, "") || "";
     const entry = [...track].reverse().find((x) => x.label === label);
     if (!entry) return;
     const priorToken = String(entry.token || "");
-    if (priorToken === "WIN" || priorToken === "TOP2") {
-      entry.extraClasses = [...new Set([...(entry.extraClasses || []), "tournament-elim-suffix"])];
-      entry.display = `${priorToken}+<br/>ELIM`;
-      entry.eliminated = true;
-      return;
-    }
-    entry.extraClasses = [...new Set([...(entry.extraClasses || []), "double-elim", "tournament-elim-suffix"])];
+    const combinedDisplay = (priorToken === "WIN" || priorToken === "TOP2") ? `${priorToken}+<br/>ELIM` : "ELIM";
     entry.token = "ELIM";
-    entry.display = "ELIM";
+    entry.display = combinedDisplay;
+    entry.extraClasses = (entry.extraClasses || []).filter((className) => !["double-elim", "tournament-elim-suffix"].includes(className));
     entry.eliminated = true;
   }
 
@@ -4111,8 +4107,16 @@ Options: ${names}`, "") || "";
     return average((pair?.ids || []).map((id) => scoreForEpisodeId(episode, id, "total")));
   }
 
+  function regularPremiereUsesSeasonFormat(season, episode) {
+    return !!(episode?.premiere && !episode?.specialPremiere && (season?.config?.premiereType || "regular") === "regular");
+  }
+
+  function seasonEliminationFormatApplies(season, episode) {
+    return !episode?.premiere || regularPremiereUsesSeasonFormat(season, episode);
+  }
+
   function shouldUseAllStarsFormat(season, episode) {
-    return episode.type === "competitive" && !episode.premiere && (isLegacyFormat(season) || isAssassinFormat(season));
+    return episode.type === "competitive" && seasonEliminationFormatApplies(season, episode) && (isLegacyFormat(season) || isAssassinFormat(season));
   }
 
   function scoreForEpisodeId(episode, id, field = "total") {
@@ -4448,7 +4452,7 @@ Options: ${names}`, "") || "";
     if (special === "mid_season_rate_a_queen") return assignMidSeasonRateAQueenPlacements(season, episode);
     if (special === "rate_a_queen_merge") return assignRateAQueenMergePlacements(season, episode);
 
-    if (isGoldenBeaverFormat(season) && !episode.premiere) return assignGoldenBeaverPlacements(season, episode);
+    if (isGoldenBeaverFormat(season) && seasonEliminationFormatApplies(season, episode)) return assignGoldenBeaverPlacements(season, episode);
     if (shouldUseAllStarsFormat(season, episode)) return assignAllStarsPlacements(season, episode);
     if (isTeamsFormat(season) && season.activeIds.length > 3) return assignTeamsPlacements(season, episode);
 
@@ -4513,6 +4517,27 @@ Options: ${names}`, "") || "";
     const activeCount = ranked.length;
     const legacy = isLegacyFormat(season);
     const excluded = new Set();
+
+    if (isAssassinFormat(season) && episode.teams?.mode === "groups" && (episode.teams.groups || []).length === 3) {
+      const teamOrder = (episode.teams.groups || [])
+        .map((team) => ({ ...team, total: average((team.ids || []).map((id) => scoreForEpisodeId(episode, id, "total"))) }))
+        .sort((a, b) => b.total - a.total);
+      const winningTeam = teamOrder[0];
+      const bottomTeam = teamOrder.at(-1);
+      const winningTeamIds = winningTeam?.ids || [];
+      const bottomTeamIds = filterImmunityProtected(season, episode, bottomTeam?.ids || []);
+      const bestWinningId = winningTeamIds.slice().sort((a, b) => scoreForEpisodeId(episode, b, "total") - scoreForEpisodeId(episode, a, "total"))[0];
+      episode.winningTeamIds = winningTeamIds.slice();
+      episode.teamWinMode = "solo";
+      episode.assassinThreeTeamBottom = true;
+      episode.winnerIds = [bestWinningId || ranked[0]].filter(Boolean);
+      episode.highIds = winningTeamIds.filter((id) => !episode.winnerIds.includes(id));
+      episode.lowIds = [];
+      episode.bottomIds = bottomTeamIds.length ? bottomTeamIds : bottomRanked.filter((id) => !episode.winnerIds.includes(id)).slice(0, Math.min(3, Math.max(0, activeCount - episode.winnerIds.length)));
+      episode.notes.push(`${bottomTeam?.name || "The lowest-ranked team"} is the bottom team, so the entire team is up for elimination.`);
+      setSafeIds(season, episode);
+      return;
+    }
 
     const pickFromBottom = (count) => {
       const target = Math.max(0, Math.min(count, activeCount - excluded.size));
@@ -4604,7 +4629,7 @@ Options: ${names}`, "") || "";
   }
 
   function resolveGoldenBeaverSave(season, episode) {
-    if (!isGoldenBeaverFormat(season) || episode.premiere || episode.type !== "competitive") return;
+    if (!isGoldenBeaverFormat(season) || !seasonEliminationFormatApplies(season, episode) || episode.type !== "competitive") return;
     const winnerId = (episode.winnerIds || [])[0];
     const bottomThree = (episode.goldenBeaverBottomIds || episode.bottomIds || []).slice(0, 3);
     if (!winnerId || bottomThree.length < 3) return;
@@ -5055,6 +5080,16 @@ Options: ${names}`, "") || "";
       episode.teamWinMode = "solo";
       episode.winnerIds = [bestWinningId].filter(Boolean);
       episode.highIds = winningIds.filter((id) => !episode.winnerIds.includes(id));
+    }
+    if (isAssassinFormat(season) && groups.length === 3) {
+      const bottomTeam = groups.at(-1);
+      episode.assassinThreeTeamBottom = true;
+      episode.bottomIds = filterImmunityProtected(season, episode, bottomTeam?.ids || []);
+      if (!episode.bottomIds.length) episode.bottomIds = bottomRankedIds(episode).filter((id) => !winningIds.includes(id)).slice(0, Math.min(3, Math.max(0, season.activeIds.length - winningIds.length)));
+      episode.lowIds = [];
+      episode.notes.push(`${bottomTeam?.name || "The lowest-ranked team"} is the bottom team, so the entire team is up for elimination.`);
+      setSafeIds(season, episode);
+      return;
     }
     const bottomPool = groups.length === 2 ? groups.at(-1).ids : groups.slice(1).flatMap((team) => team.ids);
     const bottomPoolRanked = bottomPool.slice().filter((id) => !winningIds.includes(id)).sort((a, b) => (episode.scores.find((s) => s.id === a)?.total || 0) - (episode.scores.find((s) => s.id === b)?.total || 0));
@@ -5775,9 +5810,7 @@ Options: ${names}`, "") || "";
     if (episode.type === "special_lalaparuza") {
       if ((episode.eliminatedIds || []).includes(id)) return "ELIM";
       const round = Number(episode.lalaparuzaRoundWinners?.[id] || 0);
-      if (round === 1) return "LALA_R1";
-      if (round === 2) return "LALA_R2";
-      if (round === 3) return "LALA_R3";
+      if (round >= 1) return `LALA_R${Math.min(5, round)}`;
     }
     if (episode.type === "special_slayoffs") {
       if ((episode.eliminatedIds || []).includes(id)) return "ELIM";
@@ -5832,7 +5865,7 @@ Options: ${names}`, "") || "";
       if ((episode.bottomIds || []).includes(id)) return "BTM2";
     }
     if (episode.winnerIds.includes(id)) return "WIN";
-    if (isLegacyFormat(state.season) && !episode.premiere && episode.top2Ids.includes(id)) return "WIN";
+    if (isLegacyFormat(state.season) && seasonEliminationFormatApplies(state.season, episode) && (episode.bottomIds || []).length && episode.top2Ids.includes(id)) return "WIN";
     if (episode.top2Ids.includes(id)) return "TOP2";
     if (episode.eliminatedIds.includes(id)) return "ELIM";
     if ((episode.runOnlyIds || []).includes(id)) return "RUN";
@@ -5860,30 +5893,30 @@ Options: ${names}`, "") || "";
   function eventPopularityDelta(rawDelta) {
     const base = Number(rawDelta || 0);
     if (!base) return 0;
-    const amplified = Math.round(base * (Math.abs(base) >= 3 ? 1.35 : 1.75));
-    const accent = base > 0 ? randInt(0, 2) : -randInt(0, 2);
-    return clamp(amplified + accent, -8, 8);
+    const amplified = Math.round(base * (Math.abs(base) >= 3 ? 3.1 : 3.4));
+    const accent = base > 0 ? randInt(-3, 8) : randInt(-8, 3);
+    return clamp(amplified + accent, -26, 26);
   }
 
   function placementPopularityDeltaFor(token) {
-    if (token === "WIN") return randInt(4, 8);
-    if (token === "DWIN") return randInt(3, 7);
-    if (token === "TOP2") return randInt(2, 6);
-    if (token === "HIGH" || token === "HIGH_BLK") return randInt(1, 4);
-    if (token === "IN" || token === "RTRN") return randInt(4, 9);
-    if (token === "REUNION_WIN" || token === "FAME_GAMES") return randInt(2, 6);
-    if (token === "CHOC") return randInt(3, 8);
-    if (token === "TOP3" || token === "TOP4") return randInt(1, 4);
-    if (token === "LOW") return randInt(-4, 1);
-    if (/^BTM\d+$/.test(token) || token === "BTM" || token === "BTM2") return randInt(-6, 1);
-    if (token === "ELIM") return randInt(-8, 2);
-    if (token === "OUT") return randInt(-4, 1);
-    if (token === "PWIN") return randInt(2, 5);
-    if (token === "PLOSS" || token === "PCHOP") return randInt(-3, 1);
-    if (/^LALA_R[123]$/.test(token)) return randInt(0, 3);
-    if (/^REUNION_LOST_R/.test(token)) return randInt(-2, 2);
-    if (token === "SAFE" || token === "BLK" || token === "RUN") return randInt(-1, 1);
-    return randInt(-1, 1);
+    if (token === "WIN") return randInt(0, 15);
+    if (token === "DWIN") return randInt(-1, 13);
+    if (token === "TOP2") return randInt(-2, 11);
+    if (token === "HIGH" || token === "HIGH_BLK") return randInt(-5, 9);
+    if (token === "IN" || token === "RTRN") return randInt(-2, 16);
+    if (token === "REUNION_WIN" || token === "FAME_GAMES") return randInt(-4, 11);
+    if (token === "CHOC") return randInt(-8, 12);
+    if (token === "TOP3" || token === "TOP4") return randInt(-5, 8);
+    if (token === "LOW") return randInt(-15, 4);
+    if (/^BTM\d+$/.test(token) || token === "BTM" || token === "BTM2") return randInt(-20, 5);
+    if (token === "ELIM") return randInt(-24, 8);
+    if (token === "OUT") return randInt(-15, 4);
+    if (token === "PWIN") return randInt(-3, 9);
+    if (token === "PLOSS" || token === "PCHOP") return randInt(-14, 3);
+    if (/^LALA_R[1-5]$/.test(token)) return randInt(-6, 11);
+    if (/^REUNION_LOST_R/.test(token)) return randInt(-12, 6);
+    if (token === "SAFE" || token === "BLK" || token === "RUN") return randInt(-8, 6);
+    return randInt(-7, 6);
   }
 
   function scorePopularityDelta(episode, id, token) {
@@ -5895,50 +5928,65 @@ Options: ${names}`, "") || "";
     let delta = 0;
     const count = scores.length;
     const rank = index + 1;
-    if (rank === 1) delta += 2;
-    else if (rank <= Math.max(2, Math.ceil(count * 0.25))) delta += 1;
-    else if (rank >= Math.max(1, Math.floor(count * 0.80))) delta -= 1;
-    if (rank === count && count > 4) delta -= 1;
+    if (rank === 1) delta += randInt(4, 10);
+    else if (rank <= Math.max(2, Math.ceil(count * 0.25))) delta += randInt(1, 7);
+    else if (rank >= Math.max(1, Math.floor(count * 0.80))) delta -= randInt(3, 10);
+    if (rank === count && count > 4) delta -= randInt(3, 9);
 
-    if (hasEpisodeId(episode?.runwayGroups?.slayed, id)) delta += 1;
-    if (hasEpisodeId(episode?.runwayGroups?.flopped, id)) delta -= 1;
-    if (hasEpisodeId(episode?.maxiGroups?.slayed, id)) delta += 1;
-    if (hasEpisodeId(episode?.maxiGroups?.flopped, id)) delta -= 1;
+    if (hasEpisodeId(episode?.runwayGroups?.slayed, id)) delta += randInt(3, 8);
+    if (hasEpisodeId(episode?.runwayGroups?.flopped, id)) delta -= randInt(4, 11);
+    if (hasEpisodeId(episode?.maxiGroups?.slayed, id)) delta += randInt(3, 9);
+    if (hasEpisodeId(episode?.maxiGroups?.flopped, id)) delta -= randInt(5, 13);
 
-    if (["WIN", "TOP2", "HIGH", "HIGH_BLK"].includes(token)) delta = Math.max(delta, 0);
-    if (["LOW", "BTM", "BTM2", "ELIM"].includes(token) || /^BTM\d+$/.test(token)) delta = Math.min(delta, 0);
-
-    return clamp(delta, -3, 3);
+    return clamp(delta, -24, 24);
   }
 
   function lipSyncPopularityDelta(episode, id, token) {
     const lipSyncs = [episode?.lipSync, ...((episode?.extraLipSyncs) || [])].filter(Boolean);
     if (!lipSyncs.some((ls) => (ls.ids || []).includes(id))) return 0;
     const wonAny = lipSyncs.some((ls) => (ls.ids || []).includes(id) && (ls.winnerId === id || (ls.winnerIds || []).includes(id)));
-    if (wonAny && token !== "ELIM") return randInt(1, 4);
-    if (token === "ELIM") return randInt(-4, 0);
-    return randInt(-1, 2);
+    const lostAny = lipSyncs.some((ls) => (ls.ids || []).includes(id) && (ls.loserId === id || (ls.loserIds || []).includes(id) || ls.eliminatedId === id));
+    if (wonAny && token !== "ELIM") return randInt(-2, 11);
+    if (token === "ELIM") return randInt(-18, 5);
+    if (lostAny) return randInt(-10, 3);
+    return randInt(-7, 6);
+  }
+
+  function edgicPopularityDeltaForEpisode(episode, id, token) {
+    const events = (episode?.untuckedEvents || []).filter((event) => (event.ids || []).includes(id));
+    const miniWinner = (episode?.miniWinnerIds || []).includes(id);
+    const dramatic = events.some((event) => ["drama", "fight", "shade", "meltdown", "rivalry"].includes(event.type));
+    const positive = events.some((event) => ["storyline", "bonding", "resolution", "comedy", "flirt"].includes(event.type));
+    let delta = 0;
+    if (["WIN", "DWIN", "TOP2", "HIGH", "HIGH_BLK", "IN", "RTRN"].includes(token)) delta += randInt(0, 9);
+    if (["LOW", "BTM", "BTM2", "ELIM", "OUT"].includes(token) || /^BTM\d+$/.test(token)) delta -= randInt(1, 11);
+    if (miniWinner) delta += randInt(1, 7);
+    if (dramatic) delta += randInt(-13, 7);
+    if (positive) delta += randInt(-3, 10);
+    if (!events.length && token === "SAFE") delta -= randInt(0, 7);
+    return clamp(delta, -22, 22);
   }
 
   function invisiblePopularityDelta(season, episode, id, token) {
     const stats = season.stats[id] || {};
-    let swing = randInt(-2, 2);
-    if (Math.random() < 0.16) swing += randInt(-3, 3);
+    let swing = randInt(-8, 8);
+    if (Math.random() < 0.42) swing += randInt(-14, 14);
+    if (Math.random() < 0.13) swing += randInt(-24, 24);
 
     const current = Number(stats.popularity || 0);
     const isPositivePlacement = ["WIN", "DWIN", "TOP2", "HIGH", "HIGH_BLK"].includes(token);
     const isNegativePlacement = ["LOW", "BTM", "BTM2", "ELIM"].includes(token) || /^BTM\d+$/.test(token);
 
-    if (current >= 78 && isPositivePlacement && Math.random() < 0.33) swing -= randInt(2, 5);
-    if (current >= 88 && Math.random() < 0.42) swing -= randInt(1, 4);
-    if (current <= 30 && isNegativePlacement && Math.random() < 0.34) swing += randInt(1, 5);
-    if (current <= 22 && Math.random() < 0.25) swing += randInt(1, 4);
+    if (current >= 82 && isPositivePlacement && Math.random() < 0.60) swing -= randInt(6, 18);
+    if (current >= 92 && Math.random() < 0.70) swing -= randInt(8, 24);
+    if (current <= -20 && isNegativePlacement && Math.random() < 0.42) swing += randInt(4, 14);
+    if (current <= -55 && Math.random() < 0.52) swing += randInt(8, 22);
 
     const events = (episode?.untuckedEvents || []).filter((event) => (event.ids || []).includes(id));
-    if (events.some((event) => ["storyline", "bonding", "resolution", "comedy", "flirt"].includes(event.type))) swing += randInt(0, 2);
-    if (events.some((event) => ["drama", "fight", "shade", "meltdown"].includes(event.type))) swing += randInt(-2, 1);
+    if (events.some((event) => ["storyline", "bonding", "resolution", "comedy", "flirt"].includes(event.type))) swing += randInt(-4, 10);
+    if (events.some((event) => ["drama", "fight", "shade", "meltdown"].includes(event.type))) swing += randInt(-14, 6);
 
-    return clamp(swing, -6, 6);
+    return clamp(swing, -28, 28);
   }
 
   function applyPopularityDelta(season, id, rawDelta) {
@@ -5948,12 +5996,11 @@ Options: ${names}`, "") || "";
     if (!delta) return 0;
 
     const current = Number(stats.popularity || 0);
-    if (delta > 0 && current >= 72) delta -= randInt(0, 2);
-    if (delta > 0 && current >= 84) delta -= randInt(1, 3);
-    if (delta < 0 && current <= 28) delta += randInt(0, 2);
-    if (delta < 0 && current <= 18) delta += randInt(1, 3);
+    if (delta > 0 && current >= 84) delta -= randInt(4, 12);
+    if (delta > 0 && current >= 94) delta -= randInt(8, 20);
+    if (delta < 0 && current <= -70) delta += randInt(4, 12);
 
-    const next = clamp(current + delta, 0, 100);
+    const next = clamp(current + delta, -100, 100);
     stats.popularity = next;
     return Math.round(next - current);
   }
@@ -5983,7 +6030,7 @@ Options: ${names}`, "") || "";
       if (episode.luckyCow?.savedId === id) extraClasses.push("lucky-cow-save");
       if (episode.badonkaDunkTank?.saved && episode.badonkaDunkTank?.contestantId === id) extraClasses.push("badonka-save");
       if (isProtectedByImmunity(season, episode, id)) extraClasses.push("immunity-protected");
-      let display = token === "LALA_R1" ? "SAFE<br/>(R1)" : token === "LALA_R2" ? "SAFE<br/>(R2)" : token === "LALA_R3" ? "SAFE<br/>(R3)" : /^REUNION_LOST_R/.test(token) ? `LOST<br/>(R${String(token).replace(/\D/g, "") || "1"})` : token === "REUNION_WIN" ? "WIN" : token === "FAME_GAMES" ? "FAME<br/>GAMES" : token === "HIGH_BLK" ? "HIGH+<br/>BLK" : token === "TOP3" ? "TOP 3" : token === "DWIN" ? "WIN" : token === "PWIN" ? "WIN" : (token === "PLOSS" || token === "PCHOP") ? "LOSS" : (token === "TOP2" && isAllWinnersFormat(season) && episode.allWinnersEpisode ? "WIN" : token);
+      let display = /^LALA_R\d+$/.test(token) ? `SAFE<br/>(R${String(token).replace(/\D/g, "") || "1"})` : /^REUNION_LOST_R/.test(token) ? `LOST<br/>(R${String(token).replace(/\D/g, "") || "1"})` : token === "REUNION_WIN" ? "WIN" : token === "FAME_GAMES" ? "FAME<br/>GAMES" : token === "HIGH_BLK" ? "HIGH+<br/>BLK" : token === "TOP3" ? "TOP 3" : token === "DWIN" ? "WIN" : token === "PWIN" ? "WIN" : (token === "PLOSS" || token === "PCHOP") ? "LOSS" : (token === "TOP2" && isAllWinnersFormat(season) && episode.allWinnersEpisode ? "WIN" : token);
       display = String(display).replace(/\bBTM\s+(\d+)\b/g, "BTM$1");
       const comebackFormatForTrack = episode.comeback?.format || episode.readingComeback?.format || "";
       const suppressReturnPrefix = (comebackFormatForTrack === "reinas_de_la_comedia" && token === "DWIN") || (comebackFormatForTrack === "kitty_girl_groups" && token === "WIN");
@@ -5997,7 +6044,7 @@ Options: ${names}`, "") || "";
       else if (token === "IN" || token === "RTRN") stats.safes += 1;
       else if (token === "TOP2") stats.highs += 1;
       else if (token === "HIGH" || token === "HIGH_BLK") stats.highs += 1;
-      else if (token === "SAFE" || token === "BLK" || /^LALA_R[123]$/.test(token) || /^REUNION_LOST_R/.test(token) || token === "RUN") stats.safes += 1;
+      else if (token === "SAFE" || token === "BLK" || /^LALA_R[1-5]$/.test(token) || /^REUNION_LOST_R/.test(token) || token === "RUN") stats.safes += 1;
       else if (token === "LOW") stats.lows += 1;
       else if (/^BTM\d+$/.test(token) || token === "BTM" || token === "BTM2") stats.bottoms += 1;
       else if (token === "ELIM") stats.bottoms += 1;
@@ -6006,7 +6053,8 @@ Options: ${names}`, "") || "";
       let popDelta = placementPopularityDeltaFor(token);
       popDelta += scorePopularityDelta(episode, id, token);
       popDelta += lipSyncPopularityDelta(episode, id, token);
-      if ((episode.miniWinnerIds || []).includes(id)) popDelta += randInt(1, 3);
+      popDelta += edgicPopularityDeltaForEpisode(episode, id, token);
+      if ((episode.miniWinnerIds || []).includes(id)) popDelta += randInt(1, 6);
       popDelta += invisiblePopularityDelta(season, episode, id, token);
       applyPopularityDelta(season, id, popDelta);
       stats.popularityHistory.push({ label: episode.label, value: Math.round(stats.popularity) });
@@ -6047,7 +6095,7 @@ Options: ${names}`, "") || "";
       if (["BTM2", "BTM", "ELIM", "LOW", "OUT"].includes(token) || /^BTM\d+$/.test(token)) return drama ? "OTTN" : "MORN";
       if (token === "PWIN") return "MORP";
       if (token === "PLOSS" || token === "PCHOP") return drama ? "OTTN" : "MORN";
-      if (/^LALA_R[123]$/.test(token)) return miniWinner ? "MORP" : "MOR";
+      if (/^LALA_R[1-5]$/.test(token)) return miniWinner ? "MORP" : "MOR";
       if (/^REUNION_LOST_R/.test(token)) return drama ? "OTTN" : "MORN";
       if (miniWinner) return drama ? "CPM" : "MORP";
       if (token === "SAFE" || token === "RUN" || token === "BLK") return drama ? "CPN" : "UTR";
@@ -6058,7 +6106,7 @@ Options: ${names}`, "") || "";
       if (["WIN", "DWIN", "TOP2", "RTRN", "IN", "ELIM", "CHOC", "REUNION_WIN", "FAME_GAMES"].includes(token)) return 4;
       if (["HIGH", "HIGH_BLK", "LOW", "BTM2", "BTM", "OUT", "TOP3", "TOP4"].includes(token) || /^BTM\d+$/.test(token)) return 3;
       if (token === "SAFE" || token === "RUN" || token === "BLK") return 1;
-      if (/^LALA_R[123]$/.test(token) || /^REUNION_LOST_R/.test(token)) return 2;
+      if (/^LALA_R[1-5]$/.test(token) || /^REUNION_LOST_R/.test(token)) return 2;
       return 2;
     }
 
@@ -7671,7 +7719,7 @@ Options: ${names}`, "") || "";
     if (season.config.specialFameGames) resolveFameGamesWinner(season, finale);
     finale.untuckedEvents = [];
 
-    if (season.config.finaleType === "lsftc" && season.activeIds.length === 4) simulateLSFTC(season, finale);
+    if (season.config.finaleType === "lsftc" && season.activeIds.length >= 2) simulateLSFTC(season, finale);
     else if (season.config.finaleType === "jury_finale") simulateJuryFinale(season, finale);
     else if (season.config.finaleType === "top2_finale" || season.config.finaleType === "cunt_test") simulateTop2Finale(season, finale);
     else simulateRegularFinale(season, finale);
@@ -7733,7 +7781,11 @@ Options: ${names}`, "") || "";
   function simulateRegularFinale(season, finale) {
     const ranked = season.activeIds.map((id) => ({ id, score: finaleScore(season, id) })).sort((a, b) => b.score - a.score);
     const doubleCrowning = ranked.length >= 2 && Math.abs(ranked[0].score - ranked[1].score) <= 2.5 && Math.random() < 0.03;
-    finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, season.activeIds.slice(), "Final Lip Sync"));
+    finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, season.activeIds.slice(), "Final Lip Sync for the Crown"));
+    finale.lipSync.resultType = "crown_final";
+    finale.lipSync.roundNumber = 1;
+    finale.lipSync.roundPosition = 1;
+    finale.lipSync.isFinalRound = true;
     finale.winnerIds = doubleCrowning ? [ranked[0].id, ranked[1].id] : [ranked[0].id];
     finale.resultText = doubleCrowning
       ? `The Next Drag Superstar is... ${formatList(finale.winnerIds, season)}!`
@@ -7746,6 +7798,10 @@ Options: ${names}`, "") || "";
     finale.top2Ids = top2;
     finale.eliminatedIds = ranked.slice(2).map((x) => x.id);
     finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, top2, "Final Lip Sync for the Crown"));
+    finale.lipSync.resultType = "crown_final";
+    finale.lipSync.roundNumber = 1;
+    finale.lipSync.roundPosition = 1;
+    finale.lipSync.isFinalRound = true;
     const crownWinner = chooseCrownWinner(season, top2, finale.lipSync);
     finale.lipSync.performanceWinnerId = finale.lipSync.winnerId;
     finale.lipSync.winnerId = crownWinner;
@@ -7754,36 +7810,30 @@ Options: ${names}`, "") || "";
   }
 
   function simulateLSFTC(season, finale) {
-    const bracket = shuffle(season.activeIds);
-    const semi1 = applyRupaulLipSyncChoice(season, createLipSync(season, bracket.slice(0, 2), "LSFTC Semifinal 1"));
-    const semi2 = applyRupaulLipSyncChoice(season, createLipSync(season, bracket.slice(2, 4), "LSFTC Semifinal 2"));
-    semi1.resultType = "all_winners_smackdown_round";
-    semi2.resultType = "all_winners_smackdown_round";
-    semi1.roundNumber = 1;
-    semi2.roundNumber = 1;
-    semi1.roundPosition = 1;
-    semi2.roundPosition = 2;
-    semi1.isFinalRound = false;
-    semi2.isFinalRound = false;
-    const semifinalWinners = [semi1.winnerId, semi2.winnerId].filter(Boolean);
-    const final = applyRupaulLipSyncChoice(season, createLipSync(season, semifinalWinners, "Final Lip Sync for the Crown"));
-    final.resultType = "all_winners_final_round";
-    final.roundNumber = 2;
-    final.roundPosition = 1;
-    final.isFinalRound = true;
-    const crownWinner = chooseCrownWinner(season, semifinalWinners, final);
-    final.performanceWinnerId = final.winnerId;
-    final.winnerId = crownWinner;
+    const finalists = season.activeIds.slice();
+    const crown = createLipSyncSmackdown(season, finalists, "Lip Sync for the Crown");
+    const lipSyncs = crown.lipSyncs || [];
+    const finalLipSync = crown.finalLipSync || lipSyncs.at(-1) || null;
+    const crownWinner = crown.winnerId || finalLipSync?.winnerId || finalists[0] || null;
+    if (finalLipSync && crownWinner) {
+      finalLipSync.performanceWinnerId = finalLipSync.performanceWinnerId || finalLipSync.winnerId;
+      finalLipSync.winnerId = crownWinner;
+      finalLipSync.resultType = "all_winners_final_round";
+      finalLipSync.isFinalRound = true;
+    }
     finale.lsftcFinale = true;
-    finale.extraLipSyncs = [semi1, semi2, final];
-    finale.allWinnersCrownSmackdown = { lipSyncs: finale.extraLipSyncs, winnerId: crownWinner, finalLipSync: final };
-    finale.top2Ids = semifinalWinners;
-    finale.eliminatedIds = bracket.filter((id) => id !== crownWinner && !semifinalWinners.includes(id));
-    const finalLoserId = semifinalWinners.find((id) => id !== crownWinner);
+    finale.extraLipSyncs = lipSyncs.slice();
+    finale.lipSync = finalLipSync;
+    finale.allWinnersCrownSmackdown = { lipSyncs: finale.extraLipSyncs, winnerId: crownWinner, finalLipSync };
+    finale.top2Ids = finalLipSync?.ids || finalists.slice(0, Math.min(2, finalists.length));
+    finale.eliminatedIds = finalists.filter((id) => id !== crownWinner && !(finale.top2Ids || []).includes(id));
+    const finalLoserId = (finale.top2Ids || []).find((id) => id !== crownWinner);
     if (finalLoserId) finale.runnerUpIds = [finalLoserId];
-    finale.winnerIds = [crownWinner];
-    finale.resultText = `${displayName(season.contestants[semi1.winnerId])} and ${displayName(season.contestants[semi2.winnerId])} win their semifinals. After the final lip sync and the full-season record are considered, ${displayName(season.contestants[crownWinner])} wins the crown.`;
-    finale.extraLipSyncs.forEach((ls) => (ls.ids || []).forEach((id) => updateLipSyncStats(season, id, id === ls.winnerId)));
+    finale.winnerIds = [crownWinner].filter(Boolean);
+    const openingWinners = lipSyncs.filter((ls) => !ls.isFinalRound).map((ls) => ls.winnerId).filter(Boolean);
+    finale.resultText = openingWinners.length
+      ? `${sentenceList(openingWinners, season, false)} advance to the final lip sync. After the final lip sync and the full-season record are considered, ${displayName(season.contestants[crownWinner])} wins the crown.`
+      : `${displayName(season.contestants[crownWinner])} wins the crown.`;
   }
 
   function simulateJuryFinale(season, finale) {
@@ -7816,7 +7866,7 @@ Options: ${names}`, "") || "";
     season.juryVotes = votes;
     finale.top2Ids = top2;
     finale.eliminatedIds = finalElimIds;
-    finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, top2, "Jury Finale Lip Sync"));
+    finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, top2, "Final Lip Sync for the Crown"));
     const crownWinner = chooseCrownWinner(season, top2, finale.lipSync);
     finale.lipSync.performanceWinnerId = finale.lipSync.winnerId;
     finale.lipSync.winnerId = crownWinner;
@@ -7853,7 +7903,8 @@ Options: ${names}`, "") || "";
       cuntpart2: "Part #2",
       cuntpart3: "Part #3",
       lipsync: "Lip Sync",
-      results: "Results"
+      results: "Results",
+      trackrecord: "Track Record"
     } : ep?.type === "finale" ? {
       mini: "Mx. Congeniality",
       teams: "Golden Boot",
@@ -7861,7 +7912,8 @@ Options: ${names}`, "") || "";
       maxi: "Finale Performances",
       placements: state.season?.config?.finaleType === "jury_finale" ? "Jury Voting" : "Elimination",
       lipsync: "Final Lip Sync",
-      results: "Winner"
+      results: "Winner",
+      trackrecord: "Track Record"
     } : {
       comeback: ep?.comeback?.title || "Comeback",
       mini: ep?.allWinnersStarGiveawaysAtStart?.length ? "Star Giveaway" : "Mini Challenge",
@@ -7881,6 +7933,7 @@ Options: ${names}`, "") || "";
       s17lsfyl: "Lip Sync for Your Life",
       s17lsfylresults: "Lip Sync for Your Life Results",
       pointceremony: "Point Ceremony",
+      trackrecord: "Track Record",
       wildcard: "Wildcard Lottery"
     };
     Object.entries(labels).forEach(([step, label]) => {
@@ -7925,6 +7978,7 @@ Options: ${names}`, "") || "";
     renderS17LsfylResultsPanel(ep);
     renderUntuckedPanel(ep);
     renderPointCeremonyPanel(ep);
+    renderEpisodeTrackRecordPanel(ep);
     updateVisibleEpisodeSections(ep);
     setEpisodeStep(state.currentStep || "status");
     if (els.episodeSelect) els.episodeSelect.value = String(state.currentEpisodeIndex);
@@ -8616,7 +8670,7 @@ Options: ${names}`, "") || "";
 
   function renderGoldenBeaverPanel(ep) {
     if (!els.goldenBeaverStack) return;
-    if (!isGoldenBeaverFormat(state.season) || ep.type === "finale" || ep.premiere || !ep.goldenBeaverBottomIds?.length) {
+    if (!isGoldenBeaverFormat(state.season) || ep.type === "finale" || !seasonEliminationFormatApplies(state.season, ep) || !ep.goldenBeaverBottomIds?.length) {
       els.goldenBeaverStack.innerHTML = "";
       return;
     }
@@ -9109,14 +9163,14 @@ Options: ${names}`, "") || "";
       if (!ep.judgedInTeams) cards.push(placementGroup("Top Two", (ep.top2Ids || []).filter((id) => !(ep.winnerIds || []).includes(id)), "top2"));
       if (!ep.judgedInTeams) cards.push(placementGroup("High", ep.highIds || [], "high"));
     }
-    if (isGoldenBeaverFormat(state.season) && !ep.premiere && ep.goldenBeaverBottomIds?.length) {
+    if (isGoldenBeaverFormat(state.season) && seasonEliminationFormatApplies(state.season, ep) && ep.goldenBeaverBottomIds?.length) {
       cards.push(groupBlock("Bottom Three", ep.goldenBeaverBottomIds || [], state.season, {
         className: "placement-group token-btm3",
         subtitle: `${sentenceList(ep.goldenBeaverBottomIds || [], state.season, false)}, I'm sorry my dears, but you are the bottom three of the week.`
       }));
     } else {
       cards.push(placementGroup("Low", ep.lowIds || [], "low"));
-      cards.push(placementGroup("Bottom", ep.bottomIds || [], "bottom"));
+      cards.push(placementGroup(ep.assassinThreeTeamBottom ? "Bottom Team" : "Bottom", ep.bottomIds || [], "bottom"));
     }
     if (state.config.mode === "rupaul" && ep.winnerIds?.length) {
       const winnerPool = [...new Set([...(ep.winnerIds || []), ...(ep.highIds || []), ...(ep.top2Ids || [])])];
@@ -9876,7 +9930,8 @@ Options: ${names}`, "") || "";
       s17lsfyl: false,
       s17lsfylresults: false,
       untucked: false,
-      pointceremony: false
+      pointceremony: false,
+      trackrecord: true
     } : isFinale ? {
       wildcard: !!ep.tournamentWildcard,
       status: true,
@@ -9901,7 +9956,8 @@ Options: ${names}`, "") || "";
       s17lsfyl: false,
       s17lsfylresults: false,
       untucked: false,
-      pointceremony: false
+      pointceremony: false,
+      trackrecord: true
     } : {
       wildcard: !!ep.tournamentWildcard,
       status: true,
@@ -9914,7 +9970,7 @@ Options: ${names}`, "") || "";
       runway: !!ep.runway,
       judging: !!ep.challenge && !ep.hideJudging,
       ratequeen: !!(ep.rateAQueenBallots || []).length,
-      goldenbeaver: !!(isGoldenBeaverFormat(state.season) && !ep.premiere && ep.goldenBeaverBottomIds?.length),
+      goldenbeaver: !!(isGoldenBeaverFormat(state.season) && seasonEliminationFormatApplies(state.season, ep) && ep.goldenBeaverBottomIds?.length),
       placements: !!ep.challenge,
       luckycow: !!(ep.luckyCow?.active && (ep.luckyCow.votes || []).length),
       rumocracy: !!(isAssassinFormat(state.season) && ep.rumocracyVotes?.length),
@@ -9927,7 +9983,8 @@ Options: ${names}`, "") || "";
       s17lsfyl: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep.specialPremiere)) && ep.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
       s17lsfylresults: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep.specialPremiere)) && ep.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
       untucked: !!(ep.untuckedEvents || []).length,
-      pointceremony: !!ep.pointCeremony
+      pointceremony: !!ep.pointCeremony,
+      trackrecord: true
     };
     if (ep?.comebackPending && ep?.comeback?.format === "choose_return") {
       Object.assign(visible, {
@@ -9960,28 +10017,28 @@ Options: ${names}`, "") || "";
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "porkchop_premiere") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: false, qosdadhh: false, lsftc: false, winner: false, results: false, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: false, qosdadhh: false, lsftc: false, winner: false, results: false, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (["special_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
       const isFameGames = ep?.type === "fame_games";
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "lsftf") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: true, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: true, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (isFinale && ep?.lsftcFinale && !isAllWinnersFormat(state.season)) {
@@ -10005,7 +10062,7 @@ Options: ${names}`, "") || "";
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     applyDynamicEpisodeStepOrder(ep);
@@ -10019,13 +10076,17 @@ Options: ${names}`, "") || "";
     const current = visible.wildcard && state.currentStep === "status" && !ep.tournamentWildcard?.revealed ? "wildcard" : (visible[state.currentStep] ? state.currentStep : nextVisibleStep("wildcard", 1, visible) || "status");
     state.currentStep = current;
     updateProceedTargets(visible);
+    if (els.allWinnersFinalStatsBtn) {
+      const fromWinner = nextVisibleStep("winner", 1, visible);
+      els.allWinnersFinalStatsBtn.textContent = fromWinner === "trackrecord" ? "Proceed" : "Statistics";
+    }
   }
 
   function nextVisibleStep(step, direction = 1, visibleMap = null) {
     const ep = currentEpisode();
     if (!visibleMap && ep?.type === "cunt_test") {
       const order = episodeStepOrder(ep);
-      const visible = { status: true, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, lipsync: !!ep.lipSync, results: true };
+      const visible = { status: true, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, lipsync: !!ep.lipSync, results: true, trackrecord: true };
       let idx = order.indexOf(step);
       if (idx < 0) idx = direction > 0 ? -1 : order.length;
       for (let i = idx + direction; i >= 0 && i < order.length; i += direction) {
@@ -10035,7 +10096,7 @@ Options: ${names}`, "") || "";
     }
     if (!visibleMap && ep?.type === "porkchop_premiere") {
       const order = episodeStepOrder(ep);
-      const visible = { status: true, maxi: true };
+      const visible = { status: true, maxi: true, trackrecord: true };
       let idx = order.indexOf(step);
       if (idx < 0) idx = direction > 0 ? -1 : order.length;
       for (let i = idx + direction; i >= 0 && i < order.length; i += direction) {
@@ -10067,7 +10128,8 @@ Options: ${names}`, "") || "";
       s17lsfyl: false,
       s17lsfylresults: false,
       untucked: false,
-      pointceremony: false
+      pointceremony: false,
+      trackrecord: true
     } : {
       wildcard: !!ep?.tournamentWildcard,
       status: true,
@@ -10080,7 +10142,7 @@ Options: ${names}`, "") || "";
       runway: !!ep?.runway,
       judging: !!ep?.challenge,
       ratequeen: !!(ep?.rateAQueenBallots || []).length,
-      goldenbeaver: !!(isGoldenBeaverFormat(state.season) && !ep?.premiere && ep?.goldenBeaverBottomIds?.length),
+      goldenbeaver: !!(isGoldenBeaverFormat(state.season) && seasonEliminationFormatApplies(state.season, ep) && ep?.goldenBeaverBottomIds?.length),
       placements: !!ep?.challenge,
       luckycow: !!(ep?.luckyCow?.active && (ep?.luckyCow?.votes || []).length),
       rumocracy: !!(isAssassinFormat(state.season) && ep?.rumocracyVotes?.length),
@@ -10093,22 +10155,23 @@ Options: ${names}`, "") || "";
       s17lsfyl: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep?.specialPremiere)) && ep?.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
       s17lsfylresults: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep?.specialPremiere)) && ep?.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
       untucked: ep?.type !== "finale" && !!(ep?.untuckedEvents || []).length,
-      pointceremony: !!ep?.pointCeremony
+      pointceremony: !!ep?.pointCeremony,
+      trackrecord: true
     });
     if (["special_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
       const isFameGames = ep?.type === "fame_games";
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "lsftf") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: true, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: true, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "finale" && ep?.lsftcFinale && !isAllWinnersFormat(state.season)) {
@@ -10129,7 +10192,7 @@ Options: ${names}`, "") || "";
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     const order = episodeStepOrder(ep);
@@ -10404,7 +10467,17 @@ Options: ${names}`, "") || "";
 
   function trackChallengeHeaderHtml(col) {
     const type = String(col?.challengeType || "").trim();
-    return type ? `<span class="track-head-challenge">${escapeHtml(type)}</span>` : "";
+    if (!type) return `<span class="track-head-cell"><span class="track-head-episode">&nbsp;</span></span>`;
+    const formatted = type
+      .replace(/\bGirl\s+Groups\b/i, "Girl<br/>Groups")
+      .replace(/\bSnatch\s+Game\b/i, "Snatch<br/>Game")
+      .replace(/\bTalent\s+Show\b/i, "Talent<br/>Show")
+      .replace(/\bLip\s+Sync\b/i, "Lip<br/>Sync")
+      .replace(/\bStand[ -]?Up\b/i, "Stand<br/>Up")
+      .replace(/\bPolitical\s+Debate\b/i, "Political<br/>Debate")
+      .replace(/\bFinale\s+Rumix\b/i, "Finale<br/>Rumix");
+    const safe = formatted.split(/<br\s*\/?\s*>/i).map((part) => escapeHtml(part)).join("<br/>");
+    return `<span class="track-head-cell"><span class="track-head-episode">${safe}</span></span>`;
   }
 
   function statContestantInline(id) {
@@ -10419,6 +10492,12 @@ Options: ${names}`, "") || "";
 
   function statContestantList(ids, separator = " vs. ") {
     return (ids || []).map((id) => statContestantInline(id)).join(`<span class="stat-separator">${escapeHtml(separator)}</span>`);
+  }
+
+  function lipSyncEliminatesContestant(ls, ep = null) {
+    if (!ls || !ep) return false;
+    const ids = new Set(ls.ids || []);
+    return (ep.eliminatedIds || []).some((id) => ids.has(id) && !state.season.contestants[id]?.isAssassin);
   }
 
   function isForTheWinLipSync(ls, ep = null) {
@@ -10438,7 +10517,8 @@ Options: ${names}`, "") || "";
     if (eliminationTypes.has(resultType) || /(?:^|_)elimination(?:_|$)/.test(resultType)) return false;
     if (/^(?:lalaparuza_round|reunion_lalaparuza_round|slayoffs_round|lsftf_round)/.test(resultType)) return true;
     if (["lalaparuza_comeback", "game_within_a_game", "fame_games_multiplier", "porkchop_battle"].includes(resultType)) return true;
-    if (ep && (ep.eliminatedIds || []).some((id) => (ls.ids || []).includes(id)) && !["double_shantay", "lucky_cow_save", "badonka_save"].includes(resultType)) return false;
+    if (resultType === "all_winners_final_round" || resultType === "qosdadhh_final") return true;
+    if (lipSyncEliminatesContestant(ls, ep) && !["double_shantay", "lucky_cow_save", "badonka_save"].includes(resultType)) return false;
     return context.includes("top two") || context.includes("crown") || context.includes("for the win") || context.includes("legacy") || context.includes("lsftc") || (context.includes("finale") && !context.includes("elimination"));
   }
 
@@ -10455,12 +10535,18 @@ Options: ${names}`, "") || "";
     return display.split(/<br\s*\/?\s*>/i).map((part) => escapeHtml(part).replace(/\bBTM\s+(\d+)\b/g, "BTM$1")).join("<br>");
   }
 
+  function trackEntryPpeValue(entry) {
+    const token = String(entry?.token || "");
+    const extra = Array.isArray(entry?.extraClasses) ? entry.extraClasses : [];
+    if (token === "WIN" && extra.includes("legacy-loser-win")) return 4.5;
+    const points = { WIN: 5, DWIN: 5, TOP2: 4.5, HIGH: 4, HIGH_BLK: 4, SAFE: 3, RTRN: 3, IN: 3, BLK: 3, LALA_R1: 3, LALA_R2: 3, LALA_R3: 3, LALA_R4: 3, LALA_R5: 3, LOW: 2, BTM: 1, CHOC: 1, OUT: 0, ELIM: 0 };
+    return /^BTM\d+$/.test(token) ? 1 : points[token];
+  }
+
   function trackPpeFor(id) {
-    const points = { WIN: 5, DWIN: 5, TOP2: 4.5, HIGH: 4, HIGH_BLK: 4, SAFE: 3, RTRN: 3, IN: 3, BLK: 3, LALA_R1: 3, LALA_R2: 3, LALA_R3: 3, LOW: 2, BTM: 1, CHOC: 1, OUT: 0, ELIM: 0 };
-    const valueForTrackToken = (token) => /^BTM\d+$/.test(token) ? 1 : points[token];
-    const entries = (state.season.stats[id]?.track || []).filter((entry) => entry.label !== "Finale" && valueForTrackToken(entry.token) != null);
+    const entries = (state.season.stats[id]?.track || []).filter((entry) => entry.label !== "Finale" && trackEntryPpeValue(entry) != null);
     if (!entries.length) return "—";
-    const total = entries.reduce((sum, entry) => sum + valueForTrackToken(entry.token), 0);
+    const total = entries.reduce((sum, entry) => sum + trackEntryPpeValue(entry), 0);
     return (total / entries.length).toFixed(2);
   }
 
@@ -10694,7 +10780,7 @@ Options: ${names}`, "") || "";
           };
           if (/\b(?:lucky-cow-save|token-lc-border)\b/.test(className)) drawInset("#ffeb3b", 4);
           if (/\b(?:badonka-save|token-dunk-border|golden-beaver-save)\b/.test(className)) drawInset("#ffd166", 4);
-          if (/\b(?:double-shantay|immunity-protected|multi-win)\b/.test(className)) drawInset("#ff4fd8", 3);
+          if (/\b(?:double-shantay|immunity-protected)\b/.test(className)) drawInset("#ff4fd8", 3);
         }
 
         const rawText = (cell.innerText || cell.textContent || "").replace(/\s+\n/g, "\n").trim();
@@ -10737,14 +10823,121 @@ Options: ${names}`, "") || "";
     downloadCanvasPng(canvas, `${safeName}-track-record.png`);
   }
 
-  function renderTrackRecord() {
+
+  function trackLabelsThroughEpisode(season, episodeIndex) {
+    const labels = new Set();
+    (season.episodes || []).slice(0, Number(episodeIndex || 0) + 1).forEach((ep) => {
+      if (ep?.label) labels.add(ep.label);
+    });
+    return labels;
+  }
+
+  function trackPpeForLabels(id, allowedLabels) {
+    const entries = (state.season.stats[id]?.track || []).filter((entry) => entry.label !== "Finale" && allowedLabels.has(entry.label) && trackEntryPpeValue(entry) != null);
+    if (!entries.length) return "—";
+    const total = entries.reduce((sum, entry) => sum + trackEntryPpeValue(entry), 0);
+    return (total / entries.length).toFixed(2);
+  }
+
+  function episodePlacementRankForEntry(entry) {
+    const token = String(entry?.token || "");
+    const display = String(entry?.display || "").toUpperCase();
+    if (token === "WINNER") return 0;
+    if (token === "RU" || display.includes("RUNNER")) return 1;
+    if (token === "RUN") return 2;
+    if (token === "TOP4") return 3;
+    if (token === "WIN" || token === "DWIN" || token === "PWIN" || token === "REUNION_WIN" || token === "FAME_GAMES") {
+      const extra = Array.isArray(entry?.extraClasses) ? entry.extraClasses : [];
+      return extra.includes("legacy-loser-win") ? 4.5 : 4;
+    }
+    if (token === "TOP2") return 5;
+    if (token === "HIGH" || token === "HIGH_BLK") return 6;
+    if (["SAFE", "BLK", "IMM", "RTRN", "IN"].includes(token)) return 7;
+    if (token === "LALA_R1") return 8;
+    if (token === "LALA_R2") return 9;
+    if (token === "LALA_R3") return 10;
+    if (token === "LALA_R4") return 11;
+    if (token === "LALA_R5") return 11.5;
+    if (token === "LOW") return 12;
+    if (token === "CHOC" || token === "BTM" || token === "BTM1" || token === "BTM2" || /^BTM\d+$/.test(token)) return 13;
+    if (token === "ELIM" || token === "OUT" || token === "PLOSS" || token === "PCHOP") return 14;
+    return 99;
+  }
+
+  function episodeTrackRecordOrder(season, ep, labels) {
+    const currentLabel = ep?.label || "";
+    const allowedLabels = labels instanceof Set ? labels : new Set(labels || []);
+    const labelOrder = new Map(trackColumnDefinitions(season).map((col, index) => [col.label, index]));
+    const scoreRank = new Map((ep?.scores || []).map((score, index) => [score.id, index]));
+    const fallbackOrder = seasonPlacementOrder();
+    const activeSet = new Set(ep?.activeStartIds || []);
+    const isTournamentBracketEpisode = !!ep?.tournamentBracketId;
+
+    const entryForLabel = (id, label) => [...(season.stats[id]?.track || [])].reverse().find((entry) => entry.label === label) || null;
+    const lastVisibleEntry = (id) => [...(season.stats[id]?.track || [])].reverse().find((entry) => allowedLabels.has(entry.label) && entry.token) || null;
+    const fallbackPosition = (id) => {
+      const index = fallbackOrder.indexOf(id);
+      return index < 0 ? 9999 : index;
+    };
+
+    return (season.castOrder || []).filter((id) => season.contestants?.[id] && season.stats?.[id]).slice().sort((a, b) => {
+      const aEntry = entryForLabel(a, currentLabel);
+      const bEntry = entryForLabel(b, currentLabel);
+      const aCurrent = !!aEntry;
+      const bCurrent = !!bEntry;
+
+      if (aCurrent || bCurrent) {
+        if (aCurrent && bCurrent) {
+          const ar = episodePlacementRankForEntry(aEntry);
+          const br = episodePlacementRankForEntry(bEntry);
+          if (ar !== br) return ar - br;
+          if (String(aEntry?.token || "") === "SAFE" && String(bEntry?.token || "") === "SAFE") {
+            const alpha = fullDisplayName(season.contestants[a]).localeCompare(fullDisplayName(season.contestants[b]));
+            if (alpha) return alpha;
+          }
+          const as = scoreRank.has(a) ? scoreRank.get(a) : 999;
+          const bs = scoreRank.has(b) ? scoreRank.get(b) : 999;
+          if (as !== bs) return as - bs;
+        } else if (isTournamentBracketEpisode) {
+          const aActive = activeSet.has(a);
+          const bActive = activeSet.has(b);
+          if (aActive !== bActive) return aActive ? -1 : 1;
+        } else {
+          return aCurrent ? -1 : 1;
+        }
+      }
+
+      const aLast = lastVisibleEntry(a);
+      const bLast = lastVisibleEntry(b);
+      const aHasHistory = !!aLast;
+      const bHasHistory = !!bLast;
+      if (isTournamentBracketEpisode && aHasHistory !== bHasHistory) return aHasHistory ? -1 : 1;
+      if (aLast || bLast) {
+        const aLabelIndex = aLast ? (labelOrder.get(aLast.label) ?? -1) : -1;
+        const bLabelIndex = bLast ? (labelOrder.get(bLast.label) ?? -1) : -1;
+        if (aLabelIndex !== bLabelIndex) return bLabelIndex - aLabelIndex;
+        const ar = episodePlacementRankForEntry(aLast);
+        const br = episodePlacementRankForEntry(bLast);
+        if (ar !== br) return ar - br;
+      }
+
+      return (fallbackPosition(a) - fallbackPosition(b)) || fullDisplayName(season.contestants[a]).localeCompare(fullDisplayName(season.contestants[b]));
+    });
+  }
+
+
+  function renderTrackRecordTableHtml(options = {}) {
     const season = state.season;
-    const columns = trackColumnDefinitions(season);
+    const episodeIndex = options.episodeIndex == null ? null : Number(options.episodeIndex);
+    const limited = Number.isFinite(episodeIndex);
+    const labelsThroughEpisode = limited ? trackLabelsThroughEpisode(season, episodeIndex) : null;
+    const columns = trackColumnDefinitions(season).filter((col) => !limited || labelsThroughEpisode.has(col.label));
     const labels = columns.map((col) => col.label);
     const titleByLabel = new Map(columns.map((col) => [col.label, col.title || col.label]));
-    const rows = seasonPlacementOrder().map((id) => {
+    const rowIds = limited ? episodeTrackRecordOrder(season, season.episodes[episodeIndex], labelsThroughEpisode) : seasonPlacementOrder();
+    const rows = rowIds.map((id) => {
       const stats = season.stats[id];
-      const byLabel = new Map(stats.track.map((x) => [x.label, x]));
+      const byLabel = new Map(stats.track.filter((entry) => !limited || labelsThroughEpisode.has(entry.label)).map((x) => [x.label, x]));
       let out = false;
       const cells = labels.map((label) => {
         const entry = byLabel.get(label) || null;
@@ -10761,11 +10954,24 @@ Options: ${names}`, "") || "";
         return cell;
       }).join("");
       const nameAttrs = tournamentTrackNameCellAttrs(season, id);
-      return `<tr><th${nameAttrs}>${statContestantInline(id)}</th>${cells}<td class="track-cell ppe-cell">${escapeHtml(trackPpeFor(id))}</td></tr>`;
+      const ppe = limited ? trackPpeForLabels(id, labelsThroughEpisode) : trackPpeFor(id);
+      return `<tr><th${nameAttrs}>${statContestantInline(id)}</th>${cells}<td class="track-cell ppe-cell">${escapeHtml(ppe)}</td></tr>`;
     }).join("");
-    const episodeHeadRow = `<tr class="track-episode-row"><th rowspan="2">Contestant</th>${columns.map((col) => `<th class="${String(col.label).toLowerCase() === "finale" ? "finale-col" : ""}" title="${escapeHtml(col.title || col.label)}">${trackHeaderHtml(col)}</th>`).join("")}<th class="ppe-col">PPE</th></tr>`;
-    const challengeHeadRow = `<tr class="track-challenge-row">${columns.map((col) => `<th class="track-challenge-type-head ${String(col.label).toLowerCase() === "finale" ? "finale-col" : ""}" title="${escapeHtml(col.title || col.label)}">${trackChallengeHeaderHtml(col)}</th>`).join("")}<th class="track-head-spacer ppe-col"></th></tr>`;
-    els.trackWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table"><thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
+    const episodeHeadRow = `<tr class="track-episode-row"><th rowspan="2">Contestant</th>${columns.map((col) => `<th class="${String(col.label).toLowerCase() === "finale" ? "finale-col" : ""}" title="${escapeHtml(col.title || col.label)}">${trackHeaderHtml(col)}</th>`).join("")}<th class="ppe-col" rowspan="2">PPE</th></tr>`;
+    const challengeHeadRow = `<tr class="track-challenge-row">${columns.map((col) => `<th class="track-challenge-type-head ${String(col.label).toLowerCase() === "finale" ? "finale-col" : ""}" title="${escapeHtml(col.title || col.label)}">${trackChallengeHeaderHtml(col)}</th>`).join("")}</tr>`;
+    return `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table${limited ? " episode-track-table" : ""}"><thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  function renderEpisodeTrackRecordPanel(ep) {
+    if (!els.episodeTrackWrap || !state.season || !ep) return;
+    const index = state.season.episodes.indexOf(ep);
+    els.episodeTrackWrap.innerHTML = renderTrackRecordTableHtml({ episodeIndex: Math.max(0, index) });
+  }
+
+  function renderTrackRecord() {
+    if (!state.season || !els.trackWrap) return;
+    const season = state.season;
+    els.trackWrap.innerHTML = renderTrackRecordTableHtml();
     const presentLegendTokens = new Set();
     season.castOrder.forEach((id) => (season.stats[id]?.track || []).forEach((entry) => {
       if (!entry?.token) return;
@@ -10795,43 +11001,231 @@ Options: ${names}`, "") || "";
     return `<strong>${escapeHtml(song.title || song.song || song.name || "Unknown Song")}</strong><br><span>${escapeHtml(song.artist || song.media || "")}</span>`;
   }
 
+  function lipSyncStatsIdentity(ls) {
+    if (!ls) return "";
+    const song = ls.song || {};
+    const songKey = song.id || song.title || song.song || song.name || "";
+    const idsKey = (ls.ids || []).slice().sort().join("|");
+    return [
+      String(ls.context || ""),
+      idsKey,
+      String(songKey || ""),
+      String(ls.roundNumber || ""),
+      String(ls.roundPosition || ""),
+      String(ls.resultType || ""),
+      String(ls.winnerId || ""),
+      String(ls.loserId || ls.eliminatedId || "")
+    ].join("::");
+  }
+
+  function crownLipSyncsForStats(ep) {
+    if (!ep) return [];
+    if (ep.allWinnersCrownSmackdown?.lipSyncs?.length) {
+      return ep.allWinnersCrownSmackdown.lipSyncs.filter((ls) => ls && (ls.ids || []).length);
+    }
+    const direct = [ep.lipSync].filter((ls) => ls && (ls.ids || []).length);
+    if (ep.lsftcFinale && direct.length) return direct;
+    return direct.length ? direct : (ep.extraLipSyncs || []).filter((ls) => ls && (ls.ids || []).length && /(?:crown|lsftc|all_winners)/i.test(`${ls.context || ""} ${ls.resultType || ""}`));
+  }
+
   function collectLipSyncsForStats(ep) {
-    const list = [];
+    const rows = [];
     const seen = new Set();
-    const add = (ls, source = "episode") => {
-      if (!ls) return;
-      const key = ls.id || `${source}:${ls.context || ""}:${(ls.ids || []).join("|")}:${ls.song?.title || ""}:${ls.roundNumber || ""}:${ls.roundPosition || ""}`;
+    const seenObjects = typeof WeakSet !== "undefined" ? new WeakSet() : null;
+    let sequence = 0;
+
+    const add = (ls) => {
+      if (!ls || !(ls.ids || []).length) return;
+      if (seenObjects && typeof ls === "object") {
+        if (seenObjects.has(ls)) return;
+        seenObjects.add(ls);
+      }
+      const key = lipSyncStatsIdentity(ls);
       if (seen.has(key)) return;
       seen.add(key);
-      list.push(ls);
+      ls.__statSequence = sequence++;
+      rows.push(ls);
     };
+
+    const addMany = (items) => (items || []).filter(Boolean).forEach(add);
+    if (!ep) return rows;
+
     if (isAllWinnersFormat(state.season) && ep.type === "finale" && ep.allWinnersFinale) {
-      (ep.allWinnersHersesSmackdown?.lipSyncs || []).forEach((ls) => add(ls, "qosdadhh"));
-      (ep.allWinnersCrownSmackdown?.lipSyncs || []).forEach((ls) => add(ls, "lsftc"));
-      return list;
+      addMany(ep.allWinnersHersesSmackdown?.lipSyncs || []);
+      addMany(crownLipSyncsForStats(ep));
+      return rows;
     }
-    const extraFirstTypes = new Set(["special_lalaparuza", "lalaparuza", "special_slayoffs", "lsftf"]);
-    if (extraFirstTypes.has(ep.type)) {
-      (ep.extraLipSyncs || []).forEach((ls) => add(ls, "extra"));
-      add(ep.lipSync, "episode");
-    } else {
-      add(ep.lipSync, "episode");
-      (ep.extraLipSyncs || []).forEach((ls) => add(ls, "extra"));
+
+    if (ep.type === "finale") {
+      if (ep.lsftcFinale || ep.allWinnersCrownSmackdown?.lipSyncs?.length) {
+        addMany(crownLipSyncsForStats(ep));
+      } else {
+        add(ep.lipSync);
+      }
+      return rows;
     }
-    return list;
+
+    if (["special_lalaparuza", "special_slayoffs", "lsftf"].includes(ep.type)) {
+      addMany(ep.extraLipSyncs || []);
+      if (ep.type !== "lsftf") add(ep.lipSync);
+      return rows;
+    }
+
+    if (ep.type === "reunion_lalaparuza") {
+      addMany(ep.extraLipSyncs || []);
+      add(ep.lipSync);
+      return rows;
+    }
+
+    if (ep.comeback?.format === "lalaparuza_comeback" || ep.comeback?.format === "game_within_a_game") {
+      addMany(ep.extraLipSyncs || []);
+      add(ep.lipSync);
+      return rows;
+    }
+
+    add(ep.lipSync);
+    addMany(ep.extraLipSyncs || []);
+    return rows;
+  }
+
+  function isCrownLipSync(ls, ep = null) {
+    if (!ls || !ep || ep.type !== "finale") return false;
+    const resultType = String(ls.resultType || "").toLowerCase();
+    const context = String(ls.context || "").toLowerCase();
+    const crownParts = (ep.lsftcFinale || ep.allWinnersCrownSmackdown) ? allWinnersCrownParts(ep) : null;
+    if (crownParts?.finalLipSync && ls === crownParts.finalLipSync) return true;
+    if (resultType === "all_winners_final_round" || resultType === "crown_final" || resultType === "lsftc_final") return true;
+    if (resultType === "qosdadhh_final") return false;
+    if (ls.isFinalRound && (ep.winnerIds || []).includes(ls.winnerId)) return true;
+    if (ls === ep.lipSync && (ep.winnerIds || []).some((id) => (ls.ids || []).includes(id))) return true;
+    return (context.includes("final") && context.includes("crown")) || context.includes("final lip sync for the crown");
+  }
+
+  function isForTheWinLipSync(ls, ep = null) {
+    if (!ls) return false;
+    if (isCrownLipSync(ls, ep)) return true;
+    const context = String(ls.context || "").toLowerCase();
+    const resultType = String(ls.resultType || "").toLowerCase();
+    const eliminationTypes = new Set([
+      "elimination",
+      "double_sashay",
+      "team_elimination",
+      "team_pair_elimination",
+      "team_top_four_elimination",
+      "slayoffs_bottom",
+      "lalaparuza_final",
+      "lsftf_final",
+      "mid_season_rate_a_queen_bottom1",
+      "cunt_test_final_spot"
+    ]);
+    if (eliminationTypes.has(resultType) || /(?:^|_)elimination(?:_|$)/.test(resultType)) return false;
+    if (/^(?:lalaparuza_round|reunion_lalaparuza_round|slayoffs_round|lsftf_round|all_winners_smackdown_round|qosdadhh_round)/.test(resultType)) return true;
+    if (["qosdadhh_final", "lalaparuza_comeback", "game_within_a_game", "fame_games_multiplier", "porkchop_battle"].includes(resultType)) return true;
+    if (lipSyncEliminatesContestant(ls, ep) && !["double_shantay", "lucky_cow_save", "badonka_save"].includes(resultType)) return false;
+    return context.includes("top two") || context.includes("for the win") || context.includes("legacy") || context.includes("lsftc") || context.includes("lip sync for the crown");
+  }
+
+  function smackdownRoundClass(ls, ep = null) {
+    if (!ls) return "";
+    if (isCrownLipSync(ls, ep)) return "ls-lalaparuza-final";
+    const resultType = String(ls.resultType || "").toLowerCase();
+    const context = String(ls.context || "").toLowerCase();
+    const isSmackdown = /(?:lalaparuza|slayoffs_round|reunion_lalaparuza|lsftf_round|all_winners_smackdown_round|qosdadhh_round|qosdadhh_final|game_within_a_game|porkchop_battle)/.test(resultType)
+      || context.includes("lalaparuza")
+      || context.includes("lsftc")
+      || context.includes("lip sync for the crown")
+      || context.includes("lip sync for the finale")
+      || context.includes("she done already done had herses");
+    if (!isSmackdown || !isForTheWinLipSync(ls, ep)) return "";
+    const round = clamp(Number(ls.roundNumber || 1), 1, 5);
+    return `ls-lalaparuza-r${round}`;
+  }
+
+  function lipSyncWinnerOutcomeClass(ls, ep = null) {
+    const smackdownClass = smackdownRoundClass(ls, ep);
+    if (smackdownClass) return smackdownClass;
+    if (isCrownLipSync(ls, ep)) return "ls-lalaparuza-final";
+    return "ls-win-top";
+  }
+
+  function lipSyncPurposeForStats(ep, ls) {
+    if (isCrownLipSync(ls, ep)) return { key: "crown", label: "For The Crown", className: "ls-purpose-crown" };
+    if (isForTheWinLipSync(ls, ep)) return { key: "winner", label: "For The Win", className: "ls-purpose-win" };
+    return { key: "eliminated", label: "Eliminated", className: "ls-purpose-elim" };
+  }
+
+  function lipSyncHeaderForStats(ep, ls) {
+    return lipSyncPurposeForStats(ep, ls);
+  }
+
+  function lipSyncStatOutcome(ep, ls, bottomLipSyncCounts = {}) {
+    const eliminated = (ep.eliminatedIds || []).filter((id) => !(state.season.contestants[id]?.isAssassin));
+    const lsEliminated = eliminated.filter((id) => (ls.ids || []).includes(id));
+    const isBottomLipSync = !isForTheWinLipSync(ls, ep) && !ls.isAssassinLipSync && !(ep.legacyLipsticks || []).length;
+    let outcomeText = "None";
+    let outcomeClass = "ls-none";
+
+    if (isCrownLipSync(ls, ep)) {
+      const winnerIds = (ep.winnerIds || []).filter((id) => (ls.ids || []).includes(id));
+      outcomeText = statContestantList(winnerIds.length ? winnerIds : [ls.winnerId].filter(Boolean), " / ") || "—";
+      outcomeClass = lipSyncWinnerOutcomeClass(ls, ep);
+    } else if ((ep.legacyLipsticks || []).length && lsEliminated.length) {
+      outcomeText = statContestantList(lsEliminated, " / ");
+      outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
+    } else if (ls.isAssassinLipSync && lsEliminated.length) {
+      outcomeText = statContestantList(lsEliminated, " / ");
+      outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
+    } else if (isForTheWinLipSync(ls, ep)) {
+      outcomeText = statContestantInline(ls.winnerId);
+      outcomeClass = lipSyncWinnerOutcomeClass(ls, ep);
+    } else if (isBottomLipSync && lsEliminated.length) {
+      outcomeText = statContestantList(lsEliminated, " / ");
+      outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
+    } else if (ls.winnerId && !lsEliminated.length) {
+      outcomeText = statContestantInline(ls.winnerId);
+      outcomeClass = lipSyncWinnerOutcomeClass(ls, ep);
+    }
+
+    return { outcomeText, outcomeClass };
+  }
+
+  function lipSyncStatsChoppedIds(ep) {
+    return (ep?.eliminatedIds || []).filter((id) => id && !state.season.contestants[id]?.isAssassin);
+  }
+
+  function trackBottomCountThroughEpisode(id, ep) {
+    if (!state.season?.stats?.[id] || !ep) return 1;
+    const columns = trackColumnDefinitions(state.season);
+    const order = new Map(columns.map((col, index) => [col.label, index]));
+    const epIndex = order.get(ep.label);
+    const isBottomToken = (entry) => {
+      const token = String(entry?.token || "");
+      const display = String(entry?.display || "");
+      if (/^BTM\d*$/.test(token) || token === "BTM" || token === "CHOC") return true;
+      if (token === "ELIM" || entry?.eliminated) return true;
+      if (/\bELIM\b/.test(display) && !["WINNER", "RU", "RUN"].includes(token)) return true;
+      return false;
+    };
+    const count = (state.season.stats[id].track || []).filter((entry) => {
+      if (!entry || entry.label === "Entry") return false;
+      const index = order.get(entry.label);
+      if (Number.isFinite(epIndex) && Number.isFinite(index) && index > epIndex) return false;
+      return isBottomToken(entry);
+    }).length;
+    return Math.max(1, count);
+  }
+
+  function lipSyncStatsWinnerHtml(ls, ep) {
+    const winnerIds = isCrownLipSync(ls, ep)
+      ? ((ep?.winnerIds || []).filter((id) => (ls.ids || []).includes(id)))
+      : [];
+    const ids = winnerIds.length ? winnerIds : [ls?.winnerId].filter(Boolean);
+    return statContestantList(ids, " / ") || "—";
   }
 
   function renderAllWinnersLipSyncStats() {
     const rows = [];
-    const lipSyncCounts = {};
     const blockCountsSeen = {};
-    const allWinnersWinnerClass = (ls) => {
-      if (ls?.resultType === "qosdadhh_final") return "aw-qosdadhh-final-win";
-      if (ls?.resultType === "qosdadhh_round") return "aw-qosdadhh-round-win";
-      if (ls?.resultType === "all_winners_final_round") return "aw-lsftc-final-win";
-      if (ls?.resultType === "all_winners_smackdown_round") return "aw-lsftc-round-win";
-      return "ls-win-top";
-    };
     state.season.episodes.forEach((ep) => {
       const blockedIdForEpisode = ep.allWinnersBlockTargetId || ep.allWinnersTrackBlockedId || null;
       let blockedClass = "";
@@ -10845,15 +11239,35 @@ Options: ${names}`, "") || "";
           blockedHtml = "None";
         }
       }
+
       collectLipSyncsForStats(ep).forEach((ls) => {
-        (ls.ids || []).forEach((id) => { if (state.season.stats[id]) lipSyncCounts[id] = (lipSyncCounts[id] || 0) + 1; });
         const contestantsHtml = (ls.ids || []).map((id) => statContestantInline(id)).join(`<span class="stat-separator"> vs. </span>`);
-        const winnerHtml = ls.winnerId ? statContestantInline(ls.winnerId) : "—";
-        const winnerClass = allWinnersWinnerClass(ls);
-        rows.push(`<tr><td>${escapeHtml(statEpisodeLabel(ep.label))}</td><td class="lip-sync-contestants all-winners-stat-matchup">${contestantsHtml}</td><td>${statLipSyncSongHtml(ls)}</td><td class="lip-sync-result ${winnerClass}">${winnerHtml}</td><td class="lip-sync-blocked-cell ${blockedClass}">${blockedHtml}</td></tr>`);
+        const winnerClass = lipSyncWinnerOutcomeClass(ls, ep);
+        rows.push(`<tr><td>${escapeHtml(statEpisodeLabel(ep.label))}</td><td class="lip-sync-contestants all-winners-stat-matchup">${contestantsHtml}</td><td>${statLipSyncSongHtml(ls)}</td><td class="lip-sync-result ${winnerClass}">${lipSyncStatsWinnerHtml(ls, ep)}</td><td class="lip-sync-blocked-cell ${blockedClass}">${blockedHtml}</td></tr>`);
       });
     });
     els.lipSyncStatsWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table lip-sync-stats-table all-winners-lip-sync-stats-table"><thead><tr><th>Episode</th><th>Contestants</th><th>Song</th><th>Winner</th><th>Blocked</th></tr></thead><tbody>${rows.join("") || `<tr><td colspan="5">No lip syncs recorded.</td></tr>`}</tbody></table></div>`;
+  }
+
+  function renderDualOutcomeLipSyncStats() {
+    const rows = [];
+
+    state.season.episodes.forEach((ep) => {
+      collectLipSyncsForStats(ep).forEach((ls) => {
+        const choppedIds = lipSyncStatsChoppedIds(ep);
+        const lipstickByVoter = new Map((ep.legacyLipsticks || []).map((vote) => [vote.voterId, fullDisplayName(state.season.contestants[vote.lipstickId] || { id: vote.lipstickId })]));
+        if (ls.isAssassinLipSync) {
+          if (ep.assassinWinnerChoiceId) lipstickByVoter.set(ep.winnerIds?.[0], `Top: ${fullDisplayName(state.season.contestants[ep.assassinWinnerChoiceId] || { id: ep.assassinWinnerChoiceId })}`);
+          if (ls.assassinId && ep.assassinGroupChoiceId) lipstickByVoter.set(ls.assassinId, `Group: ${fullDisplayName(state.season.contestants[ep.assassinGroupChoiceId] || { id: ep.assassinGroupChoiceId })}`);
+        }
+        const contestantsHtml = (ls.ids || []).map((id) => statContestantInlineWithNote(id, lipstickByVoter.get(id) || "")).join(`<span class="stat-separator"> vs. </span>`);
+        const maxBottomCount = choppedIds.length ? Math.max(...choppedIds.map((id) => trackBottomCountThroughEpisode(id, ep))) : 0;
+        const choppedClass = choppedIds.length ? lipSyncOutcomeClass(maxBottomCount) : "ls-none";
+        rows.push(`<tr><td>${escapeHtml(statEpisodeLabel(ep.label))}</td><td class="lip-sync-contestants">${contestantsHtml}</td><td>${statLipSyncSongHtml(ls)}</td><td class="lip-sync-result ${lipSyncWinnerOutcomeClass(ls, ep)}">${lipSyncStatsWinnerHtml(ls, ep)}</td><td class="lip-sync-result ${choppedClass}">${choppedIds.length ? statContestantList(choppedIds, " / ") : "None"}</td></tr>`);
+      });
+    });
+
+    els.lipSyncStatsWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table lip-sync-stats-table"><thead><tr><th>Episode</th><th>Contestants</th><th>Song</th><th>Winner</th><th>Eliminated</th></tr></thead><tbody>${rows.join("") || `<tr><td colspan="5">No lip syncs recorded.</td></tr>`}</tbody></table></div>`;
   }
 
   function renderLipSyncStats() {
@@ -10861,57 +11275,40 @@ Options: ${names}`, "") || "";
       renderAllWinnersLipSyncStats();
       return;
     }
+    if (isLegacyFormat(state.season) || isAssassinFormat(state.season)) {
+      renderDualOutcomeLipSyncStats();
+      return;
+    }
+
     const rows = [];
-    const lipSyncCounts = {};
     const bottomLipSyncCounts = {};
-    let lastHeader = "";
-    const headerForLipSync = (ep, ls) => {
-      if (ep.type === "finale" && (ep.winnerIds || []).includes(ls.winnerId)) return { key: "winner", label: "Winner" };
-      if (isForTheWinLipSync(ls, ep)) return { key: "winner", label: "Winner" };
-      return { key: "eliminated", label: "Eliminated" };
+    let currentHeader = "";
+
+    const pushHeaderIfNeeded = (label) => {
+      if (currentHeader === label) return;
+      currentHeader = label;
+      rows.push(`<tr class="lip-sync-header-row"><th>Episode</th><th>Contestants</th><th>Song</th><th>${escapeHtml(label)}</th></tr>`);
     };
+
     state.season.episodes.forEach((ep) => {
-      collectLipSyncsForStats(ep).forEach((ls) => {
-        (ls.ids || []).forEach((id) => { if (state.season.stats[id]) lipSyncCounts[id] = (lipSyncCounts[id] || 0) + 1; });
+      const lipSyncs = collectLipSyncsForStats(ep);
+      lipSyncs.forEach((ls) => {
         const bottomCountingLipSync = !isForTheWinLipSync(ls, ep) && !ls.isAssassinLipSync && !(ep.legacyLipsticks || []).length;
         if (bottomCountingLipSync) (ls.ids || []).forEach((id) => { if (state.season.stats[id]) bottomLipSyncCounts[id] = (bottomLipSyncCounts[id] || 0) + 1; });
-        const eliminated = (ep.eliminatedIds || []).filter((id) => !(state.season.contestants[id]?.isAssassin));
-        const lsEliminated = eliminated.filter((id) => (ls.ids || []).includes(id));
-        const isBottomLipSync = !isForTheWinLipSync(ls, ep) && !ls.isAssassinLipSync && !(ep.legacyLipsticks || []).length;
-        let outcomeText = "None";
-        let outcomeClass = "ls-none";
-        if ((ep.legacyLipsticks || []).length && lsEliminated.length) {
-          outcomeText = statContestantList(lsEliminated, " / ");
-          outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
-        } else if (ls.isAssassinLipSync && lsEliminated.length) {
-          outcomeText = statContestantList(lsEliminated, " / ");
-          outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
-        } else if (ep.type === "finale" && (ep.winnerIds || []).includes(ls.winnerId)) {
-          outcomeText = statContestantInline(ls.winnerId);
-          outcomeClass = "ls-season-winner";
-        } else if (isForTheWinLipSync(ls, ep)) {
-          outcomeText = statContestantInline(ls.winnerId);
-          outcomeClass = "ls-win-top";
-        } else if (isBottomLipSync && lsEliminated.length) {
-          outcomeText = statContestantList(lsEliminated, " / ");
-          outcomeClass = lipSyncOutcomeClass(Math.max(...lsEliminated.map((id) => bottomLipSyncCounts[id] || 1)));
-        }
-        const lipstickByVoter = new Map((ep.legacyLipsticks || []).map((vote) => [vote.voterId, fullDisplayName(state.season.contestants[vote.lipstickId] || { id: vote.lipstickId })]));
-        if (ls.isAssassinLipSync) {
-          if (ep.assassinWinnerChoiceId) lipstickByVoter.set(ep.winnerIds?.[0], `Top: ${fullDisplayName(state.season.contestants[ep.assassinWinnerChoiceId] || { id: ep.assassinWinnerChoiceId })}`);
-          if (ls.assassinId && ep.assassinGroupChoiceId) lipstickByVoter.set(ls.assassinId, `Group: ${fullDisplayName(state.season.contestants[ep.assassinGroupChoiceId] || { id: ep.assassinGroupChoiceId })}`);
-        }
-        const header = headerForLipSync(ep, ls);
-        if (header.key !== lastHeader) {
-          rows.push(`<tr class="lip-sync-stat-section-header"><th>Episode</th><th>Contestants</th><th>Song</th><th>${escapeHtml(header.label)}</th></tr>`);
-          lastHeader = header.key;
-        }
-        const contestantsHtml = (ls.ids || []).map((id) => statContestantInlineWithNote(id, lipstickByVoter.get(id) || "")).join(`<span class="stat-separator"> vs. </span>`);
+      });
+
+      lipSyncs.forEach((ls) => {
+        const forWin = isForTheWinLipSync(ls, ep) || isCrownLipSync(ls, ep);
+        const headerLabel = forWin ? "Winner" : "Eliminated";
+        pushHeaderIfNeeded(headerLabel);
+        const contestantsHtml = (ls.ids || []).map((id) => statContestantInline(id)).join(`<span class="stat-separator"> vs. </span>`);
+        const { outcomeText, outcomeClass } = lipSyncStatOutcome(ep, ls, bottomLipSyncCounts);
         rows.push(`<tr><td>${escapeHtml(statEpisodeLabel(ep.label))}</td><td class="lip-sync-contestants">${contestantsHtml}</td><td>${statLipSyncSongHtml(ls)}</td><td class="lip-sync-result ${outcomeClass}">${outcomeText}</td></tr>`);
       });
     });
-    els.lipSyncStatsWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table lip-sync-stats-table"><tbody>${rows.join("") || `<tr><td colspan="4">No lip syncs recorded.</td></tr>`}</tbody></table></div>`;
+    els.lipSyncStatsWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table lip-sync-stats-table variable-lip-sync-stats-table"><tbody>${rows.join("") || `<tr><td colspan="4">No lip syncs recorded.</td></tr>`}</tbody></table></div>`;
   }
+
 
   function runwayOutcomeFor(score, sortedScores) {
     const values = (sortedScores || []).slice().sort((a, b) => b - a);
@@ -10922,8 +11319,8 @@ Options: ${names}`, "") || "";
     const pseudo = Math.abs(Math.sin((score + 31) * 19.919 + (rank + 3) * 61.631 + values.length * 13.137)) % 1;
 
     const shootChance = clamp(0.015 + Math.pow(percentile, 3.2) * 0.24, 0.01, 0.30);
-    const scootChance = clamp(0.004 + Math.pow(1 - percentile, 4.1) * 0.09, 0.002, 0.10);
-    const tootChance = clamp(0.22 + percentile * 0.58, 0.18, 0.86);
+    const scootChance = clamp(0.003 + Math.pow(1 - percentile, 4.4) * 0.06, 0.001, 0.07);
+    const tootChance = clamp(0.42 + percentile * 0.48, 0.36, 0.94);
 
     if (pseudo < shootChance) return "SHOOT";
     if (pseudo > 1 - scootChance) return "SCOOT";
@@ -10969,11 +11366,14 @@ Options: ${names}`, "") || "";
   function popularityClass(value) {
     if (value === "" || value == null) return "pop-empty";
     const n = Number(value);
-    if (n >= 72) return "pop-high";
-    if (n >= 55) return "pop-mid-high";
-    if (n >= 45) return "pop-mid";
-    if (n >= 30) return "pop-mid-low";
-    return "pop-low";
+    if (n >= 95) return "pop-super-high";
+    if (n >= 75) return "pop-high";
+    if (n >= 50) return "pop-mid-high";
+    if (n >= 25) return "pop-mid";
+    if (n >= 0) return "pop-mid-low";
+    if (n >= -25) return "pop-low";
+    if (n >= -60) return "pop-very-low";
+    return "pop-super-low";
   }
 
   function renderPopularityStats() {
@@ -11209,12 +11609,24 @@ Options: ${names}`, "") || "";
       if (next) setEpisodeStep(next);
       else goToNextEpisode();
     });
-    els.finishEpisodeBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep?.pointCeremony && state.currentStep === "untucked") setEpisodeStep("pointceremony"); else goToNextEpisode(); });
-    document.getElementById("finishPointCeremonyBtn")?.addEventListener("click", goToNextEpisode);
+    els.finishEpisodeBtn?.addEventListener("click", () => {
+      const ep = currentEpisode();
+      if (ep?.pointCeremony && state.currentStep === "untucked") setEpisodeStep("pointceremony");
+      else if (nextVisibleStep(state.currentStep || "untucked", 1) === "trackrecord") setEpisodeStep("trackrecord");
+      else goToNextEpisode();
+    });
+    document.getElementById("finishPointCeremonyBtn")?.addEventListener("click", () => {
+      if (nextVisibleStep(state.currentStep || "pointceremony", 1) === "trackrecord") setEpisodeStep("trackrecord");
+      else goToNextEpisode();
+    });
     els.revealResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.resultsRevealed = true; saveState(); renderResultsPanel(ep); } });
     els.revealS17LsfylResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.s17SurvivalRevealed = true; saveState(); renderS17LsfylResultsPanel(ep); } });
     els.revealCrownWinnerBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.resultsRevealed = true; saveState(); renderAllWinnersFinalePanels(ep); } });
-    els.allWinnersFinalStatsBtn?.addEventListener("click", () => { renderStats(); showScreen("stats-screen"); });
+    els.allWinnersFinalStatsBtn?.addEventListener("click", () => {
+      const next = nextVisibleStep(state.currentStep || "winner", 1);
+      if (next === "trackrecord") setEpisodeStep("trackrecord");
+      else { renderStats(); showScreen("stats-screen"); }
+    });
     els.downloadTrackRecordBtn?.addEventListener("click", downloadTrackRecordPng);
 
     $all(".stats-tab").forEach((tab) => tab.addEventListener("click", () => {
