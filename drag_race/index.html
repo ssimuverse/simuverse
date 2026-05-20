@@ -433,6 +433,7 @@
           <button class="section-toggle" data-step="s17lsfylresults">Lip Sync for Your Life Results</button>
           <button class="section-toggle" data-step="untucked">Untucked</button>
           <button class="section-toggle" data-step="pointceremony">Point Ceremony</button>
+          <button class="section-toggle" data-step="trackrecord">Track Record</button>
         </div>
 
         <div class="panel episode-panel-shell">
@@ -699,7 +700,16 @@
             <div class="event-stack" id="pointCeremonyStack"></div>
             <div class="proceed-row dual">
               <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
-              <button class="primary-btn" id="finishPointCeremonyBtn" type="button">Next Episode</button>
+              <button class="primary-btn" id="finishPointCeremonyBtn" type="button">Proceed</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="trackrecord">
+            <div class="section-title">Track Record</div>
+            <div class="table-wrap episode-track-wrap" id="episodeTrackWrap"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="pointceremony">Back</button>
+              <button class="primary-btn proceed-btn" data-next="__nextEpisode">Next Episode</button>
             </div>
           </section>
         </div>
