@@ -609,7 +609,21 @@
   function showScreen(id) {
     $$(".screen").forEach(s => s.classList.toggle("is-active", s.id === id));
   }
-  function showPanel(step) {
+
+  function scrollToEpisodeSection() {
+    const episodeScreen = E("episode-screen");
+    if (!episodeScreen?.classList.contains("is-active")) return;
+    requestAnimationFrame(() => {
+      const panel = $(".episode-panel.is-active");
+      (panel || $(".episode-panel-shell") || episodeScreen).scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  function showPanel(step, scroll = false) {
+    if (step === "__nextEpisode") {
+      proceedEpisode();
+      return;
+    }
     const visible = getVisibleSteps();
     if (!visible.includes(step)) step = visible[0] || "status";
     state.currentStep = step;
@@ -617,6 +631,7 @@
     $$(".episode-panel").forEach(p => p.classList.toggle("is-active", p.dataset.panel === step));
     const title = $(`.section-toggle[data-step="${step}"]`)?.textContent || step;
     if (els.episodeSubline) els.episodeSubline.textContent = title;
+    if (scroll) scrollToEpisodeSection();
   }
 
   function getVisibleSteps() {
@@ -629,7 +644,7 @@
     const isLastSupper = ep?.type === "last_supper";
     const isResurrectionCompetitive = !!ep?.resurrection;
     const isResurrectionFinale = !!ep?.resurrectionFinale;
-    const hasReturnee = !!ep?.returnedContestant;
+    const hasReturnee = !!(ep?.returnedContestant || ep?.lateEntryContestant);
     const hasPower = !!(ep?.curse || ep?.keyPower || ep?.immunity || ep?.winnerNomination || ep?.frightAdvantage);
     const hasFright = !!ep?.hasFright;
     const hasHellbound = !!(ep?.hellbound || ep?.hellboundFinal);
@@ -647,7 +662,8 @@
       lipsync: false,
       results: false,
       hellbound: false,
-      winner: true
+      winner: true,
+      track: true
     } : isResurrectionCompetitive ? {
       returnee: hasReturnee,
       status: true,
@@ -661,7 +677,8 @@
       lipsync: false,
       results: true,
       hellbound: false,
-      winner: false
+      winner: false,
+      track: true
     } : isLastSupper ? {
       returnee: false,
       status: true,
@@ -675,7 +692,8 @@
       lipsync: false,
       results: false,
       hellbound: hasHellbound,
-      winner: false
+      winner: false,
+      track: false
     } : {
       returnee: hasReturnee,
       status: true,
@@ -689,7 +707,8 @@
       lipsync: !isFinale && !ep?.ghostlyGallows,
       results: !isFinale,
       hellbound: hasHellbound,
-      winner: isFinale
+      winner: isFinale,
+      track: true
     };
     $$(".section-toggle").forEach(btn => {
       const show = !!visibility[btn.dataset.step];
@@ -700,12 +719,12 @@
       const show = !!visibility[panel.dataset.panel];
       panel.hidden = !show;
     });
-    const order = ["returnee", "status", "guest", "mini", "teams", "maxi", "judging", "placements", "cauldron", "lipsync", "results", "hellbound", "winner"].filter(step => visibility[step]);
+    const order = ["returnee", "status", "guest", "mini", "teams", "maxi", "judging", "placements", "cauldron", "lipsync", "results", "hellbound", "winner", "track"].filter(step => visibility[step]);
     $$(".episode-panel").forEach(panel => {
       const current = panel.dataset.panel;
       const i = order.indexOf(current);
       const prev = order[Math.max(0, i - 1)] || order[0];
-      const next = order[Math.min(order.length - 1, i + 1)] || order.at(-1);
+      const next = i >= 0 && i === order.length - 1 ? "__nextEpisode" : (order[Math.min(order.length - 1, i + 1)] || order.at(-1));
       $$(".proceed-btn", panel).forEach(btn => {
         const text = btn.textContent.trim().toLowerCase();
         if (text === "back") btn.dataset.next = prev;
@@ -883,7 +902,7 @@
     const competitiveWindow = Math.max(1, state.config.castSize - state.config.finalistSize);
     const curseGoal = state.config.curses ? 1 : 0;
     const keyGoal = state.config.keys ? (competitiveWindow >= 7 && should(.38) ? 2 : 1) : 0;
-    state.season = { contestants, episodes:[], eliminated:[], usedFloorshows:[], returnedOnce:false, pendingReturn:null, lateEntryId: state.config.premiere === "late_entry" ? state.lateEntryId : null, lateEntryActivated:false, sonicUsed:false, lastSupperAdded:false, completed:false, nonElims:[], doubleElims:[], curseGoal, cursesUsed:0, keyGoal, keysUsed:0, lastCurseEpisode:0, lastKeyEpisode:0, hellboundChampion:null, hellboundFinalWinner:null, hellboundLosses:[], resurrectionComplete:false, specials:{ bottomQuit:false, walkQuit:false, disq:false } };
+    state.season = { contestants, episodes:[], eliminated:[], usedFloorshows:[], returnedOnce:false, pendingReturn:null, lateEntryId: state.config.premiere === "late_entry" ? state.lateEntryId : null, lateEntryActivated:false, lateEntryAnnounced:false, sonicUsed:false, lastSupperAdded:false, completed:false, nonElims:[], doubleElims:[], curseGoal, cursesUsed:0, keyGoal, keysUsed:0, lastCurseEpisode:0, lastKeyEpisode:0, hellboundChampion:null, hellboundFinalWinner:null, hellboundLosses:[], resurrectionComplete:false, specials:{ bottomQuit:false, walkQuit:false, disq:false } };
     state.selected.forEach((a, i) => state.selected.slice(i + 1).forEach((b) => {
       const value = Number(state.relationshipSetup[pairKey(a, b)] ?? 0);
       contestants[a].relationships[b] = value;
@@ -1520,6 +1539,10 @@
       ep.returnedContestant = state.season.pendingReturn;
       state.season.pendingReturn = null;
     }
+    if (state.config.premiere === "late_entry" && state.season.lateEntryActivated && !state.season.lateEntryAnnounced && state.season.lateEntryId && actives.includes(state.season.lateEntryId)) {
+      ep.lateEntryContestant = state.season.lateEntryId;
+      state.season.lateEntryAnnounced = true;
+    }
     const cfg = state.config;
     ep.floorshow = selectFloorShow(actives.length);
     state.season.usedFloorshows.push(ep.floorshow.name);
@@ -1956,9 +1979,28 @@
     els.episodeTitle.textContent = ep.label;
     els.episodeSelect.innerHTML = state.season.episodes.map((e, i) => `<option value="${i}" ${i === state.season.episodes.indexOf(ep) ? "selected" : ""}>${esc(e.label)}</option>`).join("");
     const returnNotice = "";
+    const entryId = ep.lateEntryContestant || ep.returnedContestant || null;
+    const isFakeoutReturn = !!(ep.returnedContestant && state.config?.premiere === "fakeout_elim");
+    const entryTitle = ep.lateEntryContestant ? "Late Entry" : isFakeoutReturn ? "Fakeout Elimination" : "Wildcard Entry";
+    const entryButton = $(`.section-toggle[data-step="returnee"]`);
+    if (entryButton) entryButton.textContent = entryTitle;
+    const entrySectionTitle = $(`[data-panel="returnee"] .section-title`);
+    if (entrySectionTitle) entrySectionTitle.textContent = entryTitle;
     if (els.wildcardEntryStack) {
-      els.wildcardEntryStack.innerHTML = ep.returnedContestant
-        ? `${eventCard(`${esc(monster(ep.returnedContestant).name)} has entered the competition as a wildcard!`, `${stripCard(ep.returnedContestant)}`, "wildcard-entry-card")}`
+      const entryName = entryId ? esc(monster(entryId).name) : "";
+      const entryClass = ep.lateEntryContestant ? "late-entry-episode-card" : isFakeoutReturn ? "fakeout-entry-episode-card" : "";
+      const entryHeadline = ep.lateEntryContestant
+        ? `${entryName} enters the competition!`
+        : isFakeoutReturn
+          ? `${entryName} has been resurrected!`
+          : `${entryName} has entered the competition as a wildcard!`;
+      const entryBody = ep.lateEntryContestant
+        ? "A new monster arrives in the boudoir and joins the competition."
+        : isFakeoutReturn
+          ? "The monster previously exterminated returns before the next floorshow begins."
+          : "The nightmare gets another chance.";
+      els.wildcardEntryStack.innerHTML = entryId
+        ? `<article class="event-card wildcard-entry-card ${entryClass}"><strong>${entryHeadline}</strong><div class="contestant-strip small-strip single-entry-strip">${stripCard(entryId)}</div><p>${entryBody}</p></article>`
         : "";
     }
     els.remainingStrip.innerHTML = returnNotice + ((ep.activeAtStart || activeIds()).map(stripCard).join("") || `<div class="empty-card">The crypt is empty.</div>`);
@@ -2073,7 +2115,7 @@
 
     renderHellbound(ep);
     $$(".results-to-hellbound-btn").forEach(btn => btn.hidden = !ep.hellbound);
-    $$(".results-next-episode-btn").forEach(btn => btn.hidden = !!ep.hellbound);
+    $$(".results-track-btn").forEach(btn => btn.hidden = !!ep.hellbound);
 
     if (ep.resurrection) {
       const resBtn = $(`.section-toggle[data-step="results"]`);
@@ -2087,7 +2129,8 @@
       els.revealBoard.innerHTML = `<div class="death-scene-wrap resurrection-points-wrap"><div class="result-card death-scene"><h3>Resurrection Points Locked</h3><p>Nobody is exterminated tonight. Only this episode's points are shown here.</p></div><div class="challenge-grid centered-box-grid resurrection-points-grid">${rows}</div></div>`;
       els.crowningMessage.textContent = "";
       els.revealResultsBtn.hidden = true;
-      showPanel(ep.returnedContestant ? "returnee" : "status");
+      attachEpisodeTrackRecord(ep);
+      showPanel((ep.lateEntryContestant || ep.returnedContestant) ? "returnee" : "status");
       return;
     }
 
@@ -2102,6 +2145,7 @@
       if (lipBtn) lipBtn.textContent = "Banishment";
       if (resBtn) resBtn.textContent = "Banishment";
       if (els.resultsSectionTitle) els.resultsSectionTitle.textContent = "Banishment";
+      attachEpisodeTrackRecord(ep);
       showPanel("status");
       return;
     }
@@ -2120,7 +2164,8 @@
       els.crowningMessage.textContent = "";
       els.revealResultsBtn.hidden = !!ep.revealed;
       els.revealResultsBtn.textContent = "Reveal Exterminated";
-      showPanel(ep.returnedContestant ? "returnee" : "status");
+      attachEpisodeTrackRecord(ep);
+      showPanel((ep.lateEntryContestant || ep.returnedContestant) ? "returnee" : "status");
       return;
     }
 
@@ -2138,7 +2183,8 @@
     els.crowningMessage.textContent = "";
     els.revealResultsBtn.hidden = false;
     els.revealResultsBtn.textContent = "Reveal Death";
-    showPanel(ep.returnedContestant ? "returnee" : "status");
+    attachEpisodeTrackRecord(ep);
+    showPanel((ep.lateEntryContestant || ep.returnedContestant) ? "returnee" : "status");
   }
 
   function placementCard(id, status) {
@@ -2231,6 +2277,7 @@
     if (!showdown) return;
     showdown.revealed = true;
     renderHellbound(ep);
+    attachEpisodeTrackRecord(ep);
   }
 
   function renderHellbound(ep) {
@@ -2239,7 +2286,7 @@
     const btn = $(`.section-toggle[data-step="hellbound"]`);
     if (btn) btn.textContent = "Hellbound Showdown";
     const revealBtn = els.revealHellboundBtn;
-    const nextBtns = $$(`[data-panel="hellbound"] .next-episode-btn`);
+    const nextBtns = $$(`[data-panel="hellbound"] .hellbound-track-btn`);
     if (!showdown) {
       els.hellboundStack.innerHTML = "";
       if (revealBtn) revealBtn.hidden = true;
@@ -2273,6 +2320,7 @@
     if (miniTitle) miniTitle.textContent = "The Last Supper";
     els.miniChallengeStack.innerHTML = `<article class="event-card last-supper-intro"><strong>The Last Supper</strong><p>The exterminated monsters return for one final reunion before the finale.</p></article><div class="last-supper-topic-list">${(ep.topics || []).map((topic, i) => { const item = typeof topic === "string" ? { text: topic, ids: [] } : topic; return `<article class="event-card cauldron-event last-supper-topic"><strong>Topic ${i + 1}</strong><div class="contestant-strip event-people">${(item.ids || []).map(stripCard).join("")}</div><p>${esc(item.text || item)}</p></article>`; }).join("")}</div>`;
     renderHellbound(ep);
+    if (els.episodeTrackRecord) els.episodeTrackRecord.innerHTML = "";
     showPanel("status");
   }
 
@@ -2302,6 +2350,7 @@
       els.winnerCrowningMessage.textContent = ep.revealed ? `${monster(ep.winner).name} survives the Resurrection and wins.` : "";
       els.revealCrownWinnerBtn.hidden = ep.revealed;
       els.allWinnersFinalStatsBtn.hidden = !ep.revealed;
+      attachEpisodeTrackRecord(ep);
       showPanel("winner");
       return;
     }
@@ -2322,6 +2371,7 @@
     if (els.hellboundStack) els.hellboundStack.innerHTML = "";
     els.winnerBoard.innerHTML = ep.activeAtStart.map(id => `<article class="challenge-card finale-contender" data-finale-id="${esc(id)}"><img class="avatar mid-sq" src="${esc(monster(id).image)}" onerror="this.src='${PLACEHOLDER}'" alt="${esc(monster(id).name)}"><h4>${esc(monster(id).name)}</h4></article>`).join("");
     els.winnerCrowningMessage.textContent = "";
+    attachEpisodeTrackRecord(ep);
     showPanel("winner");
   }
 
@@ -2333,6 +2383,7 @@
       els.revealBoard.innerHTML = `<div class="death-scene-wrap"><div class="result-card death-scene"><h3>Banishment</h3><p>${esc(monster(ep.winner).name)} chooses to banish <strong>${esc(monster(ep.banished).name)}</strong> from the competition forever.</p></div><div class="death-reveal-card">${stripCard(ep.banished)}</div></div>`;
       els.crowningMessage.innerHTML = "";
       els.revealResultsBtn.hidden = true;
+      attachEpisodeTrackRecord(ep);
       return;
     }
     if (ep.ghostlyGallows) {
@@ -2341,6 +2392,7 @@
       els.lipSyncBoard.innerHTML = "";
       els.crowningMessage.innerHTML = "";
       els.revealResultsBtn.hidden = true;
+      attachEpisodeTrackRecord(ep);
       return;
     }
     const revealIds = episodeOutgoingIds(ep);
@@ -2352,6 +2404,7 @@
       els.crowningMessage.innerHTML = "";
     }
     els.revealResultsBtn.hidden = true;
+    attachEpisodeTrackRecord(ep);
   }
 
   function proceedEpisode() {
@@ -2362,6 +2415,7 @@
     if (ep.processed) {
       state.currentEpisode = Math.min(state.season.episodes.length - 1, state.currentEpisode + 1);
       renderEpisode(state.season.episodes[state.currentEpisode]);
+      scrollToEpisodeSection();
       return;
     }
     ep.processed = true;
@@ -2388,6 +2442,7 @@
     }
     state.currentEpisode = state.season.episodes.length;
     generateNextEpisode();
+    scrollToEpisodeSection();
   }
 
   function revealWinner() {
@@ -2399,6 +2454,7 @@
     els.winnerCrowningMessage.innerHTML = `<strong>${esc(monster(ep.winner).name)}</strong>, you are The World’s Next Drag Supermonster.`;
     els.revealCrownWinnerBtn.hidden = true;
     els.allWinnersFinalStatsBtn.hidden = false;
+    attachEpisodeTrackRecord(ep);
   }
 
   function contestantRankOrder(ids, eps) {
@@ -2509,6 +2565,145 @@
     return present;
   }
 
+  function episodeSliceThrough(ep) {
+    const idx = state.season?.episodes?.indexOf(ep) ?? -1;
+    const end = idx >= 0 ? idx + 1 : Math.max(1, (state.currentEpisode || 0) + 1);
+    return (state.season?.episodes || []).slice(0, end);
+  }
+
+  function cumulativeEliminatedThrough(ep) {
+    const order = [];
+    episodeSliceThrough(ep).forEach(e => {
+      [e.returnedContestant, e.hellboundFinal?.winner].filter(Boolean).forEach(id => {
+        const idx = order.indexOf(id);
+        if (idx >= 0) order.splice(idx, 1);
+      });
+      episodeOutgoingIds(e).forEach(id => {
+        const idx = order.indexOf(id);
+        if (idx >= 0) order.splice(idx, 1);
+        order.push(id);
+      });
+    });
+    return order.filter(id => state.season?.contestants?.[id]);
+  }
+
+  function isHellboundOnlyTrack(ep, id) {
+    const value = String(ep?.track?.[id] || "").toUpperCase();
+    const inShowdown = ep?.hellbound?.contestants?.includes(id) || ep?.hellboundFinal?.contestants?.includes(id);
+    return !!(inShowdown && ["WIN", "LOSS"].includes(value));
+  }
+
+  function episodeTrackStatusOrder(ep, id) {
+    if (isHellboundOnlyTrack(ep, id)) return 9;
+    const raw = String(ep?.track?.[id] || "").replace(/<br\s*\/?\s*>/gi, "+").toUpperCase().trim();
+    if (raw.includes("WINNER")) return 0;
+    if (raw === "RU" || raw.includes("RUNNER")) return 1;
+    if (raw.includes("EXT") || raw === "QUIT" || raw === "DISQ") return 5;
+    if (raw.includes("BTM")) return 4;
+    if (raw === "WUE" || raw.includes("WIN")) return 0;
+    if (raw.includes("HIGH")) return 1;
+    if (raw.includes("LOW")) return 3;
+    if (raw.includes("SAFE") || raw.includes("IMM") || raw.startsWith("RTRN") || raw.includes("GUEST")) return 2;
+    return 2;
+  }
+
+  function episodeTrackRowOrder(ep) {
+    const through = episodeSliceThrough(ep);
+    const appeared = new Set();
+    through.forEach(e => {
+      (e.activeAtStart || []).forEach(id => appeared.add(id));
+      Object.entries(e.track || {}).forEach(([id, value]) => { if (value) appeared.add(id); });
+      if (e.lateEntryContestant) appeared.add(e.lateEntryContestant);
+      if (e.returnedContestant) appeared.add(e.returnedContestant);
+    });
+    const currentIds = uniqueIds(ep?.activeAtStart || []).filter(id => appeared.has(id));
+    const currentSorted = currentIds.slice().sort((a, b) => {
+      const groupDiff = episodeTrackStatusOrder(ep, a) - episodeTrackStatusOrder(ep, b);
+      if (groupDiff) return groupDiff;
+      return monster(a).name.localeCompare(monster(b).name);
+    });
+    const currentSet = new Set(currentSorted);
+    const eliminated = cumulativeEliminatedThrough(ep).filter(id => appeared.has(id) && !currentSet.has(id));
+    const remaining = Array.from(appeared).filter(id => !currentSet.has(id) && !eliminated.includes(id));
+    remaining.sort((a, b) => monster(a).name.localeCompare(monster(b).name));
+    return uniqueIds([...currentSorted, ...remaining, ...eliminated]);
+  }
+
+  function episodeTrackUnlocked(ep) {
+    if (!ep || ep.type === "last_supper") return false;
+    if (ep.type === "finale") return !!ep.revealed;
+    const showdown = ep.hellboundFinal || ep.hellbound;
+    if (showdown) return !!showdown.revealed;
+    if (ep.resurrection) return true;
+    return !!ep.revealed;
+  }
+
+  function trackPpeForEpisodes(id, eps) {
+    if (state.config?.format === "resurrection") {
+      return (eps || []).reduce((sum, ep) => sum + Number(ep.resurrectionPoints?.[id] || 0), 0);
+    }
+    const competitive = (eps || []).filter(e =>
+      e.activeAtStart?.includes(id) &&
+      !["finale", "last_supper"].includes(e.type) &&
+      !e.resurrection &&
+      !(e.hellbound?.contestants?.includes(id) && ["WIN", "LOSS"].includes(String(e.track?.[id] || "").toUpperCase()))
+    ).length || 1;
+    let wins = 0;
+    let highs = 0;
+    let bottoms = 0;
+    (eps || []).forEach(e => {
+      const val = String(e.track?.[id] || "").toUpperCase();
+      if (!val || ["finale", "last_supper"].includes(e.type)) return;
+      if (val.includes("WIN") || val === "WUE") wins++;
+      if (val.includes("HIGH")) highs++;
+      if (val.includes("BTM") || val === "WUE" || val.includes("EXT") || val.includes("LOW") || val.includes("QUIT")) bottoms++;
+    });
+    return ((wins * 5 + highs * 4 + Math.max(0, competitive - wins - highs - bottoms) * 3 + bottoms * 1) / competitive).toFixed(2);
+  }
+
+  function dragulaTrackTableHtml(eps, ids, options = {}) {
+    const includePpe = options.includePpe !== false;
+    const isResurrection = state.config?.format === "resurrection";
+    const columns = dragulaTrackColumnDefinitions(eps);
+    const ppeHeader = includePpe ? `<th class="ppe-col">${isResurrection ? "Points" : "PPE"}</th>` : "";
+    const ppeSpacer = includePpe ? `<th class="track-head-spacer ppe-col"></th>` : "";
+    const episodeHeadRow = `<tr class="track-episode-row"><th class="track-contestant-head" rowspan="2">Contestant</th>${columns.map(col => `<th class="${dragulaTrackColumnClass(col)}" title="${esc(col.title)}">${dragulaTrackHeaderHtml(col)}</th>`).join("")}${ppeHeader}</tr>`;
+    const challengeHeadRow = `<tr class="track-challenge-row">${columns.map(col => `<th class="track-challenge-type-head ${dragulaTrackColumnClass(col)}" title="${esc(col.title)}">${dragulaTrackChallengeHeaderHtml(col)}</th>`).join("")}${ppeSpacer}</tr>`;
+    const rows = (ids || []).map(id => {
+      let out = false;
+      const cells = columns.map(col => {
+        const e = col.episode;
+        const status = e.track?.[id] || "";
+        let html = trackCellHtml(status, out, e, id);
+        const colClass = dragulaTrackColumnClass(col);
+        if (colClass) html = html.replace('class="', `class="${colClass} `);
+        if (String(status).includes("EXT") || ["QUIT", "DISQ"].includes(String(status).toUpperCase())) out = true;
+        if (e.hellbound?.contestants?.includes(id) && ["WIN", "LOSS"].includes(String(status).toUpperCase())) out = true;
+        if (String(status).startsWith("RTRN") || e.returnedContestant === id || e.hellboundFinal?.winner === id) out = false;
+        return html.replace("<td ", `<td title="${esc(col.title)}" `);
+      }).join("");
+      const ppeCell = includePpe ? `<td class="track-cell ppe-cell">${trackPpeForEpisodes(id, eps)}</td>` : "";
+      return `<tr><th class="track-contestant">${dragulaTrackContestantInline(id)}</th>${cells}${ppeCell}</tr>`;
+    }).join("");
+    return `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table dragula-track"><thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  function renderEpisodeTrackRecord(ep) {
+    if (!ep || ep.type === "last_supper") return "";
+    if (!episodeTrackUnlocked(ep)) {
+      return `<div class="episode-track-card locked"><p>Reveal the final result of this episode to unlock the track record up to this point.</p></div>`;
+    }
+    const eps = episodeSliceThrough(ep);
+    const ids = episodeTrackRowOrder(ep);
+    return dragulaTrackTableHtml(eps, ids, { includePpe: true });
+  }
+
+  function attachEpisodeTrackRecord(ep) {
+    if (!els.episodeTrackRecord) return;
+    els.episodeTrackRecord.innerHTML = renderEpisodeTrackRecord(ep);
+  }
+
+
   function renderStats() {
     if (!state.season) return;
     const eps = state.season.episodes;
@@ -2530,30 +2725,7 @@
       trackPanel?.classList.add("is-active");
     }
     const ids = contestantRankOrder(Object.keys(state.season.contestants), eps);
-    const ppe = (id) => {
-      const m = monster(id);
-      const competitive = eps.filter(e => e.activeAtStart?.includes(id) && !["finale", "last_supper"].includes(e.type) && !e.resurrection && !(e.hellbound?.contestants?.includes(id) && ["WIN", "LOSS"].includes(String(e.track?.[id] || "").toUpperCase()))).length || 1;
-      return ((m.stats.wins * 5 + m.stats.high * 4 + Math.max(0, competitive - m.stats.wins - m.stats.high - m.stats.bottom) * 3 + m.stats.bottom * 1) / competitive).toFixed(2);
-    };
-    const columns = dragulaTrackColumnDefinitions(eps);
-    const episodeHeadRow = `<tr class="track-episode-row"><th class="track-contestant-head" rowspan="2">Contestant</th>${columns.map((col) => `<th class="${dragulaTrackColumnClass(col)}" title="${esc(col.title)}">${dragulaTrackHeaderHtml(col)}</th>`).join("")}<th class="ppe-col">${isResurrection ? "Points" : "PPE"}</th></tr>`;
-    const challengeHeadRow = `<tr class="track-challenge-row">${columns.map((col) => `<th class="track-challenge-type-head ${dragulaTrackColumnClass(col)}" title="${esc(col.title)}">${dragulaTrackChallengeHeaderHtml(col)}</th>`).join("")}<th class="track-head-spacer ppe-col"></th></tr>`;
-    const rows = ids.map(id => {
-      let out = false;
-      const cells = columns.map(col => {
-        const e = col.episode;
-        const status = e.track?.[id] || "";
-        let html = trackCellHtml(status, out, e, id);
-        const colClass = dragulaTrackColumnClass(col);
-        if (colClass) html = html.replace('class="', `class="${colClass} `);
-        if (String(status).includes("EXT") || ["QUIT", "DISQ"].includes(String(status).toUpperCase())) out = true;
-        if (e.hellbound?.contestants?.includes(id) && ["WIN", "LOSS"].includes(String(status).toUpperCase())) out = true;
-        if (String(status).startsWith("RTRN")) out = false;
-        return html.replace("<td ", `<td title="${esc(col.title)}" `);
-      }).join("");
-      return `<tr><th class="track-contestant">${dragulaTrackContestantInline(id)}</th>${cells}<td class="track-cell ppe-cell">${isResurrection ? (monster(id).stats.resurrectionPoints || 0) : ppe(id)}</td></tr>`;
-    }).join("");
-    els.trackWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table dragula-track"><thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
+    els.trackWrap.innerHTML = dragulaTrackTableHtml(eps, ids, { includePpe: true });
     const legend = [
       ["WIN", "Floorshow winner"], ["HIGH", "Strong critiques"], ["SAFE", "Safe"], ["LOW", "Negative critiques"], ["CURSE", "Cursed"], ["IMM", "Immune"], ["BTM", "Up for extermination"], ["HIGH+BTM", "High but sent to extermination"], ["LOW+BTM", "Low and sent to extermination"], ["SAFE+BTM", "Safe but sent to extermination"], ["HIGH+EXT", "High but exterminated"], ["LOW+EXT", "Low and exterminated"], ["SAFE+EXT", "Safe but exterminated"], ["WUE", "Winner up for extermination"], ["EXT", "Exterminated"], ["QUIT", "Quit"], ["DISQ", "Disqualified"], ["RTRN", "Returned"], ["LOSS", "Hellbound Showdown loss"], ["GUEST", "Last Supper guest"], ["RU", "Runner-up"], ["WINNER", "Season winner"]
     ];
@@ -3037,15 +3209,15 @@
     els.cancelCustomContestantBtn?.addEventListener("click", closeCustomContestantModal);
     els.deleteCustomContestantBtn?.addEventListener("click", () => deleteCustomContestant(els.customContestantId?.value));
     [els.resetSetupBtn, els.resetSeasonBtnCast, els.resetSeasonBtnEpisode, els.resetSeasonBtnStats].forEach(btn => btn?.addEventListener("click", resetAll));
-    $$(".section-toggle").forEach(btn => btn.addEventListener("click", () => showPanel(btn.dataset.step)));
-    $$(".proceed-btn").forEach(btn => btn.addEventListener("click", () => showPanel(btn.dataset.next)));
+    $$(".section-toggle").forEach(btn => btn.addEventListener("click", () => showPanel(btn.dataset.step, true)));
+    $$(".proceed-btn").forEach(btn => btn.addEventListener("click", () => showPanel(btn.dataset.next, true)));
     els.revealResultsBtn?.addEventListener("click", revealDeath);
     els.revealHellboundBtn?.addEventListener("click", revealHellboundResults);
     els.nextEpisodeBtn?.addEventListener("click", proceedEpisode);
     $$(".next-episode-btn").forEach(btn => btn.addEventListener("click", proceedEpisode));
     els.revealCrownWinnerBtn?.addEventListener("click", revealWinner);
     els.allWinnersFinalStatsBtn?.addEventListener("click", () => { renderStats(); showScreen("stats-screen"); });
-    els.episodeSelect?.addEventListener("change", () => { state.currentEpisode = Number(els.episodeSelect.value); renderEpisode(state.season.episodes[state.currentEpisode]); });
+    els.episodeSelect?.addEventListener("change", () => { state.currentEpisode = Number(els.episodeSelect.value); renderEpisode(state.season.episodes[state.currentEpisode]); scrollToEpisodeSection(); });
     els.viewAllSkillsBtn?.addEventListener("click", showSkillKey);
     els.viewRelationshipKeyBtn?.addEventListener("click", () => {
       if (state.selected.length >= 2) showRelationshipSetup(false);
