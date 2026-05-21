@@ -41,20 +41,22 @@
   <script>
     const shows = [
       {
-        name: "Drag Race",
+        name: "THE CROWN",
         slug: "drag_race",
         folder: "drag_race",
         accent: "214, 42, 119",
         accentDeep: "122, 12, 69",
+        titleColor: "#ff1493",
         description:
           "Queens enter the werkroom ready to serve looks, shade, comedy, and charisma as they battle through challenges, runways, and lip-syncs."
       },
       {
-        name: "Dragula",
+        name: "THE MONSTERS",
         slug: "dragula",
         folder: "dragula",
         accent: "132, 28, 43",
         accentDeep: "76, 10, 21",
+        titleColor: "#9b1024",
         description:
           "Drag monsters compete in horror, filth, glamour, and extreme performance to prove they are the ultimate alternative drag icon."
       }
@@ -80,6 +82,7 @@
           style="
             --accent-rgb: ${show.accent};
             --accent-deep-rgb: ${show.accentDeep};
+            --title-color: ${show.titleColor};
             --light-a-dur: ${aDur}s;
             --light-b-dur: ${bDur}s;
             --light-a-delay: ${aDelay}s;
@@ -94,13 +97,8 @@
           </div>
 
           <div class="compact-face">
-            <div class="logo-wrap">
-              <img
-                class="show-logo"
-                src="logos/${show.slug}.png"
-                alt="${show.name}"
-                loading="lazy"
-              />
+            <div class="title-wrap">
+              <span class="show-title">${show.name}</span>
             </div>
 
             <span class="open-dot" aria-hidden="true">+</span>
