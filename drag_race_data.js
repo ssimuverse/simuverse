@@ -1370,7 +1370,7 @@ window.QUEENS = [
   image: "images/jackie_cox.webp",
   skills: { acting: 11, comedy: 12, dance: 6, design: 6, improv: 13, runway: 9, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "Canada's Drag Race: All Stars": [1] }
 },
 {
   id: "jaida_essence_hall",
@@ -2968,7 +2968,7 @@ window.QUEENS = [
     image: "images/juice_boxx.webp",
     skills: { acting: 6, comedy: 6, dance: 6, design: 4, improv: 6, runway: 6, lipsync: 7 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [1] },
+    seasonsByShow: { "Canada's Drag Race": [1], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "kiara",
@@ -3117,7 +3117,7 @@ window.QUEENS = [
     image: "images/pythia.webp",
     skills: { acting: 8, comedy: 7, dance: 8, design: 12, improv: 9, runway: 12, lipsync: 7 },
     shows: ["Canada's Drag Race", "RuPaul's Drag Race Global All Stars"],
-    seasonsByShow: { "Canada's Drag Race": [2], "RuPaul's Drag Race Global All Stars": [1] },
+    seasonsByShow: { "Canada's Drag Race": [2], "RuPaul's Drag Race Global All Stars": [1], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "stephanie_prince",
@@ -3199,7 +3199,7 @@ window.QUEENS = [
     image: "images/jada_shada_hudson.webp",
     skills: { acting: 9, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [3] },
+    seasonsByShow: { "Canada's Drag Race": [3], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "kaos",
@@ -3272,7 +3272,7 @@ window.QUEENS = [
     image: "images/aurora_matrix.webp",
     skills: { acting: 8, comedy: 7, dance: 12, design: 7, improv: 6, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [4] },
+    seasonsByShow: { "Canada's Drag Race": [4], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "denim",
@@ -3326,7 +3326,7 @@ window.QUEENS = [
     image: "images/nearah_nuff.webp",
     skills: { acting: 8, comedy: 8, dance: 10, design: 6, improv: 8, runway: 9, lipsync: 13 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [4] },
+    seasonsByShow: { "Canada's Drag Race": [4], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "sisi_superstar",
@@ -3381,7 +3381,7 @@ window.QUEENS = [
     image: "images/makayla_couture.webp",
     skills: { acting: 6, comedy: 5, dance: 13, design: 6, improv: 5, runway: 12, lipsync: 14 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [5] },
+    seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "minhi_wang",
@@ -3426,7 +3426,7 @@ window.QUEENS = [
     image: "images/tiffany_ann_co.webp",
     skills: { acting: 6, comedy: 6, dance: 13, design: 8, improv: 5, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [5] },
+    seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "the_virgo_queen",
@@ -3490,7 +3490,7 @@ window.QUEENS = [
     image: "images/sami_landri.webp",
     skills: { acting: 12, comedy: 12, dance: 5, design: 6, improv: 9, runway: 10, lipsync: 8 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [6] },
+    seasonsByShow: { "Canada's Drag Race": [6], "Canada's Drag Race: All Stars": [1] },
   },
   {
     id: "karamilk",
