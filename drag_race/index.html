@@ -5,27 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .home-link-btn {
-      position: absolute;
-      top: 24px;
-      left: 24px;
-      z-index: 10;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
+  <link rel="stylesheet" href="style.css?v=25" />
 
-    @media (max-width: 640px) {
-      .home-link-btn {
-        position: static;
-        margin: 16px 0 0 16px;
-        width: max-content;
-      }
-    }
-  </style>
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
   <script src="mini_challenges_data.js" defer></script>
@@ -36,20 +17,16 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js" defer></script>
+  <script src="simulator.js?v=25" defer></script>
 </head>
 <body>
   <div class="app-shell">
-    <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
-    <div class="mesh mesh-a"></div>
-    <div class="mesh mesh-b"></div>
-    <div class="grain"></div>
-
     <header class="hero-header">
-      <div class="logo-glow-wrap">
-        <div class="logo-kicker">SIMUVERSE</div>
-        <h1 class="logo-main">DRAG RACE SIMULATOR</h1>
+      <div class="brand-lockup" aria-label="Drag Race Simulator">
+        <span class="logo-main">Drag Race Simulator</span>
+        <span class="logo-kicker">SIMUVERSE</span>
       </div>
+      <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
     </header>
 
     <main class="page-shell">
@@ -66,19 +43,18 @@
         </div>
 
         <div class="setup-grid">
-          <article class="panel setup-card">
+          <article class="panel setup-card setup-core-card">
             <div class="panel-head">
               <div>
-                <p class="eyebrow">General</p>
-                <h3>General Settings</h3>
+                <p class="eyebrow">Core settings</p>
+                <h3>Season Format</h3>
               </div>
             </div>
 
-            <div class="field-grid two-col">
-              <label class="field">
+            <div class="field-grid setup-core-grid">
+              <label class="field field-wide">
                 <span>Season Name</span>
                 <input type="text" id="seasonName" value="Fantasy Drag Race">
-                <small class="field-help">The title shown for this season.</small>
               </label>
 
               <label class="field">
@@ -94,20 +70,9 @@
                 </select>
                 <small class="field-help" id="eliminationFormatHelp"></small>
               </label>
-            </div>
-          </article>
 
-          <article class="panel setup-card">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Structure</p>
-                <h3>Premiere & Finale</h3>
-              </div>
-            </div>
-
-            <div class="field-grid two-col">
               <label class="field">
-                <span>Premiere Type</span>
+                <span>Premiere</span>
                 <select id="premiereTypeSelect">
                   <option value="regular">Regular</option>
                   <option value="non_elim_top2">Non-Elimination Top 2</option>
@@ -125,7 +90,7 @@
               </label>
 
               <label class="field">
-                <span>Finale Type</span>
+                <span>Finale</span>
                 <select id="finaleTypeSelect">
                   <option value="regular_finale">Regular Finale</option>
                   <option value="top2_finale">Top 2 Finale</option>
@@ -138,7 +103,7 @@
               </label>
 
               <label class="field">
-                <span>Comeback Challenge</span>
+                <span>Comeback</span>
                 <select id="comebackFormatSelect">
                   <option value="none">None</option>
                   <option value="random_return">Random Contestant Returns</option>
@@ -155,28 +120,15 @@
                 </select>
                 <small class="field-help" id="comebackHelp"></small>
               </label>
-            </div>
-          </article>
 
-          <article class="panel setup-card">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Amounts</p>
-                <h3>Cast & Finale</h3>
-              </div>
-            </div>
-
-            <div class="field-grid two-col">
-              <label class="field">
+              <label class="field range-field">
                 <span>Contestants <strong class="range-pill" id="castSizeValue">14</strong></span>
                 <input type="range" id="castSize" min="6" max="24" step="1" value="14">
-                <small class="field-help">Choose how many contestants compete in the season.</small>
               </label>
 
-              <label class="field">
+              <label class="field range-field">
                 <span>Finalists <strong class="range-pill" id="finalistSizeValue">4</strong></span>
                 <input type="range" id="finalistSize" min="2" max="5" step="1" value="4">
-                <small class="field-help">Pick how many queens reach the finale.</small>
               </label>
             </div>
           </article>
@@ -188,135 +140,81 @@
                 <h3>Tournament Settings</h3>
               </div>
             </div>
-
-            <div class="field-grid two-col">
-              <label class="field">
-                <span>Amount of Brackets <strong class="range-pill" id="tournamentBracketCountValue">2</strong></span>
+            <div class="field-grid tournament-grid">
+              <label class="field range-field">
+                <span>Brackets <strong class="range-pill" id="tournamentBracketCountValue">2</strong></span>
                 <input type="range" id="tournamentBracketCount" min="2" max="4" step="1" value="2">
               </label>
-
-              <label class="field">
-                <span>Amount of Advancers <strong class="range-pill" id="tournamentAdvancersValue">2</strong></span>
+              <label class="field range-field">
+                <span>Advancers <strong class="range-pill" id="tournamentAdvancersValue">2</strong></span>
                 <input type="range" id="tournamentAdvancers" min="2" max="4" step="1" value="2">
               </label>
-
-              <label class="field">
-                <span>Amount of Merge Episodes <strong class="range-pill" id="tournamentMergeEpisodesValue">2</strong></span>
+              <label class="field range-field">
+                <span>Bracket Episodes <strong class="range-pill" id="tournamentBracketEpisodesValue">3</strong></span>
+                <input type="range" id="tournamentBracketEpisodes" min="2" max="5" step="1" value="3">
+              </label>
+              <label class="field range-field">
+                <span>Merge Episodes <strong class="range-pill" id="tournamentMergeEpisodesValue">2</strong></span>
                 <input type="range" id="tournamentMergeEpisodes" min="2" max="6" step="1" value="2">
               </label>
-
-              <div class="check-grid tournament-checkbox-grid">
-                <label class="toggle-row">
-                  <input type="checkbox" id="tournamentPreMergeWildcard">
-                  <span>Pre-Merge Wildcard?</span>
-                </label>
-                <label class="toggle-row">
-                  <input type="checkbox" id="tournamentPreFinaleWildcard">
-                  <span>Pre-Finale Wildcard?</span>
-                </label>
-              </div>
-            </div>
-          </article>
-
-          <article class="panel setup-card setup-card-wide">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Twists</p>
-                <h3>Season Twists</h3>
-              </div>
-            </div>
-
-            <div class="check-grid compact-check-grid">
-              <label class="toggle-row">
-                <input type="checkbox" id="twistImmunity">
-                <span>Immunity</span>
+              <label class="compact-toggle">
+                <input type="checkbox" id="tournamentPreMergeWildcard">
+                <span>Pre-Merge Wildcard</span>
               </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="twistChocolateRandom">
-                <span>Chocolate Bar (Random)</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="twistChocolateChoosable">
-                <span>Chocolate Bar (Choosable)</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="twistLuckyCow">
-                <span>Lucky Cow Voting</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="twistBadonkaDunkTank">
-                <span>Badonka Dunk Tank</span>
+              <label class="compact-toggle">
+                <input type="checkbox" id="tournamentPreFinaleWildcard">
+                <span>Pre-Finale Wildcard</span>
               </label>
             </div>
           </article>
 
-          <article class="panel setup-card">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Special Challenges</p>
-                <h3>Special Challenges</h3>
-              </div>
-            </div>
+          <details class="advanced-settings" open>
+            <summary>Advanced options <span>Twists, specials and production controls</span></summary>
+            <div class="advanced-settings-grid">
+              <section class="advanced-group">
+                <div class="advanced-group-head">
+                  <p class="eyebrow">Optional</p>
+                  <h3>Season Twists</h3>
+                </div>
+                <div class="check-grid compact-check-grid">
+                  <label class="toggle-row"><input type="checkbox" id="twistImmunity"><span>Immunity</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistChocolateRandom"><span>Chocolate Bar (Random)</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Chocolate Bar (Choosable)</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistLuckyCow"><span>Lucky Cow Voting</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
+                </div>
+              </section>
 
-            <div class="check-grid compact-check-grid special-challenge-grid">
-              <label class="toggle-row">
-                <input type="checkbox" id="specialLalaparuzaSmackdown">
-                <span>LaLaPaRuZa Smackdown</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="specialSlayOffs">
-                <span>Slay-Offs</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="specialReunionLalaparuza">
-                <span>Reunion LaLaPaRuZa</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="specialMidSeasonRateAQueen">
-                <span>Mid-Season Rate-A-Queen</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="specialFameGames">
-                <span>Fame Games</span>
-              </label>
-            </div>
-          </article>
+              <section class="advanced-group">
+                <div class="advanced-group-head">
+                  <p class="eyebrow">Episodes</p>
+                  <h3>Special Challenges</h3>
+                </div>
+                <div class="check-grid compact-check-grid special-challenge-grid">
+                  <label class="toggle-row"><input type="checkbox" id="specialLalaparuzaSmackdown"><span>LaLaPaRuZa Smackdown</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="specialSlayOffs"><span>Slay-Offs</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="specialReunionLalaparuza"><span>Reunion LaLaPaRuZa</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="specialMidSeasonRateAQueen"><span>Mid-Season Rate-A-Queen</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="specialFameGames"><span>Fame Games</span></label>
+                </div>
+              </section>
 
-          <article class="panel setup-card">
-            <div class="panel-head">
-              <div>
-                <p class="eyebrow">Production</p>
-                <h3>Production Controls</h3>
-              </div>
+              <section class="advanced-group advanced-group-wide">
+                <div class="advanced-group-head">
+                  <p class="eyebrow">Control</p>
+                  <h3>Production Controls</h3>
+                </div>
+                <div class="check-grid production-grid">
+                  <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Challenge Riggory</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="disableLipSyncRiggory"><span>Disable Lip Sync Riggory</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="disableDoubleShantaysSashays"><span>Disable Double Shantays/Sashays</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="disableNonElimination"><span>Disable Non-Elimination Episodes</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="forceSlayersEpisode"><span>Force Slayers Episode</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="forceDoubleShantay"><span>Force a Double Shantay</span></label>
+                </div>
+              </section>
             </div>
-
-            <div class="check-grid">
-              <label class="toggle-row">
-                <input type="checkbox" id="disableChallengeRiggory">
-                <span>Disable Challenge Riggory</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="disableLipSyncRiggory">
-                <span>Disable Lip Sync Riggory</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="disableDoubleShantaysSashays">
-                <span>Disable Double Shantays/Sashays</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="disableNonElimination">
-                <span>Disable Non-Elimination Episodes</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="forceSlayersEpisode">
-                <span>Force Slayers Episode</span>
-              </label>
-              <label class="toggle-row">
-                <input type="checkbox" id="forceDoubleShantay">
-                <span>Force a Double Shantay</span>
-              </label>
-            </div>
-          </article>
+          </details>
         </div>
       </section>
 
@@ -328,7 +226,7 @@
           </div>
           <div class="screen-action-row">
             <button class="secondary-btn" id="backToSetupBtn" type="button">Back</button>
-            <button class="secondary-btn" id="resetSeasonBtnCast" type="button">Reset Season</button>
+            <button class="secondary-btn" id="resetSeasonBtnCast" type="button">Reset</button>
             <button class="primary-btn" id="toEpisodeBtn" type="button">Start Season</button>
           </div>
         </div>
@@ -362,12 +260,12 @@
             </div>
 
             <div class="roster-grid" id="rosterGrid"></div>
-            <div class="roster-action-row">
+            <div class="roster-action-row simplified-cast-tools" aria-label="Cast tools">
               <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
-              <button class="secondary-btn" id="randomContestantBtn" type="button">Random Contestant</button>
-              <button class="secondary-btn" id="presetCastBtn" type="button">Pre-Set Cast</button>
-              <button class="secondary-btn" id="customContestantBtn" type="button">Custom Contestant</button>
-              <button class="secondary-btn danger-lite" id="resetCastBtn" type="button">Reset Cast</button>
+              <button class="secondary-btn" id="randomContestantBtn" type="button">Add Random Contestant</button>
+              <button class="secondary-btn" id="presetCastBtn" type="button">Use Pre-Set Cast</button>
+              <button class="secondary-btn" id="customContestantBtn" type="button">Create Contestant</button>
+              <button class="secondary-btn" id="resetCastBtn" type="button">Clear Cast</button>
             </div>
           </aside>
 
@@ -397,8 +295,8 @@
           </div>
           <div class="episode-controls">
             <select id="episodeSelect" class="episode-select"></select>
-            <button class="secondary-btn" id="backToCastBtnEpisode" type="button">Back to Cast</button>
-            <button class="secondary-btn" id="resetSeasonBtnEpisode" type="button">Reset Season</button>
+            <button class="secondary-btn" id="backToCastBtnEpisode" type="button">Cast</button>
+            <button class="secondary-btn" id="resetSeasonBtnEpisode" type="button">Reset</button>
             <button class="primary-btn" id="toStatsBtn" type="button">Statistics</button>
           </div>
         </div>
@@ -722,9 +620,9 @@
             <h2>Season Statistics</h2>
           </div>
           <div class="screen-action-row">
-            <button class="secondary-btn" id="backToEpisodeBtn" type="button">Back to Episodes</button>
-            <button class="secondary-btn" id="backToCastBtnStats" type="button">Back to Cast</button>
-            <button class="secondary-btn" id="resetSeasonBtnStats" type="button">Reset Season</button>
+            <button class="secondary-btn" id="backToEpisodeBtn" type="button">Episodes</button>
+            <button class="secondary-btn" id="backToCastBtnStats" type="button">Cast</button>
+            <button class="secondary-btn" id="resetSeasonBtnStats" type="button">Reset</button>
           </div>
         </div>
 
@@ -739,7 +637,8 @@
           <button class="stats-tab" data-tab="popularity">Popularity</button>
           <button class="stats-tab" data-tab="edgic">EDGIC</button>
           <button class="stats-tab" data-tab="voting">Voting</button>
-          <button class="stats-tab" data-tab="records">Records</button>
+          <button class="stats-tab" data-tab="storylines">Storylines</button>
+          <button class="stats-tab" data-tab="highlights">Highlights</button>
         </div>
 
         <section class="stats-panel is-active" data-tab-panel="track">
@@ -806,9 +705,27 @@
           </div>
         </section>
 
-        <section class="stats-panel" data-tab-panel="records">
-          <div class="panel stats-card">
-            <div class="records-grid compact" id="recordsGrid"></div>
+        <section class="stats-panel" data-tab-panel="storylines">
+          <div class="panel stats-card narrative-stats-card">
+            <div class="narrative-section-head">
+              <div>
+                <p class="eyebrow">Season Narratives</p>
+                <h3>Contestant Storylines</h3>
+              </div>
+            </div>
+            <div class="storylines-grid" id="storylinesWrap"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" data-tab-panel="highlights">
+          <div class="panel stats-card highlights-stats-card">
+            <div class="narrative-section-head">
+              <div>
+                <p class="eyebrow">Season Recap</p>
+                <h3>Highlights</h3>
+              </div>
+            </div>
+            <div class="highlights-layout" id="highlightsWrap"></div>
           </div>
         </section>
       </section>
