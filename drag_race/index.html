@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=25" />
+  <link rel="stylesheet" href="style.css?v=35" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=25" defer></script>
+  <script src="simulator.js?v=35" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -182,6 +182,8 @@
                   <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Chocolate Bar (Choosable)</span></label>
                   <label class="toggle-row"><input type="checkbox" id="twistLuckyCow"><span>Lucky Cow Voting</span></label>
                   <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistRosconReinas"><span>El Roscón de Reinas</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistHeartSuccessor"><span>Heart Successor</span></label>
                 </div>
               </section>
 
@@ -305,6 +307,7 @@
         <div class="section-toggle-row">
           <button class="section-toggle" data-step="wildcard">Wildcard Lottery</button>
           <button class="section-toggle is-active" data-step="status">Status</button>
+          <button class="section-toggle" data-step="roscon">El Roscón de Reinas</button>
           <button class="section-toggle" data-step="comeback">Comeback</button>
           <button class="section-toggle" data-step="guest">Guest Judge</button>
           <button class="section-toggle" data-step="mini">Mini Challenge</button>
@@ -318,6 +321,7 @@
           <button class="section-toggle" data-step="judging">Judging</button>
           <button class="section-toggle" data-step="ratequeen">Rate-A-Queen</button>
           <button class="section-toggle" data-step="placements">Placements</button>
+          <button class="section-toggle" data-step="heartsuccessor">Heart Successor</button>
           <button class="section-toggle" data-step="luckycow">Lucky Cow</button>
           <button class="section-toggle" data-step="goldenbeaver">Golden Beaver</button>
           <button class="section-toggle" data-step="rumocracy">RuMocracy</button>
@@ -326,10 +330,12 @@
           <button class="section-toggle" data-step="lsftc">Lip Sync for The Crown</button>
           <button class="section-toggle" data-step="winner">Winner</button>
           <button class="section-toggle" data-step="results">Results</button>
+          <button class="section-toggle" data-step="luckycowvotes">Votes</button>
           <button class="section-toggle" data-step="badonkadunktank">Badonka Dunk Tank</button>
           <button class="section-toggle" data-step="s17lsfyl">Lip Sync for Your Life</button>
           <button class="section-toggle" data-step="s17lsfylresults">Lip Sync for Your Life Results</button>
           <button class="section-toggle" data-step="untucked">Untucked</button>
+          <button class="section-toggle" data-step="heartinheritance">Heart Inheritance</button>
           <button class="section-toggle" data-step="pointceremony">Point Ceremony</button>
           <button class="section-toggle" data-step="trackrecord">Track Record</button>
         </div>
@@ -352,6 +358,16 @@
               <button class="primary-btn proceed-btn" data-next="comeback">Proceed</button>
             </div>
           </section>
+
+          <section class="episode-panel" data-panel="roscon">
+            <div class="section-title">El Roscón de Reinas</div>
+            <div class="event-stack" id="rosconStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="status">Back</button>
+              <button class="primary-btn proceed-btn" data-next="heartinheritance">Proceed</button>
+            </div>
+          </section>
+
 
           <section class="episode-panel" data-panel="comeback">
             <div class="section-title">Comeback</div>
@@ -473,6 +489,15 @@
             </div>
           </section>
 
+          <section class="episode-panel" data-panel="heartsuccessor">
+            <div class="section-title">Heart Successor</div>
+            <div class="event-stack" id="heartSuccessorStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
+              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
+            </div>
+          </section>
+
           <section class="episode-panel" data-panel="luckycow">
             <div class="section-title">Lucky Cow</div>
             <div class="event-stack" id="luckyCowStack"></div>
@@ -553,6 +578,15 @@
             </div>
           </section>
 
+          <section class="episode-panel" data-panel="luckycowvotes">
+            <div class="section-title">Votes</div>
+            <div class="event-stack" id="luckyCowVotesStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="results">Back</button>
+              <button class="primary-btn proceed-btn" data-next="badonkadunktank">Proceed</button>
+            </div>
+          </section>
+
           <section class="episode-panel" data-panel="badonkadunktank">
             <div class="section-title">Badonka Dunk Tank</div>
             <div class="event-stack" id="badonkaDunkTankStack"></div>
@@ -589,7 +623,16 @@
             <div class="event-stack" id="untuckedStack"></div>
             <div class="proceed-row dual">
               <button class="secondary-btn proceed-btn" data-next="results">Back</button>
-              <button class="primary-btn" id="finishEpisodeBtn" type="button">Next Episode</button>
+              <button class="primary-btn proceed-btn" data-next="heartinheritance" type="button">Proceed</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="heartinheritance">
+            <div class="section-title">Heart Inheritance</div>
+            <div class="event-stack" id="heartInheritanceStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
+              <button class="primary-btn proceed-btn" data-next="pointceremony">Proceed</button>
             </div>
           </section>
 
@@ -634,9 +677,11 @@
           <button class="stats-tab" data-tab="pointbracket">Point Per Bracket</button>
           <button class="stats-tab" data-tab="runways">Runways</button>
           <button class="stats-tab" data-tab="challenges">Challenges</button>
+          <button class="stats-tab" data-tab="records">Records</button>
           <button class="stats-tab" data-tab="popularity">Popularity</button>
           <button class="stats-tab" data-tab="edgic">EDGIC</button>
           <button class="stats-tab" data-tab="voting">Voting</button>
+          <button class="stats-tab" data-tab="heartsuccessor">Heart Successor</button>
           <button class="stats-tab" data-tab="storylines">Storylines</button>
           <button class="stats-tab" data-tab="highlights">Highlights</button>
         </div>
@@ -687,6 +732,12 @@
           </div>
         </section>
 
+        <section class="stats-panel" data-tab-panel="records">
+          <div class="panel stats-card">
+            <div id="recordsStatsWrap"></div>
+          </div>
+        </section>
+
         <section class="stats-panel" data-tab-panel="popularity">
           <div class="panel stats-card">
             <div class="table-wrap" id="popularityWrap"></div>
@@ -702,6 +753,12 @@
         <section class="stats-panel" data-tab-panel="voting">
           <div class="panel stats-card">
             <div class="table-wrap" id="votingStatsWrap"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" data-tab-panel="heartsuccessor">
+          <div class="panel stats-card">
+            <div class="table-wrap" id="heartSuccessorStatsWrap"></div>
           </div>
         </section>
 
