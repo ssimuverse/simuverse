@@ -95,6 +95,9 @@
     ["FAME_GAMES", "Won the Fame Games."],
     ["LOW", "Negative critique but did not lip sync."],
     ["LOW + GOLD", "Saved from the bottom three by the Golden Beaver."],
+    ["GOLD LOW BORDER", "Saved from the lip sync by El Roscón de Reinas or Heart Successor."],
+    ["LOW + BTM2", "Placed low, then was forced into the bottom two by El Roscón de Reinas and survived."],
+    ["LOW + ELIM", "Placed low, then was forced into the bottom two by El Roscón de Reinas and was eliminated."],
     ["LC BORDER", "Saved by the Lucky Cow vote."],
     ["DUNK BORDER", "Saved by the Badonka Dunk Tank."],
     ["BLK", "Blocked from earning a Legendary Legend Star."],
@@ -477,6 +480,8 @@
       twistChocolateChoosable: false,
       twistLuckyCow: false,
       twistBadonkaDunkTank: false,
+      twistRosconReinas: false,
+      twistHeartSuccessor: false,
       disableChallengeRiggory: false,
       disableLipSyncRiggory: false,
       disableDoubleShantaysSashays: false,
@@ -538,7 +543,13 @@
     twistChocolateChoosable: document.getElementById("twistChocolateChoosable"),
     twistLuckyCow: document.getElementById("twistLuckyCow"),
     twistBadonkaDunkTank: document.getElementById("twistBadonkaDunkTank"),
+    twistRosconReinas: document.getElementById("twistRosconReinas"),
+    twistHeartSuccessor: document.getElementById("twistHeartSuccessor"),
+    rosconStack: document.getElementById("rosconStack"),
+    heartInheritanceStack: document.getElementById("heartInheritanceStack"),
+    heartSuccessorStack: document.getElementById("heartSuccessorStack"),
     luckyCowStack: document.getElementById("luckyCowStack"),
+    luckyCowVotesStack: document.getElementById("luckyCowVotesStack"),
     badonkaDunkTankStack: document.getElementById("badonkaDunkTankStack"),
     disableChallengeRiggory: document.getElementById("disableChallengeRiggory"),
     disableLipSyncRiggory: document.getElementById("disableLipSyncRiggory"),
@@ -618,11 +629,13 @@
     lipSyncStatsWrap: document.getElementById("lipSyncStatsWrap"),
     runwayStatsWrap: document.getElementById("runwayStatsWrap"),
     challengeStatsWrap: document.getElementById("challengeStatsWrap"),
+    recordsStatsWrap: document.getElementById("recordsStatsWrap"),
     popularityWrap: document.getElementById("popularityWrap"),
     edgicWrap: document.getElementById("edgicWrap"),
     storylinesWrap: document.getElementById("storylinesWrap"),
     highlightsWrap: document.getElementById("highlightsWrap"),
     votingStatsWrap: document.getElementById("votingStatsWrap"),
+    heartSuccessorStatsWrap: document.getElementById("heartSuccessorStatsWrap"),
     starCountWrap: document.getElementById("starCountWrap"),
     pointSummaryWrap: document.getElementById("pointSummaryWrap"),
     pointBracketWrap: document.getElementById("pointBracketWrap"),
@@ -874,11 +887,34 @@
   function makeoverWindowActive(season, challenge = null, episode = null) {
     if (episode?.comeback?.format === "conjoined_twins") return true;
     const count = Number(season?.activeIds?.length || 0);
-    if (count >= 3 && count <= 6) return true;
+    const finalistCount = Number(season?.config?.finalistSize || 4);
+    if (count <= finalistCount) return false;
+    if ([3, 4, 5, 6].includes(count)) return true;
     if (count !== 8) return false;
     if (isTeamsFormat(season)) return true;
     if (!challenge) return true;
     return ["pairs", "groups"].includes(String(challenge.teamMode || "solo"));
+  }
+
+  function makeoverDirectSelectionChance(season) {
+    const count = Number(season?.activeIds?.length || 0);
+    if (count === 8) return 0.012;
+    if (count === 6) return 0.56;
+    if (count === 5) return 0.66;
+    if (count === 4) return 0.08;
+    if (count === 3) return 0.025;
+    return 0;
+  }
+
+  function makeoverChallengeWeight(season, challenge = null, episode = null) {
+    if (!makeoverWindowActive(season, challenge, episode) || hasChallengeTypeInSeason(season, "makeover")) return 0.02;
+    const count = Number(season?.activeIds?.length || 0);
+    if (count === 8) return 0.045;
+    if (count === 6) return 8.4;
+    if (count === 5) return 10.2;
+    if (count === 4) return 0.52;
+    if (count === 3) return 0.16;
+    return 0.12;
   }
 
   function makeoverReservedForConjoinedTwins(season) {
@@ -1084,7 +1120,10 @@
       if (state.config.seasonName === "Drag Race Reimagined") state.config.seasonName = state.defaults.seasonName;
       if (parsed.season?.config) parsed.season.config.mode = "viewer";
       if (Array.isArray(parsed.selected)) state.selected = parsed.selected;
-      if (parsed.season) state.season = parsed.season;
+      if (parsed.season) {
+        state.season = parsed.season;
+        ensureSeasonTwistState(state.season);
+      }
       if (Number.isInteger(parsed.currentEpisodeIndex)) state.currentEpisodeIndex = parsed.currentEpisodeIndex;
       if (parsed.currentStep) state.currentStep = parsed.currentStep;
     } catch (err) {
@@ -1365,6 +1404,8 @@
       twistChocolateChoosable: !!els.twistChocolateChoosable?.checked,
       twistLuckyCow: !!els.twistLuckyCow?.checked,
       twistBadonkaDunkTank: !!els.twistBadonkaDunkTank?.checked,
+      twistRosconReinas: !!els.twistRosconReinas?.checked,
+      twistHeartSuccessor: !!els.twistHeartSuccessor?.checked,
       disableChallengeRiggory: !!els.disableChallengeRiggory?.checked,
       disableLipSyncRiggory: !!els.disableLipSyncRiggory?.checked,
       disableDoubleShantaysSashays: !!els.disableDoubleShantaysSashays?.checked,
@@ -1409,6 +1450,8 @@
       state.config.twistChocolateChoosable = false;
       state.config.twistLuckyCow = false;
       state.config.twistBadonkaDunkTank = false;
+      state.config.twistRosconReinas = false;
+      state.config.twistHeartSuccessor = false;
       state.config.specialLalaparuzaSmackdown = false;
       state.config.specialSlayOffs = false;
       state.config.specialReunionLalaparuza = false;
@@ -1427,6 +1470,8 @@
       if (els.twistChocolateChoosable) els.twistChocolateChoosable.checked = false;
       if (els.twistLuckyCow) els.twistLuckyCow.checked = false;
       if (els.twistBadonkaDunkTank) els.twistBadonkaDunkTank.checked = false;
+      if (els.twistRosconReinas) els.twistRosconReinas.checked = false;
+      if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = false;
       if (els.specialLalaparuzaSmackdown) els.specialLalaparuzaSmackdown.checked = false;
       if (els.specialSlayOffs) els.specialSlayOffs.checked = false;
       if (els.specialReunionLalaparuza) els.specialReunionLalaparuza.checked = false;
@@ -1447,6 +1492,8 @@
       state.config.twistChocolateRandom = false;
       state.config.twistChocolateChoosable = false;
       state.config.twistLuckyCow = false;
+      state.config.twistRosconReinas = false;
+      state.config.twistHeartSuccessor = false;
       state.config.specialLalaparuzaSmackdown = false;
       state.config.specialSlayOffs = false;
       state.config.specialReunionLalaparuza = false;
@@ -1459,6 +1506,8 @@
       if (els.twistChocolateRandom) els.twistChocolateRandom.checked = false;
       if (els.twistChocolateChoosable) els.twistChocolateChoosable.checked = false;
       if (els.twistLuckyCow) els.twistLuckyCow.checked = false;
+      if (els.twistRosconReinas) els.twistRosconReinas.checked = false;
+      if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = false;
       if (els.specialLalaparuzaSmackdown) els.specialLalaparuzaSmackdown.checked = false;
       if (els.specialSlayOffs) els.specialSlayOffs.checked = false;
       if (els.specialReunionLalaparuza) els.specialReunionLalaparuza.checked = false;
@@ -1479,6 +1528,8 @@
       state.config.twistChocolateRandom = false;
       state.config.twistChocolateChoosable = false;
       state.config.twistLuckyCow = false;
+      state.config.twistRosconReinas = false;
+      state.config.twistHeartSuccessor = false;
       state.config.specialLalaparuzaSmackdown = false;
       state.config.specialSlayOffs = false;
       state.config.specialReunionLalaparuza = false;
@@ -1491,6 +1542,8 @@
       if (els.twistChocolateRandom) els.twistChocolateRandom.checked = false;
       if (els.twistChocolateChoosable) els.twistChocolateChoosable.checked = false;
       if (els.twistLuckyCow) els.twistLuckyCow.checked = false;
+      if (els.twistRosconReinas) els.twistRosconReinas.checked = false;
+      if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = false;
       if (els.specialLalaparuzaSmackdown) els.specialLalaparuzaSmackdown.checked = false;
       if (els.specialSlayOffs) els.specialSlayOffs.checked = false;
       if (els.specialReunionLalaparuza) els.specialReunionLalaparuza.checked = false;
@@ -1519,6 +1572,8 @@
     if (els.twistChocolateChoosable) els.twistChocolateChoosable.checked = !!c.twistChocolateChoosable;
     if (els.twistLuckyCow) els.twistLuckyCow.checked = !!c.twistLuckyCow;
     if (els.twistBadonkaDunkTank) els.twistBadonkaDunkTank.checked = !!c.twistBadonkaDunkTank;
+    if (els.twistRosconReinas) els.twistRosconReinas.checked = !!c.twistRosconReinas;
+    if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = !!c.twistHeartSuccessor;
     if (els.disableChallengeRiggory) els.disableChallengeRiggory.checked = !!c.disableChallengeRiggory;
     if (els.disableLipSyncRiggory) els.disableLipSyncRiggory.checked = !!c.disableLipSyncRiggory;
     if (els.disableDoubleShantaysSashays) els.disableDoubleShantaysSashays.checked = !!c.disableDoubleShantaysSashays;
@@ -1557,7 +1612,7 @@
       if (els.finalistSize) els.finalistSize.value = 4;
       if (els.finalistSizeValue) els.finalistSizeValue.textContent = 4;
     }
-    [els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames].forEach((el) => {
+    [els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames].forEach((el) => {
       if (el) el.disabled = allWinners || tournament || teams;
     });
     if (allWinners || tournament) {
@@ -1574,6 +1629,8 @@
       state.config.twistChocolateChoosable = false;
       state.config.twistLuckyCow = false;
       state.config.twistBadonkaDunkTank = false;
+      state.config.twistRosconReinas = false;
+      state.config.twistHeartSuccessor = false;
       if (state.config.castSize % 2 !== 0) state.config.castSize = Math.max(6, Math.min(24, state.config.castSize + 1));
       if (els.castSize) els.castSize.value = state.config.castSize;
       if (els.finalistSize) els.finalistSize.value = 3;
@@ -1584,10 +1641,16 @@
       if (els.twistChocolateChoosable) els.twistChocolateChoosable.checked = false;
       if (els.twistLuckyCow) els.twistLuckyCow.checked = false;
       if (els.twistBadonkaDunkTank) els.twistBadonkaDunkTank.checked = false;
+      if (els.twistRosconReinas) els.twistRosconReinas.checked = false;
+      if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = false;
     }
     if (state.config.eliminationFormat !== "regular") {
       state.config.twistLuckyCow = false;
+      state.config.twistRosconReinas = false;
+      state.config.twistHeartSuccessor = false;
       if (els.twistLuckyCow) els.twistLuckyCow.checked = false;
+      if (els.twistRosconReinas) els.twistRosconReinas.checked = false;
+      if (els.twistHeartSuccessor) els.twistHeartSuccessor.checked = false;
     }
     enforceExclusiveSetupControls();
     if (state.config.disableDoubleShantaysSashays && state.config.forceDoubleShantay) {
@@ -1682,6 +1745,10 @@
     if (config.specialMidSeasonRateAQueen && Number(config.castSize || 0) < 12) return "Mid-Season Rate-A-Queen requires at least 12 contestants.";
     if (config.specialMidSeasonRateAQueen && ["rate_a_queen_s16", "rate_a_queen_s17", "split_s14"].includes(config.premiereType || "regular")) return "Mid-Season Rate-A-Queen cannot be combined with Rate-A-Queen premieres or the S14 split premiere.";
     if (config.specialLalaparuzaSmackdown && config.specialSlayOffs) return "Choose either LaLaPaRuZa Smackdown or Slay-Offs, not both.";
+    const preLipSyncTwists = [config.twistLuckyCow, config.twistRosconReinas, config.twistHeartSuccessor].filter(Boolean).length;
+    if (preLipSyncTwists > 1) return "Choose only one pre-lip-sync saving twist: Lucky Cow, El Roscón de Reinas, or Heart Successor.";
+    if ((config.twistRosconReinas || config.twistHeartSuccessor) && config.eliminationFormat !== "regular") return "El Roscón de Reinas and Heart Successor only work with Regular eliminations.";
+    if ((config.twistRosconReinas || config.twistHeartSuccessor) && config.eliminationFormat === "golden_beaver") return "El Roscón de Reinas and Heart Successor cannot be combined with Golden Beaver.";
     if (config.eliminationFormat === "all_winners") return "";
     if (config.eliminationFormat === "tournament") {
       const brackets = Number(config.tournamentBracketCount || 2);
@@ -2000,7 +2067,7 @@
     $all(".screen").forEach((screen) => screen.classList.toggle("is-active", screen.id === id));
   }
 
-  const EPISODE_STEPS = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
+  const EPISODE_STEPS = ["wildcard", "status", "roscon", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "heartsuccessor", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "luckycowvotes", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "heartinheritance", "pointceremony", "trackrecord"];
 
   function scrollToEpisodeSection(step) {
     const panel = $(`.episode-panel[data-panel="${step}"]`);
@@ -2024,15 +2091,33 @@
     if (options.scroll !== false) scrollToEpisodeSection(step);
   }
 
+  function contestantTwistBadges(id, episode = currentEpisode()) {
+    const season = state.season;
+    if (!season || !episode) return "";
+    const badges = [];
+    if (season.config?.twistHeartSuccessor) {
+      const balance = clamp(Number(episode.heartBalancesStart?.[id] ?? season.heartSuccessor?.balances?.[id] ?? 0), 0, 2);
+      const label = balance >= 2 ? "♥ READY" : balance === 1 ? "♡ 1/2" : "♡ 0/2";
+      badges.push(`<span class="contestant-twist-badge heart-balance-${balance}">${escapeHtml(label)}</span>`);
+    }
+    if (season.config?.twistRosconReinas) {
+      const draw = (season.roscon?.draws || []).find((item) => item.beanHolderId === id && Number(item.episodeNumber) < Number(episode.number));
+      if (draw) badges.push('<span class="contestant-twist-badge roscon-bean-badge">🫘 El Haba</span>');
+    }
+    return badges.length ? `<div class="contestant-twist-badges">${badges.join("")}</div>` : "";
+  }
+
   function contestantCard(id, extra = "", options = {}) {
     const season = state.season;
     const item = season?.contestants?.[id] || state.roster.find((q) => q.id === id) || {};
     const name = options.nick ? nickDisplayName(item) : fullDisplayName(item);
+    const twistBadges = options.twistBadges ? contestantTwistBadges(id, options.episode || currentEpisode()) : "";
     return `
       <article class="mini-contestant-card ${escapeHtml(options.className || "")}">
         <img class="avatar sqr" src="${escapeHtml(item.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(item))}">
         <strong>${escapeHtml(name)}</strong>
         ${extra ? `<span>${escapeHtml(extra)}</span>` : ""}
+        ${twistBadges}
       </article>
     `;
   }
@@ -2077,15 +2162,15 @@
   }
 
   function episodeStepOrder(ep = currentEpisode()) {
-    const base = ["wildcard", "status", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
+    const base = ["wildcard", "status", "roscon", "comeback", "guest", "mini", "teams", "famegames", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "runway", "judging", "ratequeen", "placements", "heartsuccessor", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "luckycowvotes", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "heartinheritance", "pointceremony", "trackrecord"];
     const format = ep?.comeback?.format || "none";
     const position = ep?.comeback?.position || comebackPosition(format);
     if (ep?.type === "cunt_test") return ["status", "maxi", "cuntpart1", "cuntpart2", "cuntpart3", "lipsync", "results", "trackrecord"];
-    if (ep?.type === "porkchop_premiere") return ["status", "maxi", "trackrecord"];
-    if (format === "lalaparuza_comeback" || format === "game_within_a_game") return ["wildcard", "status", "comeback", "lipsync", "trackrecord"];
-    if (position === "postMini") return ["wildcard", "status", "guest", "mini", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
-    if (position === "preMaxi") return ["wildcard", "status", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "pointceremony", "trackrecord"];
-    if (position === "standalone") return ["wildcard", "status", "comeback", "maxi", "placements", "lipsync", "results", "trackrecord"];
+    if (ep?.type === "porkchop_premiere") return ["status", "roscon", "maxi", "trackrecord"];
+    if (format === "lalaparuza_comeback" || format === "game_within_a_game") return ["wildcard", "status", "roscon", "comeback", "lipsync", "results", "heartinheritance", "trackrecord"];
+    if (position === "postMini") return ["wildcard", "status", "roscon", "guest", "mini", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "heartsuccessor", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "luckycowvotes", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "heartinheritance", "pointceremony", "trackrecord"];
+    if (position === "preMaxi") return ["wildcard", "status", "roscon", "comeback", "teams", "famegames", "maxi", "runway", "judging", "ratequeen", "placements", "heartsuccessor", "luckycow", "goldenbeaver", "rumocracy", "lipsync", "qosdadhh", "lsftc", "winner", "results", "luckycowvotes", "badonkadunktank", "s17lsfyl", "s17lsfylresults", "untucked", "heartinheritance", "pointceremony", "trackrecord"];
+    if (position === "standalone") return ["wildcard", "status", "roscon", "comeback", "maxi", "placements", "heartsuccessor", "lipsync", "results", "heartinheritance", "trackrecord"];
     return base;
   }
 
@@ -2365,6 +2450,8 @@
       chocolate: null,
       luckyCow: { active: !!state.config.twistLuckyCow, used: false },
       badonkaDunkTank: null,
+      roscon: null,
+      heartSuccessor: null,
       lateEntryId: null,
       episodeCounter: 1,
       seasonComplete: false,
@@ -2398,6 +2485,8 @@
       premiereChallengeType: "",
       premiereChallengeIds: []
     };
+    season.roscon = createRosconState(season);
+    season.heartSuccessor = createHeartSuccessorState(season);
     initializePreseasonReception(season);
     initializeComebackState(season);
     return season;
@@ -2644,6 +2733,7 @@
     if (["HIGH", "HIGH_BLK", "TOP3", "TOP4"].includes(value)) return 4;
     if (["SAFE", "RUN", "BLK", "IMM", "IN", "RTRN"].includes(value) || /^LALA_R/.test(value)) return 3;
     if (value === "LOW") return 2;
+    if (["LOW_ROSCON_BTM2", "LOW_ROSCON_ELIM"].includes(value)) return 1;
     if (/^BTM/.test(value) || ["CHOC", "ELIM", "OUT", "PLOSS", "PCHOP", "QUIT", "DEPT", "DISQ"].includes(value)) return 1;
     return 3;
   }
@@ -3334,6 +3424,366 @@
       savesUsed: 0,
       boxes: Array.from({ length: count }, (_, index) => ({ number: index + 1, save: saveNumbers.has(index + 1), opened: false, openedById: null, episodeLabel: null }))
     };
+  }
+
+
+  function createRosconState(season) {
+    return {
+      active: !!season?.config?.twistRosconReinas,
+      draws: [],
+      holderIds: [],
+      beanHolderIds: [],
+      usedHolderIds: [],
+      prizeAwardedHolderIds: [],
+      expiredHolderIds: []
+    };
+  }
+
+  function createHeartSuccessorState(season) {
+    const balances = Object.fromEntries((season?.castOrder || []).map((id) => [id, 1]));
+    return {
+      active: !!season?.config?.twistHeartSuccessor,
+      balances,
+      pendingReveals: [],
+      history: [],
+      uses: [],
+      inheritanceClosed: false
+    };
+  }
+
+  function ensureSeasonTwistState(season) {
+    if (!season) return;
+    if (!season.roscon || typeof season.roscon !== "object") season.roscon = createRosconState(season);
+    if (!season.heartSuccessor || typeof season.heartSuccessor !== "object") season.heartSuccessor = createHeartSuccessorState(season);
+    season.roscon.active = !!season.config?.twistRosconReinas;
+    season.roscon.draws = Array.isArray(season.roscon.draws) ? season.roscon.draws : [];
+    season.roscon.holderIds = Array.isArray(season.roscon.holderIds) ? season.roscon.holderIds : [];
+    season.roscon.beanHolderIds = Array.isArray(season.roscon.beanHolderIds) ? season.roscon.beanHolderIds : [];
+    season.roscon.usedHolderIds = Array.isArray(season.roscon.usedHolderIds) ? season.roscon.usedHolderIds : [];
+    season.roscon.prizeAwardedHolderIds = Array.isArray(season.roscon.prizeAwardedHolderIds) ? season.roscon.prizeAwardedHolderIds : [];
+    season.roscon.expiredHolderIds = Array.isArray(season.roscon.expiredHolderIds) ? season.roscon.expiredHolderIds : [];
+    season.heartSuccessor.active = !!season.config?.twistHeartSuccessor;
+    season.heartSuccessor.balances = season.heartSuccessor.balances && typeof season.heartSuccessor.balances === "object" ? season.heartSuccessor.balances : {};
+    (season.castOrder || []).forEach((id) => {
+      if (!Number.isFinite(Number(season.heartSuccessor.balances[id]))) season.heartSuccessor.balances[id] = 1;
+    });
+    season.heartSuccessor.pendingReveals = Array.isArray(season.heartSuccessor.pendingReveals) ? season.heartSuccessor.pendingReveals : [];
+    season.heartSuccessor.history = Array.isArray(season.heartSuccessor.history) ? season.heartSuccessor.history : [];
+    season.heartSuccessor.uses = Array.isArray(season.heartSuccessor.uses) ? season.heartSuccessor.uses : [];
+    season.heartSuccessor.inheritanceClosed = !!season.heartSuccessor.inheritanceClosed;
+  }
+
+  function rosconDrawKey(season, episode) {
+    if (season?.config?.premiereType === "split_s6" && episode?.premiere) return `s6:${episode.splitGroup || episode.number}`;
+    return "main";
+  }
+
+  function rosconDrawParticipantsForEpisode(season, episode) {
+    if (!season?.roscon?.active || !episode) return [];
+    const premiere = season.config?.premiereType || "regular";
+    const existingKeys = new Set((season.roscon.draws || []).map((draw) => draw.key));
+    const key = rosconDrawKey(season, episode);
+    if (existingKeys.has(key)) return [];
+
+    if (premiere === "split_s6") {
+      if (episode.premiere && episode.specialPremiere === "split_elim") return (episode.activeStartIds || season.activeIds || []).slice();
+      return [];
+    }
+
+    if ((season.roscon.draws || []).length) return [];
+    if (["regular", "slayers", "non_elim_top2", "uk3", "porkchop"].includes(premiere) && episode.number === 1) {
+      return (season.activeIds || episode.activeStartIds || []).slice();
+    }
+    if (premiere === "late_entry" && episode.number >= 2 && season.lateEntryId && season.activeIds.includes(season.lateEntryId)) {
+      return season.activeIds.slice();
+    }
+    if (["split_s12", "split_s14", "rate_a_queen_s16", "rate_a_queen_s17"].includes(premiere) && episode.number >= 3) {
+      return season.activeIds.slice();
+    }
+    return [];
+  }
+
+  function maybeCreateRosconDraw(season, episode) {
+    ensureSeasonTwistState(season);
+    const participants = [...new Set(rosconDrawParticipantsForEpisode(season, episode).filter((id) => season.contestants?.[id]))];
+    if (participants.length < 2) return null;
+    const luckyHolderId = randomItem(participants);
+    const beanHolderId = randomItem(participants.filter((id) => id !== luckyHolderId));
+    const draw = {
+      key: rosconDrawKey(season, episode),
+      episodeNumber: episode.number,
+      episodeLabel: episode.label,
+      groupLabel: episode.splitGroup || "",
+      participantIds: participants.slice(),
+      luckyHolderId,
+      beanHolderId
+    };
+    season.roscon.draws.push(draw);
+    season.roscon.holderIds = [...new Set([...(season.roscon.holderIds || []), luckyHolderId])];
+    season.roscon.beanHolderIds = [...new Set([...(season.roscon.beanHolderIds || []), beanHolderId])];
+    episode.rosconDraw = clone(draw);
+    return draw;
+  }
+
+  function rosconHolderIsUsable(season, id) {
+    const roscon = season?.roscon;
+    return !!(roscon?.active
+      && (roscon.holderIds || []).includes(id)
+      && !(roscon.usedHolderIds || []).includes(id)
+      && !(roscon.prizeAwardedHolderIds || []).includes(id)
+      && !(roscon.expiredHolderIds || []).includes(id));
+  }
+
+  function maybeAwardRosconPrize(season, episode) {
+    ensureSeasonTwistState(season);
+    const prizeEligibleEpisodeTypes = new Set(["competitive", "cunt_test", "lsftf", "finale"]);
+    if (!season.roscon.active || !episode || episode.premiere || !prizeEligibleEpisodeTypes.has(episode.type)) return [];
+    const semiFinalCount = Number(season.config?.finalistSize || 4) + 1;
+    if (season.activeIds.length > semiFinalCount) return [];
+    const awards = (season.roscon.holderIds || []).filter((id) => season.activeIds.includes(id) && rosconHolderIsUsable(season, id)).map((id) => ({
+      holderId: id,
+      amount: 2500,
+      episodeNumber: episode.number,
+      episodeLabel: episode.label
+    }));
+    if (!awards.length) return [];
+    awards.forEach((award) => {
+      season.roscon.prizeAwardedHolderIds.push(award.holderId);
+      season.roscon.expiredHolderIds.push(award.holderId);
+    });
+    season.roscon.prizeAwardedHolderIds = [...new Set(season.roscon.prizeAwardedHolderIds)];
+    season.roscon.expiredHolderIds = [...new Set(season.roscon.expiredHolderIds)];
+    episode.rosconPrizeAwards = awards;
+    return awards;
+  }
+
+  function heartBalanceFor(season, id) {
+    return clamp(Number(season?.heartSuccessor?.balances?.[id] || 0), 0, 2);
+  }
+
+  function prepareEpisodeTwists(season, episode) {
+    ensureSeasonTwistState(season);
+    episode.heartBalancesStart = clone(season.heartSuccessor.balances || {});
+    episode.heartInheritanceEvents = [];
+    episode.heartSuccessorUses = [];
+    episode.heartSuccessorSavedIds = [];
+    episode.heartSuccessorReplacementIds = [];
+    episode.heartSuccessorBottomIds = [];
+    episode.heartSuccessorPlacementLowIds = [];
+    episode.rosconUses = [];
+    episode.rosconSavedIds = [];
+    episode.rosconReplacementIds = [];
+    episode.rosconAnnouncedLowIds = [];
+    episode.rosconAnnouncedBottomIds = [];
+    episode.rosconPrizeAwards = [];
+    maybeCreateRosconDraw(season, episode);
+    maybeAwardRosconPrize(season, episode);
+    return episode;
+  }
+
+  function removeContestantFromPlacementGroups(episode, id) {
+    ["winnerIds", "top2Ids", "highIds", "safeIds", "lowIds", "bottomIds", "savedIds"].forEach((key) => {
+      episode[key] = (episode[key] || []).filter((value) => value !== id);
+    });
+  }
+
+  function preLipSyncReplacementId(season, episode, excludedIds = []) {
+    const excluded = new Set([...(excludedIds || []), ...(episode.bottomIds || []), ...(episode.winnerIds || []), ...(episode.top2Ids || []), ...(episode.highIds || [])]);
+    const ranked = bottomRankedIds(episode);
+    let replacement = ranked.find((id) => season.activeIds.includes(id) && !excluded.has(id) && !isProtectedByImmunity(season, episode, id));
+    if (!replacement) {
+      const fallbackExcluded = new Set([...(excludedIds || []), ...(episode.bottomIds || []), ...(episode.winnerIds || [])]);
+      replacement = ranked.find((id) => season.activeIds.includes(id) && !fallbackExcluded.has(id) && !isProtectedByImmunity(season, episode, id));
+    }
+    return replacement || null;
+  }
+
+  function swapBottomContestantForTwist(season, episode, savedId, replacementId) {
+    if (!savedId || !replacementId) return false;
+    removeContestantFromPlacementGroups(episode, savedId);
+    removeContestantFromPlacementGroups(episode, replacementId);
+    episode.lowIds = [...new Set([...(episode.lowIds || []), savedId])];
+    episode.bottomIds = [...new Set([...(episode.bottomIds || []), replacementId])];
+    setSafeIds(season, episode);
+    return true;
+  }
+
+  function rosconLipSyncEligible(season, episode) {
+    if (!season?.roscon?.active || !isRegularFormat(season) || !episode || episode.type !== "competitive") return false;
+    if (episode.skipLipSyncThisEpisode || (episode.bottomIds || []).length !== 2) return false;
+    if (episode.specialPremiere && !["uk3", "split_elim", "rate_a_queen_merge"].includes(episode.specialPremiere)) return false;
+    return true;
+  }
+
+  function applyRosconSaves(season, episode) {
+    if (!rosconLipSyncEligible(season, episode)) return [];
+    const announcedBottomIds = (episode.bottomIds || []).slice();
+    const announcedLowIds = (episode.lowIds || []).slice();
+    const holders = announcedBottomIds.filter((id) => rosconHolderIsUsable(season, id));
+    const uses = [];
+    const reserved = new Set(announcedBottomIds);
+    holders.forEach((holderId) => {
+      const replacementId = preLipSyncReplacementId(season, episode, [...reserved, ...uses.map((use) => use.replacementId)]);
+      if (!replacementId) return;
+      if (!swapBottomContestantForTwist(season, episode, holderId, replacementId)) return;
+      const use = { holderId, savedId: holderId, replacementId, episodeNumber: episode.number, episodeLabel: episode.label };
+      uses.push(use);
+      reserved.add(replacementId);
+      season.roscon.usedHolderIds.push(holderId);
+    });
+    if (!uses.length) return [];
+    season.roscon.usedHolderIds = [...new Set(season.roscon.usedHolderIds)];
+    episode.rosconAnnouncedLowIds = announcedLowIds;
+    episode.rosconAnnouncedBottomIds = announcedBottomIds;
+    episode.rosconUses = uses;
+    episode.rosconSavedIds = uses.map((use) => use.savedId);
+    episode.rosconReplacementIds = uses.map((use) => use.replacementId);
+    return uses;
+  }
+
+  function chooseHeartSaveTarget(season, episode, ownerId, candidates = []) {
+    const bottomIds = (candidates || []).slice();
+    if (bottomIds.includes(ownerId)) return ownerId;
+    return bottomIds.map((id) => {
+      const relationship = Number(season.relationships?.[pairKey(ownerId, id)] || 0);
+      const loyalty = (season.heartSuccessor?.uses || []).some((use) => use.ownerId === id && use.savedId === ownerId) ? 14 : 0;
+      const threat = trackRecordPower(season, id) * 0.08;
+      return { id, score: relationship * 14 + loyalty - threat + randInt(-6, 6) };
+    }).sort((a, b) => b.score - a.score)[0]?.id || bottomIds[0] || null;
+  }
+
+  function chooseHeartOwner(season, episode, readyOwners, dangerIds) {
+    const rank = new Map(bottomRankedIds(episode).map((id, index) => [id, index]));
+    const endangeredOwners = readyOwners.filter((id) => dangerIds.includes(id));
+    if (endangeredOwners.length) return endangeredOwners.sort((a, b) => (rank.get(a) ?? 999) - (rank.get(b) ?? 999))[0];
+    return readyOwners.map((ownerId) => {
+      const bestRelationship = Math.max(...dangerIds.map((id) => Number(season.relationships?.[pairKey(ownerId, id)] || 0)), -10);
+      return { ownerId, score: bestRelationship * 10 + randInt(-5, 5) };
+    }).sort((a, b) => b.score - a.score)[0]?.ownerId || readyOwners[0] || null;
+  }
+
+  function heartSuccessorLipSyncEligible(season, episode) {
+    if (!season?.heartSuccessor?.active || !isRegularFormat(season) || !episode || episode.type !== "competitive") return false;
+    if (episode.skipLipSyncThisEpisode || (episode.bottomIds || []).length !== 2) return false;
+    if (episode.specialPremiere && !["uk3", "split_elim", "rate_a_queen_merge"].includes(episode.specialPremiere)) return false;
+    return season.activeIds.some((id) => heartBalanceFor(season, id) >= 2);
+  }
+
+  function applyHeartSuccessorSaves(season, episode) {
+    if (!heartSuccessorLipSyncEligible(season, episode)) return [];
+    const readyOwners = season.activeIds.filter((id) => heartBalanceFor(season, id) >= 2);
+    if (!readyOwners.length) return [];
+    const originalBottomIds = (episode.bottomIds || []).slice();
+    const originalLowIds = (episode.lowIds || []).slice();
+    const thirdBottomId = preLipSyncReplacementId(season, episode, originalBottomIds);
+    if (!thirdBottomId) return [];
+    const dangerIds = [...new Set([thirdBottomId, ...originalBottomIds])].slice(0, 3);
+    if (dangerIds.length !== 3) return [];
+    const ownerId = chooseHeartOwner(season, episode, readyOwners, dangerIds);
+    const savedId = chooseHeartSaveTarget(season, episode, ownerId, dangerIds);
+    if (!ownerId || !savedId || !dangerIds.includes(savedId)) return [];
+
+    dangerIds.forEach((id) => removeContestantFromPlacementGroups(episode, id));
+    episode.bottomIds = dangerIds.filter((id) => id !== savedId).slice(0, 2);
+    episode.lowIds = [...new Set([...originalLowIds.filter((id) => !dangerIds.includes(id)), savedId])];
+    setSafeIds(season, episode);
+
+    season.heartSuccessor.balances[ownerId] = 0;
+    const use = { ownerId, savedId, bottomGroupIds: dangerIds.slice(), episodeNumber: episode.number, episodeLabel: episode.label };
+    season.heartSuccessor.uses.push(use);
+    episode.heartSuccessorUses = [use];
+    episode.heartSuccessorSavedIds = [savedId];
+    episode.heartSuccessorReplacementIds = [];
+    episode.heartSuccessorBottomIds = dangerIds.slice();
+    episode.heartSuccessorPlacementLowIds = originalLowIds.filter((id) => !dangerIds.includes(id));
+    return [use];
+  }
+
+  function applyPreLipSyncTwists(season, episode) {
+    if (season?.config?.twistRosconReinas) return applyRosconSaves(season, episode);
+    if (season?.config?.twistHeartSuccessor) return applyHeartSuccessorSaves(season, episode);
+    return [];
+  }
+
+  function chooseHeartSuccessorRecipient(season, donorIds, eligibleIds) {
+    const donors = (donorIds || []).filter(Boolean);
+    return (eligibleIds || []).map((id) => {
+      const relationship = donors.reduce((sum, donorId) => sum + Number(season.relationships?.[pairKey(donorId, id)] || 0), 0);
+      const recentBond = donors.some((donorId) => (season.episodes || []).slice(-3).some((ep) => (ep.untuckedEvents || []).some((event) => (event.ids || []).includes(donorId) && (event.ids || []).includes(id) && Number(event.relationship || 0) > 0))) ? 10 : 0;
+      const balancePreference = heartBalanceFor(season, id) === 1 ? 8 : 2;
+      return { id, score: relationship * 12 + recentBond + balancePreference + randInt(-8, 8) };
+    }).sort((a, b) => b.score - a.score)[0]?.id || null;
+  }
+
+  function processHeartSuccessorInheritance(season, episode) {
+    ensureSeasonTwistState(season);
+    if (!season.heartSuccessor.active) return;
+    const eliminatedIds = [...new Set((episode.eliminatedIds || []).filter((id) => season.contestants?.[id]))];
+    episode.heartInheritanceEvents = [];
+    episode.heartSuccessorSuccessionEvents = [];
+    episode.heartSuccessorHistoryRow = null;
+    if (!eliminatedIds.length) return;
+
+    if (season.heartSuccessor.inheritanceClosed || episode.type === "finale" || season.activeIds.length <= Number(season.config?.finalistSize || 4)) {
+      eliminatedIds.forEach((id) => { season.heartSuccessor.balances[id] = 0; });
+      season.heartSuccessor.inheritanceClosed = true;
+      return;
+    }
+
+    const savedIds = [...new Set((episode.heartSuccessorSavedIds || []).filter(Boolean))];
+    const historyRow = {
+      episodeNumber: episode.number,
+      episodeLabel: episode.label,
+      eliminatedIds: eliminatedIds.slice(),
+      successorIds: [],
+      savedIds: savedIds.slice(),
+      events: [],
+      none: false
+    };
+    const activeRecipients = season.activeIds.filter((id) => !eliminatedIds.includes(id) && heartBalanceFor(season, id) < 2);
+    const doubleSashay = eliminatedIds.length === 2 && String(episode.lipSync?.resultType || "").startsWith("double_sashay");
+    if (doubleSashay) {
+      const donorIds = eliminatedIds.filter((id) => heartBalanceFor(season, id) === 1);
+      eliminatedIds.forEach((id) => { season.heartSuccessor.balances[id] = 0; });
+      const successorId = donorIds.length ? chooseHeartSuccessorRecipient(season, donorIds, activeRecipients) : null;
+      if (successorId) season.heartSuccessor.balances[successorId] = Math.min(2, heartBalanceFor(season, successorId) + donorIds.length);
+      const event = {
+        donorIds: eliminatedIds.slice(),
+        contributingDonorIds: donorIds.slice(),
+        successorId,
+        amount: donorIds.length,
+        newBalance: successorId ? heartBalanceFor(season, successorId) : 0,
+        sourceEpisodeNumber: episode.number,
+        sourceEpisodeLabel: episode.label
+      };
+      historyRow.events.push(event);
+      if (successorId) historyRow.successorIds.push(successorId);
+    } else {
+      eliminatedIds.forEach((donorId) => {
+        const balance = heartBalanceFor(season, donorId);
+        season.heartSuccessor.balances[donorId] = 0;
+        const eligible = season.activeIds.filter((id) => id !== donorId && heartBalanceFor(season, id) < 2);
+        const successorId = balance === 1 ? chooseHeartSuccessorRecipient(season, [donorId], eligible) : null;
+        if (successorId) season.heartSuccessor.balances[successorId] = Math.min(2, heartBalanceFor(season, successorId) + 1);
+        const event = {
+          donorIds: [donorId],
+          contributingDonorIds: balance === 1 ? [donorId] : [],
+          successorId,
+          amount: balance === 1 ? 1 : 0,
+          newBalance: successorId ? heartBalanceFor(season, successorId) : 0,
+          sourceEpisodeNumber: episode.number,
+          sourceEpisodeLabel: episode.label
+        };
+        historyRow.events.push(event);
+        if (successorId) historyRow.successorIds.push(successorId);
+      });
+    }
+    historyRow.successorIds = [...new Set(historyRow.successorIds)];
+    season.heartSuccessor.pendingReveals = [];
+    season.heartSuccessor.history.push(historyRow);
+    episode.heartInheritanceEvents = clone(historyRow.events);
+    episode.heartSuccessorSuccessionEvents = clone(historyRow.events);
+    episode.heartSuccessorHistoryRow = clone(historyRow);
   }
 
   function isLuckyCowEligible(season, episode) {
@@ -4933,7 +5383,7 @@ Options: ${names}`, "") || "";
 
   function createEpisodeShell(season, options = {}) {
     const label = options.label || `Episode ${season.episodeCounter}`;
-    return {
+    const episode = {
       number: season.episodeCounter,
       label,
       title: options.title || label,
@@ -5031,6 +5481,7 @@ Options: ${names}`, "") || "";
       unplannedExit: null,
       departureIds: []
     };
+    return prepareEpisodeTwists(season, episode);
   }
 
   function simulateRegularEpisode(season, options = {}) {
@@ -5084,15 +5535,13 @@ Options: ${names}`, "") || "";
     }
 
     const makeoverUsed = hasChallengeTypeInSeason(season, "makeover");
-    const makeoverCandidates = baseValid.filter((challenge) => challengeTypeKey(challenge.type) === "makeover");
+    let makeoverCandidates = baseValid.filter((challenge) => challengeTypeKey(challenge.type) === "makeover");
+    if (season.activeIds.length === 8 && !isTeamsFormat(season)) {
+      makeoverCandidates = makeoverCandidates.filter((challenge) => ["pairs", "groups"].includes(String(challenge.teamMode || "solo")));
+    }
     if (!makeoverUsed && makeoverCandidates.length && !episode.premiere && makeoverWindowActive(season)) {
-      const count = season.activeIds.length;
-      const chance = count >= 8 ? 0.38
-        : count === 7 ? 0.52
-          : count === 6 ? 0.72
-            : count === 5 ? 0.88
-              : 1;
-      if (Math.random() < chance) return clone(randomItem(makeoverCandidates));
+      const chance = makeoverDirectSelectionChance(season);
+      if (chance > 0 && Math.random() < chance) return clone(randomItem(makeoverCandidates));
     }
 
     const spaced = baseValid.filter((challenge) => isChallengeFamilySpaced(season, challenge.type));
@@ -5127,7 +5576,7 @@ Options: ${names}`, "") || "";
       if (family === "fashion" && totalLookCount >= 2) weight *= 0.16;
       if (type === "design") weight *= 0.46;
       if (type === "ball") weight *= 0.58;
-      if (type === "makeover") weight *= makeoverWindowActive(season, challenge, episode) && !hasChallengeTypeInSeason(season, "makeover") ? 8.5 : 0.78;
+      if (type === "makeover") weight *= makeoverChallengeWeight(season, challenge, episode);
       if (type === "runway" && !episode.premiere) weight *= 0.035;
       if (["acting", "improv", "snatch_game", "roast", "rusical", "girlgroups", "dance"].includes(type)) weight *= 1.35;
       if (type === "talent_show" && !episode.premiere && !isFormatRequiredTalentShow(episode)) weight *= 0.025;
@@ -5768,7 +6217,7 @@ Options: ${names}`, "") || "";
 
   function isTrackExitToken(token) {
     const value = String(token || "").toUpperCase();
-    return value === "ELIM" || isUnplannedExitToken(value);
+    return value === "ELIM" || value === "LOW_ROSCON_ELIM" || isUnplannedExitToken(value);
   }
 
   function isIneligibleUnplannedExit(season, id) {
@@ -6689,12 +7138,18 @@ Options: ${names}`, "") || "";
 
   function shouldJudgeInTeams(season, episode) {
     if (isGoldenBeaverFormat(season)) return false;
+    const topEightMakeover = challengeTypeKey(episode?.challenge?.type) === "makeover"
+      && Number(episode?.activeStartIds?.length || season?.activeIds?.length || 0) === 8;
+    if (topEightMakeover && episode.teams?.mode === "groups") return true;
     const chance = isAssassinFormat(season) ? 0.22 : 0.14;
     return episode.teams?.mode === "groups" && season.teamJudgedEpisodes < 3 && Math.random() < chance;
   }
 
   function shouldJudgeInPairs(season, episode) {
     if (isGoldenBeaverFormat(season)) return false;
+    const topEightMakeover = challengeTypeKey(episode?.challenge?.type) === "makeover"
+      && Number(episode?.activeStartIds?.length || season?.activeIds?.length || 0) === 8;
+    if (topEightMakeover && episode.teams?.mode === "pairs") return true;
     return episode.teams?.mode === "pairs" && season.pairJudgedEpisodes < 3 && Math.random() < 0.38;
   }
 
@@ -6805,6 +7260,7 @@ Options: ${names}`, "") || "";
       resolveTeamsLipSync(season, episode);
       return;
     }
+    applyPreLipSyncTwists(season, episode);
     if (episode.top2Ids.length) {
       const topLipSyncContext = ["uk3", "mid_season_rate_a_queen"].includes(episode.specialPremiere) ? "Lip Sync For The Win" : "Top Two Lip Sync";
       const topLipSync = applyRupaulLipSyncChoice(season, createLipSync(season, episode.top2Ids, topLipSyncContext));
@@ -7030,6 +7486,7 @@ Options: ${names}`, "") || "";
       context,
       song,
       ids,
+      displayIds: shuffle(ids.slice()),
       performances,
       winnerId: performances[0]?.id || ids[0],
       loserId: performances.at(-1)?.id || ids.at(-1),
@@ -7054,6 +7511,7 @@ Options: ${names}`, "") || "";
       context,
       song,
       ids,
+      displayIds: shuffle(ids.slice()),
       performances,
       winnerId: performances[0]?.id || ids[0],
       loserId: performances.at(-1)?.id || ids.at(-1),
@@ -7077,6 +7535,7 @@ Options: ${names}`, "") || "";
       context,
       song,
       ids,
+      displayIds: shuffle(ids.slice()),
       performances,
       winnerId: performances[0]?.id || ids[0],
       loserId: performances.at(-1)?.id || ids.at(-1),
@@ -7473,7 +7932,7 @@ Options: ${names}`, "") || "";
   }
 
   function nonEliminationSaveResultText(season, id, label) {
-    return `${displayName(season.contestants[id])} was saved by the ${label}. This is a non-elimination.`;
+    return `${displayName(season.contestants[id])} is protected by the ${label}.`;
   }
 
   function updateLipSyncStats(season, id, survived) {
@@ -7580,6 +8039,7 @@ Options: ${names}`, "") || "";
     if (episode.challenge?.type) season.usedChallengeTypes.push(challengeTypeKey(episode.challenge.type));
     if (episode.runway?.id && !episode.runway.challengeRunway) season.usedRunwayIds.push(episode.runway.id);
     applyEliminations(season, episode);
+    processHeartSuccessorInheritance(season, episode);
     awardNextEpisodeImmunity(season, episode);
     generateHiddenNarrativeEvents(season, episode);
     updateEpisodeStats(season, episode);
@@ -7682,6 +8142,10 @@ Options: ${names}`, "") || "";
       if ((episode.winnerIds || []).includes(id)) return "WIN";
       if ((episode.eliminatedIds || []).includes(id)) return "ELIM";
       if ((episode.bottomIds || []).includes(id)) return "BTM2";
+    }
+    if ((episode.rosconReplacementIds || []).includes(id)) {
+      if ((episode.eliminatedIds || []).includes(id)) return "LOW_ROSCON_ELIM";
+      if ((episode.bottomIds || []).includes(id)) return "LOW_ROSCON_BTM2";
     }
     if (episode.winnerIds.includes(id)) return "WIN";
     if (isLegacyFormat(state.season) && seasonEliminationFormatApplies(state.season, episode) && (episode.bottomIds || []).length && episode.top2Ids.includes(id)) return "WIN";
@@ -7806,7 +8270,7 @@ Options: ${names}`, "") || "";
       : randInt(-10, -4);
     const rawWinner = (best.lipSync.performances || []).slice().sort((a, b) => Number(b.rawScore || b.score || 0) - Number(a.rawScore || a.score || 0))[0]?.id;
     const officialWinner = best.lipSync.winnerId || best.lipSync.winnerIds?.[0];
-    if (token === "ELIM" && rawWinner === id) {
+    if (["ELIM", "LOW_ROSCON_ELIM"].includes(token) && rawWinner === id) {
       delta += randInt(10, 18);
       addArcEvidence(season, id, "robbed_queen", 1.5, "lip_sync_robbery", episode.label);
     }
@@ -7817,7 +8281,7 @@ Options: ${names}`, "") || "";
     if (["slayed", "great"].includes(band)) {
       addArcEvidence(season, id, "lip_sync_assassin", band === "slayed" ? 1.4 : 0.8, "lip_sync", episode.label);
     }
-    if (token === "ELIM") {
+    if (["ELIM", "LOW_ROSCON_ELIM"].includes(token)) {
       const opponentBestBand = (best.lipSync.performances || []).filter((entry) => entry.id !== id).map((entry) => String(entry.band || legacyLipSyncBand(Number(entry.rawScore || 0))));
       if (["bad", "flopped"].includes(band) && opponentBestBand.some((value) => value === "slayed" || value === "great")) {
         addArcEvidence(season, id, "sacrificial_lamb", 2, "lip_sync_mismatch", episode.label);
@@ -8183,6 +8647,15 @@ Options: ${names}`, "") || "";
       stats.ppe += 2;
       return;
     }
+    if (token === "LOW_ROSCON_BTM2") {
+      stats.unfavoritism += 3;
+      stats.ppe += 1;
+      return;
+    }
+    if (token === "LOW_ROSCON_ELIM") {
+      stats.unfavoritism += 5;
+      return;
+    }
     if (/^BTM\d+$/.test(token) || token === "BTM" || token === "BTM2" || token === "CHOC") {
       stats.unfavoritism += 3;
       stats.ppe += 1;
@@ -8208,6 +8681,9 @@ Options: ${names}`, "") || "";
       if (token === "WIN" && episode.assassinTopLostId === id) extraClasses.push("assassin-loser-win");
       if (token === "HIGH" && (episode.winningTeamIds || []).includes(id)) extraClasses.push("winning-team-high");
       if (token === "LOW" && (episode.goldenBeaverSavedId === id || episode.slayOffsSavedId === id)) extraClasses.push("golden-beaver-save");
+      if (token === "LOW" && (episode.rosconSavedIds || []).includes(id)) extraClasses.push("roscon-save", "twist-gold-save");
+      if (token === "LOW" && (episode.heartSuccessorSavedIds || []).includes(id)) extraClasses.push("heart-successor-save", "twist-gold-save");
+      if (["LOW_ROSCON_BTM2", "LOW_ROSCON_ELIM"].includes(token)) extraClasses.push("roscon-replacement");
       if (isUnplannedExitToken(token)) extraClasses.push("token-elim", "unplanned-exit");
       if (token === "ELIM" && (episode.eliminatedIds || []).length > 1 && !(isTeamsFormat(season) && episode.teamFormatEpisode)) extraClasses.push("double-elim");
       if (isTeamsFormat(season) && (episode.teamPartnerElimIds || []).includes(id)) extraClasses.push("team-partner-elim");
@@ -8217,7 +8693,7 @@ Options: ${names}`, "") || "";
       if (episode.luckyCow?.savedId === id) extraClasses.push("lucky-cow-save");
       if (episode.badonkaDunkTank?.saved && episode.badonkaDunkTank?.contestantId === id) extraClasses.push("badonka-save");
       if (isProtectedByImmunity(season, episode, id)) extraClasses.push("immunity-protected");
-      let display = /^LALA_R\d+$/.test(token) ? `SAFE<br/>(R${String(token).replace(/\D/g, "") || "1"})` : /^REUNION_LOST_R/.test(token) ? `LOST<br/>(R${String(token).replace(/\D/g, "") || "1"})` : token === "REUNION_WIN" ? "WIN" : token === "FAME_GAMES" ? "FAME<br/>GAMES" : token === "HIGH_BLK" ? "HIGH+<br/>BLK" : token === "TOP3" ? "TOP 3" : token === "DWIN" ? "WIN" : token === "PWIN" ? "WIN" : token === "WIN_QUIT" ? "WIN<br/>+<br/>QUIT" : token === "BTM2_QUIT" ? "BTM2<br/>+<br/>QUIT" : (token === "PLOSS" || token === "PCHOP") ? "LOSS" : (token === "TOP2" && isAllWinnersFormat(season) && episode.allWinnersEpisode ? "WIN" : token);
+      let display = /^LALA_R\d+$/.test(token) ? `SAFE<br/>(R${String(token).replace(/\D/g, "") || "1"})` : /^REUNION_LOST_R/.test(token) ? `LOST<br/>(R${String(token).replace(/\D/g, "") || "1"})` : token === "REUNION_WIN" ? "WIN" : token === "FAME_GAMES" ? "FAME<br/>GAMES" : token === "HIGH_BLK" ? "HIGH+<br/>BLK" : token === "TOP3" ? "TOP 3" : token === "DWIN" ? "WIN" : token === "PWIN" ? "WIN" : token === "WIN_QUIT" ? "WIN<br/>+<br/>QUIT" : token === "BTM2_QUIT" ? "BTM2<br/>+<br/>QUIT" : token === "LOW_ROSCON_BTM2" ? "LOW+<br/>BTM2" : token === "LOW_ROSCON_ELIM" ? "LOW+<br/>ELIM" : (token === "PLOSS" || token === "PCHOP") ? "LOSS" : (token === "TOP2" && isAllWinnersFormat(season) && episode.allWinnersEpisode ? "WIN" : token);
       display = String(display).replace(/\bBTM\s+(\d+)\b/g, "BTM$1");
       const comebackFormatForTrack = episode.comeback?.format || episode.readingComeback?.format || "";
       const suppressReturnPrefix = (comebackFormatForTrack === "reinas_de_la_comedia" && token === "DWIN") || (comebackFormatForTrack === "kitty_girl_groups" && token === "WIN");
@@ -8225,7 +8701,7 @@ Options: ${names}`, "") || "";
       if ((episode.revengeGreenOutIds || []).includes(id)) extraClasses.push("revenge-green-out");
       if ((episode.revengeActiveWinnerIds || []).includes(id) && token === "WIN") extraClasses.push("revenge-active-win");
       if (!suppressReturnPrefix && (episode.returnedIds || []).includes(id) && !["RTRN", "IN", "OUT", "RUN"].includes(token) && (token !== "ELIM" || ["random_return", "choose_return", "other_queens_choose", "reading_is_fundamental"].includes(comebackFormatForTrack))) display = `RTRN+<br/>${display}`;
-      stats.track.push({ label: episode.label, token, display, extraClasses, eliminated: isUnplannedExitToken(token) });
+      stats.track.push({ label: episode.label, token, display, extraClasses, eliminated: isUnplannedExitToken(token) || token === "LOW_ROSCON_ELIM" });
 
       if (token === "WIN_QUIT") stats.wins += 1;
       else if (token === "WIN" || token === "DWIN") stats.wins += 1;
@@ -8234,6 +8710,7 @@ Options: ${names}`, "") || "";
       else if (token === "HIGH" || token === "HIGH_BLK") stats.highs += 1;
       else if (token === "SAFE" || token === "BLK" || /^LALA_R[1-5]$/.test(token) || /^REUNION_LOST_R/.test(token) || token === "RUN") stats.safes += 1;
       else if (token === "LOW") stats.lows += 1;
+      else if (token === "LOW_ROSCON_BTM2" || token === "LOW_ROSCON_ELIM") stats.bottoms += 1;
       else if (token === "BTM2_QUIT") stats.bottoms += 1;
       else if (/^BTM\d+$/.test(token) || token === "BTM" || token === "BTM2") stats.bottoms += 1;
       else if (token === "ELIM") stats.bottoms += 1;
@@ -10283,6 +10760,11 @@ Options: ${names}`, "") || "";
     finale.lipSync.roundPosition = 1;
     finale.lipSync.isFinalRound = true;
     finale.winnerIds = doubleCrowning ? [ranked[0].id, ranked[1].id] : [ranked[0].id];
+    finale.lipSync.performanceWinnerId = finale.lipSync.winnerId;
+    finale.lipSync.winnerId = finale.winnerIds[0];
+    finale.lipSync.winnerIds = finale.winnerIds.slice();
+    finale.lipSync.tieIds = doubleCrowning ? finale.winnerIds.slice() : [];
+    finale.lipSync.loserId = (finale.lipSync.ids || []).find((id) => !finale.winnerIds.includes(id)) || finale.lipSync.loserId;
     finale.resultText = doubleCrowning
       ? `The Next Drag Superstar is... ${formatList(finale.winnerIds, season)}!`
       : `The Next Drag Superstar is... ${displayName(season.contestants[ranked[0].id])}!`;
@@ -10411,6 +10893,9 @@ Options: ${names}`, "") || "";
       results: "Winner",
       trackrecord: "Track Record"
     } : {
+      roscon: "El Roscón de Reinas",
+      heartinheritance: "Heart Inheritance",
+      heartsuccessor: "Heart Successor",
       comeback: ep?.comeback?.title || "Comeback",
       mini: ep?.allWinnersStarGiveawaysAtStart?.length ? "Star Giveaway" : "Mini Challenge",
       teams: "Teams",
@@ -10478,6 +10963,8 @@ Options: ${names}`, "") || "";
     }
     renderWildcardPanel(ep);
     renderStatusPanel(ep);
+    renderRosconPanel(ep);
+    renderHeartInheritancePanel(ep);
     renderComebackPanel(ep);
     renderGuestPanel(ep);
     renderMiniPanel(ep);
@@ -10491,7 +10978,9 @@ Options: ${names}`, "") || "";
     renderRateQueenPanel(ep);
     renderGoldenBeaverPanel(ep);
     renderPlacementsPanel(ep);
+    renderHeartSuccessorPanel(ep);
     renderLuckyCowPanel(ep);
+    renderLuckyCowVotesPanel(ep);
     renderRumocracyPanel(ep);
     renderLipSyncPanel(ep);
     renderS17LsfylPanel(ep);
@@ -10503,6 +10992,8 @@ Options: ${names}`, "") || "";
     renderPointCeremonyPanel(ep);
     renderEpisodeTrackRecordPanel(ep);
     updateVisibleEpisodeSections(ep);
+    applyLipSyncRevealGating(ep);
+    activateWinnerRevealAnimation(ep);
     setEpisodeStep(state.currentStep || "status", { scroll: false });
     if (els.episodeSelect) els.episodeSelect.value = String(state.currentEpisodeIndex);
   }
@@ -10538,9 +11029,9 @@ Options: ${names}`, "") || "";
     const remainingAtStart = readingPreStatus || (ep.type === "finale" ? (ep.activeStartIds || state.season.activeIds) : (ep.activeStartIds || []));
     const remainingSet = new Set(remainingAtStart);
     const eliminatedAtStart = (ep.eliminatedStartIds || []).filter((id) => !remainingSet.has(id));
-    if (els.remainingStrip) els.remainingStrip.innerHTML = remainingAtStart.map((id) => contestantCard(id)).join("") || `<span class="empty-state">No contestants remaining.</span>`;
+    if (els.remainingStrip) els.remainingStrip.innerHTML = remainingAtStart.map((id) => contestantCard(id, "", { twistBadges: true, episode: ep })).join("") || `<span class="empty-state">No contestants remaining.</span>`;
     if (els.eliminatedStrip) {
-      els.eliminatedStrip.innerHTML = eliminatedAtStart.map((id) => contestantCard(id, "", { className: "is-eliminated status-eliminated-card" })).join("");
+      els.eliminatedStrip.innerHTML = eliminatedAtStart.map((id) => contestantCard(id, "", { className: "is-eliminated status-eliminated-card", twistBadges: true, episode: ep })).join("");
       els.eliminatedStrip.hidden = !eliminatedAtStart.length;
     }
     if (els.eliminatedTitle) {
@@ -10565,6 +11056,104 @@ Options: ${names}`, "") || "";
         <div class="random-return-name">${escapeHtml(fullDisplayName(item))}</div>
       </div>`;
     }).join("")}</div>`;
+  }
+
+  function renderRosconPanel(ep) {
+    if (!els.rosconStack) return;
+    const draw = ep?.rosconDraw || null;
+    const awards = ep?.rosconPrizeAwards || [];
+    const parts = [];
+    if (draw) {
+      const beanId = draw.beanHolderId;
+      parts.push(`
+        <div class="twist-theme-copy roscon-theme-copy">
+          <h3>${escapeHtml(draw.groupLabel ? `${draw.groupLabel} Draw` : "The Roscón Draw")}</h3>
+          <p>Each contestant chooses a slice. One slice hides the Reina de la Suerte, while another contains El Haba.</p>
+        </div>
+        <div class="contestant-strip roscon-slice-grid">
+          ${(draw.participantIds || []).map((id) => contestantCard(id, id === beanId ? "🫘 El Haba" : "🍰 Slice", { className: id === beanId ? "is-roscon-bean-holder" : "" })).join("")}
+        </div>
+        <p class="twist-announcement"><strong>${escapeHtml(fullDisplayName(state.season.contestants[beanId]))}</strong> has found El Haba. Everyone now knows that they do not possess the Reina de la Suerte. They must also pay for the cake themselves.</p>
+      `);
+    }
+    awards.forEach((award) => {
+      parts.push(`
+        <div class="twist-theme-copy roscon-prize-copy">
+          <p>The Reina de la Suerte is finally revealed.</p>
+          <div class="contestant-strip small-strip award-strip">${contestantCard(award.holderId, "€2,500")}</div>
+          <p><strong>${escapeHtml(fullDisplayName(state.season.contestants[award.holderId]))}</strong> reached the semi-final without using the figurine and receives €2,500.</p>
+        </div>
+      `);
+    });
+    els.rosconStack.innerHTML = parts.join("");
+  }
+
+  function renderHeartInheritancePanel(ep) {
+    if (!els.heartInheritanceStack) return;
+    const events = ep?.heartInheritanceEvents || [];
+    els.heartInheritanceStack.innerHTML = events.map((event) => {
+      const donorIds = event.donorIds || [];
+      const successorId = event.successorId || null;
+      if (!event.amount || !successorId) {
+        return `
+          <div class="twist-theme-copy heart-inheritance-copy">
+            <div class="contestant-strip small-strip">${donorIds.map((id) => contestantCard(id, "No inheritance", { className: "is-eliminated" })).join("")}</div>
+            <p>${escapeHtml(sentenceList(donorIds, state.season, false))} left the competition without a half-heart to pass on.</p>
+          </div>
+        `;
+      }
+      const complete = Number(event.newBalance || 0) >= 2;
+      return `
+        <div class="heart-inheritance-flow">
+          <div class="contestant-strip small-strip heart-donor-strip">${donorIds.map((id) => contestantCard(id, "½ Heart", { className: "is-eliminated" })).join("")}</div>
+          <div class="heart-flow-symbol">${event.amount >= 2 ? "♡ + ♡" : "♡"} →</div>
+          <div class="contestant-strip small-strip heart-successor-strip">${contestantCard(successorId, complete ? "♥ READY" : "♡ 1/2", { className: complete ? "is-heart-ready" : "" })}</div>
+        </div>
+        <p class="twist-announcement">${escapeHtml(sentenceList(donorIds, state.season, false))} ${donorIds.length === 1 ? "leaves" : "leave"} ${event.amount >= 2 ? "their two half-hearts" : "a half-heart"} to <strong>${escapeHtml(fullDisplayName(state.season.contestants[successorId]))}</strong>.${complete ? " The heart is now complete and must be used at the next eligible lip sync." : ""}</p>
+      `;
+    }).join("");
+  }
+
+  function renderRosconLipSyncReveal(ep) {
+    const uses = ep?.rosconUses || [];
+    if (!uses.length) return "";
+    const finalBottomIds = ep?.bottomIds || [];
+    return `<div class="roscon-lipsync-reveal">${uses.map((use) => `
+      <div class="twist-theme-copy roscon-use-copy">
+        <div class="contestant-strip small-strip twist-save-strip">${contestantCard(use.holderId, "Reina de la Suerte", { className: "is-twist-saved" })}</div>
+        <p><strong>${escapeHtml(fullDisplayName(state.season.contestants[use.holderId]))}</strong> reveals the Reina de la Suerte and saves themself from the lip sync.</p>
+        <div class="twist-swap-arrow">↓ the next-lowest contestant takes their place ↓</div>
+        <div class="contestant-strip small-strip twist-replacement-strip">${contestantCard(use.replacementId, "Must Lip Sync", { className: "is-twist-replacement" })}</div>
+      </div>
+    `).join("")}<p class="twist-final-pair">${escapeHtml(sentenceList(finalBottomIds, state.season, false))} will lip sync for their lives.</p></div>`;
+  }
+
+  function renderHeartSuccessorPanel(ep) {
+    if (!els.heartSuccessorStack) return;
+    const heartUses = ep?.heartSuccessorUses || [];
+    if (!heartUses.length) {
+      els.heartSuccessorStack.innerHTML = "";
+      return;
+    }
+    const finalBottomIds = ep?.bottomIds || [];
+    els.heartSuccessorStack.innerHTML = heartUses.map((use) => {
+      const ownerName = fullDisplayName(state.season.contestants[use.ownerId]);
+      const savedName = fullDisplayName(state.season.contestants[use.savedId]);
+      const dangerIds = use.bottomGroupIds || ep.heartSuccessorBottomIds || [];
+      const saveText = use.ownerId === use.savedId
+        ? `<strong>${escapeHtml(ownerName)}</strong> completes the heart and uses it to save themself from the bottom group.`
+        : `<strong>${escapeHtml(ownerName)}</strong> completes the heart and uses it to save <strong>${escapeHtml(savedName)}</strong> from the bottom group.`;
+      return `
+        <div class="twist-theme-copy heart-use-copy">
+          <div class="heart-complete-symbol">♡ + ♡ = ♥</div>
+          <div class="contestant-strip small-strip heart-holder-strip">${contestantCard(use.ownerId, "Heart Holder", { className: "is-heart-ready" })}</div>
+          <p>${saveText}</p>
+          <div class="contestant-strip small-strip heart-successor-bottom-group">
+            ${dangerIds.map((id) => contestantCard(id, id === use.savedId ? "Saved" : "Must Lip Sync", { className: id === use.savedId ? "is-twist-saved" : "is-twist-replacement" })).join("")}
+          </div>
+        </div>
+      `;
+    }).join("") + `<p class="twist-final-pair">${escapeHtml(sentenceList(finalBottomIds, state.season, false))} will lip sync for their lives.</p>`;
   }
 
   function renderComebackPanel(ep) {
@@ -10912,7 +11501,7 @@ Options: ${names}`, "") || "";
             <p class="lip-sync-outcome-line">${escapeHtml(`${fullDisplayName(state.season.contestants[loading.choppedId] || {})}, I'm sorry, my dear, but you're getting the porkchop. Now, sashay away...`)}</p>
           </article>
         ` : "";
-        els.challengeGrid.innerHTML = `<div class="lalaparuza-round-list porkchop-battle-list">${battleHtml}</div>${loadingHtml}${groupHtml}`;
+        els.challengeGrid.innerHTML = `<div class="lalaparuza-round-list porkchop-battle-list">${battleHtml}</div><div class="after-lip-sync-sequence">${loadingHtml}${groupHtml}</div>`;
       }
       return;
     }
@@ -10976,7 +11565,7 @@ Options: ${names}`, "") || "";
       }
       if (els.challengeGrid) {
         const saving = ep.slayOffsSavedId ? `<article class="challenge-card saving-ceremony-card"><h3>Saving Ceremony</h3><p>${escapeHtml(fullDisplayName(state.season.contestants[ep.winnerIds?.[0]] || {}))} has won the Slay-Offs and saves ${escapeHtml(fullDisplayName(state.season.contestants[ep.slayOffsSavedId] || {}))} from the bottom lip sync.</p><div class="contestant-strip small-strip">${contestantCard(ep.slayOffsSavedId, "Saved")}</div></article>` : "";
-        els.challengeGrid.innerHTML = `<div class="lalaparuza-round-list">${(ep.extraLipSyncs || []).map((ls) => renderLipSyncCardWithOutcome(ls, ep, true, { forceOutcome: true, className: "lalaparuza-opening-round" })).join("")}</div>${saving}`;
+        els.challengeGrid.innerHTML = `<div class="lalaparuza-round-list">${(ep.extraLipSyncs || []).map((ls) => renderLipSyncCardWithOutcome(ls, ep, false, { className: "lalaparuza-opening-round" })).join("")}</div><div class="after-lip-sync-sequence">${saving}</div>`;
       }
       return;
     }
@@ -11028,7 +11617,9 @@ Options: ${names}`, "") || "";
         els.challengeSummary.innerHTML = `<div class="episode-theme-copy"><h3>Finale Performances</h3><p>The finalists have prepared lip sync numbers to their original songs.</p></div>`;
       }
       if (els.challengeGrid) {
-        els.challengeGrid.innerHTML = (ep.finalePerformances || []).map((perf) => groupBlock("", [perf.id], state.season, { className: "performance-band finale-performance-card", subtitle: `${fullDisplayName(state.season.contestants[perf.id])} performs a song ${perf.style}.` })).join("");
+        const performances = (ep.finalePerformances?.length ? ep.finalePerformances : createFinalePerformances({ ...state.season, activeIds: (ep.activeStartIds || state.season.activeIds || []).slice() }));
+        if (!ep.finalePerformances?.length) ep.finalePerformances = performances.slice();
+        els.challengeGrid.innerHTML = performances.map((perf) => groupBlock("", [perf.id], state.season, { className: "performance-band finale-performance-card", subtitle: `${fullDisplayName(state.season.contestants[perf.id])} performs a song ${perf.style}.` })).join("") || `<article class="event-card finale-performance-empty"><p>The finalists are preparing their original performances.</p></article>`;
       }
       return;
     }
@@ -11254,22 +11845,37 @@ Options: ${names}`, "") || "";
     if (!els.luckyCowStack) return;
     const cow = ep?.luckyCow;
     if (!cow?.active || !(cow.votes || []).length) { els.luckyCowStack.innerHTML = ""; return; }
-    const bottomIds = ep.bottomIds || [];
-    const totals = cow.totals || {};
-    const voteRows = (cow.votes || []).map((vote) => `
-      <article class="mx-vote-card lucky-cow-vote-card">
-        ${contestantCard(vote.voterId)}
-        <span class="vote-arrow">voted for</span>
-        ${contestantCard(vote.votedForId)}
-      </article>
-    `).join("");
+    const contestantIds = [...new Set((ep.activeStartIds || state.season.activeIds || []).filter(Boolean))];
     els.luckyCowStack.innerHTML = `
-      <article class="challenge-card lucky-cow-intro-card">
-        <div class="lucky-cow-title-row"><span class="lucky-cow-icon">🐄</span><h3>Lucky Cow</h3><span class="lucky-cow-icon">✨</span></div>
-        <p>The safe contestants secretly vote to save one queen from the bottom before the lip sync begins.</p>
+      <article class="twist-info-panel lucky-cow-intro-card">
+        <div class="twist-result-heading">
+          <span class="twist-result-icon" aria-hidden="true">🐄</span>
+          <div>
+            <h3>Lucky Cow</h3>
+            <p>The contestants are voting on who out of the bottom two deserves another chance...</p>
+          </div>
+        </div>
       </article>
-      <div class="contestant-strip small-strip lucky-cow-bottoms">${bottomIds.map((id) => contestantCard(id, `${Number(totals[id] || 0)} vote${Number(totals[id] || 0) === 1 ? "" : "s"}`, { className: cow.targetId === id ? "is-lucky-cow-target" : "" })).join("")}</div>
-      <div class="mx-vote-grid lucky-cow-vote-grid">${voteRows}</div>
+      <div class="contestant-strip small-strip lucky-cow-cast">
+        ${contestantIds.map((id) => contestantCard(id)).join("")}
+      </div>
+    `;
+  }
+
+  function renderLuckyCowVotesPanel(ep) {
+    if (!els.luckyCowVotesStack) return;
+    const cow = ep?.luckyCow;
+    if (!cow?.active || !(cow.votes || []).length) { els.luckyCowVotesStack.innerHTML = ""; return; }
+    els.luckyCowVotesStack.innerHTML = `
+      <div class="mx-vote-grid lucky-cow-vote-grid">
+        ${(cow.votes || []).map((vote) => `
+          <article class="mx-vote-card lucky-cow-vote-card">
+            ${contestantCard(vote.voterId)}
+            <span class="vote-arrow">voted for</span>
+            ${contestantCard(vote.votedForId)}
+          </article>
+        `).join("")}
+      </div>
     `;
   }
 
@@ -11278,14 +11884,25 @@ Options: ${names}`, "") || "";
     if (!revealed || !cow?.active || !cow.eliminatedId) return "";
     const opened = !!cow.revealed;
     const saved = !!cow.saved;
+    const name = fullDisplayName(state.season.contestants[cow.eliminatedId] || {});
     const message = saved
-      ? "Condragulations, my dear! You're one Lucky Cow and you're safe to slay another day!"
-      : "I'm sorry my dear, but your fellow competitors did not vote you to be the lucky cow. Now, sashay away...";
+      ? `${name}, you are one Lucky Cow! Shantay, you stay!`
+      : `${name}, the Lucky Cow does not save you. Sashay away.`;
     return `
-      <article class="lucky-cow-reveal-panel ${opened ? (saved ? "is-saved" : "is-not-saved") : ""}">
-        <h3>Lucky Cow</h3>
-        <div class="contestant-strip small-strip">${contestantCard(cow.eliminatedId)}</div>
-        ${opened ? `<p>${escapeHtml(message)}</p>` : `<button class="primary-btn reveal-lucky-cow-btn" type="button">Reveal Lucky Cow</button>`}
+      <article class="twist-result-panel lucky-cow-reveal-panel ${opened ? (saved ? "is-saved" : "is-not-saved") : ""}">
+        <div class="twist-result-heading">
+          <span class="twist-result-icon" aria-hidden="true">🐄</span>
+          <div>
+            <h3>Lucky Cow</h3>
+            <p>Reveal whether the lip-sync loser received the saving vote.</p>
+          </div>
+        </div>
+        <div class="contestant-strip small-strip twist-result-contestant">${contestantCard(cow.eliminatedId)}</div>
+        <div class="twist-result-action">
+          ${opened
+            ? `<p class="twist-result-copy ${saved ? "is-save" : "is-elimination"}">${escapeHtml(message)}</p>`
+            : `<button class="primary-btn reveal-lucky-cow-btn" type="button">Reveal Vote</button>`}
+        </div>
       </article>
     `;
   }
@@ -11299,22 +11916,34 @@ Options: ${names}`, "") || "";
     const opened = !!dunk.revealed;
     const boxes = (tank.boxes || []).map((box) => {
       const isCurrent = Number(box.number) === Number(dunk.boxNumber);
-      const isOpen = !!box.opened || (isCurrent && opened);
+      const happenedBeforeThisEpisode = Number(box.episodeNumber || Infinity) < Number(ep.number || 0);
+      const isOpen = !!box.opened || happenedBeforeThisEpisode || (isCurrent && opened);
       const icon = !isOpen ? "" : (box.save ? "✓" : "✕");
-      const cls = ["badonka-box", isOpen ? "is-open" : "", isOpen && box.save ? "is-save" : "", isOpen && !box.save ? "is-bust" : "", isCurrent ? "is-current" : ""].filter(Boolean).join(" ");
-      return `<div class="${cls}"><strong>${box.number}</strong>${isOpen ? `<span>${icon}</span>` : ""}</div>`;
+      const cls = ["badonka-box", isOpen ? "is-open" : "", isOpen && box.save ? "is-save" : "", isOpen && !box.save ? "is-bust" : "", isCurrent ? "is-current" : "", happenedBeforeThisEpisode ? "is-history" : ""].filter(Boolean).join(" ");
+      const label = isOpen && box.episodeNumber ? `<small>Episode ${escapeHtml(box.episodeNumber)}</small>` : "";
+      return `<div class="${cls}"><strong>${box.number}</strong>${isOpen ? `<span>${icon}</span>${label}` : ""}</div>`;
     }).join("");
+    const contestantName = fullDisplayName(state.season.contestants[contestantId] || {});
     const result = dunk.saved
-      ? `${fullDisplayName(state.season.contestants[contestantId])}, condragulations, the luck is on your side! Shantay you stay!`
-      : "I'm sorry my dear, but this is not your time. Now, sashay away.";
+      ? `${contestantName}, you are safe to slay another day! Shantay, you stay.`
+      : `${contestantName}, the Drag Gods have spoken. Sashay away.`;
     els.badonkaDunkTankStack.innerHTML = `
-      <article class="challenge-card badonka-intro-card">
-        <h3>Badonka Dunk Tank</h3>
-        <p>${escapeHtml(`${fullDisplayName(state.season.contestants[contestantId])}, now your fate lies in the hands of the Drag Gods. Pull the lever, and if you're lucky enough, you'll be safe and continue in the competition.`)}</p>
+      <article class="twist-result-panel badonka-intro-card ${opened ? (dunk.saved ? "is-saved" : "is-not-saved") : ""}">
+        <div class="twist-result-heading">
+          <span class="twist-result-icon" aria-hidden="true">🎛️</span>
+          <div>
+            <h3>Badonka-Dunk-Tank</h3>
+            <p>${escapeHtml(`${contestantName}, now your fate lies in the hands of the Drag Gods...`)}</p>
+          </div>
+        </div>
+        <div class="contestant-strip small-strip badonka-contestant-strip">${contestantCard(contestantId)}</div>
+        <div class="badonka-box-grid box-count-${Number(dunk.boxCount || tank.boxCount || 4)}">${boxes}</div>
+        <div class="twist-result-action">
+          ${opened
+            ? `<p class="twist-result-copy ${dunk.saved ? "is-save" : "is-elimination"}">${escapeHtml(result)}</p>`
+            : `<button class="primary-btn pull-badonka-lever-btn" type="button">Pull Lever</button>`}
+        </div>
       </article>
-      <div class="contestant-strip small-strip badonka-contestant-strip">${contestantCard(contestantId)}</div>
-      <div class="badonka-box-grid box-count-${Number(dunk.boxCount || tank.boxCount || 4)}">${boxes}</div>
-      <div class="center-actions">${opened ? `<p class="badonka-result-line ${dunk.saved ? "is-save" : "is-bust"}">${dunk.saved ? "✓" : "✕"} ${escapeHtml(result)}</p>` : `<button class="primary-btn pull-badonka-lever-btn" type="button">Pull Lever</button>`}</div>
     `;
     els.badonkaDunkTankStack.querySelector(".pull-badonka-lever-btn")?.addEventListener("click", () => {
       dunk.revealed = true;
@@ -11328,8 +11957,10 @@ Options: ${names}`, "") || "";
       }
       saveState();
       renderBadonkaDunkTankPanel(ep);
+      renderResultsPanel(ep);
     });
   }
+
 
   function renderJuryVotingPanel(ep) {
     const finalists = ep.activeStartIds || state.season.activeIds || [];
@@ -11721,14 +12352,33 @@ Options: ${names}`, "") || "";
         subtitle: `${sentenceList(ep.goldenBeaverBottomIds || [], state.season, false)}, I'm sorry my dears, but you are the bottom three of the week.`
       }));
     } else {
-      cards.push(placementGroup("Low", ep.lowIds || [], "low"));
-      cards.push(placementGroup(ep.assassinThreeTeamBottom ? "Bottom Team" : "Bottom", ep.bottomIds || [], "bottom"));
+      const rosconActive = !!(ep.rosconUses || []).length;
+      const heartActive = !!(ep.heartSuccessorUses || []).length;
+      const placementLowIds = rosconActive
+        ? (ep.rosconAnnouncedLowIds || [])
+        : heartActive
+          ? (ep.heartSuccessorPlacementLowIds || [])
+          : (ep.lowIds || []);
+      const placementBottomIds = rosconActive
+        ? (ep.rosconAnnouncedBottomIds || [])
+        : heartActive
+          ? (ep.heartSuccessorBottomIds || [])
+          : (ep.bottomIds || []);
+      cards.push(placementGroup("Low", placementLowIds, "low"));
+      if (heartActive) {
+        cards.push(groupBlock("Bottom", placementBottomIds, state.season, {
+          className: "placement-group token-btm3",
+          subtitle: `${sentenceList(placementBottomIds, state.season, false)}, I'm sorry my dears, but you are the bottom three of the week.`
+        }));
+      } else {
+        cards.push(placementGroup(ep.assassinThreeTeamBottom ? "Bottom Team" : "Bottom", placementBottomIds, "bottom"));
+      }
     }
     if (state.config.mode === "rupaul" && ep.winnerIds?.length) {
       const winnerPool = [...new Set([...(ep.winnerIds || []), ...(ep.highIds || []), ...(ep.top2Ids || [])])];
       cards.push(rupaulSelectControl("winner", "RuPaul mode: choose the challenge winner", winnerPool, ep.winnerIds[0]));
     }
-    const dangerPool = [...new Set([...(ep.lowIds || []), ...(ep.bottomIds || [])])];
+    const dangerPool = [...new Set([...(ep.rosconAnnouncedLowIds?.length ? ep.rosconAnnouncedLowIds : ep.heartSuccessorPlacementLowIds?.length ? ep.heartSuccessorPlacementLowIds : ep.lowIds || []), ...(ep.rosconAnnouncedBottomIds?.length ? ep.rosconAnnouncedBottomIds : ep.heartSuccessorBottomIds?.length ? ep.heartSuccessorBottomIds : ep.bottomIds || [])])];
     if (state.config.mode === "rupaul" && dangerPool.length >= 3) cards.push(rupaulSelectControl("save", "RuPaul mode: choose who is saved from the bottom group", dangerPool, (ep.lowIds || [])[0]));
     els.placementsGrid.innerHTML = cards.filter(Boolean).join("") || `<span class="empty-state">No placements to display.</span>`;
     attachRupaulControls(ep);
@@ -11757,9 +12407,9 @@ Options: ${names}`, "") || "";
     const headingText = isMidSeasonRateAQueen
       ? "The two bottom-one queens from both Talent Show parts now lip sync for their lives."
       : (ep.specialPremiere === "uk3" ? "The bottom two now lip sync for their lives." : "The two lowest-ranked queens from the split premieres now battle to stay.");
-    els.s17LsfylBoard.innerHTML = `
+    els.s17LsfylBoard.innerHTML = `${ep.specialPremiere === "uk3" ? renderRosconLipSyncReveal(ep) : ""}
       <article class="challenge-card lip-sync-for-life-heading"><h3>Lip Sync for Your Life</h3><p>${escapeHtml(headingText)}</p></article>
-      ${survivalLipSyncs.map(renderLipSyncCard).join("")}
+      ${survivalLipSyncs.map((lipSync) => renderLipSyncCard(lipSync, ep)).join("")}
     `;
   }
 
@@ -11777,57 +12427,54 @@ Options: ${names}`, "") || "";
     els.s17LsfylResultsBoard.innerHTML = survivalLipSyncs.map((ls) => renderLipSyncResultBlock(ls, ep, revealed)).join("");
     const resultLine = isMidSeasonRateAQueen ? (ep.midSeasonRateAQueen?.bottomLipSyncResultText || ep.s17SurvivalResultText || "The bottom-one lip sync is complete.") : (ep.s17SurvivalResultText || ep.resultText || "The lip sync is complete.");
     if (els.s17LsfylCrowningMessage) els.s17LsfylCrowningMessage.innerHTML = revealed ? `${escapeHtml(resultLine)}${renderChocolatePanel(ep, revealed)}` : "";
-    if (els.revealS17LsfylResultsBtn) els.revealS17LsfylResultsBtn.style.display = revealed ? "none" : "inline-flex";
+    if (els.revealS17LsfylResultsBtn) els.revealS17LsfylResultsBtn.style.display = "none";
   }
 
   function renderLipSyncPanel(ep) {
     if (!els.lipSyncBoard) return;
+    const rosconReveal = ep.specialPremiere === "uk3" ? "" : renderRosconLipSyncReveal(ep);
     if (ep.type === "cunt_test") {
-      els.lipSyncBoard.innerHTML = ep.lipSync ? `<article class="challenge-card cunt-test-lip-sync-intro"><h3>Lip Sync For Your Life</h3><p>${escapeHtml(`${sentenceList(ep.lipSync.ids || [], state.season, false)}, this is your last chance to impress me and save yourself from elimination.`)}</p></article>${renderLipSyncCard({ ...ep.lipSync, roundResultText: "", resultTextLine: "" })}` : "";
+      els.lipSyncBoard.innerHTML = ep.lipSync ? `<article class="challenge-card cunt-test-lip-sync-intro"><h3>Lip Sync For Your Life</h3><p>${escapeHtml(`${sentenceList(ep.lipSync.ids || [], state.season, false)}, this is your last chance to impress me and save yourself from elimination.`)}</p></article>${renderLipSyncCard(ep.lipSync, ep)}` : "";
       return;
     }
     if (ep.type === "special_lalaparuza") {
-      els.lipSyncBoard.innerHTML = ep.lipSync ? `<article class="challenge-card"><h3>Final LaLaPaRuZa Lip Sync</h3><p>${escapeHtml(sentenceList(ep.lipSync.ids || [], state.season, false))} face one final lip sync for their lives. The result will be revealed in Results.</p></article>${renderLipSyncCard({ ...ep.lipSync, roundResultText: "" })}` : "";
+      els.lipSyncBoard.innerHTML = ep.lipSync ? `<article class="challenge-card"><h3>Final LaLaPaRuZa Lip Sync</h3><p>${escapeHtml(sentenceList(ep.lipSync.ids || [], state.season, false))} face one final lip sync for their lives.</p></article>${renderLipSyncCard(ep.lipSync, ep)}` : "";
       return;
     }
-    if (["special_slayoffs", "fame_games"].includes(ep.type)) {
-      els.lipSyncBoard.innerHTML = ep.lipSync ? renderLipSyncCard(ep.lipSync) : "";
-      return;
-    }
-    if (ep.type === "mid_season_rate_a_queen") {
-      els.lipSyncBoard.innerHTML = ep.lipSync ? renderLipSyncCard(ep.lipSync) : "";
+    if (["special_slayoffs", "fame_games", "mid_season_rate_a_queen"].includes(ep.type)) {
+      els.lipSyncBoard.innerHTML = ep.lipSync ? renderLipSyncCard(ep.lipSync, ep) : "";
       return;
     }
     if (ep.type === "reunion_lalaparuza") {
-      els.lipSyncBoard.innerHTML = `<article class="challenge-card"><h3>Reunion Smackdown Complete</h3><p>The Reunion LaLaPaRuZa results are revealed in Results.</p></article>`;
+      els.lipSyncBoard.innerHTML = ep.lipSync ? renderLipSyncCard(ep.lipSync, ep) : "";
       return;
     }
     if (ep.type === "lsftf") {
-      const openingRounds = (ep.extraLipSyncs || []).filter((ls) => ls?.resultType === "lsftf_round");
-      els.lipSyncBoard.innerHTML = openingRounds.map((ls) => renderLipSyncCardWithOutcome(ls, ep, true, { forceOutcome: true, className: "lsftf-round-lip-sync" })).join("");
+      const rounds = (ep.extraLipSyncs || []).filter(Boolean);
+      els.lipSyncBoard.innerHTML = rounds.map((lipSync) => renderLipSyncCardWithOutcome(lipSync, ep, false, { className: lipSync.resultType === "lsftf_final" ? "lsftf-final-lip-sync" : "lsftf-round-lip-sync" })).join("");
       return;
     }
     if (isAllWinnersFormat(state.season) && ep.allWinnersFinale) {
-      els.lipSyncBoard.innerHTML = `<article class="challenge-card"><h3>Finale Smackdowns</h3><p>Proceed to Results for the Queen of She Done Already Done Had Herses lalaparuza, then the Lip Sync for the Crown.</p></article>`;
+      els.lipSyncBoard.innerHTML = "";
       return;
     }
     if (ep.comeback?.format === "lalaparuza_comeback") {
       const battles = (ep.extraLipSyncs || []).filter(Boolean);
       els.lipSyncBoard.innerHTML = battles.length
-        ? `<div class="lalaparuza-round-list first-sim-lalaparuza-round-list lip-sync-only-lalaparuza-list">${battles.map((ls, index) => `<article class="challenge-card comeback-battle-heading"><h4>Lip Sync #${index + 1}</h4></article>${renderLipSyncCard(ls)}`).join("")}</div>`
+        ? `<div class="lalaparuza-round-list first-sim-lalaparuza-round-list lip-sync-only-lalaparuza-list">${battles.map((lipSync, index) => `<article class="challenge-card comeback-battle-heading"><h4>Lip Sync #${index + 1}</h4></article>${renderLipSyncCard(lipSync, ep)}`).join("")}</div>`
         : "";
       return;
     }
     if (ep.comeback?.format === "game_within_a_game") {
       const battles = (ep.extraLipSyncs || []).filter(Boolean);
       els.lipSyncBoard.innerHTML = battles.length
-        ? `<div class="lalaparuza-round-list first-sim-gwag-round-list">${battles.map((ls, index) => `<article class="challenge-card comeback-battle-heading gwag-battle-heading"><h4>Lip Sync #${index + 1}</h4><p>${escapeHtml(sentenceList(ls.ids || [], state.season, false))} will compete in a lip sync battle.</p></article>${renderLipSyncCardWithOutcome(ls, ep, true, { forceOutcome: true, className: "gwag-lip-sync-battle" })}`).join("")}</div>`
+        ? `<div class="lalaparuza-round-list first-sim-gwag-round-list">${battles.map((lipSync, index) => `<article class="challenge-card comeback-battle-heading gwag-battle-heading"><h4>Lip Sync #${index + 1}</h4><p>${escapeHtml(sentenceList(lipSync.ids || [], state.season, false))} will compete in a lip sync battle.</p></article>${renderLipSyncCardWithOutcome(lipSync, ep, false, { className: "gwag-lip-sync-battle" })}`).join("")}</div>`
         : "";
       return;
     }
     const lipSyncs = [ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean);
-    if (!lipSyncs.length) { els.lipSyncBoard.innerHTML = ""; return; }
-    const assassinLipSync = lipSyncs.find((ls) => ls?.isAssassinLipSync);
+    if (!lipSyncs.length) { els.lipSyncBoard.innerHTML = rosconReveal; return; }
+    const assassinLipSync = lipSyncs.find((lipSync) => lipSync?.isAssassinLipSync);
     const assassinIntro = assassinLipSync?.assassinId ? `
       <article class="challenge-card assassin-ruveal-card">
         <h3>It's time to ruveal this week's Lip Sync Assassin!</h3>
@@ -11835,45 +12482,188 @@ Options: ${names}`, "") || "";
       </article>
     ` : "";
     if (["rate_a_queen_s17_split", "uk3"].includes(ep.specialPremiere) && ep.extraLipSyncs?.length) {
-      els.lipSyncBoard.innerHTML = assassinIntro + (ep.lipSync ? renderLipSyncCard(ep.lipSync) : "");
+      els.lipSyncBoard.innerHTML = rosconReveal + assassinIntro + (ep.lipSync ? renderLipSyncCard(ep.lipSync, ep) : "");
       return;
     }
-    els.lipSyncBoard.innerHTML = assassinIntro + lipSyncs.map(renderLipSyncCard).join("");
+    els.lipSyncBoard.innerHTML = rosconReveal + assassinIntro + lipSyncs.map((lipSync) => renderLipSyncCard(lipSync, ep)).join("");
   }
 
-  function renderLipSyncCard(lipSync) {
-    const song = lipSync.song;
+  function ensureLipSyncRevealKeys(ep = currentEpisode()) {
+    if (!ep) return [];
+    const lipSyncs = collectLipSyncsForStats(ep);
+    ep.lipSyncRevealState = ep.lipSyncRevealState || {};
+    ep.lipSyncCrownComplete = ep.lipSyncCrownComplete || {};
+    lipSyncs.forEach((lipSync, index) => {
+      if (!lipSync.__uiRevealKey) lipSync.__uiRevealKey = `episode-${Number(ep.number || 0)}-lip-sync-${index + 1}`;
+    });
+    return lipSyncs;
+  }
+
+  function lipSyncRevealKey(ep, lipSync) {
+    if (!ep || !lipSync) return "";
+    const lipSyncs = ensureLipSyncRevealKeys(ep);
+    if (lipSync.__uiRevealKey) return lipSync.__uiRevealKey;
+    const identity = lipSyncStatsIdentity(lipSync);
+    const matched = lipSyncs.find((candidate) => lipSyncStatsIdentity(candidate) === identity);
+    if (matched?.__uiRevealKey) return matched.__uiRevealKey;
+    const fallback = `episode-${Number(ep.number || 0)}-lip-sync-${lipSyncs.length + 1}`;
+    lipSync.__uiRevealKey = fallback;
+    return fallback;
+  }
+
+  function lipSyncIsRevealed(ep, lipSync) {
+    const key = lipSyncRevealKey(ep, lipSync);
+    return !!(key && ep?.lipSyncRevealState?.[key]);
+  }
+
+  function lipSyncByRevealKey(ep, key) {
+    return ensureLipSyncRevealKeys(ep).find((lipSync) => lipSync.__uiRevealKey === key) || null;
+  }
+
+  function lipSyncOutcomeSets(lipSync, ep) {
+    const winners = new Set(lipSyncWinningIds(lipSync, ep));
+    const losers = new Set((lipSync?.ids || []).filter((id) => !winners.has(id)));
+    return { winners, losers };
+  }
+
+  function lipSyncDisplayIds(lipSync) {
+    if (!lipSync) return [];
+    const ids = (lipSync.ids || []).filter(Boolean);
+    const stored = (lipSync.displayIds || []).filter((id) => ids.includes(id));
+    if (stored.length === ids.length && ids.every((id) => stored.includes(id))) return stored;
+    lipSync.displayIds = shuffle(ids.slice());
+    return lipSync.displayIds;
+  }
+
+  function lipSyncRevealsInPlace(ep, lipSync) {
+    if (!ep || !lipSync || isCrownLipSync(lipSync, ep)) return false;
+    if (ep.type === "porkchop_premiere" || ep.type === "lsftf" || ep.type === "reunion_lalaparuza") return true;
+    if (["lalaparuza_comeback", "game_within_a_game"].includes(ep.comeback?.format)) return true;
+    if (["special_lalaparuza", "special_slayoffs"].includes(ep.type)) return (ep.extraLipSyncs || []).includes(lipSync);
+    if (ep.type === "finale") return (ep.extraLipSyncs || []).includes(lipSync) && lipSync !== ep.lipSync && !lipSync.isFinalRound;
+    return false;
+  }
+
+  function lipSyncLocalResultMessage(lipSync, ep) {
+    const supplied = lipSync?.roundResultText || lipSync?.resultTextLine;
+    if (supplied) return supplied;
+    const winners = lipSyncWinningIds(lipSync, ep);
+    const winnerNames = sentenceList(winners, state.season, false);
+    if (!winnerNames) return "The lip sync result is revealed.";
+    if (isForTheWinLipSync(lipSync, ep)) return `${winnerNames}, you're a winner, baby!`;
+    if (winners.length > 1) return `${winnerNames}, shantay you all stay!`;
+    return `${winnerNames}, shantay you stay!`;
+  }
+
+  function crownConfettiHtml(className = "crown-confetti") {
+    return `<div class="${escapeHtml(className)}" aria-hidden="true">${Array.from({ length: 84 }, (_, index) => `<i style="--confetti-index:${index};--confetti-left:${(index * 47) % 101}%;--confetti-drift:${((index * 29) % 45) - 22};--confetti-delay:${(index % 14) * 0.055}s;--confetti-duration:${(3.65 + (index % 8) * 0.11).toFixed(2)}s"></i>`).join("")}</div>`;
+  }
+
+  function launchWinnerConfetti() {
+    document.querySelectorAll(".global-winner-confetti").forEach((node) => node.remove());
+    const shell = document.createElement("div");
+    shell.innerHTML = crownConfettiHtml("global-winner-confetti");
+    const confetti = shell.firstElementChild;
+    if (!confetti) return;
+    document.body.appendChild(confetti);
+    requestAnimationFrame(() => confetti.classList.add("is-active"));
+    window.setTimeout(() => confetti.remove(), 5200);
+  }
+
+  function renderInteractiveLipSyncCard(lipSync, ep = currentEpisode(), options = {}) {
+    if (!lipSync) return "";
+    if (!ep || typeof ep !== "object" || !Array.isArray(ep.activeStartIds)) ep = currentEpisode();
+    const revealInPlace = options.revealInPlace ?? lipSyncRevealsInPlace(ep, lipSync);
+    const key = lipSyncRevealKey(ep, lipSync);
+    const revealed = revealInPlace && lipSyncIsRevealed(ep, lipSync);
+    const { winners, losers } = lipSyncOutcomeSets(lipSync, ep);
+    const song = lipSync.song || {};
+    const displayIds = lipSyncDisplayIds(lipSync);
+    const performanceById = new Map((lipSync.performances || []).map((perf) => [perf.id, perf]));
+    const performers = displayIds.map((id) => {
+      const perf = performanceById.get(id) || { id, band: "good", comment: "" };
+      const isWinner = winners.has(id);
+      const isLoser = losers.has(id);
+      const resultClass = revealed ? (isWinner ? "is-lip-sync-winner" : isLoser ? "is-lip-sync-loser" : "") : "";
+      return `
+        <article class="mini-contestant-card lip-sync-comment-card token-${escapeHtml(perf.band)} ${resultClass}">
+          <img class="avatar sqr" src="${escapeHtml(state.season.contestants[id]?.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(state.season.contestants[id]))}">
+          <strong>${escapeHtml(fullDisplayName(state.season.contestants[id]))}</strong>
+          <span>${escapeHtml(perf.comment || "")}</span>
+        </article>
+      `;
+    }).join("");
+    const revealClass = revealInPlace ? "lip-sync-reveal-unit" : "lip-sync-performance-only";
     return `
-      <article class="challenge-card lip-sync-card">
-        <h4>${escapeHtml(lipSync.context)}</h4>
-        <p><strong>${escapeHtml(song.title)}</strong> by ${escapeHtml(song.artist)}</p>
+      <article class="challenge-card lip-sync-card ${revealClass} ${escapeHtml(options.className || "")} ${revealed ? "is-result-revealed" : ""}" ${revealInPlace ? `data-lip-sync-key="${escapeHtml(key)}" data-lip-sync-revealed="${revealed ? "true" : "false"}"` : ""}>
+        <h4>${escapeHtml(lipSync.context || "Lip Sync")}</h4>
+        <p><strong>${escapeHtml(song.title || "Unknown Song")}</strong> by ${escapeHtml(song.artist || "")}</p>
         ${lipSync.shemergencyText?.length ? `<div class="shemergency-alert">${lipSync.shemergencyText.map((text) => escapeHtml(text)).join("<br>")}</div>` : ""}
         <div class="contestant-strip lip-sync-performers lip-sync-row">
-          ${lipSync.performances.map((perf) => `
-            <article class="mini-contestant-card lip-sync-comment-card token-${escapeHtml(perf.band)}">
-              <img class="avatar sqr" src="${escapeHtml(state.season.contestants[perf.id]?.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(state.season.contestants[perf.id]))}">
-              <strong>${escapeHtml(fullDisplayName(state.season.contestants[perf.id]))}</strong>
-              <span>${escapeHtml(perf.comment)}</span>
-            </article>
-          `).join("")}
+          ${performers}
         </div>
-        ${lipSync.roundResultText ? `<p class="lip-sync-round-result">${escapeHtml(lipSync.roundResultText)}</p>` : ""}
-        ${(lipSync.resultType !== "lalaparuza_final" && ((lipSync.resultType && String(lipSync.resultType).includes("lalaparuza")) || lipSync.context?.toLowerCase?.().includes("lalaparuza"))) ? renderInlineLipSyncOutcome(lipSync) : ""}
+        ${revealed ? `<p class="lip-sync-local-result-message">${escapeHtml(lipSyncLocalResultMessage(lipSync, ep))}</p>` : ""}
+        ${revealInPlace ? `<div class="center-actions lip-sync-reveal-actions">${revealed ? "" : `<button class="primary-btn reveal-lip-sync-result-btn" data-lip-sync-key="${escapeHtml(key)}" type="button">Reveal Results</button>`}</div>` : ""}
       </article>
     `;
   }
 
-  function renderInlineLipSyncOutcome(lipSync) {
-    const winners = new Set(lipSyncWinningIds(lipSync, currentEpisode()));
-    const eliminated = new Set();
-    const losers = new Set();
-    if (lipSync.comebackBattle?.activeEliminated && lipSync.comebackBattle?.activeId) eliminated.add(lipSync.comebackBattle.activeId);
-    (lipSync.ids || []).forEach((id) => {
-      if (id === lipSync.loserId && lipSync.resultType === "elimination") { eliminated.add(id); losers.add(id); }
-      else if (eliminated.has(id)) losers.add(id);
-      else if (!winners.has(id)) losers.add(id);
+  function renderLipSyncCard(lipSync, ep = currentEpisode(), options = {}) {
+    if (!ep || typeof ep !== "object" || !Array.isArray(ep.activeStartIds)) ep = currentEpisode();
+    return renderInteractiveLipSyncCard(lipSync, ep, options);
+  }
+
+  function applyLipSyncRevealGating(ep = currentEpisode()) {
+    if (!ep) return;
+    ensureLipSyncRevealKeys(ep);
+    $all(".episode-panel").forEach((panel) => {
+      const units = $all(".lip-sync-reveal-unit", panel);
+      if (!units.length) return;
+      let waitingForReveal = false;
+      units.forEach((unit) => {
+        const key = unit.dataset.lipSyncKey || "";
+        const revealed = !!ep.lipSyncRevealState?.[key];
+        unit.hidden = waitingForReveal;
+        const heading = unit.previousElementSibling;
+        if (heading?.matches?.(".comeback-battle-heading, .porkchop-battle-heading")) heading.hidden = unit.hidden;
+        if (!revealed && !waitingForReveal) waitingForReveal = true;
+      });
+      const allRevealed = units.every((unit) => !!ep.lipSyncRevealState?.[unit.dataset.lipSyncKey || ""]);
+      $all(".after-lip-sync-sequence", panel).forEach((element) => { element.hidden = !allRevealed; });
+      const proceed = $(".proceed-row .primary-btn", panel);
+      if (proceed) proceed.disabled = !allRevealed;
     });
-    return `<div class="lalaparuza-inline-results contestant-strip small-strip">${(lipSync.ids || []).map((id) => resultContestantCard(id, winners.has(id), losers.has(id), false, eliminated.has(id))).join("")}</div>`;
+  }
+
+  function activateWinnerRevealAnimation(ep = currentEpisode()) {
+    if (!ep?.winnerRevealStarted || ep?.winnerRevealComplete) return;
+    const reveal = $('.season-winner-reveal[data-winner-reveal-pending="true"]');
+    if (!reveal || reveal.dataset.winnerTimerBound === "true") return;
+    reveal.dataset.winnerTimerBound = "true";
+    const delay = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? 50 : 2000;
+    window.setTimeout(() => {
+      ep.winnerRevealComplete = true;
+      ep.winnerConfettiPlayed = true;
+      saveState();
+      renderEpisode();
+      launchWinnerConfetti();
+    }, delay);
+  }
+
+  function handleLipSyncReveal(button) {
+    const ep = currentEpisode();
+    if (!ep) return;
+    const key = button?.dataset?.lipSyncKey || "";
+    const lipSync = lipSyncByRevealKey(ep, key);
+    if (!lipSync || !key || !lipSyncRevealsInPlace(ep, lipSync)) return;
+    ep.lipSyncRevealState = ep.lipSyncRevealState || {};
+    ep.lipSyncRevealState[key] = true;
+    const panel = button.closest(".episode-panel");
+    const panelKeys = panel ? $all(".lip-sync-reveal-unit", panel).map((unit) => unit.dataset.lipSyncKey).filter(Boolean) : [key];
+    const panelComplete = panelKeys.every((panelKey) => panelKey === key || !!ep.lipSyncRevealState?.[panelKey]);
+    if (panelComplete && panel?.dataset?.panel === "qosdadhh") ep.allWinnersHersesRevealed = true;
+    saveState();
+    renderEpisode();
   }
 
   function lipSyncTwistSaveLabel(ep, id) {
@@ -11917,15 +12707,8 @@ Options: ${names}`, "") || "";
     return lipSync?.eliminatedId === id;
   }
 
-  function lipSyncNonEliminationText(ep, lipSync) {
-    const savedIds = lipSyncTwistSavedIds(ep, lipSync);
-    if (!savedIds.length) return "";
-    const actualEliminated = (lipSync?.ids || []).filter((id) => isLipSyncContestantEliminated(ep, lipSync, id));
-    if (actualEliminated.length) return "";
-    const id = savedIds[0];
-    const label = lipSyncTwistSaveLabel(ep, id);
-    const name = fullDisplayName(state.season.contestants[id] || {});
-    return `${name} was saved by the ${label}. This is a non-elimination.`;
+  function lipSyncNonEliminationText() {
+    return "";
   }
 
   function renderLipSyncResultBlock(lipSync, ep, revealed) {
@@ -11943,11 +12726,12 @@ Options: ${names}`, "") || "";
       }
     }
     const nonEliminationText = lipSyncNonEliminationText(ep, lipSync);
+    const fateRevealed = revealed && !twistOutcomeStillHidden(ep);
     return `
       <div class="contestant-strip small-strip lip-sync-result-row">
-        ${(lipSync.ids || []).map((id) => resultContestantCard(id, revealed && winners.has(id), revealed && losers.has(id), false, revealed && isLipSyncContestantEliminated(ep, lipSync, id))).join("")}
+        ${lipSyncDisplayIds(lipSync).map((id) => resultContestantCard(id, revealed && winners.has(id), fateRevealed && losers.has(id), false, fateRevealed && isLipSyncContestantEliminated(ep, lipSync, id))).join("")}
       </div>
-      ${revealed && nonEliminationText ? `<p class="lip-sync-outcome-line">${escapeHtml(nonEliminationText)}</p>` : ""}
+      ${fateRevealed && nonEliminationText ? `<p class="lip-sync-outcome-line">${escapeHtml(nonEliminationText)}</p>` : ""}
     `;
   }
 
@@ -11967,9 +12751,12 @@ Options: ${names}`, "") || "";
       ? "Who has the group chosen to get the chop?"
       : `${fullDisplayName(winner)}, you're a winner baby! With great power comes great responsibility... Who have you chosen to get the chop?`;
     const bottomIds = (ep.bottomIds || []).slice();
-    const bottomCards = bottomIds.map((id) => resultContestantCard(id, false, revealed && id !== choiceId, false, revealed && id === choiceId)).join("");
+    const fateRevealed = revealed && !twistOutcomeStillHidden(ep);
+    const bottomCards = bottomIds.map((id) => resultContestantCard(id, false, revealed && id !== choiceId, false, fateRevealed && id === choiceId)).join("");
     const revealButton = !revealed ? `<button class="primary-btn show-eliminated-btn" type="button">Show Eliminated</button>` : "";
-    const finalText = revealed && choiceId ? `<p class="all-stars-sashay-line">${escapeHtml(`${fullDisplayName(state.season.contestants[choiceId])}, as it is written, so it shall be done... Sashay Away.`)}</p>` : "";
+    const finalText = fateRevealed && choiceId && !ep.chocolateOpenedById
+      ? `<p class="all-stars-sashay-line">${escapeHtml(`${fullDisplayName(state.season.contestants[choiceId])}, as it is written, so it shall be done... Sashay Away.`)}</p>`
+      : "";
     return `
       <article class="all-stars-elimination-reveal challenge-card">
         <p class="announcement-line">${escapeHtml(prompt)}</p>
@@ -12014,38 +12801,12 @@ Options: ${names}`, "") || "";
   }
 
   function renderLipSyncCardWithOutcome(lipSync, ep, revealed, options = {}) {
-    if (!lipSync) return "";
-    const showOutcome = options.forceOutcome || revealed;
-    const winners = new Set(showOutcome ? lipSyncWinningIds(lipSync, ep) : []);
-    const losers = new Set();
-    if (showOutcome) (lipSync.ids || []).forEach((id) => { if (!winners.has(id)) losers.add(id); });
-    return `
-      <article class="challenge-card lip-sync-card ${options.className || ""}">
-        <h4>${escapeHtml(lipSync.context)}</h4>
-        <p><strong>${escapeHtml(lipSync.song.title)}</strong> by ${escapeHtml(lipSync.song.artist)}</p>
-        <div class="contestant-strip lip-sync-performers lip-sync-row">
-          ${lipSync.performances.map((perf) => `
-            <article class="mini-contestant-card lip-sync-comment-card token-${escapeHtml(perf.band)}">
-              <img class="avatar sqr" src="${escapeHtml(state.season.contestants[perf.id]?.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(state.season.contestants[perf.id]))}">
-              <strong>${escapeHtml(fullDisplayName(state.season.contestants[perf.id]))}</strong>
-              <span>${escapeHtml(perf.comment)}</span>
-            </article>
-          `).join("")}
-        </div>
-        <div class="lalaparuza-inline-results contestant-strip small-strip">
-          ${(lipSync.ids || []).map((id) => resultContestantCard(id, winners.has(id), losers.has(id), !!options.finalCrowning && winners.has(id))).join("")}
-        </div>
-        ${showOutcome && lipSync.roundResultText ? `<p class="lip-sync-outcome-line">${escapeHtml(lipSync.roundResultText)}</p>` : ""}
-      </article>
-    `;
+    return renderInteractiveLipSyncCard(lipSync, ep || currentEpisode(), options);
   }
 
   function renderQoSDADHHSection(ep) {
     const smackdown = ep.allWinnersHersesSmackdown || { lipSyncs: [], winnerId: ep.allWinnersQueenOfHersesId };
     const lipSyncs = smackdown.lipSyncs || [];
-    const winnerId = smackdown.winnerId || ep.allWinnersQueenOfHersesId;
-    const revealed = !!ep.allWinnersHersesRevealed;
-    const finalLipSync = smackdown.finalLipSync || lipSyncs.at(-1) || null;
     if (!lipSyncs.length) {
       return `
         <section class="all-winners-finale-section qosdadhh-section">
@@ -12053,25 +12814,13 @@ Options: ${names}`, "") || "";
         </section>
       `;
     }
-    const cards = lipSyncs.map((ls) => {
-      if (ls === finalLipSync) {
-        return `
-          ${renderLipSyncCardWithOutcome(ls, ep, revealed, { finalCrowning: true, className: "qosdadhh-final-lip-sync" })}
-          <div class="center-actions qosdadhh-reveal-actions">
-            ${revealed ? "" : `<button class="primary-btn reveal-herses-winner-btn" type="button">Reveal Winner</button>`}
-          </div>
-          ${revealed && winnerId ? `<p class="crowning-message qosdadhh-winner-line">${escapeHtml(`${fullDisplayName(state.season.contestants[winnerId])}, condragulations! You've done already done had yourses!`)}</p>` : ""}
-        `;
-      }
-      return renderLipSyncCardWithOutcome(ls, ep, true, { className: "qosdadhh-round-lip-sync" });
-    }).join("");
     return `
       <section class="all-winners-finale-section qosdadhh-section">
         <article class="challenge-card finale-section-intro">
           <h3>Queen of She Done Already Done Had Herses</h3>
           <p>The non-finalists compete in a parallel lip sync lalaparuza before the crown bracket.</p>
         </article>
-        ${cards}
+        ${lipSyncs.map((lipSync) => renderLipSyncCardWithOutcome(lipSync, ep, false, { className: lipSync.resultType === "qosdadhh_final" ? "qosdadhh-final-lip-sync" : "qosdadhh-round-lip-sync" })).join("")}
       </section>
     `;
   }
@@ -12085,17 +12834,21 @@ Options: ${names}`, "") || "";
   }
 
   function renderAllWinnersCrownOpeningSection(ep) {
-    const { openingRounds } = allWinnersCrownParts(ep);
+    const { openingRounds, finalLipSync } = allWinnersCrownParts(ep);
     const openingCards = openingRounds.length
-      ? openingRounds.map((ls) => renderLipSyncCardWithOutcome(ls, ep, true, { className: "lsftc-round-lip-sync" })).join("")
+      ? openingRounds.map((ls) => renderLipSyncCardWithOutcome(ls, ep, false, { className: "lsftc-round-lip-sync" })).join("")
       : `<article class="event-card"><p>The finalists advance directly to the final lip sync.</p></article>`;
+    const finalPerformance = finalLipSync
+      ? renderLipSyncCard(finalLipSync, ep, { revealInPlace: false, className: "lsftc-final-performance" })
+      : `<article class="event-card"><p>No final lip sync was needed.</p></article>`;
     return `
       <section class="all-winners-finale-section lsftc-section">
         <article class="challenge-card finale-section-intro">
           <h3>Lip Sync for The Crown</h3>
-          <p>The first two lip syncs determine who advances to the final lip sync.</p>
+          <p>The opening battles determine who advances to the final lip sync.</p>
         </article>
         ${openingCards}
+        <div class="after-lip-sync-sequence lsftc-final-performance-wrap">${finalPerformance}</div>
       </section>
     `;
   }
@@ -12103,7 +12856,7 @@ Options: ${names}`, "") || "";
   function renderAllWinnersWinnerSection(ep, revealed) {
     const { finalLipSync } = allWinnersCrownParts(ep);
     const finalCard = finalLipSync
-      ? renderLipSyncCardWithOutcome(finalLipSync, ep, revealed, { finalCrowning: true, className: "lsftc-final-lip-sync" })
+      ? renderLipSyncCardWithOutcome(finalLipSync, ep, false, { finalCrowning: true, className: "lsftc-final-lip-sync" })
       : `<article class="event-card"><p>No final lip sync was needed.</p></article>`;
     return `
       <section class="all-winners-finale-section crown-section">
@@ -12128,9 +12881,40 @@ Options: ${names}`, "") || "";
     ].join("");
   }
 
+  function seasonWinnerDisplayIds(ep) {
+    const finalLipSync = allWinnersCrownParts(ep).finalLipSync || ep?.lipSync || null;
+    if (finalLipSync?.ids?.length) return lipSyncDisplayIds(finalLipSync);
+    const ids = (ep?.top2Ids?.length ? ep.top2Ids : (ep?.activeStartIds || [])).filter(Boolean);
+    const stored = (ep?.winnerDisplayIds || []).filter((id) => ids.includes(id));
+    if (stored.length === ids.length && ids.every((id) => stored.includes(id))) return stored;
+    ep.winnerDisplayIds = shuffle(ids.slice());
+    return ep.winnerDisplayIds;
+  }
+
+  function renderSeasonWinnerReveal(ep) {
+    const ids = seasonWinnerDisplayIds(ep);
+    const winnerIds = (ep?.winnerIds || state.season?.winnerIds || []).filter(Boolean);
+    const started = !!ep?.winnerRevealStarted;
+    const complete = !!ep?.winnerRevealComplete;
+    const winnerNames = sentenceList(winnerIds, state.season, false);
+    const message = winnerIds.length > 1
+      ? `${winnerNames}, you're winners, baby!`
+      : `${winnerNames}, you're a winner, baby!`;
+    return `
+      <section class="season-winner-reveal ${started ? "is-winner-started" : ""} ${complete ? "is-winner-complete" : ""}" data-winner-reveal-pending="${started && !complete ? "true" : "false"}">
+        ${started ? `<div class="winner-typing-line" aria-live="polite">The Next Drag Superstar is...</div>` : ""}
+        <div class="contestant-strip winner-reveal-contestants">
+          ${ids.map((id) => contestantCard(id, "", { className: `winner-reveal-contestant ${winnerIds.includes(id) ? "is-season-winner-target" : "is-season-runner-up-target"}` })).join("")}
+        </div>
+        ${complete ? `<p class="season-winner-message">${escapeHtml(message)}</p>` : ""}
+      </section>
+    `;
+  }
+
   function renderAllWinnersFinalePanels(ep) {
-    const useCrownPanels = (isAllWinnersFormat(state.season) && ep?.allWinnersFinale) || ep?.lsftcFinale;
-    if (!useCrownPanels) {
+    const isFinale = ep?.type === "finale";
+    const useCrownPanels = isFinale && ((isAllWinnersFormat(state.season) && ep?.allWinnersFinale) || ep?.lsftcFinale);
+    if (!isFinale) {
       if (els.qosdadhhBoard) els.qosdadhhBoard.innerHTML = "";
       if (els.lsftcBoard) els.lsftcBoard.innerHTML = "";
       if (els.winnerBoard) els.winnerBoard.innerHTML = "";
@@ -12138,21 +12922,11 @@ Options: ${names}`, "") || "";
       if (els.revealCrownWinnerBtn) els.revealCrownWinnerBtn.style.display = "none";
       return;
     }
-    const revealed = !!ep.resultsRevealed;
-    if (els.qosdadhhBoard) els.qosdadhhBoard.innerHTML = (isAllWinnersFormat(state.season) && ep?.allWinnersFinale) ? renderQoSDADHHSection(ep) : "";
-    if (els.lsftcBoard) els.lsftcBoard.innerHTML = renderAllWinnersCrownOpeningSection(ep);
-    if (els.winnerBoard) els.winnerBoard.innerHTML = renderAllWinnersWinnerSection(ep, revealed);
-    if (els.winnerCrowningMessage) {
-      const winners = sentenceList(ep.winnerIds || [], state.season, false);
-      const crownText = isAllWinnersFormat(state.season) ? `The All Winners champion is... ${winners}!` : `The Next Drag Superstar is... ${winners}!`;
-      els.winnerCrowningMessage.innerHTML = revealed ? escapeHtml(crownText) : "";
-    }
-    if (els.revealCrownWinnerBtn) els.revealCrownWinnerBtn.style.display = revealed ? "none" : "inline-flex";
-    $all(".reveal-herses-winner-btn").forEach((btn) => btn.addEventListener("click", () => {
-      ep.allWinnersHersesRevealed = true;
-      saveState();
-      renderAllWinnersFinalePanels(ep);
-    }));
+    if (els.qosdadhhBoard) els.qosdadhhBoard.innerHTML = useCrownPanels && isAllWinnersFormat(state.season) ? renderQoSDADHHSection(ep) : "";
+    if (els.lsftcBoard) els.lsftcBoard.innerHTML = useCrownPanels ? renderAllWinnersCrownOpeningSection(ep) : "";
+    if (els.winnerBoard) els.winnerBoard.innerHTML = renderSeasonWinnerReveal(ep);
+    if (els.winnerCrowningMessage) els.winnerCrowningMessage.innerHTML = "";
+    if (els.revealCrownWinnerBtn) els.revealCrownWinnerBtn.style.display = ep.winnerRevealStarted ? "none" : "inline-flex";
   }
 
   function renderJuryFinaleResults(ep, revealed) {
@@ -12234,6 +13008,26 @@ Options: ${names}`, "") || "";
     return pieces.join("");
   }
 
+  function twistOutcomePanelActive(ep) {
+    return !!(
+      ep?.chocolateOpenedById
+      || ep?.luckyCow?.eliminatedId
+      || ep?.badonkaDunkTank?.active
+    );
+  }
+
+  function twistOutcomeStillHidden(ep) {
+    if (ep?.chocolateOpenedById && !ep?.chocolateRevealed) return true;
+    if (ep?.luckyCow?.eliminatedId && !ep?.luckyCow?.revealed) return true;
+    if (ep?.badonkaDunkTank?.active && !ep?.badonkaDunkTank?.revealed) return true;
+    return false;
+  }
+
+  function standardResultMessageHtml(ep, revealed) {
+    if (!revealed || twistOutcomePanelActive(ep) || twistOutcomeStillHidden(ep)) return "";
+    return escapeHtml(ep?.resultText || "The episode ends with no elimination.");
+  }
+
   function renderResultsPanel(ep) {
     const revealed = !!ep.resultsRevealed;
     const eliminatedRevealed = !!ep.eliminationRevealed;
@@ -12294,8 +13088,11 @@ Options: ${names}`, "") || "";
       } else if (ep.comeback?.format === "lalaparuza_comeback" && (ep.extraLipSyncs || []).length) {
         els.revealBoard.innerHTML = renderLalaparuzaComebackResults(ep, revealed);
       } else if (ep.comeback?.format === "game_within_a_game") {
-        els.revealBoard.innerHTML = "";
-        if (els.crowningMessage) els.crowningMessage.innerHTML = "";
+        const returnedId = ep.comeback?.returnedId || (ep.returnedIds || [])[0] || null;
+        els.revealBoard.innerHTML = revealed && returnedId
+          ? `<div class="contestant-strip small-strip award-strip">${resultContestantCard(returnedId, true, false, false, false)}</div>`
+          : "";
+        if (els.crowningMessage) els.crowningMessage.innerHTML = revealed ? escapeHtml(ep.resultText || `${fullDisplayName(state.season.contestants[returnedId] || {})}, you're back in the race, baby!`) : "";
       } else if (ep.comeback?.format === "attention_girl_groups" && primaryLipSync) {
         els.revealBoard.innerHTML = renderLipSyncResultBlock(primaryLipSync, ep, revealed);
       } else if (ep.comeback?.format === "kitty_girl_groups" && primaryLipSync) {
@@ -12303,7 +13100,7 @@ Options: ${names}`, "") || "";
       } else if (ep.comeback?.format === "revenge_of_the_queens" && primaryLipSync) {
         els.revealBoard.innerHTML = renderRevengeOfTheQueensResults(ep, revealed);
       } else if (lipSyncs.length) {
-        const ids = [...new Set(lipSyncs.flatMap((ls) => ls.ids || []))];
+        const ids = [...new Set(lipSyncs.flatMap((ls) => lipSyncDisplayIds(ls)))];
         const winners = new Set();
         const losers = new Set();
         const nonEliminationLines = [];
@@ -12322,20 +13119,15 @@ Options: ${names}`, "") || "";
           if (saveLine) nonEliminationLines.push(saveLine);
         });
         const nonEliminationHtml = revealed && nonEliminationLines.length ? `<p class="lip-sync-outcome-line">${escapeHtml(nonEliminationLines.join(" "))}</p>` : "";
-        els.revealBoard.innerHTML = `<div class="contestant-strip small-strip lip-sync-result-row">${ids.map((id) => resultContestantCard(id, revealed && winners.has(id), revealed && losers.has(id), false, revealed && lipSyncs.some((ls) => isLipSyncContestantEliminated(ep, ls, id)))).join("")}</div>${nonEliminationHtml}`;
+        const fateRevealed = revealed && !twistOutcomeStillHidden(ep);
+        els.revealBoard.innerHTML = `<div class="contestant-strip small-strip lip-sync-result-row">${ids.map((id) => resultContestantCard(id, revealed && winners.has(id), fateRevealed && losers.has(id), false, fateRevealed && lipSyncs.some((ls) => isLipSyncContestantEliminated(ep, ls, id)))).join("")}</div>${nonEliminationHtml}`;
       } else {
         els.revealBoard.innerHTML = `<article class="event-card"><p>${escapeHtml(ep.resultText || "The episode ends with no elimination.")}</p></article>`;
       }
     }
     if (els.crowningMessage) {
       if (ep.type === "finale") {
-        const winners = sentenceList(ep.winnerIds || [], state.season, false);
-        if ((isAllWinnersFormat(state.season) && ep.allWinnersFinale) || ep.lsftcFinale) {
-          const crownText = isAllWinnersFormat(state.season) ? `The All Winners champion is... ${winners}!` : `The Next Drag Superstar is... ${winners}!`;
-          els.crowningMessage.innerHTML = revealed ? `${escapeHtml(crownText)}` : "";
-        } else {
-          els.crowningMessage.innerHTML = revealed ? `${escapeHtml(`The Next Drag Superstar is... ${winners}!`)}` : "";
-        }
+        els.crowningMessage.innerHTML = "";
       } else if (ep.type === "special_lalaparuza") {
         els.revealBoard.innerHTML = ep.lipSync ? renderLipSyncResultBlock(ep.lipSync, ep, revealed) : `<article class="event-card"><p>${escapeHtml(ep.resultText || "The LaLaPaRuZa is complete.")}</p></article>`;
         els.crowningMessage.innerHTML = revealed ? escapeHtml(ep.resultText || "The LaLaPaRuZa is complete.") : "";
@@ -12358,7 +13150,8 @@ Options: ${names}`, "") || "";
       } else if (isAllStarsElimination) {
         els.crowningMessage.innerHTML = eliminatedRevealed ? renderChocolatePanel(ep, eliminatedRevealed) : "";
       } else {
-        els.crowningMessage.innerHTML = revealed ? `${escapeHtml(ep.resultText || "The episode ends with no elimination.")}${(["rate_a_queen_s17_split", "uk3"].includes(ep.specialPremiere) && ep.extraLipSyncs?.length) ? "" : renderChocolatePanel(ep, revealed)}${renderLuckyCowReveal(ep, revealed)}` : "";
+        const chocolatePanel = (["rate_a_queen_s17_split", "uk3"].includes(ep.specialPremiere) && ep.extraLipSyncs?.length) ? "" : renderChocolatePanel(ep, revealed);
+        els.crowningMessage.innerHTML = revealed ? `${standardResultMessageHtml(ep, revealed)}${chocolatePanel}${renderLuckyCowReveal(ep, revealed)}` : "";
       }
     }
     renderUnplannedExitResult(ep);
@@ -12419,19 +13212,30 @@ Options: ${names}`, "") || "";
     const id = ep.chocolateOpenedById;
     const item = state.season.contestants[id] || {};
     const opened = !!ep.chocolateRevealed;
+    const resultText = ep.chocolateSave
+      ? "The bar is golden. Shantay, you stay."
+      : "The bar is not golden. Sashay away.";
     return `
-      <article class="chocolate-panel ${opened ? (ep.chocolateSave ? "is-golden" : "is-plain") : ""}">
-        <div class="contestant-strip small-strip">
-          <article class="mini-contestant-card chocolate-card ${opened ? (ep.chocolateSave ? "is-golden" : "is-plain") : ""}">
-            <img class="avatar sqr" src="${escapeHtml(item.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(item))}">
-            <strong>${escapeHtml(fullDisplayName(item))}</strong>
-          </article>
+      <article class="twist-result-panel chocolate-panel ${opened ? (ep.chocolateSave ? "is-golden" : "is-plain") : ""}">
+        <div class="twist-result-heading">
+          <span class="twist-result-icon" aria-hidden="true">🍫</span>
+          <div>
+            <h3>Golden Chocolate Bar</h3>
+            <p>The lip-sync loser must open their chocolate bar to learn their fate.</p>
+          </div>
         </div>
-        <p>${escapeHtml(fullDisplayName(item))}, now your fate lies in the hands of Drag Gods. If your chocolate bar is golden, you'll re-enter the competition.</p>
-        ${opened ? `<strong>${ep.chocolateSave ? "It's chocolate... and it's GOLD!" : "It's chocolate."}</strong>` : `<button class="primary-btn open-chocolate-btn" type="button">Open Chocolate Bar</button>`}
+        <div class="contestant-strip small-strip twist-result-contestant">
+          ${contestantCard(id)}
+        </div>
+        <div class="twist-result-action">
+          ${opened
+            ? `<p class="twist-result-copy ${ep.chocolateSave ? "is-save" : "is-elimination"}">${escapeHtml(resultText)}</p>`
+            : `<button class="primary-btn open-chocolate-btn" type="button">Open Chocolate Bar</button>`}
+        </div>
       </article>
     `;
   }
+
 
   function resultContestantCard(id, isWinner, isLoser, isFinale = false, isEliminated = false) {
     const item = state.season.contestants[id] || {};
@@ -12564,8 +13368,8 @@ Options: ${names}`, "") || "";
       lipsync: [ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean).length > 0,
       qosdadhh: false,
       lsftc: false,
-      winner: false,
-      results: true,
+      winner: true,
+      results: false,
       badonkadunktank: false,
       s17lsfyl: false,
       s17lsfylresults: false,
@@ -12600,6 +13404,10 @@ Options: ${names}`, "") || "";
       pointceremony: !!ep.pointCeremony,
       trackrecord: true
     };
+    visible.luckycowvotes = !!(ep?.luckyCow?.active && (ep?.luckyCow?.votes || []).length);
+    visible.roscon = !!ep?.rosconDraw || !!(ep?.rosconPrizeAwards || []).length;
+    visible.heartinheritance = !!(ep?.heartInheritanceEvents || []).length;
+    visible.heartsuccessor = !!(ep?.heartSuccessorUses || []).length;
     if (ep?.comebackPending && ep?.comeback?.format === "choose_return") {
       Object.assign(visible, {
         wildcard: false,
@@ -12676,7 +13484,7 @@ Options: ${names}`, "") || "";
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     applyDynamicEpisodeStepOrder(ep);
@@ -12710,7 +13518,7 @@ Options: ${names}`, "") || "";
     }
     if (!visibleMap && ep?.type === "porkchop_premiere") {
       const order = episodeStepOrder(ep);
-      const visible = { status: true, maxi: true, trackrecord: true };
+      const visible = { status: true, roscon: !!ep?.rosconDraw || !!(ep?.rosconPrizeAwards || []).length, maxi: true, trackrecord: true };
       let idx = order.indexOf(step);
       if (idx < 0) idx = direction > 0 ? -1 : order.length;
       for (let i = idx + direction; i >= 0 && i < order.length; i += direction) {
@@ -12763,8 +13571,8 @@ Options: ${names}`, "") || "";
       lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0,
       qosdadhh: false,
       lsftc: false,
-      winner: false,
-      results: true,
+      winner: ep?.type === "finale",
+      results: ep?.type !== "finale",
       badonkadunktank: !!ep?.badonkaDunkTank?.active,
       s17lsfyl: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep?.specialPremiere)) && ep?.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
       s17lsfylresults: !!(((["rate_a_queen_s17_split", "uk3"].includes(ep?.specialPremiere)) && ep?.extraLipSyncs?.length) || hasMidSeasonRateAQueenBottomLipSync(ep)),
@@ -12772,6 +13580,9 @@ Options: ${names}`, "") || "";
       pointceremony: !!ep?.pointCeremony,
       trackrecord: true
     });
+    visible.roscon = !!ep?.rosconDraw || !!(ep?.rosconPrizeAwards || []).length;
+    visible.heartinheritance = !!(ep?.heartInheritanceEvents || []).length;
+    visible.heartsuccessor = !!(ep?.heartSuccessorUses || []).length;
     if (["special_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
       const isFameGames = ep?.type === "fame_games";
       Object.assign(visible, {
@@ -12806,7 +13617,7 @@ Options: ${names}`, "") || "";
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: ep?.comeback?.format !== "lalaparuza_comeback", badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     const order = episodeStepOrder(ep);
@@ -12833,8 +13644,23 @@ Options: ${names}`, "") || "";
     });
   }
 
+  function finalizeBadonkaAttemptBeforeLeaving(ep) {
+    const dunk = ep?.badonkaDunkTank;
+    if (!dunk?.active || dunk.revealed) return;
+    dunk.revealed = true;
+    const box = (state.season?.badonkaDunkTank?.boxes || []).find((candidate) => Number(candidate.number) === Number(dunk.boxNumber));
+    if (box) {
+      box.opened = true;
+      box.reserved = false;
+      box.openedById = dunk.contestantId;
+      box.episodeLabel = ep.label;
+      box.episodeNumber = ep.number;
+    }
+  }
+
   function goToNextEpisode() {
     if (!state.season) return;
+    finalizeBadonkaAttemptBeforeLeaving(currentEpisode());
     if (state.currentEpisodeIndex < state.season.episodes.length - 1) {
       state.currentEpisodeIndex += 1;
       state.currentStep = "status";
@@ -12842,6 +13668,7 @@ Options: ${names}`, "") || "";
       renderEpisode();
       scrollToEpisodeSection(state.currentStep || "status");
     } else {
+      saveState();
       openStatsScreen();
     }
   }
@@ -12860,6 +13687,20 @@ Options: ${names}`, "") || "";
     }
   }
 
+
+  function updateHeartSuccessorStatsVisibility() {
+    const showHeartSuccessor = !!state.season?.config?.twistHeartSuccessor;
+    const heartTab = $('.stats-tab[data-tab="heartsuccessor"]');
+    const heartPanel = $('.stats-panel[data-tab-panel="heartsuccessor"]');
+    if (heartTab) heartTab.hidden = !showHeartSuccessor;
+    if (heartPanel) heartPanel.hidden = !showHeartSuccessor;
+    if (!showHeartSuccessor && heartTab?.classList.contains("is-active")) {
+      heartTab.classList.remove("is-active");
+      heartPanel?.classList.remove("is-active");
+      $('.stats-tab[data-tab="track"]')?.classList.add("is-active");
+      $('.stats-panel[data-tab-panel="track"]')?.classList.add("is-active");
+    }
+  }
 
   function updatePointStatsVisibility() {
     const showPoints = isTournamentFormat(state.season);
@@ -13048,7 +13889,8 @@ Options: ${names}`, "") || "";
     const visibilityTasks = [
       ["Voting visibility", updateVotingStatsVisibility],
       ["Star visibility", updateStarStatsVisibility],
-      ["Tournament-point visibility", updatePointStatsVisibility]
+      ["Tournament-point visibility", updatePointStatsVisibility],
+      ["Heart Successor visibility", updateHeartSuccessorStatsVisibility]
     ];
     visibilityTasks.forEach(([label, renderer]) => safelyRenderStatsSection(label, renderer));
 
@@ -13060,9 +13902,11 @@ Options: ${names}`, "") || "";
       ["Points Per Bracket", renderPointBracketStats, els.pointBracketWrap],
       ["Runways", renderRunwayStats, els.runwayStatsWrap],
       ["Challenges", renderChallengeStats, els.challengeStatsWrap],
+      ["Records", renderRecordsStats, els.recordsStatsWrap],
       ["Popularity", renderPopularityStats, els.popularityWrap],
       ["Edgic", renderEdgicStats, els.edgicWrap],
       ["Voting", renderVotingStats, els.votingStatsWrap],
+      ["Heart Successor", renderHeartSuccessorStats, els.heartSuccessorStatsWrap],
       ["Storylines", renderStorylines, els.storylinesWrap],
       ["Highlights", renderHighlights, els.highlightsWrap]
     ];
@@ -13199,7 +14043,7 @@ Options: ${names}`, "") || "";
     const extra = Array.isArray(entry?.extraClasses) ? entry.extraClasses : [];
     if (isQuitOrDisqTrackToken(token)) return 0;
     if (token === "WIN" && extra.includes("legacy-loser-win")) return 4.5;
-    const points = { WIN: 5, DWIN: 5, TOP2: 4.5, HIGH: 4, HIGH_BLK: 4, SAFE: 3, RTRN: 3, IN: 3, BLK: 3, LALA_R1: 3, LALA_R2: 3, LALA_R3: 3, LALA_R4: 3, LALA_R5: 3, LOW: 2, BTM: 1, CHOC: 1, DEPT: 0, OUT: 0, ELIM: 0 };
+    const points = { WIN: 5, DWIN: 5, TOP2: 4.5, HIGH: 4, HIGH_BLK: 4, SAFE: 3, RTRN: 3, IN: 3, BLK: 3, LALA_R1: 3, LALA_R2: 3, LALA_R3: 3, LALA_R4: 3, LALA_R5: 3, LOW: 2, LOW_ROSCON_BTM2: 1, LOW_ROSCON_ELIM: 0, BTM: 1, CHOC: 1, DEPT: 0, OUT: 0, ELIM: 0 };
     return /^BTM\d+$/.test(token) ? 1 : points[token];
   }
 
@@ -13680,8 +14524,9 @@ Options: ${names}`, "") || "";
     if (token === "LALA_R4") return 11;
     if (token === "LALA_R5") return 11.5;
     if (token === "LOW") return 12;
+    if (token === "LOW_ROSCON_BTM2") return 13;
     if (token === "CHOC" || token === "BTM" || token === "BTM1" || token === "BTM2" || /^BTM\d+$/.test(token)) return 13;
-    if (token === "ELIM" || token === "QUIT" || token === "BTM2_QUIT" || token === "DEPT" || token === "DISQ" || token === "OUT" || token === "PLOSS" || token === "PCHOP") return 14;
+    if (token === "LOW_ROSCON_ELIM" || token === "ELIM" || token === "QUIT" || token === "BTM2_QUIT" || token === "DEPT" || token === "DISQ" || token === "OUT" || token === "PLOSS" || token === "PCHOP") return 14;
     return 99;
   }
 
@@ -13810,6 +14655,9 @@ Options: ${names}`, "") || "";
       if ((entry.extraClasses || []).includes("golden-beaver-save")) presentLegendTokens.add("LOW + GOLD");
       if ((entry.extraClasses || []).includes("lucky-cow-save")) presentLegendTokens.add("LC BORDER");
       if ((entry.extraClasses || []).includes("badonka-save")) presentLegendTokens.add("DUNK BORDER");
+      if ((entry.extraClasses || []).includes("twist-gold-save")) presentLegendTokens.add("GOLD LOW BORDER");
+      if (entry.token === "LOW_ROSCON_BTM2") presentLegendTokens.add("LOW + BTM2");
+      if (entry.token === "LOW_ROSCON_ELIM") presentLegendTokens.add("LOW + ELIM");
     }));
     const legendTokenPresent = (token) => {
       if (presentLegendTokens.has(token)) return true;
@@ -13818,7 +14666,7 @@ Options: ${names}`, "") || "";
       if (token === "WIN" && presentLegendTokens.has("REUNION_WIN")) return true;
       if (token === "HIGH+BLK" && presentLegendTokens.has("HIGH_BLK")) return true;
       if (token === "LOW + GOLD" && presentLegendTokens.has("LOW + GOLD")) return true;
-      if (["LC BORDER", "DUNK BORDER"].includes(token) && presentLegendTokens.has(token)) return true;
+      if (["LC BORDER", "DUNK BORDER", "GOLD LOW BORDER", "LOW + BTM2", "LOW + ELIM"].includes(token) && presentLegendTokens.has(token)) return true;
       return false;
     };
     els.trackLegend.innerHTML = trackLegend
@@ -14041,8 +14889,8 @@ Options: ${names}`, "") || "";
     const isBottomToken = (entry) => {
       const token = String(entry?.token || "");
       const display = String(entry?.display || "");
-      if (/^BTM\d*$/.test(token) || token === "BTM" || token === "CHOC") return true;
-      if (token === "ELIM" || isUnplannedExitToken(token) || entry?.eliminated) return true;
+      if (/^BTM\d*$/.test(token) || token === "BTM" || token === "CHOC" || token === "LOW_ROSCON_BTM2") return true;
+      if (token === "ELIM" || token === "LOW_ROSCON_ELIM" || isUnplannedExitToken(token) || entry?.eliminated) return true;
       if (/\bELIM\b/.test(display) && !["WINNER", "RU", "RUN"].includes(token)) return true;
       return false;
     };
@@ -14212,6 +15060,185 @@ Options: ${names}`, "") || "";
     els.challengeStatsWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table challenge-stats-table"><thead><tr><th>Episode</th><th>Challenge</th><th>Type</th><th>Winner</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
+  function recordMaxIds(ids, valueFor, options = {}) {
+    const values = ids.map((id) => ({ id, value: Number(valueFor(id) || 0) }));
+    const maximum = values.length ? Math.max(...values.map((entry) => entry.value)) : 0;
+    if (options.requirePositive && maximum <= 0) return { ids: [], value: maximum };
+    const tolerance = Number(options.tolerance || 0);
+    return {
+      ids: values.filter((entry) => Math.abs(entry.value - maximum) <= tolerance).map((entry) => entry.id),
+      value: maximum
+    };
+  }
+
+  function recordTrackEntries(season, id) {
+    return season.stats[id]?.track || [];
+  }
+
+  function topPlacementCountForRecords(season, id) {
+    return recordTrackEntries(season, id).reduce((count, entry) => {
+      const token = String(entry.token || "");
+      if (["WIN", "DWIN", "WIN_QUIT", "HIGH", "HIGH_BLK"].includes(token)) return count + 1;
+      if (token === "TOP2" && isAllWinnersFormat(season)) return count + 1;
+      return count;
+    }, 0);
+  }
+
+  function safePlacementCountForRecords(season, id) {
+    return recordTrackEntries(season, id).filter((entry) => ["SAFE", "BLK"].includes(String(entry.token || ""))).length;
+  }
+
+  function bottomPlacementCountForRecords(season, id) {
+    return recordTrackEntries(season, id).reduce((count, entry) => {
+      const token = String(entry.token || "");
+      if (token === "LOW") return count + 1;
+      if (["ELIM", "CHOC", "BTM", "BTM2_QUIT", "LOW_ROSCON_BTM2", "LOW_ROSCON_ELIM"].includes(token)) return count + 1;
+      if (/^BTM\d+$/.test(token)) return count + 1;
+      return count;
+    }, 0);
+  }
+
+  function maxiChallengeWinCountForRecords(season, id) {
+    return (season.stats[id]?.track || []).reduce((count, entry) => {
+      const token = String(entry.token || "");
+      if (["WIN", "DWIN", "WIN_QUIT"].includes(token)) return count + 1;
+      if (token === "TOP2" && (isLegacyFormat(season) || isAllWinnersFormat(season))) return count + 1;
+      return count;
+    }, 0);
+  }
+
+  function runwayRecordForSeason(season) {
+    const ids = (season.castOrder || []).filter((id) => season.stats?.[id]);
+    const profiles = ids.map((id) => {
+      const scores = (season.stats[id]?.runwayScores || []).map((entry) => Number(entry.value)).filter(Number.isFinite);
+      if (!scores.length) return null;
+      let toots = 0;
+      let boots = 0;
+      (season.episodes || []).forEach((episode) => {
+        if (!episode.runway) return;
+        const score = (episode.scores || []).find((entry) => entry.id === id);
+        if (!score || !Number.isFinite(Number(score.runwayScore))) return;
+        const values = (episode.scores || []).map((entry) => Number(entry.runwayScore)).filter(Number.isFinite);
+        const outcome = runwayOutcomeFor(Number(score.runwayScore), values);
+        if (["TOOT", "SHOOT"].includes(outcome)) toots += 1;
+        if (["BOOT", "SCOOT"].includes(outcome)) boots += 1;
+      });
+      return {
+        id,
+        average: averageNumber(scores),
+        toots,
+        boots,
+        ratio: toots / Math.max(1, boots)
+      };
+    }).filter(Boolean);
+    if (!profiles.length) return { ids: [], average: 0, toots: 0, boots: 0, ratio: 0 };
+    profiles.sort((a, b) => b.average - a.average || b.ratio - a.ratio || b.toots - a.toots);
+    const best = profiles[0];
+    const idsAtAverage = profiles.filter((profile) => Math.abs(profile.average - best.average) < 0.005);
+    const bestRatio = Math.max(...idsAtAverage.map((profile) => profile.ratio));
+    const winners = idsAtAverage.filter((profile) => Math.abs(profile.ratio - bestRatio) < 0.005);
+    return {
+      ids: winners.map((profile) => profile.id),
+      average: best.average,
+      toots: winners[0]?.toots || 0,
+      boots: winners[0]?.boots || 0,
+      ratio: bestRatio
+    };
+  }
+
+  function finalistIdsForRecords(season) {
+    const finale = (season.episodes || []).find((episode) => episode.type === "finale");
+    if (finale?.activeStartIds?.length) return [...new Set(finale.activeStartIds)];
+    if (season.allWinnersFinalistIds?.length && (season.episodes || []).some((episode) => episode.allWinnersFinalistsRevealed || episode.allWinnersFinale)) {
+      return [...new Set(season.allWinnersFinalistIds)];
+    }
+    return [];
+  }
+
+  function contestantEverLandedBottomTwo(season, id) {
+    const finaleLabels = new Set((season.episodes || []).filter((episode) => episode.type === "finale").map((episode) => episode.label));
+    return (season.stats[id]?.track || []).some((entry) => {
+      if (finaleLabels.has(entry.label)) return false;
+      const token = String(entry.token || "");
+      return token === "ELIM"
+        || token === "CHOC"
+        || token === "BTM"
+        || /^BTM\d+$/.test(token)
+        || token === "BTM2_QUIT"
+        || token === "LOW_ROSCON_BTM2"
+        || token === "LOW_ROSCON_ELIM";
+    });
+  }
+
+  function recordWinnerNames(ids) {
+    const names = ids.map((id) => fullDisplayName(state.season.contestants[id] || {}));
+    if (!names.length) return "None";
+    if (names.length === 1) return names[0];
+    if (names.length === 2) return `${names[0]} & ${names[1]}`;
+    return `${names.slice(0, -1).join(", ")} & ${names.at(-1)}`;
+  }
+
+  function recordPortraitsHtml(ids) {
+    if (!ids.length) return `<div class="season-record-empty">None</div>`;
+    return `
+      <div class="season-record-winners">
+        <div class="season-record-portraits">
+          ${ids.map((id) => {
+            const contestant = state.season.contestants[id] || {};
+            return `<div class="season-record-portrait"><img src="${escapeHtml(contestant.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(contestant))}"></div>`;
+          }).join("")}
+        </div>
+        <div class="season-record-names">${escapeHtml(recordWinnerNames(ids))}</div>
+      </div>
+    `;
+  }
+
+  function recordCardHtml(title, ids, description = "", options = {}) {
+    if (!ids.length && options.hideWhenEmpty) return "";
+    return `
+      <article class="season-record-card">
+        <div class="season-record-copy">
+          <h3>${escapeHtml(title)}</h3>
+          ${description ? `<p>${description}</p>` : ""}
+        </div>
+        ${recordPortraitsHtml(ids)}
+      </article>
+    `;
+  }
+
+  function renderRecordsStats() {
+    if (!els.recordsStatsWrap || !state.season) return;
+    const season = state.season;
+    const ids = (season.castOrder || []).filter((id) => season.stats?.[id]);
+    const wins = recordMaxIds(ids, (id) => maxiChallengeWinCountForRecords(season, id), { requirePositive: true });
+    const top = recordMaxIds(ids, (id) => topPlacementCountForRecords(season, id), { requirePositive: true });
+    const safe = recordMaxIds(ids, (id) => safePlacementCountForRecords(season, id), { requirePositive: true });
+    const bottom = recordMaxIds(ids, (id) => bottomPlacementCountForRecords(season, id), { requirePositive: true });
+    const lipSyncs = recordMaxIds(ids, (id) => season.stats[id]?.lipSyncs, { requirePositive: true });
+    const fanProfiles = ids.map((id) => {
+      const values = (season.stats[id]?.popularityHistory || []).map((entry) => Number(entry.value)).filter(Number.isFinite);
+      return { id, average: values.length ? averageNumber(values) : Number(season.stats[id]?.popularity || 50) };
+    });
+    const fanMaximum = fanProfiles.length ? Math.max(...fanProfiles.map((profile) => profile.average)) : 0;
+    const fanFavoriteIds = fanProfiles.filter((profile) => Math.abs(profile.average - fanMaximum) < 0.005).map((profile) => profile.id);
+    const runway = runwayRecordForSeason(season);
+    const goldenBootyIds = finalistIdsForRecords(season).filter((id) => !contestantEverLandedBottomTwo(season, id));
+    const subjectFor = (recordIds) => recordIds.length > 1 ? "These contestants" : "This contestant";
+
+    const cards = [
+      recordCardHtml("Most Maxi-Challenge Wins", wins.ids, wins.ids.length ? `<strong>${wins.value} win${wins.value === 1 ? "" : "s"}</strong>` : "No maxi-challenge wins"),
+      recordCardHtml("Best Runways", runway.ids, "The contestant who had the strongest average runway score across the season."),
+      recordCardHtml("Most Times in the Top", top.ids, `${subjectFor(top.ids)} spent the most time in the top, whether they were in the top three or winning the maxi challenge, which is <strong>${top.value} time${top.value === 1 ? "" : "s"}</strong>.`),
+      recordCardHtml("Most Times Safe", safe.ids, `${subjectFor(safe.ids)} played it too safe, landing in the middle zone <strong>${safe.value} time${safe.value === 1 ? "" : "s"}</strong>.`),
+      recordCardHtml("Most Times in the Bottom", bottom.ids, `${subjectFor(bottom.ids)} flopped the most, landing in the bottom or lip syncing for their life <strong>${bottom.value} time${bottom.value === 1 ? "" : "s"}</strong>.`),
+      recordCardHtml("Most Lip Syncs", lipSyncs.ids, `${subjectFor(lipSyncs.ids)} put on a show, lip syncing <strong>${lipSyncs.value} time${lipSyncs.value === 1 ? "" : "s"}</strong>.`),
+      recordCardHtml("Fan Favorite", fanFavoriteIds, `Work Fan Favorite! ${subjectFor(fanFavoriteIds)} had the highest popularity throughout the season.`),
+      recordCardHtml("The Golden Booty", goldenBootyIds, `Wow! ${subjectFor(goldenBootyIds)} made it to the finale without ever lip syncing for their life!`, { hideWhenEmpty: true })
+    ].filter(Boolean).join("");
+
+    els.recordsStatsWrap.innerHTML = `<div class="records-stats-grid">${cards}</div>`;
+  }
+
   function popularitySeriesColor(index, total) {
     const hue = (18 + index * 137.508 + (total % 5) * 9) % 360;
     const lightness = index % 3 === 0 ? 62 : index % 3 === 1 ? 70 : 56;
@@ -14362,6 +15389,77 @@ Options: ${names}`, "") || "";
       }).join("")}<td class="edgic-cell edgic-overall ${edgicClass(overallValue)}">${escapeHtml(overallValue ? `${overallValue}${overallVisibility}` : "")}</td></tr>`;
     }).join("");
     els.edgicWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table edgic-table"><thead><tr><th>Contestant</th>${labels.map((label) => `<th>${escapeHtml(statEpisodeLabel(label))}</th>`).join("")}<th>Overall</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  function heartSuccessorStatisticsRows(season) {
+    const eventsByEpisode = new Map();
+    (season.heartSuccessor?.history || []).forEach((historyRow) => {
+      const episodeNumber = Number(historyRow.episodeNumber || 0);
+      const events = Array.isArray(historyRow.events) ? historyRow.events : [];
+      if (!eventsByEpisode.has(episodeNumber)) eventsByEpisode.set(episodeNumber, []);
+      eventsByEpisode.get(episodeNumber).push(...events);
+    });
+    const usesByEpisode = new Map();
+    (season.heartSuccessor?.uses || []).forEach((use) => {
+      const episodeNumber = Number(use.episodeNumber || 0);
+      if (!usesByEpisode.has(episodeNumber)) usesByEpisode.set(episodeNumber, []);
+      usesByEpisode.get(episodeNumber).push(use);
+    });
+
+    const rows = [];
+    const pendingBySuccessor = new Map();
+    const episodeNumbers = [...new Set([
+      ...(season.episodes || []).map((episode) => Number(episode.number || 0)),
+      ...eventsByEpisode.keys(),
+      ...usesByEpisode.keys()
+    ])].sort((a, b) => a - b);
+
+    episodeNumbers.forEach((episodeNumber) => {
+      (usesByEpisode.get(episodeNumber) || []).forEach((use) => {
+        const pending = pendingBySuccessor.get(use.ownerId) || [];
+        pending.forEach((row) => {
+          row.useEpisodeNumber = Number(use.episodeNumber || episodeNumber);
+          row.useEpisodeLabel = use.episodeLabel || `Episode ${episodeNumber}`;
+          row.savedIds = [use.savedId].filter(Boolean);
+        });
+        pendingBySuccessor.set(use.ownerId, []);
+      });
+
+      (eventsByEpisode.get(episodeNumber) || []).forEach((event) => {
+        const row = {
+          sourceEpisodeNumber: Number(event.sourceEpisodeNumber || episodeNumber),
+          sourceEpisodeLabel: event.sourceEpisodeLabel || `Episode ${episodeNumber}`,
+          donorIds: [...new Set((event.donorIds || []).filter((id) => season.contestants?.[id]))],
+          successorId: event.successorId && season.contestants?.[event.successorId] ? event.successorId : null,
+          savedIds: [],
+          useEpisodeNumber: null,
+          useEpisodeLabel: ""
+        };
+        rows.push(row);
+        if (row.successorId && Number(event.amount || 0) > 0) {
+          const pending = pendingBySuccessor.get(row.successorId) || [];
+          pending.push(row);
+          pendingBySuccessor.set(row.successorId, pending);
+        }
+      });
+    });
+    return rows;
+  }
+
+  function renderHeartSuccessorStats() {
+    if (!els.heartSuccessorStatsWrap) return;
+    if (!state.season?.config?.twistHeartSuccessor) {
+      els.heartSuccessorStatsWrap.innerHTML = "";
+      return;
+    }
+    const statRows = heartSuccessorStatisticsRows(state.season);
+    const rows = statRows.length ? statRows.map((row) => `<tr>
+      <th>${row.useEpisodeLabel ? escapeHtml(statEpisodeLabel(row.useEpisodeLabel)) : "None"}</th>
+      <td>${statContestantList(row.donorIds || [], " & ") || "None"}</td>
+      <td>${row.successorId ? statContestantInline(row.successorId) : "None"}</td>
+      <td>${statContestantList(row.savedIds || [], " & ") || "None"}</td>
+    </tr>`).join("") : `<tr><td colspan="4" class="heart-successor-none">None</td></tr>`;
+    els.heartSuccessorStatsWrap.innerHTML = `<div class="stat-table-shell heart-successor-table-shell"><table class="stats-table modern-stat-table heart-successor-stats-table"><thead><tr><th>Episode</th><th>Eliminated Contestant</th><th>Successor</th><th>Saved Contestant</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function renderVotingStats() {
@@ -15672,6 +16770,13 @@ Options: ${names}`, "") || "";
       else if (preferDisableNonElim) els.forceSlayersEpisode.checked = false;
       else els.forceSlayersEpisode.checked = false;
     }
+
+    const saveTwists = [els.twistLuckyCow, els.twistRosconReinas, els.twistHeartSuccessor].filter(Boolean);
+    const selectedSaveTwists = saveTwists.filter((el) => el.checked);
+    if (selectedSaveTwists.length > 1) {
+      const preferred = saveTwists.includes(changedEl) && changedEl.checked ? changedEl : selectedSaveTwists[0];
+      saveTwists.forEach((el) => { if (el !== preferred) el.checked = false; });
+    }
   }
 
   function resetSeasonOnly() {
@@ -15717,7 +16822,7 @@ Options: ${names}`, "") || "";
   }
 
   function bindEvents() {
-    [els.seasonName, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.forceSlayersEpisode, els.forceDoubleShantay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
+    [els.seasonName, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.forceSlayersEpisode, els.forceDoubleShantay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
     els.searchFilter?.addEventListener("input", applyGlobalFilters);
     els.genderFilter?.addEventListener("change", applyGlobalFilters);
 
@@ -15786,18 +16891,28 @@ Options: ${names}`, "") || "";
       else goToNextEpisode();
     });
     els.finishEpisodeBtn?.addEventListener("click", () => {
-      const ep = currentEpisode();
-      if (ep?.pointCeremony && state.currentStep === "untucked") setEpisodeStep("pointceremony");
-      else if (nextVisibleStep(state.currentStep || "untucked", 1) === "trackrecord") setEpisodeStep("trackrecord");
+      const next = nextVisibleStep(state.currentStep || "untucked", 1);
+      if (next) setEpisodeStep(next);
       else goToNextEpisode();
     });
     document.getElementById("finishPointCeremonyBtn")?.addEventListener("click", () => {
       if (nextVisibleStep(state.currentStep || "pointceremony", 1) === "trackrecord") setEpisodeStep("trackrecord");
       else goToNextEpisode();
     });
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest?.(".reveal-lip-sync-result-btn");
+      if (button) handleLipSyncReveal(button);
+    });
     els.revealResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.resultsRevealed = true; saveState(); renderResultsPanel(ep); } });
     els.revealS17LsfylResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.s17SurvivalRevealed = true; saveState(); renderS17LsfylResultsPanel(ep); } });
-    els.revealCrownWinnerBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.resultsRevealed = true; saveState(); renderAllWinnersFinalePanels(ep); } });
+    els.revealCrownWinnerBtn?.addEventListener("click", () => {
+      const ep = currentEpisode();
+      if (!ep || ep.type !== "finale") return;
+      ep.winnerRevealStarted = true;
+      ep.winnerRevealComplete = false;
+      saveState();
+      renderEpisode();
+    });
     els.allWinnersFinalStatsBtn?.addEventListener("click", () => {
       const next = nextVisibleStep(state.currentStep || "winner", 1);
       if (next === "trackrecord") setEpisodeStep("trackrecord");
