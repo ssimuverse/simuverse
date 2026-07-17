@@ -12153,3 +12153,1370 @@ details.advanced-settings[open] > .advanced-settings-grid {
   -webkit-text-fill-color: #111 !important;
   text-shadow: none !important;
 }
+
+.twist-theme-copy,
+.twist-announcement,
+.twist-final-pair {
+  width: min(820px, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.twist-theme-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.twist-theme-copy h3,
+.twist-theme-copy p,
+.twist-announcement,
+.twist-final-pair {
+  margin-inline: auto;
+}
+
+.roscon-slice-grid {
+  grid-template-columns: repeat(auto-fit, minmax(128px, 160px));
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.is-roscon-bean-holder {
+  border-color: rgba(255, 209, 102, .72) !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 209, 102, .42), 0 14px 28px rgba(0, 0, 0, .20) !important;
+}
+
+.contestant-twist-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.contestant-twist-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, .20);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .10);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: .02em;
+  line-height: 1;
+}
+
+.heart-balance-0 {
+  color: rgba(255, 255, 255, .62);
+}
+
+.heart-balance-1 {
+  color: #ffd7e2;
+  border-color: rgba(255, 92, 139, .46);
+  background: rgba(255, 92, 139, .12);
+}
+
+.heart-balance-2 {
+  color: #fff;
+  border-color: rgba(255, 60, 112, .72);
+  background: rgba(165, 0, 45, .38);
+  box-shadow: 0 0 16px rgba(255, 60, 112, .34);
+}
+
+.roscon-bean-badge {
+  color: #2b1800;
+  border-color: rgba(255, 209, 102, .72);
+  background: #ffd166;
+}
+
+.heart-inheritance-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  width: min(820px, 100%);
+  margin: 0 auto 14px;
+}
+
+.heart-flow-symbol,
+.heart-complete-symbol,
+.twist-swap-arrow {
+  text-align: center;
+  font-weight: 950;
+}
+
+.heart-flow-symbol,
+.heart-complete-symbol {
+  color: #ff668f;
+  font-size: clamp(22px, 4vw, 38px);
+  text-shadow: 0 0 18px rgba(255, 71, 126, .38);
+}
+
+.twist-swap-arrow {
+  margin: 12px auto;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.twist-save-strip,
+.twist-replacement-strip,
+.heart-donor-strip,
+.heart-successor-strip {
+  justify-content: center;
+}
+
+.is-heart-ready,
+.is-twist-saved {
+  border-color: rgba(255, 209, 102, .80) !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 209, 102, .44), 0 0 24px rgba(255, 209, 102, .24) !important;
+}
+
+.is-twist-replacement {
+  border-color: rgba(255, 71, 126, .74) !important;
+}
+
+.track-table .track-cell.twist-gold-save,
+.legend-key.token-gold-low-border {
+  box-shadow: inset 0 0 0 4px #ffd166, 0 0 16px rgba(255, 209, 102, .55) !important;
+}
+
+.track-table .track-cell.token-low-roscon-btm2,
+.legend-key.token-low-btm2 {
+  background: #ff5b42 !important;
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+}
+
+.track-table .track-cell.token-low-roscon-elim,
+.legend-key.token-low-elim {
+  background: #ff0000 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+.legend-key.token-gold-low-border {
+  background: #ffc0cb !important;
+  color: #111 !important;
+}
+
+.heart-successor-table-shell {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.heart-successor-stats-table {
+  min-width: 760px;
+}
+
+.heart-successor-stats-table th:first-child {
+  width: 90px;
+  text-align: center;
+}
+
+.heart-successor-stats-table td,
+.heart-successor-stats-table th {
+  vertical-align: middle;
+}
+
+.heart-successor-none {
+  text-align: center;
+  color: var(--ink-muted);
+  font-weight: 900;
+}
+
+@media (max-width: 720px) {
+  .heart-inheritance-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .heart-flow-symbol {
+    transform: rotate(90deg);
+  }
+}
+
+.roscon-lipsync-reveal {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  margin: 0 auto 22px;
+}
+
+.heart-holder-strip,
+.heart-successor-bottom-group {
+  justify-content: center;
+}
+
+.heart-successor-bottom-group {
+  margin-top: 14px;
+}
+.episode-panel p,
+.episode-panel .announcement-line,
+.episode-panel .crowning-message,
+.episode-panel .lip-sync-outcome-line,
+.episode-panel .badonka-result-line,
+.episode-panel .twist-announcement,
+.episode-panel .twist-final-pair,
+.episode-panel .relationship-influence {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
+}
+
+.episode-panel .challenge-card > h3,
+.episode-panel .challenge-card > h4,
+.episode-panel .event-card > h3,
+.episode-panel .event-card > h4,
+.episode-panel .twist-result-heading h3 {
+  margin: 0 !important;
+  font-family: var(--sans) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.episode-panel p strong,
+.episode-panel .announcement-line strong,
+.episode-panel .crowning-message strong {
+  font-weight: 650 !important;
+}
+
+.episode-panel .mini-contestant-card > strong,
+.episode-panel .reveal-card > strong {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+.crowning-message:not(:empty) {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.twist-info-panel,
+.twist-result-panel {
+  width: min(860px, 100%);
+  margin: 0 auto 16px;
+  padding: 16px;
+  border: 1px solid #34343b;
+  border-radius: 12px;
+  background: #19191e;
+  box-shadow: none;
+}
+
+.twist-result-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  text-align: left;
+}
+
+.twist-result-heading > div {
+  min-width: 0;
+}
+
+.twist-result-heading p {
+  margin: 3px 0 0 !important;
+  color: #a0a0a8 !important;
+}
+
+.twist-result-icon {
+  display: inline-grid;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #3c3c44;
+  border-radius: 9px;
+  background: #222228;
+  font-size: 17px;
+}
+
+.twist-result-contestant,
+.badonka-contestant-strip {
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.twist-result-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.twist-result-copy {
+  width: min(620px, 100%);
+  margin: 0 !important;
+  padding: 10px 12px;
+  border: 1px solid #37373e;
+  border-radius: 9px;
+  background: #202026;
+  color: #d8d8dd !important;
+  text-align: center;
+}
+
+.twist-result-copy.is-save {
+  border-color: rgba(72, 243, 169, .38);
+  color: #c8ffe6 !important;
+}
+
+.twist-result-copy.is-elimination {
+  border-color: rgba(255, 71, 126, .38);
+  color: #ffd0dc !important;
+}
+
+.chocolate-panel.is-golden,
+.lucky-cow-reveal-panel.is-saved,
+.badonka-intro-card.is-saved {
+  border-color: rgba(72, 243, 169, .45);
+}
+
+.chocolate-panel.is-plain,
+.lucky-cow-reveal-panel.is-not-saved,
+.badonka-intro-card.is-not-saved {
+  border-color: rgba(255, 71, 126, .42);
+}
+
+.lucky-cow-title-row {
+  display: none !important;
+}
+
+.lucky-cow-intro-card,
+.badonka-intro-card,
+.lucky-cow-reveal-panel {
+  background: #19191e !important;
+  box-shadow: none !important;
+}
+
+.lucky-cow-reveal-panel {
+  margin-top: 16px;
+  text-align: initial;
+}
+
+.lucky-cow-reveal-panel p {
+  margin: 3px 0 0 !important;
+  max-width: none !important;
+  color: #a0a0a8 !important;
+  font-weight: 500 !important;
+}
+
+.badonka-box-grid {
+  gap: 9px;
+  width: min(680px, 100%);
+  margin: 15px auto 0;
+}
+
+.badonka-box {
+  min-height: 68px;
+  border: 1px solid #3a3a42;
+  border-radius: 10px;
+  background: #222228;
+  box-shadow: none;
+  font-weight: 700;
+}
+
+.badonka-box strong {
+  font-size: 14px;
+}
+
+.badonka-box span {
+  font-size: 20px;
+}
+
+.badonka-box small {
+  display: block;
+  color: currentColor;
+  font-size: 9px;
+  font-weight: 600;
+  opacity: .72;
+}
+
+.badonka-box.is-current {
+  outline: 2px solid rgba(255, 209, 102, .62);
+  outline-offset: 2px;
+}
+
+.badonka-box.is-history:not(.is-current) {
+  opacity: .78;
+}
+
+.lucky-cow-vote-card {
+  border: 1px solid #34343b !important;
+  background: #1c1c21 !important;
+  box-shadow: none !important;
+}
+
+.records-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  padding: 18px;
+}
+
+.season-record-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid #34343b;
+  border-radius: 12px;
+  background: #19191e;
+}
+
+.season-record-card h3 {
+  margin: 0 0 12px;
+  color: #f4f4f6;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 750;
+  letter-spacing: .01em;
+}
+
+.season-record-people {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.season-record-card p {
+  margin: 10px 0 0;
+  color: #8e8e97;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.season-record-card .stat-contestant {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 620px) {
+  .twist-result-heading {
+    align-items: flex-start;
+  }
+
+  .records-stats-grid {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+}
+
+
+.lucky-cow-cast {
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.lucky-cow-vote-grid {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.records-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 18px;
+}
+
+.season-record-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 22px;
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid #34343b;
+  border-radius: 14px;
+  background: #19191e;
+}
+
+.season-record-copy {
+  min-width: 0;
+}
+
+.season-record-card h3 {
+  margin: 0;
+  color: #f4f4f6;
+  font-family: var(--sans);
+  font-size: clamp(20px, 2.3vw, 30px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+}
+
+.season-record-card p {
+  max-width: 720px;
+  margin: 8px 0 0;
+  color: #a0a0a8;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.season-record-card p strong {
+  color: #f4f4f6;
+  font-weight: 750;
+}
+
+.season-record-winners {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  min-width: 118px;
+}
+
+.season-record-portraits {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.season-record-portrait {
+  width: 84px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid #3b3b43;
+  border-radius: 14px;
+  background: #222228;
+}
+
+.season-record-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.season-record-names {
+  max-width: 360px;
+  color: #d8d8dd;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.season-record-empty {
+  min-width: 118px;
+  color: #777780;
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .season-record-card {
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+  }
+
+  .season-record-winners {
+    justify-self: start;
+    justify-items: start;
+  }
+
+  .season-record-portraits {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .season-record-names {
+    text-align: left;
+  }
+}
+
+.records-stats-grid {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 18px;
+}
+
+.season-record-card {
+  grid-template-columns: minmax(280px, 520px) minmax(110px, max-content);
+  justify-content: center;
+  gap: clamp(24px, 4vw, 52px);
+  padding: 20px clamp(18px, 3vw, 32px);
+}
+
+.season-record-copy {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.season-record-card h3 {
+  max-width: 520px;
+  text-align: center;
+}
+
+.season-record-card p {
+  max-width: 520px;
+  margin: 9px auto 0;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.season-record-card p strong {
+  color: #fff;
+  font-weight: 850;
+}
+
+.season-record-winners {
+  justify-self: center;
+  min-width: 0;
+}
+
+.season-record-portraits {
+  justify-content: center;
+}
+
+.season-record-names {
+  text-align: center;
+}
+
+.episode-panel[data-panel="wildcard"] .event-stack,
+.episode-panel[data-panel="roscon"] .event-stack,
+.episode-panel[data-panel="comeback"] .event-stack,
+.episode-panel[data-panel="famegames"] .event-stack,
+.episode-panel[data-panel="cuntpart1"] .event-stack,
+.episode-panel[data-panel="cuntpart2"] .event-stack,
+.episode-panel[data-panel="cuntpart3"] .event-stack,
+.episode-panel[data-panel="ratequeen"] .judging-stack,
+.episode-panel[data-panel="heartsuccessor"] .event-stack,
+.episode-panel[data-panel="luckycow"] .event-stack,
+.episode-panel[data-panel="goldenbeaver"] .event-stack,
+.episode-panel[data-panel="rumocracy"] .event-stack,
+.episode-panel[data-panel="qosdadhh"] .lip-sync-board,
+.episode-panel[data-panel="lsftc"] .lip-sync-board,
+.episode-panel[data-panel="winner"] .reveal-board,
+.episode-panel[data-panel="luckycowvotes"] .event-stack,
+.episode-panel[data-panel="badonkadunktank"] .event-stack,
+.episode-panel[data-panel="s17lsfyl"] .lip-sync-board,
+.episode-panel[data-panel="s17lsfylresults"] .reveal-board,
+.episode-panel[data-panel="heartinheritance"] .event-stack,
+.episode-panel[data-panel="pointceremony"] .event-stack {
+  width: min(980px, 100%);
+  margin-inline: auto;
+}
+
+.episode-panel[data-panel="wildcard"],
+.episode-panel[data-panel="roscon"],
+.episode-panel[data-panel="comeback"],
+.episode-panel[data-panel="famegames"],
+.episode-panel[data-panel="cuntpart1"],
+.episode-panel[data-panel="cuntpart2"],
+.episode-panel[data-panel="cuntpart3"],
+.episode-panel[data-panel="ratequeen"],
+.episode-panel[data-panel="heartsuccessor"],
+.episode-panel[data-panel="luckycow"],
+.episode-panel[data-panel="goldenbeaver"],
+.episode-panel[data-panel="rumocracy"],
+.episode-panel[data-panel="qosdadhh"],
+.episode-panel[data-panel="lsftc"],
+.episode-panel[data-panel="winner"],
+.episode-panel[data-panel="luckycowvotes"],
+.episode-panel[data-panel="badonkadunktank"],
+.episode-panel[data-panel="s17lsfyl"],
+.episode-panel[data-panel="s17lsfylresults"],
+.episode-panel[data-panel="heartinheritance"],
+.episode-panel[data-panel="pointceremony"] {
+  text-align: center;
+}
+
+.episode-panel[data-panel="wildcard"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="roscon"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="comeback"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="famegames"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="cuntpart1"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="cuntpart2"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="cuntpart3"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="ratequeen"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="heartsuccessor"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="luckycow"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="goldenbeaver"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="rumocracy"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="qosdadhh"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="lsftc"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="winner"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="luckycowvotes"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="badonkadunktank"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="s17lsfyl"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="s17lsfylresults"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="heartinheritance"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card),
+.episode-panel[data-panel="pointceremony"] :is(.challenge-card, .event-card, .callout-card, .reveal-card, .placement-card, .judging-card) {
+  border-color: #303239 !important;
+  border-radius: 13px !important;
+  background: #17181c !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.episode-panel[data-panel="wildcard"] :is(h3, h4, p),
+.episode-panel[data-panel="roscon"] :is(h3, h4, p),
+.episode-panel[data-panel="comeback"] :is(h3, h4, p),
+.episode-panel[data-panel="famegames"] :is(h3, h4, p),
+.episode-panel[data-panel="cuntpart1"] :is(h3, h4, p),
+.episode-panel[data-panel="cuntpart2"] :is(h3, h4, p),
+.episode-panel[data-panel="cuntpart3"] :is(h3, h4, p),
+.episode-panel[data-panel="ratequeen"] :is(h3, h4, p),
+.episode-panel[data-panel="heartsuccessor"] :is(h3, h4, p),
+.episode-panel[data-panel="luckycow"] :is(h3, h4, p),
+.episode-panel[data-panel="goldenbeaver"] :is(h3, h4, p),
+.episode-panel[data-panel="rumocracy"] :is(h3, h4, p),
+.episode-panel[data-panel="qosdadhh"] :is(h3, h4, p),
+.episode-panel[data-panel="lsftc"] :is(h3, h4, p),
+.episode-panel[data-panel="winner"] :is(h3, h4, p),
+.episode-panel[data-panel="luckycowvotes"] :is(h3, h4, p),
+.episode-panel[data-panel="badonkadunktank"] :is(h3, h4, p),
+.episode-panel[data-panel="s17lsfyl"] :is(h3, h4, p),
+.episode-panel[data-panel="s17lsfylresults"] :is(h3, h4, p),
+.episode-panel[data-panel="heartinheritance"] :is(h3, h4, p),
+.episode-panel[data-panel="pointceremony"] :is(h3, h4, p) {
+  max-width: 720px;
+  margin-inline: auto !important;
+  text-align: center !important;
+  text-wrap: balance;
+}
+
+.episode-panel[data-panel="wildcard"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="roscon"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="comeback"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="famegames"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="cuntpart1"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="cuntpart2"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="cuntpart3"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="ratequeen"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="heartsuccessor"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="luckycow"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="goldenbeaver"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="rumocracy"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="qosdadhh"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="lsftc"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="winner"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="luckycowvotes"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="badonkadunktank"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="s17lsfyl"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="s17lsfylresults"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="heartinheritance"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid),
+.episode-panel[data-panel="pointceremony"] :is(.contestant-strip, .challenge-grid, .callout-grid, .reveal-board, .judging-grid, .mx-vote-grid) {
+  justify-content: center !important;
+  justify-items: center;
+}
+
+.comeback-intro-card,
+.comeback-choice-card,
+.comeback-return-card,
+.comeback-out-card,
+.comeback-quote-card,
+.reading-comeback-card,
+.reading-comeback-results-card,
+.first-sim-lalaparuza-comeback-card,
+.first-sim-revenge-comeback-card,
+.first-sim-gwag-comeback-card,
+.porkchop-loading-dock-card,
+.porkchop-chop-reveal,
+.rate-queen-intro-card,
+.split-s14-return-card,
+.finale-section-intro,
+.all-winners-finale-section,
+.all-winners-finalists-card,
+.all-winners-block-reveal,
+.jury-top-two-announcement,
+.jury-finale-results,
+.cunt-test-part-block,
+.cunt-test-round-summary,
+.cunt-test-bottom-two-card,
+.cunt-test-lip-sync-intro,
+.lalaparuza-rules-card,
+.lalaparuza-return-summary,
+.fame-games-finale-panel,
+.fame-games-advantage-box,
+.golden-beaver-card,
+.golden-beaver-save-line,
+.rumocracy-card,
+.wildcard-lottery-intro,
+.wildcard-reveal-card,
+.twist-info-panel,
+.twist-result-panel {
+  width: min(900px, 100%) !important;
+  margin-inline: auto !important;
+  padding: 14px 16px !important;
+  border: 1px solid #303239 !important;
+  border-radius: 13px !important;
+  background: #17181c !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-align: center !important;
+}
+
+.comeback-intro-card::before,
+.comeback-choice-card::before,
+.comeback-return-card::before,
+.comeback-out-card::before,
+.reading-comeback-card::before,
+.porkchop-loading-dock-card::before,
+.rate-queen-intro-card::before,
+.finale-section-intro::before,
+.all-winners-finale-section::before,
+.cunt-test-part-block::before,
+.lalaparuza-rules-card::before,
+.fame-games-finale-panel::before,
+.golden-beaver-card::before,
+.rumocracy-card::before,
+.wildcard-reveal-card::before {
+  display: none !important;
+}
+
+.comeback-intro-card :is(h3, h4, p),
+.comeback-choice-card :is(h3, h4, p),
+.comeback-return-card :is(h3, h4, p),
+.comeback-out-card :is(h3, h4, p),
+.comeback-quote-card :is(h3, h4, p),
+.reading-comeback-card :is(h3, h4, p),
+.reading-comeback-results-card :is(h3, h4, p),
+.porkchop-loading-dock-card :is(h3, h4, p),
+.porkchop-chop-reveal :is(h3, h4, p),
+.rate-queen-intro-card :is(h3, h4, p),
+.split-s14-return-card :is(h3, h4, p),
+.finale-section-intro :is(h3, h4, p),
+.all-winners-finale-section :is(h3, h4, p),
+.all-winners-finalists-card :is(h3, h4, p),
+.all-winners-block-reveal :is(h3, h4, p),
+.jury-top-two-announcement :is(h3, h4, p),
+.jury-finale-results :is(h3, h4, p),
+.cunt-test-part-block :is(h3, h4, p),
+.cunt-test-round-summary :is(h3, h4, p),
+.cunt-test-bottom-two-card :is(h3, h4, p),
+.cunt-test-lip-sync-intro :is(h3, h4, p),
+.lalaparuza-rules-card :is(h3, h4, p),
+.lalaparuza-return-summary :is(h3, h4, p),
+.fame-games-finale-panel :is(h3, h4, p),
+.fame-games-advantage-box :is(h3, h4, p),
+.golden-beaver-card :is(h3, h4, p),
+.golden-beaver-save-line :is(h3, h4, p),
+.rumocracy-card :is(h3, h4, p),
+.wildcard-lottery-intro :is(h3, h4, p),
+.wildcard-reveal-card :is(h3, h4, p),
+.twist-info-panel :is(h3, h4, p),
+.twist-result-panel :is(h3, h4, p) {
+  max-width: 720px;
+  margin-inline: auto !important;
+  text-align: center !important;
+  text-wrap: balance;
+}
+
+.comeback-vote-grid,
+.comeback-small-grid,
+.comeback-candidates,
+.reading-comeback-candidates,
+.porkchop-vote-grid,
+.porkchop-group-grid,
+.rate-queen-ballots-grid,
+.jury-ballot-grid,
+.jury-score-grid,
+.jury-total-grid,
+.cunt-test-performance-grid,
+.wildcard-candidate-strip,
+.lalaparuza-round-list,
+.lip-sync-only-lalaparuza-list {
+  width: min(980px, 100%);
+  margin-inline: auto !important;
+  justify-content: center !important;
+  justify-items: center !important;
+  gap: 10px !important;
+}
+
+.comeback-vote-card,
+.porkchop-vote-card,
+.rate-queen-ballot-card,
+.jury-ballot-card,
+.jury-score-card,
+.jury-mx-vote-card,
+.wildcard-card,
+.tournament-slot-card,
+.cunt-test-winner-card {
+  border: 1px solid #303239 !important;
+  border-radius: 12px !important;
+  background: #17181c !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.crown-section,
+.all-winners-finale-section,
+.jury-finale-results,
+.finale-result-row,
+.finalist-strip,
+.comeback-returnee-reveal,
+.comeback-return-card,
+.comeback-out-card,
+.heart-inheritance-flow,
+.roscon-lipsync-reveal {
+  justify-content: center !important;
+  justify-items: center !important;
+  text-align: center !important;
+}
+
+@media (max-width: 720px) {
+  .season-record-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 16px;
+  }
+
+  .season-record-winners,
+  .season-record-portraits,
+  .season-record-names {
+    justify-self: center;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+.lip-sync-reveal-unit {
+  position: relative;
+  overflow: hidden;
+}
+
+.lip-sync-reveal-unit[hidden],
+.after-lip-sync-sequence[hidden],
+.comeback-battle-heading[hidden],
+.porkchop-battle-heading[hidden] {
+  display: none !important;
+}
+
+.lip-sync-reveal-actions {
+  margin-top: 16px;
+}
+
+.lip-sync-comment-card {
+  transition: border-color .32s ease, box-shadow .32s ease, opacity .32s ease, filter .32s ease, transform .32s ease;
+}
+
+.lip-sync-comment-card.is-lip-sync-winner,
+.lip-sync-reveal-unit.is-result-revealed .lip-sync-comment-card.is-lip-sync-winner {
+  border-color: rgba(72, 243, 169, 1) !important;
+  outline: 3px solid rgba(72, 243, 169, .92);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px rgba(72, 243, 169, .14), 0 14px 30px rgba(26, 180, 116, .22) !important;
+  transform: translateY(-2px);
+}
+
+.lip-sync-comment-card.is-lip-sync-loser {
+  opacity: .46;
+  filter: grayscale(1) saturate(.15);
+}
+
+.is-final-crown-lip-sync {
+  isolation: isolate;
+}
+
+.crown-typing-line {
+  width: 0;
+  max-width: 100%;
+  margin: 8px auto 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid rgba(255, 209, 102, .9);
+  color: var(--ink-strong);
+  font-family: var(--display);
+  font-size: clamp(20px, 3vw, 34px);
+  font-weight: 900;
+  letter-spacing: -.02em;
+  animation: crownTyping 1.7s steps(29, end) forwards, crownCaret .65s step-end infinite;
+}
+
+@keyframes crownTyping {
+  from { width: 0; }
+  to { width: 29ch; }
+}
+
+@keyframes crownCaret {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: rgba(255, 209, 102, .95); }
+}
+
+.is-final-crown-lip-sync.is-result-revealed .is-crown-winner-target,
+.is-final-crown-lip-sync.is-result-revealed .is-crown-loser-target {
+  transition: border-color .5s ease, box-shadow .5s ease, opacity .5s ease, filter .5s ease, transform .5s ease;
+}
+
+.is-final-crown-lip-sync.is-crown-complete .is-crown-winner-target {
+  border-color: rgba(255, 209, 102, 1);
+  box-shadow: 0 0 0 3px rgba(255, 209, 102, .42), 0 0 36px rgba(255, 209, 102, .42), 0 18px 38px rgba(0, 0, 0, .28);
+  transform: translateY(-4px) scale(1.015);
+}
+
+.is-final-crown-lip-sync.is-crown-complete .is-crown-loser-target {
+  opacity: .38;
+  filter: grayscale(1) saturate(.1);
+}
+
+.crown-winner-message {
+  position: relative;
+  z-index: 3;
+  margin: 18px auto 4px;
+  opacity: 0;
+  transform: translateY(8px);
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: clamp(18px, 2.4vw, 28px);
+  font-weight: 900;
+  text-align: center;
+  transition: opacity .45s ease, transform .45s ease;
+}
+
+.is-final-crown-lip-sync.is-crown-complete .crown-winner-message {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.crown-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.crown-confetti i {
+  position: absolute;
+  left: 50%;
+  bottom: 15%;
+  width: 8px;
+  height: 13px;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(-50%, 0) rotate(0deg);
+}
+
+.crown-confetti i:nth-child(5n + 1) { background: #ffd166; }
+.crown-confetti i:nth-child(5n + 2) { background: #ff4fd8; }
+.crown-confetti i:nth-child(5n + 3) { background: #ffffff; }
+.crown-confetti i:nth-child(5n + 4) { background: #67e8f9; }
+.crown-confetti i:nth-child(5n) { background: #a78bfa; }
+
+.is-final-crown-lip-sync.is-crown-complete .crown-confetti i {
+  animation: crownConfettiBurst 1.55s cubic-bezier(.17, .72, .22, 1) var(--confetti-delay) both;
+}
+
+@keyframes crownConfettiBurst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 20px) rotate(0deg) scale(.65);
+  }
+  12% { opacity: 1; }
+  72% { opacity: .95; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + (var(--confetti-x) * 5px)), -360px) rotate(calc(360deg + (var(--confetti-index) * 19deg))) scale(1);
+  }
+}
+
+@media (max-width: 680px) {
+  .crown-typing-line {
+    white-space: normal;
+    width: auto;
+    border-right: 0;
+    animation: crownTextFade .7s ease both;
+  }
+
+  @keyframes crownTextFade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crown-typing-line,
+  .is-final-crown-lip-sync.is-crown-complete .crown-confetti i {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+.lip-sync-comment-card.is-lip-sync-loser {
+  opacity: .68;
+  filter: none;
+}
+
+.lip-sync-comment-card.is-lip-sync-loser .avatar,
+.is-final-crown-lip-sync.is-crown-complete .is-crown-loser-target .avatar {
+  opacity: .42;
+  filter: grayscale(1) saturate(.08);
+}
+
+.is-final-crown-lip-sync.is-crown-complete .is-crown-loser-target {
+  opacity: .68;
+  filter: none;
+}
+
+.lip-sync-local-result-message {
+  max-width: 760px;
+  margin: 16px auto 2px;
+  color: var(--ink-strong);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.porkchop-group-grid {
+  grid-template-columns: repeat(2, minmax(280px, 470px)) !important;
+  justify-content: center !important;
+  justify-items: stretch !important;
+  align-items: stretch;
+}
+
+.porkchop-group-card {
+  width: 100%;
+  text-align: center;
+}
+
+.porkchop-group-card .contestant-strip {
+  width: 100%;
+  justify-content: center !important;
+  align-content: flex-start;
+}
+
+.season-winner-reveal {
+  position: relative;
+  width: min(920px, 100%);
+  margin-inline: auto;
+  padding: clamp(18px, 3vw, 30px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 20px;
+  background: rgba(20, 21, 25, .78);
+  text-align: center;
+  isolation: isolate;
+}
+
+.winner-typing-line {
+  width: 0;
+  max-width: 100%;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--ink-strong);
+  font-family: var(--display);
+  font-size: clamp(22px, 3vw, 36px);
+  font-weight: 900;
+  letter-spacing: -.025em;
+  animation: winnerLetters 1.7s steps(29, end) forwards;
+}
+
+@keyframes winnerLetters {
+  from { width: 0; }
+  to { width: 29ch; }
+}
+
+.is-winner-complete .winner-typing-line {
+  width: 29ch;
+  animation: none;
+}
+
+.winner-reveal-contestants {
+  position: relative;
+  z-index: 3;
+  justify-content: center !important;
+  gap: clamp(14px, 2vw, 24px);
+}
+
+.winner-reveal-contestant {
+  flex-basis: 150px !important;
+  transition: border-color .48s ease, box-shadow .48s ease, opacity .48s ease, transform .48s ease;
+}
+
+.winner-reveal-contestant .avatar {
+  width: 104px;
+  height: 104px;
+  transition: filter .48s ease, opacity .48s ease;
+}
+
+.is-winner-complete .is-season-winner-target {
+  border-color: rgba(255, 209, 102, 1) !important;
+  box-shadow: 0 0 0 3px rgba(255, 209, 102, .34), 0 0 34px rgba(255, 209, 102, .32) !important;
+  transform: translateY(-3px);
+}
+
+.is-winner-complete .is-season-runner-up-target {
+  opacity: .58;
+}
+
+.is-winner-complete .is-season-runner-up-target .avatar {
+  opacity: .48;
+  filter: grayscale(1) saturate(.08);
+}
+
+.season-winner-message {
+  position: relative;
+  z-index: 4;
+  margin: 20px auto 0;
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: clamp(18px, 2.4vw, 28px);
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: center;
+  animation: winnerMessageIn .5s ease both;
+}
+
+@keyframes winnerMessageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.season-winner-reveal .crown-confetti {
+  z-index: 2;
+}
+
+.is-winner-complete .crown-confetti i {
+  animation: crownConfettiBurst 1.55s cubic-bezier(.17, .72, .22, 1) var(--confetti-delay) both;
+}
+
+.lsftc-final-performance-wrap[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  .porkchop-group-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .winner-typing-line,
+  .is-winner-complete .winner-typing-line {
+    width: auto;
+    white-space: normal;
+    animation: winnerTextFade .7s ease both;
+  }
+
+  @keyframes winnerTextFade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .winner-typing-line,
+  .is-winner-complete .crown-confetti i,
+  .season-winner-message {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+
+
+.challenge-grid > .after-lip-sync-sequence {
+  grid-column: 1 / -1;
+  width: min(1040px, 100%);
+  margin-inline: auto;
+  justify-self: center;
+}
+
+.after-lip-sync-sequence {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.after-lip-sync-sequence .porkchop-group-grid {
+  width: min(920px, 100%) !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  justify-content: center !important;
+  justify-items: stretch !important;
+  margin-inline: auto !important;
+}
+
+.after-lip-sync-sequence .porkchop-group-card {
+  min-width: 0;
+  width: 100%;
+  margin-inline: auto;
+}
+
+.after-lip-sync-sequence .porkchop-group-card .contestant-strip {
+  width: 100%;
+  margin-inline: auto !important;
+  justify-content: center !important;
+  justify-items: center !important;
+}
+
+.primary-btn,
+.secondary-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  vertical-align: middle;
+}
+
+.secondary-btn.dropdown-summary {
+  justify-content: space-between !important;
+}
+
+.global-winner-confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.global-winner-confetti i {
+  position: absolute;
+  left: var(--confetti-left);
+  bottom: -28px;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translate(-50%, 0) rotate(0deg) scale(.7);
+}
+
+.global-winner-confetti i:nth-child(6n + 1) { background: #ffd166; }
+.global-winner-confetti i:nth-child(6n + 2) { background: #ff4fd8; }
+.global-winner-confetti i:nth-child(6n + 3) { background: #ffffff; }
+.global-winner-confetti i:nth-child(6n + 4) { background: #67e8f9; }
+.global-winner-confetti i:nth-child(6n + 5) { background: #a78bfa; }
+.global-winner-confetti i:nth-child(6n) { background: #48f3a9; }
+
+.global-winner-confetti.is-active i {
+  animation: globalWinnerConfetti var(--confetti-duration) cubic-bezier(.13, .7, .24, 1) var(--confetti-delay) both;
+}
+
+@keyframes globalWinnerConfetti {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 26px) rotate(0deg) scale(.65);
+  }
+  8% { opacity: 1; }
+  74% { opacity: 1; }
+  88% { opacity: .92; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + (var(--confetti-drift) * 1vw)), -112vh) rotate(calc(700deg + (var(--confetti-index) * 21deg))) scale(1);
+  }
+}
+
+@media (max-width: 760px) {
+  .after-lip-sync-sequence .porkchop-group-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-winner-confetti.is-active i {
+    animation-duration: .01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
