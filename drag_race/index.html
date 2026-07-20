@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=35" />
+  <link rel="stylesheet" href="style.css?v=48" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=35" defer></script>
+  <script src="simulator.js?v=48" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -52,9 +52,18 @@
             </div>
 
             <div class="field-grid setup-core-grid">
-              <label class="field field-wide">
+              <label class="field season-name-field">
                 <span>Season Name</span>
                 <input type="text" id="seasonName" value="Fantasy Drag Race">
+              </label>
+
+              <label class="field game-mode-field">
+                <span>Game Mode</span>
+                <select id="modeSelect">
+                  <option value="viewer">Viewer Mode</option>
+                  <option value="rupaul">RuPaul Mode [BETA]</option>
+                </select>
+                <small class="field-help" id="modeHelp"></small>
               </label>
 
               <label class="field">
@@ -95,7 +104,7 @@
                   <option value="regular_finale">Regular Finale</option>
                   <option value="top2_finale">Top 2 Finale</option>
                   <option value="lsftc">Lip Sync for The Crown</option>
-                  <option value="jury_finale">Jury Finale</option>
+                  <option value="jury_finale">Jury</option>
                   <option value="lsftf">Lip Sync for The Finale</option>
                   <option value="cunt_test">The C.U.N.T.-test</option>
                 </select>
@@ -834,63 +843,71 @@
 
   <dialog class="custom-contestant-modal" id="customContestantModal">
     <form method="dialog" class="custom-contestant-form" id="customContestantForm">
-      <div class="modal-head custom-modal-head">
-        <div>
-          <p class="eyebrow">Custom Contestant</p>
-          <h3>Create or Edit Contestant</h3>
+      <header class="modal-head custom-modal-head">
+        <div class="custom-modal-title">
+          <p class="eyebrow">Custom Cast</p>
+          <h3 id="customContestantModalTitle">New Contestant</h3>
         </div>
-        <button type="button" class="icon-close" id="closeCustomContestantModal">×</button>
-      </div>
+        <button type="button" class="icon-close" id="closeCustomContestantModal" aria-label="Close custom contestant editor">×</button>
+      </header>
 
       <input type="hidden" id="customContestantId">
 
-      <div class="custom-contestant-builder">
-        <aside class="custom-preview-panel">
-          <div class="custom-preview-title">
-            <p class="eyebrow">Preview</p>
-            <span class="meta-chip">Custom</span>
-          </div>
+      <div class="custom-contestant-workspace">
+        <aside class="custom-photo-card">
           <div class="modal-profile custom-image-preview" id="customImagePreview"></div>
+
+          <div class="custom-image-source-switch" role="group" aria-label="Image source">
+            <button type="button" class="custom-source-btn is-active" data-custom-image-source="url" aria-pressed="true">Insert URL</button>
+            <button type="button" class="custom-source-btn" data-custom-image-source="upload" aria-pressed="false">Upload</button>
+          </div>
+
+          <div class="custom-source-panel" id="customUrlSourcePanel">
+            <label class="field custom-image-url-field">
+              <span>Direct image URL</span>
+              <input type="url" id="customImageUrl" placeholder="https://example.com/photo.jpg" autocomplete="off">
+            </label>
+          </div>
+
+          <div class="custom-source-panel custom-upload-panel" id="customUploadSourcePanel" hidden>
+            <input type="file" id="customImageFile" accept="image/png,image/jpeg,image/webp" hidden>
+            <button type="button" class="secondary-btn custom-upload-btn" id="customImageUploadBtn">Choose Image</button>
+            <span class="custom-upload-filename" id="customImageFileName">No file selected</span>
+          </div>
+
+          <small class="custom-image-status" id="customImageStatus" aria-live="polite"></small>
         </aside>
 
-        <section class="custom-edit-panel">
-          <div class="field-grid custom-contestant-fields">
+        <section class="custom-details-card">
+          <div class="custom-name-grid">
             <label class="field">
               <span>Full Name</span>
-              <input type="text" id="customFullName" placeholder="e.g. Aurora Vex" required>
+              <input type="text" id="customFullName" placeholder="Aurora Vex" required autocomplete="off">
             </label>
             <label class="field">
               <span>Nickname</span>
-              <input type="text" id="customNickname" placeholder="e.g. Aurora">
-            </label>
-            <label class="field custom-image-url-field">
-              <span>Photo URL</span>
-              <div class="custom-url-control">
-                <span class="custom-url-pill">URL</span>
-                <input type="url" id="customImageUrl" placeholder="https://example.com/photo.jpg">
-              </div>
-              <small class="field-help">Paste a direct image link. Empty or broken links use the default placeholder.</small>
+              <input type="text" id="customNickname" placeholder="Aurora" autocomplete="off">
             </label>
           </div>
+
+          <div class="custom-skills-head">
+            <div>
+              <p class="eyebrow">Skills</p>
+              <small class="field-help">1–15</small>
+            </div>
+            <button type="button" class="secondary-btn custom-randomize-skills-btn" id="randomizeCustomSkillsBtn">Randomize</button>
+          </div>
+          <div class="skills-stack custom-skills-stack" id="customSkillsStack"></div>
         </section>
       </div>
 
-      <section class="custom-skills-card">
-        <div class="custom-skills-head">
-          <div>
-            <p class="eyebrow">Skills</p>
-            <small class="field-help">Set each skill from 1 to 15.</small>
-          </div>
-          <button type="button" class="secondary-btn custom-randomize-skills-btn" id="randomizeCustomSkillsBtn">Randomize Skills</button>
-        </div>
-        <div class="skills-stack custom-skills-stack" id="customSkillsStack"></div>
-      </section>
-
-      <div class="modal-actions custom-contestant-actions">
+      <footer class="modal-actions custom-contestant-actions">
         <button type="button" class="secondary-btn danger-lite" id="deleteCustomContestantBtn" hidden>Delete</button>
-        <button type="button" class="secondary-btn" id="cancelCustomContestantBtn">Cancel</button>
-        <button type="submit" class="primary-btn">Save Contestant</button>
-      </div>
+        <div class="custom-action-group">
+          <button type="button" class="secondary-btn" id="cancelCustomContestantBtn">Cancel</button>
+          <button type="submit" class="primary-btn" id="saveCustomContestantBtn">Save Contestant</button>
+        </div>
+      </footer>
     </form>
   </dialog>
 
