@@ -30,7 +30,8 @@
   ];
 
   const modeDescriptions = {
-    viewer: "Viewer mode simulates the season automatically and reveals the story section by section."
+    viewer: "Viewer mode simulates the season automatically and reveals the story section by section.",
+    rupaul: "You play as RuPaul, where you make all of the decisions, from challenges to eliminations. <strong>BETA:</strong> This mode is in beta testing and is still being fixed."
   };
 
   const eliminationFormatDescriptions = {
@@ -61,7 +62,7 @@
     regular_finale: "Finalists perform final lip syncs, and the winner is chosen.",
     top2_finale: "Finalists are cut down to a top two in the finale before the final lip sync.",
     lsftc: "Four finalists compete in a Lip Sync for the Crown tournament.",
-    jury_finale: "Eliminated contestants vote for two finalists.",
+    jury_finale: "A jury of eligible eliminated contestants ranks a Top 2 with 2-point and 1-point ballots. Works with 3 to 5 finalists.",
     lsftf: "At top four, a penultimate lalaparuza eliminates one queen before the finale.",
     cunt_test: "At the Top 5, three maxi challenges each send one contestant to the finale. The remaining two lip sync for the final Top 4 spot, then the finale plays as a Top 2 Finale."
   };
@@ -650,12 +651,20 @@
     customContestantModal: document.getElementById("customContestantModal"),
     customContestantForm: document.getElementById("customContestantForm"),
     customContestantId: document.getElementById("customContestantId"),
+    customContestantModalTitle: document.getElementById("customContestantModalTitle"),
     customFullName: document.getElementById("customFullName"),
     customNickname: document.getElementById("customNickname"),
     customImageUrl: document.getElementById("customImageUrl"),
+    customImageFile: document.getElementById("customImageFile"),
+    customImageUploadBtn: document.getElementById("customImageUploadBtn"),
+    customImageFileName: document.getElementById("customImageFileName"),
+    customImageStatus: document.getElementById("customImageStatus"),
+    customUrlSourcePanel: document.getElementById("customUrlSourcePanel"),
+    customUploadSourcePanel: document.getElementById("customUploadSourcePanel"),
     customImagePreview: document.getElementById("customImagePreview"),
     customSkillsStack: document.getElementById("customSkillsStack"),
     randomizeCustomSkillsBtn: document.getElementById("randomizeCustomSkillsBtn"),
+    saveCustomContestantBtn: document.getElementById("saveCustomContestantBtn"),
     closeCustomContestantModal: document.getElementById("closeCustomContestantModal"),
     cancelCustomContestantBtn: document.getElementById("cancelCustomContestantBtn"),
     deleteCustomContestantBtn: document.getElementById("deleteCustomContestantBtn"),
@@ -1110,19 +1119,50 @@
     };
   }
 
+  function normalizeTournamentBracketSafePlacements(season) {
+    if (!season || season.config?.eliminationFormat !== "tournament") return false;
+    let changed = false;
+    (season.episodes || []).forEach((episode) => {
+      if (!episode?.tournamentBracketId) return;
+      const formerBottomIds = (episode.bottomIds || []).slice();
+      if (!formerBottomIds.length) return;
+      episode.safeIds = [...new Set([...(episode.safeIds || []), ...formerBottomIds])];
+      episode.bottomIds = [];
+      episode.notes = (episode.notes || []).map((note) => String(note || "").replace(
+        "The Top 2 lip sync for the legacy, and everyone else votes in the Point Ceremony.",
+        "The Top 2 lip sync for the legacy, and everyone else is safe and votes in the Point Ceremony."
+      ));
+      formerBottomIds.forEach((id) => {
+        const entry = [...(season.stats?.[id]?.track || [])].reverse().find((item) => item.label === episode.label);
+        if (!entry || !/^BTM\d*$/.test(String(entry.token || ""))) return;
+        entry.token = "SAFE";
+        entry.display = "SAFE";
+        entry.extraClasses = (entry.extraClasses || []).filter((className) => !/^token-btm/.test(String(className || "")));
+        const stats = season.stats?.[id];
+        if (stats) {
+          stats.bottoms = Math.max(0, Number(stats.bottoms || 0) - 1);
+          stats.safes = Number(stats.safes || 0) + 1;
+        }
+      });
+      changed = true;
+    });
+    return changed;
+  }
+
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       const parsed = JSON.parse(raw);
       if (parsed.config) state.config = { ...state.defaults, ...parsed.config };
-      state.config.mode = "viewer";
+      if (!["viewer", "rupaul"].includes(state.config.mode)) state.config.mode = "viewer";
       if (state.config.seasonName === "Drag Race Reimagined") state.config.seasonName = state.defaults.seasonName;
-      if (parsed.season?.config) parsed.season.config.mode = "viewer";
+      if (parsed.season?.config && !["viewer", "rupaul"].includes(parsed.season.config.mode)) parsed.season.config.mode = "viewer";
       if (Array.isArray(parsed.selected)) state.selected = parsed.selected;
       if (parsed.season) {
         state.season = parsed.season;
         ensureSeasonTwistState(state.season);
+        normalizeTournamentBracketSafePlacements(state.season);
       }
       if (Number.isInteger(parsed.currentEpisodeIndex)) state.currentEpisodeIndex = parsed.currentEpisodeIndex;
       if (parsed.currentStep) state.currentStep = parsed.currentStep;
@@ -1155,40 +1195,112 @@
     return src;
   }
 
-  async function createExportSafeImage(src) {
-    const value = normalizeCustomImageUrl(src);
-    if (!value || value === PLACEHOLDER || value.startsWith("data:")) return value;
+  function isEmbeddedCustomImage(value) {
+    return /^data:image\//i.test(String(value || "").trim());
+  }
+
+  let customImageDraft = {
+    mode: "url",
+    url: "",
+    convertedUrl: "",
+    urlData: "",
+    uploadData: "",
+    uploadFileName: ""
+  };
+
+  function loadBlobImage(blob) {
+    return new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(blob);
+      const image = new Image();
+      image.onload = () => resolve({
+        drawable: image,
+        width: image.naturalWidth,
+        height: image.naturalHeight,
+        cleanup: () => URL.revokeObjectURL(objectUrl)
+      });
+      image.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error("The selected file is not a readable image."));
+      };
+      image.src = objectUrl;
+    });
+  }
+
+  async function compressCustomImageBlob(blob) {
+    if (!(blob instanceof Blob) || !blob.size) throw new Error("The image file is empty.");
+    if (blob.size > 12 * 1024 * 1024) throw new Error("The image is too large. Choose a file under 12 MB.");
+    if (blob.type && !/^image\//i.test(blob.type)) throw new Error("Choose a JPG, PNG, or WebP image.");
+
+    let source = null;
     try {
-      const response = await fetch(value, { mode: "cors", credentials: "omit" });
-      if (!response.ok) throw new Error("Image request failed");
-      const blob = await response.blob();
-      const bitmap = await createImageBitmap(blob);
+      if (typeof createImageBitmap === "function") {
+        const bitmap = await createImageBitmap(blob);
+        source = {
+          drawable: bitmap,
+          width: bitmap.width,
+          height: bitmap.height,
+          cleanup: () => bitmap.close?.()
+        };
+      } else {
+        source = await loadBlobImage(blob);
+      }
+
+      if (!source.width || !source.height) throw new Error("The image has invalid dimensions.");
       const maxSize = 420;
-      const ratio = Math.min(1, maxSize / Math.max(bitmap.width, bitmap.height));
+      const ratio = Math.min(1, maxSize / Math.max(source.width, source.height));
       const canvas = document.createElement("canvas");
-      canvas.width = Math.max(1, Math.round(bitmap.width * ratio));
-      canvas.height = Math.max(1, Math.round(bitmap.height * ratio));
-      const context = canvas.getContext("2d");
-      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-      bitmap.close?.();
-      return canvas.toDataURL("image/webp", 0.86);
-    } catch (error) {
-      return value;
+      canvas.width = Math.max(1, Math.round(source.width * ratio));
+      canvas.height = Math.max(1, Math.round(source.height * ratio));
+      const context = canvas.getContext("2d", { alpha: true });
+      if (!context) throw new Error("The browser could not prepare the image.");
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
+      context.drawImage(source.drawable, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/webp", 0.86);
+      if (!dataUrl || dataUrl === "data:,") throw new Error("The browser could not save the image.");
+      return dataUrl;
+    } finally {
+      source?.cleanup?.();
     }
+  }
+
+  async function createExportSafeImage(src) {
+    const value = String(src || "").trim();
+    if (!value || value === PLACEHOLDER) return PLACEHOLDER;
+    if (isEmbeddedCustomImage(value)) return value;
+
+    let response;
+    try {
+      response = await fetch(value, { mode: "cors", credentials: "omit", cache: "no-store" });
+    } catch (error) {
+      const wrapped = new Error("This image host does not allow the simulator to save the picture. Upload the image instead, or use a direct link from a host that allows cross-origin access.");
+      wrapped.cause = error;
+      throw wrapped;
+    }
+    if (!response.ok) throw new Error(`The image could not be downloaded (${response.status}).`);
+    const blob = await response.blob();
+    if (blob.type && !/^image\//i.test(blob.type)) throw new Error("The URL did not return an image. Use a direct link to a JPG, PNG, or WebP file.");
+    return await compressCustomImageBlob(blob);
   }
 
   function makeCustomContestant(raw = {}, index = 0) {
     const fullName = String(raw.fullName || raw.name || raw.nickname || `Custom Contestant ${index + 1}`).trim();
     const nickname = String(raw.nickname || fullName).trim();
-    const image = normalizeCustomImageUrl(raw.image || raw.imageUrl || raw.photo || "");
+    const storedImage = normalizeCustomImageUrl(raw.image || raw.exportImage || raw.imageUrl || raw.photo || "");
+    const rawSourceUrl = String(raw.imageUrl || "").trim();
+    const imageUrl = rawSourceUrl && !isEmbeddedCustomImage(rawSourceUrl) && rawSourceUrl !== PLACEHOLDER
+      ? rawSourceUrl
+      : (!isEmbeddedCustomImage(storedImage) && storedImage !== PLACEHOLDER ? storedImage : "");
+    const exportImage = normalizeCustomImageUrl(raw.exportImage || storedImage);
+    const image = isEmbeddedCustomImage(exportImage) ? exportImage : storedImage;
     return {
       id: String(raw.id || `custom_${Date.now()}_${index}`),
       name: fullName,
       fullName,
       nickname,
       image,
-      imageUrl: image,
-      exportImage: normalizeCustomImageUrl(raw.exportImage || image),
+      imageUrl,
+      exportImage,
       primaryShow: "Custom",
       shows: ["Custom"],
       seasons: ["Custom"],
@@ -1222,9 +1334,11 @@
   function saveCustomContestants() {
     try {
       localStorage.setItem(CUSTOM_CONTESTANTS_KEY, JSON.stringify(state.customContestants.map(makeCustomContestant)));
+      return true;
     } catch (err) {
       console.warn("Failed to save custom contestants", err);
-      alert("Could not save custom contestants in this browser.");
+      alert("Could not save the custom contestant. Browser storage may be full; try a smaller image or remove an unused custom contestant.");
+      return false;
     }
   }
 
@@ -1388,7 +1502,7 @@
 
   function readConfigFromInputs() {
     const selectedEliminationFormat = els.eliminationFormatSelect?.value || "regular";
-    const selectedMode = "viewer";
+    const selectedMode = els.modeSelect?.value || "viewer";
     state.config = {
       ...state.config,
       seasonName: els.seasonName?.value?.trim() || state.defaults.seasonName,
@@ -1424,7 +1538,6 @@
       tournamentPreMergeWildcard: !!els.tournamentPreMergeWildcard?.checked,
       tournamentPreFinaleWildcard: !!els.tournamentPreFinaleWildcard?.checked
     };
-    state.config.mode = "viewer";
 
     if (state.config.disableDoubleShantaysSashays && state.config.forceDoubleShantay) {
       state.config.forceDoubleShantay = false;
@@ -1439,9 +1552,12 @@
       state.config.finalistSize = 4;
       if (els.finalistSize) els.finalistSize.value = 4;
     }
+    if (state.config.finaleType === "jury_finale" && Number(state.config.finalistSize || 0) < 3) {
+      state.config.finalistSize = 3;
+      if (els.finalistSize) els.finalistSize.value = 3;
+    }
 
     if (state.config.eliminationFormat === "teams") {
-      state.config.mode = "viewer";
       state.config.premiereType = "regular";
       state.config.finaleType = "top2_finale";
       state.config.finalistSize = 3;
@@ -1559,8 +1675,7 @@
   function writeConfigToInputs() {
     const c = state.config;
     if (els.seasonName) els.seasonName.value = c.seasonName;
-    c.mode = "viewer";
-    if (els.modeSelect) els.modeSelect.value = "viewer";
+    if (els.modeSelect) els.modeSelect.value = c.mode || "viewer";
     if (els.eliminationFormatSelect) els.eliminationFormatSelect.value = c.eliminationFormat || "regular";
     if (els.premiereTypeSelect) els.premiereTypeSelect.value = c.premiereType;
     if (els.finaleTypeSelect) els.finaleTypeSelect.value = c.finaleType;
@@ -1601,16 +1716,17 @@
     const allWinners = (state.config.eliminationFormat || "regular") === "all_winners";
     const tournament = (state.config.eliminationFormat || "regular") === "tournament";
     const teams = (state.config.eliminationFormat || "regular") === "teams";
-    state.config.mode = "viewer";
-    if (els.modeSelect) {
-      els.modeSelect.disabled = true;
-      els.modeSelect.value = "viewer";
-    }
-    if (els.modeHelp) els.modeHelp.textContent = modeDescriptions.viewer || "";
+    if (els.modeSelect) els.modeSelect.disabled = false;
+    if (els.modeHelp) els.modeHelp.innerHTML = modeDescriptions[state.config.mode || "viewer"] || "";
+    if (els.finalistSize) els.finalistSize.min = state.config.finaleType === "jury_finale" ? "3" : "2";
     if (state.config.finaleType === "cunt_test") {
       state.config.finalistSize = 4;
       if (els.finalistSize) els.finalistSize.value = 4;
       if (els.finalistSizeValue) els.finalistSizeValue.textContent = 4;
+    } else if (state.config.finaleType === "jury_finale" && Number(state.config.finalistSize || 0) < 3) {
+      state.config.finalistSize = 3;
+      if (els.finalistSize) els.finalistSize.value = 3;
+      if (els.finalistSizeValue) els.finalistSizeValue.textContent = 3;
     }
     [els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames].forEach((el) => {
       if (el) el.disabled = allWinners || tournament || teams;
@@ -1759,6 +1875,7 @@
       return "";
     }
     if (config.finaleType === "lsftc" && config.finalistSize !== 4) return "Lip Sync for The Crown only works with 4 finalists.";
+    if (config.finaleType === "jury_finale" && ![3, 4, 5].includes(Number(config.finalistSize))) return "Jury only works with 3, 4, or 5 finalists.";
     if (config.finaleType === "lsftf" && config.finalistSize !== 4) return "Lip Sync for The Finale only works with 4 finalists.";
     if (config.finaleType === "cunt_test" && config.finalistSize !== 4) return "The C.U.N.T.-test only works with 4 finalists.";
     if (config.eliminationFormat === "golden_beaver" && ![4, 5].includes(Number(config.finalistSize))) return "Golden Beaver only works with 4 or 5 finalists.";
@@ -1937,14 +2054,92 @@
     els.skillModal.showModal?.();
   }
 
-  function renderCustomImagePreview(src) {
+  function setCustomImageStatus(message = "", stateName = "neutral") {
+    if (!els.customImageStatus) return;
+    els.customImageStatus.textContent = message;
+    els.customImageStatus.dataset.state = stateName;
+  }
+
+  function setCustomSaveBusy(busy, label = "Preparing Image…") {
+    if (!els.saveCustomContestantBtn) return;
+    els.saveCustomContestantBtn.disabled = !!busy;
+    els.saveCustomContestantBtn.textContent = busy ? label : "Save Contestant";
+  }
+
+  function renderCustomImagePreview(src, caption = "No image selected") {
     if (!els.customImagePreview) return;
     const image = normalizeCustomImageUrl(src);
     els.customImagePreview.dataset.image = image;
     els.customImagePreview.innerHTML = `
-      <img class="avatar sqr custom-preview-img" src="${escapeHtml(image)}" alt="Custom contestant photo preview" onerror="this.src='${PLACEHOLDER}'">
-      <span>${image === PLACEHOLDER ? "No image URL set" : "Image preview"}</span>
+      <div class="custom-preview-frame">
+        <img class="avatar sqr custom-preview-img" src="${escapeHtml(image)}" alt="Custom contestant photo preview">
+      </div>
+      <span>${escapeHtml(caption)}</span>
     `;
+    const previewImage = $("img", els.customImagePreview);
+    previewImage?.addEventListener("error", () => {
+      if (previewImage.src !== PLACEHOLDER) previewImage.src = PLACEHOLDER;
+      setCustomImageStatus("The image could not be previewed. Check the link or upload a file.", "error");
+    }, { once: true });
+  }
+
+  function refreshCustomImageDraftUi() {
+    const isUrl = customImageDraft.mode === "url";
+    const urlMatchesData = customImageDraft.urlData && customImageDraft.convertedUrl === customImageDraft.url;
+    const previewSource = isUrl
+      ? (urlMatchesData ? customImageDraft.urlData : customImageDraft.url)
+      : customImageDraft.uploadData;
+    const previewCaption = isUrl
+      ? (customImageDraft.url ? (urlMatchesData ? "Imported URL" : "URL preview") : "No image selected")
+      : (customImageDraft.uploadData ? customImageDraft.uploadFileName || "Uploaded image" : "No image selected");
+
+    renderCustomImagePreview(previewSource, previewCaption);
+    if (els.customImageFileName) {
+      els.customImageFileName.textContent = customImageDraft.uploadFileName || "No file selected";
+    }
+
+    if (isUrl) {
+      if (urlMatchesData) setCustomImageStatus("This URL has been imported and is ready for downloads.", "success");
+      else if (customImageDraft.url) setCustomImageStatus("The image will be imported and compressed when you save.", "neutral");
+      else setCustomImageStatus("Paste a direct image link, or switch to Upload.", "neutral");
+    } else if (customImageDraft.uploadData) {
+      setCustomImageStatus("The uploaded image is compressed and ready.", "success");
+    } else {
+      setCustomImageStatus("Choose a JPG, PNG, or WebP image up to 12 MB.", "neutral");
+    }
+  }
+
+  function setCustomImageSourceMode(mode) {
+    customImageDraft.mode = mode === "upload" ? "upload" : "url";
+    const isUrl = customImageDraft.mode === "url";
+    $all("[data-custom-image-source]", els.customContestantModal || document).forEach((button) => {
+      const active = button.dataset.customImageSource === customImageDraft.mode;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    if (els.customUrlSourcePanel) els.customUrlSourcePanel.hidden = !isUrl;
+    if (els.customUploadSourcePanel) els.customUploadSourcePanel.hidden = isUrl;
+    refreshCustomImageDraftUi();
+  }
+
+  async function handleCustomImageUpload(file) {
+    if (!file) return;
+    setCustomImageSourceMode("upload");
+    setCustomImageStatus("Compressing image…", "loading");
+    setCustomSaveBusy(true, "Processing Image…");
+    try {
+      const dataUrl = await compressCustomImageBlob(file);
+      customImageDraft.uploadData = dataUrl;
+      customImageDraft.uploadFileName = file.name || "Uploaded image";
+      refreshCustomImageDraftUi();
+    } catch (error) {
+      customImageDraft.uploadData = "";
+      customImageDraft.uploadFileName = "";
+      refreshCustomImageDraftUi();
+      setCustomImageStatus(error?.message || "The image could not be processed.", "error");
+    } finally {
+      setCustomSaveBusy(false);
+    }
   }
 
   function renderCustomSkillInputs(skills = {}) {
@@ -1980,45 +2175,123 @@
   function openCustomContestantModal(id = "") {
     const existing = (state.customContestants || []).map(makeCustomContestant).find((item) => item.id === id);
     if (!els.customContestantModal) return;
+
+    const storedImage = String(existing?.image || existing?.exportImage || "").trim();
+    const sourceUrl = String(existing?.imageUrl || (!isEmbeddedCustomImage(storedImage) && storedImage !== PLACEHOLDER ? storedImage : "")).trim();
+    const embeddedImage = isEmbeddedCustomImage(existing?.exportImage)
+      ? existing.exportImage
+      : (isEmbeddedCustomImage(storedImage) ? storedImage : "");
+    const initialMode = sourceUrl ? "url" : (embeddedImage ? "upload" : "url");
+
+    customImageDraft = {
+      mode: initialMode,
+      url: sourceUrl,
+      convertedUrl: sourceUrl && embeddedImage ? sourceUrl : "",
+      urlData: sourceUrl && embeddedImage ? embeddedImage : "",
+      uploadData: !sourceUrl && embeddedImage ? embeddedImage : "",
+      uploadFileName: !sourceUrl && embeddedImage ? "Saved image" : ""
+    };
+
     if (els.customContestantId) els.customContestantId.value = existing?.id || "";
+    if (els.customContestantModalTitle) els.customContestantModalTitle.textContent = existing ? "Edit Contestant" : "New Contestant";
     if (els.customFullName) els.customFullName.value = existing?.fullName || "";
     if (els.customNickname) els.customNickname.value = existing?.nickname || "";
-    if (els.customImageUrl) els.customImageUrl.value = existing?.image || "";
+    if (els.customImageUrl) els.customImageUrl.value = sourceUrl;
+    if (els.customImageFile) els.customImageFile.value = "";
     if (els.deleteCustomContestantBtn) els.deleteCustomContestantBtn.hidden = !existing;
-    renderCustomImagePreview(existing?.image || "");
+    setCustomSaveBusy(false);
+    setCustomImageSourceMode(initialMode);
     renderCustomSkillInputs(existing?.skills || {});
     els.customContestantModal.showModal?.();
+    requestAnimationFrame(() => els.customFullName?.focus?.());
   }
 
   function closeCustomContestantModal() {
     els.customContestantModal?.close?.();
     els.customContestantForm?.reset?.();
     if (els.customContestantId) els.customContestantId.value = "";
-    renderCustomImagePreview("");
+    if (els.customImageFile) els.customImageFile.value = "";
+    customImageDraft = {
+      mode: "url",
+      url: "",
+      convertedUrl: "",
+      urlData: "",
+      uploadData: "",
+      uploadFileName: ""
+    };
+    setCustomSaveBusy(false);
+    setCustomImageSourceMode("url");
   }
 
   async function saveCustomContestantFromForm() {
     const id = els.customContestantId?.value || `custom_${Date.now()}`;
     const fullName = String(els.customFullName?.value || "").trim();
     const nickname = String(els.customNickname?.value || "").trim() || fullName;
-    const image = normalizeCustomImageUrl(els.customImageUrl?.value || "");
     if (!fullName) {
       alert("Please enter a contestant name.");
+      els.customFullName?.focus?.();
       return false;
     }
+
+    let image = PLACEHOLDER;
+    let imageUrl = "";
+    if (customImageDraft.mode === "url") {
+      const url = String(els.customImageUrl?.value || customImageDraft.url || "").trim();
+      customImageDraft.url = url;
+      if (url) {
+        try {
+          setCustomImageStatus("Importing and compressing the image…", "loading");
+          setCustomSaveBusy(true, "Importing Image…");
+          if (customImageDraft.urlData && customImageDraft.convertedUrl === url) {
+            image = customImageDraft.urlData;
+          } else {
+            image = await createExportSafeImage(url);
+            customImageDraft.urlData = image;
+            customImageDraft.convertedUrl = url;
+          }
+          imageUrl = isEmbeddedCustomImage(url) ? "" : url;
+          refreshCustomImageDraftUi();
+        } catch (error) {
+          setCustomImageStatus(error?.message || "The URL image could not be imported.", "error");
+          setCustomSaveBusy(false);
+          return false;
+        }
+      }
+    } else if (customImageDraft.uploadData) {
+      image = customImageDraft.uploadData;
+    }
+
     const skills = {};
     $all("[data-custom-skill]", els.customSkillsStack).forEach((input) => {
       skills[input.dataset.customSkill] = clamp(Number(input.value), 1, 15);
     });
-    const exportImage = await createExportSafeImage(image);
-    const contestant = makeCustomContestant({ id, fullName, name: fullName, nickname, image, imageUrl: image, exportImage, skills, isCustom: true });
+
+    const contestant = makeCustomContestant({
+      id,
+      fullName,
+      name: fullName,
+      nickname,
+      image,
+      imageUrl,
+      exportImage: image,
+      skills,
+      isCustom: true
+    });
     const index = state.customContestants.findIndex((item) => item.id === id);
+    const previousContestant = index >= 0 ? state.customContestants[index] : null;
     if (index >= 0) state.customContestants[index] = contestant;
     else state.customContestants.push(contestant);
-    saveCustomContestants();
+    if (!saveCustomContestants()) {
+      if (index >= 0) state.customContestants[index] = previousContestant;
+      else state.customContestants = state.customContestants.filter((item) => item.id !== id);
+      setCustomImageStatus("The contestant could not be stored. Try a smaller image.", "error");
+      setCustomSaveBusy(false);
+      return false;
+    }
     state.season = null;
     hydrateRoster();
     saveState();
+    setCustomSaveBusy(false);
     return true;
   }
 
@@ -2077,10 +2350,14 @@
     });
   }
 
-  function setEpisodeStep(step, options = {}) {
+  async function setEpisodeStep(step, options = {}) {
     if (step === "__nextEpisode") {
       goToNextEpisode();
       return;
+    }
+    if (!options.skipRupaulGate && isRupaulMode() && currentEpisode()?.rupaulPending) {
+      const allowed = await ensureRupaulDecisionBeforeStep(step);
+      if (!allowed) return;
     }
     const panel = $(`.episode-panel[data-panel="${step}"]`);
     if (panel?.hidden) step = nextVisibleStep(step, 1) || nextVisibleStep(step, -1) || "status";
@@ -2412,6 +2689,7 @@
       usedChallengeIds: [],
       usedRunwayIds: [],
       usedLipSyncIds: [],
+      usedAssassinIds: [],
       usedTalentActIds: [],
       usedSnatchCharacterIds: [],
       relationships: {},
@@ -2426,6 +2704,7 @@
       lastDoubleChallengeWinEpisode: -99,
       teamJudgedEpisodes: 0,
       pairJudgedEpisodes: 0,
+      rupaulSlayersUsed: 0,
       nonElimTop2Used: false,
       everyoneBadUsed: false,
       legacyMassLipSyncUsed: false,
@@ -2483,7 +2762,11 @@
       comeback: null,
       comebackUsed: false,
       premiereChallengeType: "",
-      premiereChallengeIds: []
+      premiereChallengeIds: [],
+      rupaulTopFourRumixDone: false,
+      rupaulFameGamesDone: false,
+      rupaulAllWinnersFinalePrepared: false,
+      rupaulTournamentFinalePrepared: false
     };
     season.roscon = createRosconState(season);
     season.heartSuccessor = createHeartSuccessorState(season);
@@ -4030,6 +4313,2287 @@ Options: ${names}`, "") || "";
   }
 
 
+  /* RuPaul Mode: true episodic production flow */
+  function isRupaulMode(season = state.season) {
+    return (season?.config?.mode || state.config?.mode || "viewer") === "rupaul";
+  }
+
+  function rupaulQueenCard(id, selected = false, tone = "", disabled = false) {
+    const queen = state.season?.contestants?.[id] || state.roster.find((item) => item.id === id) || {};
+    return `<button class="rupaul-photo-choice ${selected ? "is-selected" : ""} ${tone ? `tone-${tone}` : ""}" type="button" data-id="${escapeHtml(id)}" ${disabled ? "disabled" : ""}><img src="${escapeHtml(queen.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(queen))}"><strong>${escapeHtml(fullDisplayName(queen))}</strong></button>`;
+  }
+
+  function rupaulTeamCard(group, selected = false, tone = "") {
+    const size = Math.max(1, (group.ids || []).length);
+    const columns = Math.min(size, 4);
+    return `<button class="rupaul-team-choice team-size-${Math.min(size, 6)} ${selected ? "is-selected" : ""} ${tone ? `tone-${tone}` : ""}" style="--rupaul-team-size:${size};--rupaul-team-cols:${columns}" type="button" data-team="${escapeHtml(group.name)}"><span class="rupaul-team-photos">${(group.ids || []).map((id) => {
+      const queen = state.season?.contestants?.[id] || {};
+      return `<img src="${escapeHtml(queen.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(queen))}">`;
+    }).join("")}</span><strong>${escapeHtml(group.name)}</strong></button>`;
+  }
+
+  function showRupaulModal(title, renderBody, setup) {
+    if (showRupaulModal.activePromise) return showRupaulModal.activePromise;
+    const promise = new Promise((resolve) => {
+      const backdrop = document.createElement("div");
+      backdrop.className = "rupaul-flow-backdrop";
+      const close = (value) => { backdrop.remove(); resolve(value); };
+      const render = () => {
+        const active = document.activeElement;
+        const restoreSearch = !!(active && backdrop.contains(active) && active.classList?.contains("rupaul-search"));
+        const selectionStart = restoreSearch ? active.selectionStart : null;
+        const selectionEnd = restoreSearch ? active.selectionEnd : null;
+        const listScroll = [...backdrop.querySelectorAll(".rupaul-scroll-list")].map((node) => node.scrollTop);
+        const typeScroll = backdrop.querySelector(".rupaul-challenge-types")?.scrollTop || 0;
+        const compactSelector = /runway|lip sync song|choose the song/i.test(title);
+        backdrop.innerHTML = `<div class="rupaul-flow-modal ${compactSelector ? "is-compact-selector" : ""}" role="dialog" aria-modal="true"><div class="rupaul-modal-head"><h3>${escapeHtml(title)}</h3>${state.season ? '<button class="secondary-btn rupaul-modal-stats" type="button">Statistics</button>' : ""}</div>${renderBody()}</div>`;
+        setup?.(backdrop, close, render);
+        backdrop.querySelector(".rupaul-modal-stats")?.addEventListener("click", () => {
+          close(null);
+          window.setTimeout(() => openStatsScreen(), 0);
+        });
+        [...backdrop.querySelectorAll(".rupaul-scroll-list")].forEach((node, index) => { node.scrollTop = listScroll[index] || 0; });
+        const typeList = backdrop.querySelector(".rupaul-challenge-types");
+        if (typeList) typeList.scrollTop = typeScroll;
+        if (restoreSearch) {
+          const input = backdrop.querySelector(".rupaul-search");
+          if (input) {
+            input.focus({ preventScroll: true });
+            if (Number.isFinite(selectionStart) && Number.isFinite(selectionEnd)) input.setSelectionRange(selectionStart, selectionEnd);
+          }
+        }
+      };
+      document.body.appendChild(backdrop);
+      render();
+    });
+    showRupaulModal.activePromise = promise;
+    promise.finally(() => { if (showRupaulModal.activePromise === promise) showRupaulModal.activePromise = null; });
+    return promise;
+  }
+
+  function openRupaulSimpleChoice(title, choices, options = {}) {
+    let selected = options.selected || "";
+    return showRupaulModal(title, () => `<div class="rupaul-simple-options ${choices.length === 3 ? "three" : ""}">${choices.map((choice) => `<button type="button" class="rupaul-simple-option ${selected === choice.value ? "is-selected" : ""}" data-value="${escapeHtml(choice.value)}">${escapeHtml(choice.label)}</button>`).join("")}</div><div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" ${selected ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelectorAll(".rupaul-simple-option").forEach((button) => button.addEventListener("click", () => { selected = button.dataset.value || ""; render(); }));
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => selected && close(selected));
+    });
+  }
+
+  function openRupaulPhotoPicker(title, ids, options = {}) {
+    const min = Number(options.min ?? 1);
+    const max = Number(options.max ?? min);
+    const disabled = new Set(options.disabledIds || []);
+    const selected = new Set((options.selectedIds || []).filter((id) => ids.includes(id) && !disabled.has(id)));
+    const tone = options.tone || "";
+    return showRupaulModal(title, () => `<div class="rupaul-photo-grid">${ids.map((id) => rupaulQueenCard(id, selected.has(id), tone, disabled.has(id))).join("")}</div>${options.extraHtml || ""}<div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" ${selected.size >= min && selected.size <= max ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelectorAll(".rupaul-photo-choice:not(:disabled)").forEach((button) => button.addEventListener("click", () => {
+        const id = button.dataset.id;
+        if (selected.has(id)) selected.delete(id);
+        else if (selected.size < max) selected.add(id);
+        else if (max === 1) { selected.clear(); selected.add(id); }
+        render();
+      }));
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => { if (selected.size >= min && selected.size <= max) close([...selected]); });
+    });
+  }
+
+  function challengeFormatBucket(challenge) {
+    const mode = String(challenge?.teamMode || "solo").toLowerCase();
+    if (["pairs", "pair", "duo", "duos"].includes(mode)) return "duo";
+    if (["groups", "group", "teams", "team"].includes(mode)) return "team";
+    return "solo";
+  }
+
+  function rupaulChallengePool(season, episode) {
+    const tournamentFreeChoice = !!(episode?.rupaulTournamentEpisode || episode?.rupaulTournamentMergeEpisode);
+    const used = tournamentFreeChoice ? new Set() : new Set([...(season.usedChallengeIds || []), ...(episode.rupaulReservedChallengeIds || [])]);
+    let pool = getChallengeData().filter((challenge) => canUseTeamChallenge(challenge, (episode.competingIds?.length || season.activeIds.length)));
+    if (episode.rupaulForceSolo) pool = pool.filter((challenge) => challengeFormatBucket(challenge) === "solo");
+    if (episode.rupaulAllowedChallengeTypes?.length && !episode.rupaulTournamentEpisode && !episode.rupaulTournamentMergeEpisode) {
+      const allowed = new Set(episode.rupaulAllowedChallengeTypes.map(challengeTypeKey));
+      pool = pool.filter((challenge) => allowed.has(challengeTypeKey(challenge.type)));
+    }
+    if (episode.forcedChallengeType && !episode.rupaulTournamentEpisode && !episode.rupaulTournamentMergeEpisode) {
+      pool = pool.filter((challenge) => challengeTypeKey(challenge.type) === challengeTypeKey(episode.forcedChallengeType));
+    }
+    return pool.map((challenge) => ({ ...challenge, rupaulUsed: used.has(challenge.id) }));
+  }
+
+  function randomRupaulChallenge(season, episode, pool) {
+    const unused = (pool || []).filter((challenge) => !challenge.rupaulUsed);
+    if (!unused.length) return null;
+    if (episode?.rupaulTournamentEpisode || episode?.rupaulTournamentMergeEpisode) return clone(randomItem(unused));
+    const viewerPick = pickChallenge(season, episode);
+    const exactViewerPick = unused.find((challenge) => challenge.id === viewerPick?.id);
+    if (exactViewerPick) return clone(exactViewerPick);
+    const viewerValid = unused.filter((challenge) => isChallengeValid(season, episode, challenge));
+    return clone(weightedChallengePick(season, episode, viewerValid.length ? viewerValid : unused));
+  }
+
+  function rupaulUsesPresetChallenge(episode) {
+    return ["rate_a_queen_split", "rate_a_queen_s17_split", "mid_season_rate_a_queen", "porkchop_top2", "top4_rumix", "fame_games"].includes(episode?.specialPremiere)
+      || !!episode?.challengeSelectionLocked;
+  }
+
+  function chooseRupaulPresetChallenge(season, episode) {
+    const pool = rupaulChallengePool(season, episode).filter((challenge) => !challenge.rupaulUsed);
+    return randomRupaulChallenge(season, episode, pool) || clone(pool[0] || null);
+  }
+
+  function openRupaulChallengePicker(season, episode) {
+    const pool = rupaulChallengePool(season, episode);
+    const types = [...new Set(pool.map((challenge) => challengeTypeKey(challenge.type)))];
+    let selectedType = episode.forcedChallengeType ? challengeTypeKey(episode.forcedChallengeType) : "";
+    let selectedId = "";
+    let query = "";
+    let format = "all";
+    return showRupaulModal("Choose the Maxi Challenge", () => {
+      const visible = pool.filter((challenge) => (!selectedType || challengeTypeKey(challenge.type) === selectedType) && (format === "all" || challengeFormatBucket(challenge) === format) && (!query || `${challenge.name} ${challenge.description || ""}`.toLowerCase().includes(query.toLowerCase())));
+      const typeButtons = [{ value: "", label: "All" }, ...types.map((type) => ({ value: type, label: challengeTypeLabel(type) }))];
+      return `<div class="rupaul-challenge-picker"><div class="rupaul-challenge-types">${typeButtons.map((item) => `<button class="rupaul-type-option ${selectedType === item.value ? "is-selected" : ""}" type="button" data-type="${escapeHtml(item.value)}">${escapeHtml(item.label)}</button>`).join("")}</div><div><input class="rupaul-search" type="search" placeholder="Search challenges..." value="${escapeHtml(query)}"><div class="rupaul-filter-row">${[["all","All"],["solo","Solo"],["duo","Duo"],["team","Team"]].map(([value,label]) => `<button class="rupaul-filter-option ${format === value ? "is-selected" : ""}" type="button" data-format="${value}">${label}</button>`).join("")}</div><div class="rupaul-scroll-list">${visible.length ? visible.map((challenge) => `<button class="rupaul-list-option ${selectedId === challenge.id ? "is-selected" : ""} ${challenge.rupaulUsed ? "is-used" : ""}" type="button" data-id="${escapeHtml(challenge.id)}" ${challenge.rupaulUsed ? "disabled" : ""}><strong>${escapeHtml(challenge.name)}</strong><span>${escapeHtml(challengeFormatBucket(challenge) === "duo" ? "Duo" : challengeFormatBucket(challenge) === "team" ? "Team" : "Solo")}</span></button>`).join("") : `<p class="rupaul-empty-list">No available challenges.</p>`}</div></div></div><div class="modal-actions"><button class="secondary-btn rupaul-random" type="button">Random</button><button class="primary-btn rupaul-confirm" type="button" ${selectedId ? "" : "disabled"}>Confirm</button></div>`;
+    }, (root, close, render) => {
+      root.querySelectorAll(".rupaul-type-option").forEach((button) => button.addEventListener("click", () => { selectedType = button.dataset.type || ""; selectedId = ""; render(); }));
+      root.querySelectorAll(".rupaul-filter-option").forEach((button) => button.addEventListener("click", () => { format = button.dataset.format || "all"; selectedId = ""; render(); }));
+      root.querySelector(".rupaul-search")?.addEventListener("input", (event) => { query = event.target.value || ""; render(); });
+      root.querySelectorAll(".rupaul-list-option:not(:disabled)").forEach((button) => button.addEventListener("click", () => { selectedId = button.dataset.id || ""; render(); }));
+      root.querySelector(".rupaul-random")?.addEventListener("click", () => {
+        const picked = randomRupaulChallenge(season, episode, pool);
+        if (!picked) return;
+        selectedId = picked.id;
+        selectedType = challengeTypeKey(picked.type);
+        format = "all";
+        query = "";
+        render();
+      });
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => { const challenge = pool.find((item) => item.id === selectedId && !item.rupaulUsed); if (challenge) close(clone(challenge)); });
+    });
+  }
+
+  function openRupaulRunwayPicker(season) {
+    const pool = getRunwayData().map((runway) => ({ ...runway, used: (season.usedRunwayIds || []).includes(runway.id) }));
+    let selectedId = "";
+    let query = "";
+    return showRupaulModal("Choose the Runway", () => `<input class="rupaul-search" type="search" placeholder="Search runways..." value="${escapeHtml(query)}"><div class="rupaul-scroll-list">${pool.filter((item) => !query || item.name.toLowerCase().includes(query.toLowerCase())).map((item) => `<button class="rupaul-list-option ${selectedId === item.id ? "is-selected" : ""} ${item.used ? "is-used" : ""}" type="button" data-id="${escapeHtml(item.id)}" ${item.used ? "disabled" : ""}><strong>${escapeHtml(item.name)}</strong></button>`).join("")}</div><div class="modal-actions"><button class="secondary-btn rupaul-random" type="button">Random</button><button class="primary-btn rupaul-confirm" type="button" ${selectedId ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelector(".rupaul-search")?.addEventListener("input", (event) => { query = event.target.value || ""; render(); });
+      root.querySelectorAll(".rupaul-list-option:not(:disabled)").forEach((button) => button.addEventListener("click", () => { selectedId = button.dataset.id || ""; render(); }));
+      root.querySelector(".rupaul-random")?.addEventListener("click", () => { const item = randomItem(pool.filter((runway) => !runway.used)); if (item) { selectedId = item.id; query = ""; render(); } });
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => { const runway = pool.find((item) => item.id === selectedId && !item.used); if (runway) close(clone(runway)); });
+    });
+  }
+
+  function openRupaulSongPicker(season, title = "Choose the Lip Sync Song") {
+    const pool = getLipSyncData().map((song) => ({ ...song, used: (season.usedLipSyncIds || []).includes(song.id) }));
+    let selectedId = "";
+    let query = "";
+    return showRupaulModal(title, () => `<input class="rupaul-search" type="search" placeholder="Search by song or artist..." value="${escapeHtml(query)}"><div class="rupaul-scroll-list">${pool.filter((song) => !query || `${song.title} ${song.artist}`.toLowerCase().includes(query.toLowerCase())).map((song) => `<button class="rupaul-list-option ${selectedId === song.id ? "is-selected" : ""} ${song.used ? "is-used" : ""}" type="button" data-id="${escapeHtml(song.id)}" ${song.used ? "disabled" : ""}><strong>${escapeHtml(song.title)}</strong><span>${escapeHtml(song.artist)}</span></button>`).join("")}</div><div class="modal-actions"><button class="secondary-btn rupaul-random" type="button">Random</button><button class="primary-btn rupaul-confirm" type="button" ${selectedId ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelector(".rupaul-search")?.addEventListener("input", (event) => { query = event.target.value || ""; render(); });
+      root.querySelectorAll(".rupaul-list-option:not(:disabled)").forEach((button) => button.addEventListener("click", () => { selectedId = button.dataset.id || ""; render(); }));
+      root.querySelector(".rupaul-random")?.addEventListener("click", () => { const item = randomItem(pool.filter((song) => !song.used)); if (item) { selectedId = item.id; query = ""; render(); } });
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => { const song = pool.find((item) => item.id === selectedId && !item.used); if (song) { season.usedLipSyncIds.push(song.id); close(clone(song)); } });
+    });
+  }
+
+  function openRupaulAssassinPicker(season) {
+    const inSeason = new Set(season.castOrder || []);
+    const usedAssassins = new Set(season.usedAssassinIds || []);
+    const candidates = (state.roster || []).filter((queen) => !inSeason.has(queen.id) && !usedAssassins.has(queen.id)).sort((a,b) => Number(b.skills?.lipsync || 0) - Number(a.skills?.lipsync || 0));
+    const shows = [...new Set(candidates.flatMap((queen) => queen.shows || []))].sort(showSort);
+    let query = "", show = "", seasonFilter = "", selectedId = "";
+    return showRupaulModal("Choose the Lip Sync Assassin", () => {
+      const seasons = [...new Set(candidates.filter((queen) => !show || (queen.shows || []).includes(show)).flatMap((queen) => show ? (queen.seasonsByShow?.[show] || []) : Object.values(queen.seasonsByShow || {}).flat()).map(String))].sort((a,b) => Number(a)-Number(b));
+      const visible = candidates.filter((queen) => (!query || fullDisplayName(queen).toLowerCase().includes(query.toLowerCase())) && (!show || (queen.shows || []).includes(show)) && (!seasonFilter || (queen.seasonsByShow?.[show] || []).map(String).includes(seasonFilter)));
+      return `<div class="rupaul-assassin-tools"><input class="rupaul-search" type="search" placeholder="Search contestants..." value="${escapeHtml(query)}"><select class="rupaul-assassin-show"><option value="">All shows</option>${shows.map((item) => `<option value="${escapeHtml(item)}" ${show===item?"selected":""}>${escapeHtml(item)}</option>`).join("")}</select><select class="rupaul-assassin-season"><option value="">All seasons</option>${seasons.map((item) => `<option value="${escapeHtml(item)}" ${seasonFilter===item?"selected":""}>${escapeHtml(item)}</option>`).join("")}</select></div><div class="rupaul-photo-grid rupaul-assassin-grid">${visible.map((queen) => rupaulQueenCard(queen.id, selectedId === queen.id, "stay")).join("")}</div><div class="modal-actions"><button class="secondary-btn rupaul-assassin-random" type="button" ${visible.length ? "" : "disabled"}>Random</button><button class="primary-btn rupaul-confirm" type="button" ${selectedId ? "" : "disabled"}>Confirm</button></div>`;
+    }, (root, close, render) => {
+      root.querySelector(".rupaul-search")?.addEventListener("input", (event) => { query = event.target.value || ""; render(); });
+      root.querySelector(".rupaul-assassin-show")?.addEventListener("change", (event) => { show = event.target.value || ""; seasonFilter = ""; selectedId = ""; render(); });
+      root.querySelector(".rupaul-assassin-season")?.addEventListener("change", (event) => { seasonFilter = event.target.value || ""; selectedId = ""; render(); });
+      root.querySelectorAll(".rupaul-photo-choice").forEach((button) => button.addEventListener("click", () => { selectedId = button.dataset.id || ""; render(); }));
+      root.querySelector(".rupaul-assassin-random")?.addEventListener("click", () => {
+        const visible = candidates.filter((queen) => (!query || fullDisplayName(queen).toLowerCase().includes(query.toLowerCase())) && (!show || (queen.shows || []).includes(show)) && (!seasonFilter || (queen.seasonsByShow?.[show] || []).map(String).includes(seasonFilter)));
+        const picked = randomItem(visible.length ? visible : candidates);
+        if (picked) { selectedId = picked.id; render(); }
+      });
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => {
+        const picked = candidates.find((queen) => queen.id === selectedId);
+        if (!picked) return;
+        const id = `assassin_${picked.id}`;
+        season.contestants[id] = { ...clone(picked), id, isAssassin: true };
+        season.usedAssassinIds = [...new Set([...(season.usedAssassinIds || []), picked.id])];
+        close(id);
+      });
+    });
+  }
+
+  function rupaulCompetingIds(season, episode) {
+    return (episode.competingIds?.length ? episode.competingIds : episode.activeStartIds?.length ? episode.activeStartIds : season.activeIds).filter((id) => season.contestants[id]);
+  }
+
+  function rupaulRankedIds(episode, ids = null) {
+    const allowed = ids ? new Set(ids) : null;
+    return (episode.scores || []).filter((score) => !allowed || allowed.has(score.id)).slice().sort((a,b) => Number(a.legacyTopScore ?? -a.total) - Number(b.legacyTopScore ?? -b.total)).map((score) => score.id);
+  }
+
+  function createRupaulDraftEpisode(season, options = {}) {
+    const episode = createEpisodeShell(season, options);
+    episode.rupaulPremiereSequence = !!options.rupaulPremiereSequence;
+    episode.rupaulPremiereTotal = Number(options.rupaulPremiereTotal || 0);
+    episode.rupaulSplitSequence = !!options.rupaulSplitSequence;
+    episode.rupaulAllowedChallengeTypes = Array.isArray(options.rupaulAllowedChallengeTypes) ? options.rupaulAllowedChallengeTypes.slice() : [];
+    episode.rupaulTournamentEpisode = !!options.rupaulTournamentEpisode;
+    episode.rupaulMidRatePart = !!options.rupaulMidRatePart;
+    episode.rupaulDirectComeback = !!options.rupaulDirectComeback;
+    episode.rupaulTournamentMergeEpisode = !!options.rupaulTournamentMergeEpisode;
+    episode.rupaulTopFourRumixEpisode = !!options.rupaulTopFourRumixEpisode;
+    episode.rupaulFameGamesPending = !!options.rupaulFameGamesPending;
+    episode.rateAQueenS17FinalPremiere = !!options.rateAQueenS17FinalPremiere;
+    episode.tournamentBracketId = options.tournamentBracketId || episode.tournamentBracketId || null;
+    episode.tournamentBracketName = options.tournamentBracketName || episode.tournamentBracketName || "";
+    episode.tournamentBracketColor = options.tournamentBracketColor || episode.tournamentBracketColor || "";
+    episode.rupaulPending = true;
+    episode.rupaulChallengeConfirmed = false;
+    episode.rupaulRunwayConfirmed = false;
+    episode.rupaulPlacementsConfirmed = false;
+    episode.rupaulLipSyncPrepared = false;
+    episode.rupaulResultsConfirmed = false;
+    episode.rupaulOutcome = "";
+    episode.rupaulBattles = [];
+    episode.rupaulFinalized = false;
+    season.episodes.push(episode);
+    state.currentEpisodeIndex = season.episodes.length - 1;
+    state.currentStep = "status";
+    saveState();
+    return episode;
+  }
+
+  async function initializeRupaulDraftChallenge(season, episode) {
+    if (episode.rupaulChallengeConfirmed) return true;
+    maybeApplyPreChallengeUnplannedExit(season, episode);
+    const challenge = rupaulUsesPresetChallenge(episode)
+      ? chooseRupaulPresetChallenge(season, episode)
+      : await openRupaulChallengePicker(season, episode);
+    if (!challenge) return false;
+    episode.challenge = challenge;
+    if (episode.rupaulSplitSequence && !season.rupaulSplitChallengeType) season.rupaulSplitChallengeType = challengeTypeKey(challenge.type);
+    const type = challengeTypeKey(challenge.type);
+    const separate = !NO_SEPARATE_RUNWAY_TYPES.has(type);
+    if (separate) {
+      const temporary = getRunwayData().find((runway) => !(season.usedRunwayIds || []).includes(runway.id)) || getRunwayData()[0];
+      episode.rupaulChosenRunway = clone(temporary);
+    }
+    episode.guestJudge = episode.noGuestJudge ? null : pickGuestJudge(type);
+    if (episode.readingComeback) runReadingComebackMiniChallenge(season, episode);
+    else if (!episode.noMiniChallenge) runMiniChallenge(season, episode);
+    maybeCreateTeams(season, episode);
+    runChallengeAndRunway(season, episode);
+    if (["rate_a_queen_split", "rate_a_queen_s17_split", "rate_a_queen_merge", "mid_season_rate_a_queen"].includes(episode.specialPremiere)) buildRateAQueenBallots(season, episode);
+    episode.rupaulChallengeConfirmed = true;
+    episode.rupaulRunwayConfirmed = !separate;
+    state.currentStep = "status";
+    saveState(); renderEpisodeSelect(); renderEpisode(); showScreen("episode-screen");
+    return true;
+  }
+
+  function updateRupaulRunwayName(season, episode, runway) {
+    const oldName = episode.runway?.name;
+    episode.runway = clone(runway);
+    (episode.scores || []).forEach((score) => {
+      const entries = season.stats?.[score.id]?.runwayScores || [];
+      const row = entries.findLast ? entries.findLast((entry) => entry.label === episode.label && (!oldName || entry.runway === oldName)) : [...entries].reverse().find((entry) => entry.label === episode.label);
+      if (row) row.runway = runway.name;
+    });
+  }
+
+  function rupaulGroupScore(episode, group) {
+    const scores = (group.ids || []).map((id) => (episode.scores || []).find((score) => score.id === id)).filter(Boolean);
+    if (!scores.length) return -Infinity;
+    return average(scores.map((score) => {
+      const legacy = score.individualLegacyTopScore ?? score.legacyTopScore ?? score.legacyPerformanceScore;
+      return Number.isFinite(Number(legacy)) ? -Number(legacy) : Number(score.total || 0);
+    }));
+  }
+
+  function rupaulLowsFromLosingGroup(episode, group, bottomIds) {
+    const remaining = (group.ids || []).filter((id) => !(bottomIds || []).includes(id));
+    const orderedWorstFirst = remaining.slice().sort((a, b) => Number(scoreForEpisodeId(episode, a, "legacyBottomScore") || 0) - Number(scoreForEpisodeId(episode, b, "legacyBottomScore") || 0)).reverse();
+    let count = 0;
+    // A losing team contributes only a three-person danger group: one LOW plus
+    // the Bottom Two, or a full Bottom Three. Extra teammates remain SAFE.
+    if ((bottomIds || []).length === 2) count = remaining.length ? 1 : 0;
+    else if ((bottomIds || []).length >= 3) count = 0;
+    return orderedWorstFirst.slice(0, Math.min(count, remaining.length));
+  }
+
+  function applyRupaulRateAQueenPlacements(season, episode) {
+    const ranked = (episode.rateAQueenResults || []).map((item) => item.id).filter(Boolean);
+    const order = ranked.length ? ranked : rupaulRankedIds(episode, rupaulCompetingIds(season, episode));
+    episode.winnerIds = [];
+    episode.top2Ids = [];
+    episode.highIds = [];
+    episode.safeIds = [];
+    episode.lowIds = [];
+    episode.bottomIds = [];
+    if (episode.specialPremiere === "rate_a_queen_split") {
+      episode.top2Ids = order.slice(0, 2);
+      episode.safeIds = order.slice(2);
+    } else if (["rate_a_queen_s17_split", "mid_season_rate_a_queen"].includes(episode.specialPremiere)) {
+      episode.top2Ids = order.slice(0, 2);
+      episode.bottomIds = order.length ? [order.at(-1)] : [];
+      episode.safeIds = order.slice(2, -1);
+    } else {
+      const count = order.length;
+      const topCount = count > 13 ? 4 : count > 6 ? 3 : count === 6 ? 3 : count >= 4 ? 2 : 1;
+      const dangerCount = count > 13 ? 4 : count >= 6 ? 3 : Math.min(2, Math.max(0, count - topCount));
+      const top = order.slice(0, topCount);
+      const danger = dangerCount ? order.slice(-dangerCount) : [];
+      episode.winnerIds = top.slice(0, 1);
+      episode.highIds = top.slice(1);
+      if (danger.length >= 4) {
+        episode.lowIds = danger.slice(0, -2);
+        episode.bottomIds = danger.slice(-2);
+      } else if (danger.length === 3) {
+        episode.lowIds = danger.slice(0, 1);
+        episode.bottomIds = danger.slice(1);
+      } else {
+        episode.bottomIds = danger.slice();
+      }
+      const assigned = new Set([...episode.winnerIds, ...episode.highIds, ...episode.lowIds, ...episode.bottomIds]);
+      episode.safeIds = order.filter((id) => !assigned.has(id));
+    }
+    episode.notes = episode.notes || [];
+    episode.notes.push("RuPaul Mode: Rate-A-Queen placements are locked to the generated peer ratings.");
+  }
+
+  async function runRupaulSlayersJudging(season, episode) {
+    const ids = rupaulCompetingIds(season, episode);
+    const ranked = rupaulRankedIds(episode, ids);
+    const critiquedCount = ranked.length <= 8 ? ranked.length : Math.max(2, Math.ceil(ranked.length / 2));
+    const topPool = ranked.slice(0, critiquedCount);
+    const topTwo = await openRupaulPhotoPicker("Choose the Top Two", topPool, { min: 2, max: 2, tone: "winner" });
+    if (!topTwo) return false;
+    episode.judgedInTeams = false;
+    episode.winningTeamIds = [];
+    episode.teamWinMode = "";
+    episode.winnerIds = [];
+    episode.top2Ids = topTwo;
+    episode.highIds = topPool.filter((id) => !topTwo.includes(id));
+    episode.safeIds = ranked.length <= 8 ? [] : ranked.slice(critiquedCount);
+    episode.lowIds = [];
+    episode.bottomIds = [];
+    episode.eliminatedIds = [];
+    return true;
+  }
+
+  async function runRupaulPairJudging(season, episode, outcome) {
+    const pairs = (episode.teams?.groups || []).filter((group) => group.ids?.length === 2)
+      .map((group) => ({ ...group, avg: rupaulGroupScore(episode, group) }))
+      .sort((a, b) => b.avg - a.avg);
+    if (pairs.length < 2) return runRupaulIndividualJudging(season, episode, outcome);
+    season.pairJudgedEpisodes = Number(season.pairJudgedEpisodes || 0) + 1;
+    episode.judgedInTeams = true;
+    episode.rupaulTeamScoreOrder = pairs.map((pair) => ({ name: pair.name, ids: pair.ids.slice(), score: pair.avg }));
+    episode.winnerIds = [];
+    episode.top2Ids = [];
+    episode.highIds = [];
+    episode.safeIds = [];
+    episode.lowIds = [];
+    episode.bottomIds = [];
+    episode.winningTeamIds = [];
+
+    let winningPair = null;
+    let automaticHighPair = null;
+    if (outcome !== "flops") {
+      const topCandidates = pairs.slice(0, Math.min(2, pairs.length));
+      winningPair = await openRupaulTeamPicker("Choose the winning pair", topCandidates, "winner");
+      if (!winningPair) return false;
+      automaticHighPair = pairs.length > 2 ? (topCandidates.find((pair) => pair.name !== winningPair.name) || null) : null;
+      episode.winningTeamIds = winningPair.ids.slice();
+      const legacyTopTwo = isLegacyFormat(season) && seasonEliminationFormatApplies(season, episode);
+      const bracketTopTwo = !!episode.rupaulTournamentEpisode;
+      if (legacyTopTwo || bracketTopTwo) {
+        episode.top2Ids = winningPair.ids.slice(0, 2);
+        episode.winnerIds = [];
+        episode.teamWinMode = bracketTopTwo ? "tournament_top2" : "legacy_top2";
+      } else {
+        const maxWinners = (isAssassinFormat(season) || isGoldenBeaverFormat(season)) ? 1 : winningPair.ids.length;
+        const winners = await openRupaulPhotoPicker("Who wins the challenge?", winningPair.ids, { min: 1, max: maxWinners, tone: "winner" });
+        if (!winners) return false;
+        episode.winnerIds = winners;
+        episode.teamWinMode = winners.length === winningPair.ids.length ? "team" : "solo";
+        episode.highIds.push(...winningPair.ids.filter((id) => !winners.includes(id)));
+      }
+      if (automaticHighPair) episode.highIds.push(...automaticHighPair.ids);
+    }
+
+    if (episode.rupaulTournamentEpisode) {
+      episode.lowIds = [];
+      episode.bottomIds = [];
+      setRupaulSafeIds(season, episode);
+      return true;
+    }
+
+    const excludedTop = new Set([winningPair?.name, automaticHighPair?.name].filter(Boolean));
+    let bottomCandidates = pairs.filter((pair) => !excludedTop.has(pair.name)).slice(-2);
+    if (!bottomCandidates.length) bottomCandidates = pairs.filter((pair) => pair.name !== winningPair?.name).slice(-1);
+    const protectedIds = protectedIdsForEpisode(season, episode);
+    if (isGoldenBeaverFormat(season) && seasonEliminationFormatApplies(season, episode)) {
+      const nonWinningPairs = pairs.filter((pair) => pair.name !== winningPair?.name);
+      const candidatePairs = [];
+      for (let i = nonWinningPairs.length - 1; i >= 0; i -= 1) {
+        candidatePairs.unshift(nonWinningPairs[i]);
+        const available = [...new Set(candidatePairs.flatMap((pair) => pair.ids))].filter((id) => !protectedIds.includes(id));
+        if (available.length >= 3) break;
+      }
+      const dangerIds = [...new Set(candidatePairs.flatMap((pair) => pair.ids))].filter((id) => !protectedIds.includes(id));
+      const count = Math.min(3, dangerIds.length);
+      const bottoms = await openRupaulPhotoPicker("Choose the bottom three", dangerIds, { min: count, max: count, tone: "bottom", disabledIds: protectedIds });
+      if (!bottoms?.length) return false;
+      episode.bottomIds = bottoms;
+      episode.highIds = episode.highIds.filter((id) => !bottoms.includes(id));
+      episode.safeIds = episode.safeIds.filter((id) => !bottoms.includes(id));
+      episode.lowIds = episode.lowIds.filter((id) => !dangerIds.includes(id));
+      episode.rupaulTeamBottomPairs = candidatePairs.map((pair) => ({ ...pair, ids: pair.ids.slice() }));
+    } else {
+      let bottomPair = null;
+      if (bottomCandidates.length === 1) bottomPair = bottomCandidates[0];
+      else bottomPair = await openRupaulTeamPicker("Choose the bottom pair", bottomCandidates, "bottom");
+      if (!bottomPair) return false;
+      const automaticLowPair = bottomCandidates.find((pair) => pair.name !== bottomPair.name) || null;
+      if (automaticLowPair) episode.lowIds.push(...automaticLowPair.ids);
+      episode.bottomIds = bottomPair.ids.filter((id) => !protectedIds.includes(id));
+    }
+    setRupaulSafeIds(season, episode);
+    enforceImmunitySafety(season, episode);
+    return true;
+  }
+
+  function openRupaulTeamJudgingPicker(episode) {
+    const groups = episode.teams?.groups || [];
+    return showRupaulModal("How should this challenge be judged?", () => `<div class="rupaul-teams-preview">${groups.map((group) => rupaulTeamCard(group)).join("")}</div><div class="rupaul-simple-options"><button class="rupaul-simple-option" type="button" data-value="individual">Individually</button><button class="rupaul-simple-option" type="button" data-value="team">In ${episode.teams?.mode === "pairs" ? "Pairs" : "Teams"}</button></div>`, (root, close) => {
+      root.querySelectorAll(".rupaul-simple-option").forEach((button) => button.addEventListener("click", () => close(button.dataset.value)));
+    });
+  }
+
+  function openRupaulTeamPicker(title, groups, tone = "winner") {
+    let selected = "";
+    return showRupaulModal(title, () => `<div class="rupaul-teams-preview">${groups.map((group) => rupaulTeamCard(group, selected === group.name, tone)).join("")}</div><div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" ${selected ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelectorAll(".rupaul-team-choice").forEach((button) => button.addEventListener("click", () => { selected = button.dataset.team || ""; render(); }));
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => { const group = groups.find((item) => item.name === selected); if (group) close(group); });
+    });
+  }
+
+
+  function openRupaulTeamMultiPicker(title, groups, options = {}) {
+    const min = Number(options.min ?? 1), max = Number(options.max ?? min);
+    const selected = new Set();
+    return showRupaulModal(title, () => `<div class="rupaul-teams-preview">${groups.map((group) => rupaulTeamCard(group, selected.has(group.name), options.tone || "bottom")).join("")}</div><div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" ${selected.size >= min && selected.size <= max ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelectorAll(".rupaul-team-choice").forEach((button) => button.addEventListener("click", () => {
+        const name = button.dataset.team || "";
+        if (selected.has(name)) selected.delete(name);
+        else if (selected.size < max) selected.add(name);
+        render();
+      }));
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => {
+        if (selected.size < min || selected.size > max) return;
+        close(groups.filter((group) => selected.has(group.name)));
+      });
+    });
+  }
+
+  async function runRupaulSeasonTeamsJudging(season, episode, outcome) {
+    const pairs = activeTeamPairs(season)
+      .filter((pair) => pair.ids.length === 2)
+      .map((pair) => ({ ...pair, avg: teamPairScore(episode, pair) }))
+      .sort((a, b) => b.avg - a.avg);
+    if (pairs.length < 2) return runRupaulIndividualJudging(season, episode, outcome);
+    episode.judgedInTeams = true;
+    episode.teamFormatEpisode = true;
+    episode.teamPairScoreOrder = pairs.map((pair) => ({ pairId: pair.id, ids: pair.ids.slice(), score: pair.avg }));
+    episode.top2Ids = [];
+    episode.winnerIds = [];
+    episode.highIds = [];
+    episode.safeIds = [];
+    episode.lowIds = [];
+    episode.bottomIds = [];
+
+    let winningPair = null;
+    if (outcome !== "flops") {
+      winningPair = await openRupaulTeamPicker("Choose the winning pair", pairs.slice(0, Math.min(2, pairs.length)), "winner");
+      if (!winningPair) return false;
+      episode.winnerIds = winningPair.ids.slice();
+    }
+    const remaining = pairs.filter((pair) => pair.id !== winningPair?.id);
+    if (outcome === "slayers") {
+      if (remaining[0]) episode.highIds.push(...remaining[0].ids);
+      setRupaulSafeIds(season, episode);
+      return true;
+    }
+
+    if (pairs.length === 2) {
+      const bottomPair = remaining[0] || pairs.at(-1);
+      episode.teamTopFourLipSync = true;
+      episode.rupaulTeamBottomPairs = [bottomPair];
+      episode.bottomIds = bottomPair.ids.slice();
+      setRupaulSafeIds(season, episode);
+      return true;
+    }
+
+    const eligibleBottomPairs = remaining.slice(-Math.min(3, remaining.length));
+    const bottomPairs = await openRupaulTeamMultiPicker("Choose the bottom pairs", eligibleBottomPairs, { min: 2, max: 2, tone: "bottom" });
+    if (!bottomPairs?.length) return false;
+    episode.rupaulTeamBottomPairs = bottomPairs.map((pair) => ({ ...pair, ids: pair.ids.slice() }));
+    episode.bottomIds = bottomPairs.flatMap((pair) => pair.ids);
+    const neutral = remaining.filter((pair) => !bottomPairs.some((bottom) => bottom.id === pair.id));
+    if (outcome === "flops") {
+      if (neutral.length) episode.safeIds.push(...neutral[0].ids);
+      neutral.slice(1).forEach((pair) => episode.lowIds.push(...pair.ids));
+    } else {
+      if (neutral[0]) episode.highIds.push(...neutral[0].ids);
+      if (neutral.length > 2) neutral.slice(-1).forEach((pair) => episode.lowIds.push(...pair.ids));
+    }
+    setRupaulSafeIds(season, episode);
+    return true;
+  }
+
+  function setRupaulSafeIds(season, episode) {
+    const assigned = new Set([...(episode.winnerIds||[]), ...(episode.top2Ids||[]), ...(episode.highIds||[]), ...(episode.lowIds||[]), ...(episode.bottomIds||[]), ...(episode.eliminatedIds||[]), ...(episode.runOnlyIds||[])]);
+    episode.safeIds = rupaulCompetingIds(season, episode).filter((id) => !assigned.has(id));
+  }
+
+  async function runRupaulIndividualJudging(season, episode, outcome) {
+    const ids = rupaulCompetingIds(season, episode);
+    const ranked = rupaulRankedIds(episode, ids);
+    const protectedIds = protectedIdsForEpisode(season, episode);
+    const pools = buildLegacyJudgingPools(season, episode);
+    let topPool = legacyTopOrder(episode, pools.top).filter((id) => ids.includes(id));
+    let dangerPool = legacyBottomOrder(episode, pools.bottom).filter((id) => ids.includes(id));
+    if (!topPool.length) topPool.push(...ranked.slice(0, Math.min(3, ranked.length)));
+    if (!dangerPool.length) dangerPool.push(...ranked.slice(-Math.min(3, ranked.length)));
+    const topPoolLimit = ids.length >= 6 ? 3 : ids.length >= 4 ? 2 : 1;
+    const dangerPoolLimit = ids.length >= 5 ? 3 : Math.min(2, ids.length);
+    topPool = topPool.slice(0, topPoolLimit);
+    dangerPool = [...new Set(dangerPool.filter((id) => !topPool.includes(id)))].slice(-dangerPoolLimit);
+    if (dangerPool.length < dangerPoolLimit) {
+      [...ranked].reverse().forEach((id) => {
+        if (dangerPool.length >= dangerPoolLimit) return;
+        if (topPool.includes(id) || dangerPool.includes(id) || protectedIds.includes(id)) return;
+        dangerPool.push(id);
+      });
+    }
+    const topTwoFormat = episode.allWinnersEpisode || episode.rupaulTournamentEpisode || ["non_elim_top2", "porkchop_top2", "rate_a_queen_split", "rate_a_queen_s17_split", "mid_season_rate_a_queen", "uk3"].includes(episode.specialPremiere) || (isLegacyFormat(season) && seasonEliminationFormatApplies(season, episode));
+    if (outcome !== "flops") {
+      const topCount = topTwoFormat ? 2 : 1;
+      const maxTop = topTwoFormat ? 2 : ((isAssassinFormat(season) || isGoldenBeaverFormat(season)) ? 1 : Math.min(2, topPool.length));
+      const winners = await openRupaulPhotoPicker(topTwoFormat ? "Choose the Top Two" : "Choose the challenge winner", topPool, { min: topCount, max: maxTop, tone: "winner" });
+      if (!winners) return false;
+      if (topTwoFormat) { episode.top2Ids = winners; episode.winnerIds = []; }
+      else { episode.winnerIds = winners; episode.top2Ids = []; }
+      episode.highIds = topPool.filter((id) => !winners.includes(id));
+    } else {
+      episode.winnerIds = []; episode.top2Ids = []; episode.highIds = [];
+    }
+    if (["rate_a_queen_s17_split", "mid_season_rate_a_queen"].includes(episode.specialPremiere)) {
+      const pickedBottom = await openRupaulPhotoPicker("Choose the bottom contestant", dangerPool, { min: 1, max: 1, tone: "bottom", disabledIds: protectedIds });
+      if (!pickedBottom?.[0]) return false;
+      episode.bottomIds = pickedBottom;
+      episode.lowIds = dangerPool.filter((id) => !pickedBottom.includes(id));
+      setRupaulSafeIds(season, episode);
+      return true;
+    }
+    const noBottom = episode.allWinnersEpisode || episode.rupaulTournamentEpisode || ["non_elim_top2", "porkchop_top2", "rate_a_queen_split", "late_entry"].includes(episode.specialPremiere);
+    if (noBottom) { episode.lowIds = []; episode.bottomIds = []; setRupaulSafeIds(season, episode); return true; }
+    const requiredBottom = isGoldenBeaverFormat(season) && seasonEliminationFormatApplies(season, episode) ? 3 : 2;
+    if (requiredBottom === 3 && dangerPool.filter((id) => !protectedIds.includes(id)).length < 3) {
+      [...ranked].reverse().forEach((id) => {
+        if (dangerPool.length >= 5) return;
+        if (topPool.includes(id) || dangerPool.includes(id) || protectedIds.includes(id)) return;
+        dangerPool.push(id);
+      });
+    }
+    const availableBottomCount = dangerPool.filter((id) => !protectedIds.includes(id)).length;
+    const exactBottomCount = Math.min(requiredBottom, availableBottomCount);
+    const maxBottom = requiredBottom === 3 ? exactBottomCount : Math.min(3, availableBottomCount);
+    const bottoms = await openRupaulPhotoPicker(`Choose the bottom ${requiredBottom === 3 ? "three" : "contestants"}`, dangerPool, { min: exactBottomCount, max: maxBottom, tone: "bottom", disabledIds: protectedIds });
+    if (!bottoms) return false;
+    episode.bottomIds = bottoms;
+    episode.lowIds = (isGoldenBeaverFormat(season) && seasonEliminationFormatApplies(season, episode))
+      ? []
+      : dangerPool.filter((id) => !bottoms.includes(id) && !episode.highIds.includes(id));
+    setRupaulSafeIds(season, episode);
+    enforceImmunitySafety(season, episode);
+    return true;
+  }
+
+  async function openRupaulTeamPlacementChoice(group, options) {
+    return showRupaulModal(`Place ${group.name}`, () => `<div class="rupaul-teams-preview">${rupaulTeamCard(group)}</div><div class="rupaul-simple-options">${options.map((item) => `<button class="rupaul-simple-option" type="button" data-value="${escapeHtml(item.value)}">${escapeHtml(item.label)}</button>`).join("")}</div>`, (root, close) => {
+      root.querySelectorAll(".rupaul-simple-option").forEach((button) => button.addEventListener("click", () => close(button.dataset.value)));
+    });
+  }
+
+  async function runRupaulTeamJudging(season, episode, outcome) {
+    if (episode.teams?.mode === "pairs") return runRupaulPairJudging(season, episode, outcome);
+    const groups = (episode.teams?.groups || []).filter((group) => group.ids?.length);
+    if (!groups.length) return runRupaulIndividualJudging(season, episode, outcome);
+    season.teamJudgedEpisodes = Number(season.teamJudgedEpisodes || 0) + 1;
+    const rankedGroups = groups.map((group) => ({ ...group, avg: rupaulGroupScore(episode, group) })).sort((a,b) => b.avg-a.avg);
+    episode.judgedInTeams = true;
+    episode.rupaulTeamScoreOrder = rankedGroups.map((group) => ({ name: group.name, ids: group.ids.slice(), score: group.avg }));
+    let winningGroup = null;
+    episode.winnerIds = [];
+    episode.top2Ids = [];
+    episode.highIds = [];
+    episode.safeIds = [];
+    episode.lowIds = [];
+    episode.bottomIds = [];
+    episode.winningTeamIds = [];
+    if (outcome !== "flops") {
+      winningGroup = await openRupaulTeamPicker("Choose the winning team", rankedGroups.slice(0, Math.min(2, rankedGroups.length)), "winner");
+      if (!winningGroup) return false;
+      episode.winningTeamIds = winningGroup.ids.slice();
+      const legacyTopTwo = isLegacyFormat(season) && seasonEliminationFormatApplies(season, episode);
+      const bracketTopTwo = !!episode.rupaulTournamentEpisode;
+      if (legacyTopTwo || bracketTopTwo) {
+        const topTwo = await openRupaulPhotoPicker("Choose the Top Two", winningGroup.ids, { min: Math.min(2, winningGroup.ids.length), max: Math.min(2, winningGroup.ids.length), tone: "winner" });
+        if (!topTwo?.length) return false;
+        episode.top2Ids = topTwo;
+        episode.winnerIds = [];
+        episode.teamWinMode = bracketTopTwo ? "tournament_top2" : "legacy_top2";
+        episode.highIds = winningGroup.ids.filter((id) => !topTwo.includes(id));
+      } else {
+        const maxWinners = (isAssassinFormat(season) || isGoldenBeaverFormat(season)) ? 1 : winningGroup.ids.length;
+        const winnerIds = await openRupaulPhotoPicker("Who wins the challenge?", winningGroup.ids, { min: 1, max: maxWinners, tone: "winner" });
+        if (!winnerIds) return false;
+        episode.winnerIds = winnerIds;
+        episode.teamWinMode = winnerIds.length === winningGroup.ids.length ? "team" : "solo";
+        episode.highIds = winningGroup.ids.filter((id) => !winnerIds.includes(id));
+      }
+    }
+    const remainingGroups = rankedGroups.filter((group) => group.name !== winningGroup?.name);
+    if (episode.rupaulTournamentEpisode) {
+      episode.lowIds = [];
+      episode.bottomIds = [];
+      setRupaulSafeIds(season, episode);
+      return true;
+    }
+    const dangerGroup = remainingGroups.at(-1) || rankedGroups.at(-1);
+    const middleGroups = remainingGroups.filter((group) => group.name !== dangerGroup.name);
+    if (outcome === "flops") {
+      for (let i = 0; i < middleGroups.length; i += 1) {
+        const group = middleGroups[i];
+        const placement = await openRupaulTeamPlacementChoice(group, [{ value: "safe", label: "Safe" }, { value: "low", label: "Low" }]);
+        if (!placement) return false;
+        if (placement === "low") episode.lowIds.push(...group.ids);
+      }
+    } else {
+      if (middleGroups[0]) {
+        const placement = await openRupaulTeamPlacementChoice(middleGroups[0], [{ value: "high", label: "High" }, { value: "safe", label: "Safe" }]);
+        if (!placement) return false;
+        if (placement === "high") episode.highIds.push(...middleGroups[0].ids);
+      }
+      for (let i = 1; i < middleGroups.length; i += 1) {
+        const group = middleGroups[i];
+        if (i === middleGroups.length - 1) {
+          const placement = await openRupaulTeamPlacementChoice(group, [{ value: "safe", label: "Safe" }, { value: "low", label: "Low" }]);
+          if (!placement) return false;
+          if (placement === "low") episode.lowIds.push(...group.ids);
+        }
+      }
+    }
+    const goldenBeaverTeamJudging = isGoldenBeaverFormat(season) && seasonEliminationFormatApplies(season, episode);
+    const protectedBottomIds = protectedIdsForEpisode(season, episode);
+    let dangerSelectionIds = dangerGroup.ids.slice();
+    if (goldenBeaverTeamJudging) {
+      const candidateGroups = [];
+      for (let i = remainingGroups.length - 1; i >= 0; i -= 1) {
+        candidateGroups.unshift(remainingGroups[i]);
+        dangerSelectionIds = [...new Set(candidateGroups.flatMap((group) => group.ids))];
+        if (dangerSelectionIds.filter((id) => !protectedBottomIds.includes(id)).length >= 3) break;
+      }
+    }
+    const requiredBottomCount = goldenBeaverTeamJudging ? Math.min(3, dangerSelectionIds.filter((id) => !protectedBottomIds.includes(id)).length) : Math.min(2, dangerSelectionIds.length);
+    const selected = await showRupaulModal(goldenBeaverTeamJudging ? "Choose the bottom three" : "Choose the bottom contestants", () => `<div class="rupaul-photo-grid">${dangerSelectionIds.map((id) => rupaulQueenCard(id, false, "bottom", protectedBottomIds.includes(id))).join("")}</div><div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" disabled>Confirm</button></div>`, (root, close) => {
+      const chosen = new Set();
+      const confirm = root.querySelector(".rupaul-confirm");
+      const minCount = goldenBeaverTeamJudging ? requiredBottomCount : Math.min(2, dangerSelectionIds.length);
+      const maxCount = goldenBeaverTeamJudging ? requiredBottomCount : Math.min(3, dangerSelectionIds.length);
+      const sync = () => { root.querySelectorAll(".rupaul-photo-choice").forEach((button) => button.classList.toggle("is-selected", chosen.has(button.dataset.id))); if (confirm) confirm.disabled = !(chosen.size >= minCount && chosen.size <= maxCount); };
+      root.querySelectorAll(".rupaul-photo-choice:not(:disabled)").forEach((button) => button.addEventListener("click", () => { const id=button.dataset.id; if(chosen.has(id)) chosen.delete(id); else if(chosen.size<maxCount) chosen.add(id); sync(); }));
+      confirm?.addEventListener("click", () => close([...chosen]));
+    });
+    if (!selected?.length) return false;
+    episode.bottomIds = selected;
+    if (goldenBeaverTeamJudging) {
+      episode.highIds = episode.highIds.filter((id) => !selected.includes(id));
+      episode.safeIds = episode.safeIds.filter((id) => !selected.includes(id));
+      episode.lowIds = episode.lowIds.filter((id) => !dangerSelectionIds.includes(id));
+    }
+    const losingTeamLows = goldenBeaverTeamJudging
+      ? []
+      : rupaulLowsFromLosingGroup(episode, dangerGroup, selected);
+    episode.lowIds = [...new Set([...(episode.lowIds||[]).filter((id) => !selected.includes(id)), ...losingTeamLows])];
+    setRupaulSafeIds(season, episode);
+    enforceImmunitySafety(season, episode);
+    return true;
+  }
+
+  async function runRupaulJudgingFlow(season, episode) {
+    if (episode.rupaulPlacementsConfirmed) return true;
+    if (episode.rupaulTopFourRumixEpisode) {
+      const ids = rupaulCompetingIds(season, episode);
+      episode.winnerIds = []; episode.top2Ids = []; episode.highIds = []; episode.lowIds = []; episode.bottomIds = [];
+      episode.safeIds = ids.slice(); episode.eliminatedIds = []; episode.savedIds = ids.slice();
+      episode.resultText = "The finalists have completed their final RuMix performances.";
+      episode.rupaulPlacementsConfirmed = true; episode.rupaulLipSyncPrepared = true; episode.rupaulResultsConfirmed = true;
+      saveState(); renderEpisode();
+      return true;
+    }
+    if (isRateAQueenEpisode(episode)) {
+      applyRupaulRateAQueenPlacements(season, episode);
+      if (isGoldenBeaverFormat(season)) resolveGoldenBeaverSave(season, episode);
+      buildLuckyCowVoting(season, episode);
+      episode.rupaulPlacementsConfirmed = true;
+      saveState(); renderEpisode();
+      return true;
+    }
+    let outcome = episode.rupaulOutcome;
+    if (!outcome) {
+      if (episode.allWinnersEpisode || episode.rupaulTournamentEpisode || episode.rupaulTournamentMergeEpisode || ["non_elim_top2", "porkchop_top2", "rate_a_queen_split", "rate_a_queen_s17_split", "mid_season_rate_a_queen", "uk3"].includes(episode.specialPremiere)) outcome = "regular";
+      else if (episode.specialPremiere === "slayers") outcome = "slayers";
+      else {
+        const resultChoices = [{ value: "regular", label: "Regular" }];
+        if (Number(season.rupaulSlayersUsed || 0) < 2) resultChoices.push({ value: "slayers", label: "Slayers" });
+        resultChoices.push({ value: "flops", label: "Flops" });
+        outcome = await openRupaulSimpleChoice("Choose the episode result", resultChoices);
+        if (outcome) episode.rupaulOutcomeChosenByPlayer = true;
+      }
+      if (!outcome) return false;
+      episode.rupaulOutcome = outcome;
+    }
+    if (outcome === "slayers") {
+      const ok = await runRupaulSlayersJudging(season, episode);
+      if (!ok) return false;
+      if (episode.rupaulOutcomeChosenByPlayer && !episode.rupaulSlayersCounted) {
+        season.rupaulSlayersUsed = Number(season.rupaulSlayersUsed || 0) + 1;
+        episode.rupaulSlayersCounted = true;
+      }
+      episode.rupaulPlacementsConfirmed = true;
+      saveState(); renderEpisode();
+      return true;
+    }
+    let judging = "individual";
+    if (episode.teams && episode.teams.mode !== "solo" && episode.teams.groups?.length && !isTeamsFormat(season)) {
+      judging = episode.rupaulTeamJudging || await openRupaulTeamJudgingPicker(episode);
+      if (!judging) return false;
+      episode.rupaulTeamJudging = judging;
+    } else if (isTeamsFormat(season)) judging = "team";
+    const ok = isTeamsFormat(season)
+      ? await runRupaulSeasonTeamsJudging(season, episode, outcome)
+      : judging === "team"
+        ? await runRupaulTeamJudging(season, episode, outcome)
+        : await runRupaulIndividualJudging(season, episode, outcome);
+    if (!ok) return false;
+    if (isGoldenBeaverFormat(season)) resolveGoldenBeaverSave(season, episode);
+    buildLuckyCowVoting(season, episode);
+    if (isAssassinFormat(season) && seasonEliminationFormatApplies(season, episode) && episode.winnerIds?.length && episode.bottomIds?.length) {
+      episode.rumocracyVotes = episode.rumocracyVotes?.length ? episode.rumocracyVotes : buildRumocracyVotes(season, episode);
+    }
+    episode.rupaulPlacementsConfirmed = true;
+    saveState(); renderEpisode();
+    return true;
+  }
+
+
+  async function applyRupaulPreLipSyncTwists(season, episode) {
+    if (season?.config?.twistRosconReinas && rosconLipSyncEligible(season, episode)) {
+      const announcedBottomIds = (episode.bottomIds || []).slice();
+      const announcedLowIds = (episode.lowIds || []).slice();
+      const holders = announcedBottomIds.filter((id) => rosconHolderIsUsable(season, id));
+      const uses = [];
+      const reserved = new Set(announcedBottomIds);
+      for (const holderId of holders) {
+        const replacementId = preLipSyncReplacementId(season, episode, [...reserved, ...uses.map((use) => use.replacementId)]);
+        if (!replacementId) continue;
+        const action = await openRupaulSimpleChoice(`${fullDisplayName(season.contestants[holderId])}: use El Haba?`, [
+          { value: "use", label: `Swap with ${fullDisplayName(season.contestants[replacementId])}` },
+          { value: "keep", label: "Do Not Use" }
+        ]);
+        if (action !== "use") continue;
+        if (!swapBottomContestantForTwist(season, episode, holderId, replacementId)) continue;
+        const use = { holderId, savedId: holderId, replacementId, episodeNumber: episode.number, episodeLabel: episode.label };
+        uses.push(use);
+        reserved.add(replacementId);
+        season.roscon.usedHolderIds.push(holderId);
+      }
+      if (uses.length) {
+        season.roscon.usedHolderIds = [...new Set(season.roscon.usedHolderIds)];
+        episode.rosconAnnouncedLowIds = announcedLowIds;
+        episode.rosconAnnouncedBottomIds = announcedBottomIds;
+        episode.rosconUses = uses;
+        episode.rosconSavedIds = uses.map((use) => use.savedId);
+        episode.rosconReplacementIds = uses.map((use) => use.replacementId);
+        saveState(); renderEpisode();
+      }
+      return uses;
+    }
+    if (season?.config?.twistHeartSuccessor && heartSuccessorLipSyncEligible(season, episode)) {
+      const readyOwners = season.activeIds.filter((id) => heartBalanceFor(season, id) >= 2);
+      const originalBottomIds = (episode.bottomIds || []).slice();
+      const originalLowIds = (episode.lowIds || []).slice();
+      const thirdBottomId = preLipSyncReplacementId(season, episode, originalBottomIds);
+      if (!readyOwners.length || !thirdBottomId) return [];
+      const dangerIds = [...new Set([thirdBottomId, ...originalBottomIds])].slice(0, 3);
+      if (dangerIds.length !== 3) return [];
+      const action = await openRupaulSimpleChoice("Use the completed Heart?", [
+        { value: "use", label: "Use the Heart" },
+        { value: "keep", label: "Save It" }
+      ]);
+      if (action !== "use") return [];
+      const ownerPick = await openRupaulPhotoPicker("Who uses the Heart?", readyOwners, { min: 1, max: 1, tone: "winner" });
+      if (!ownerPick?.[0]) return [];
+      const savedPick = await openRupaulPhotoPicker("Who is saved?", dangerIds, { min: 1, max: 1, tone: "winner" });
+      if (!savedPick?.[0]) return [];
+      const ownerId = ownerPick[0], savedId = savedPick[0];
+      dangerIds.forEach((id) => removeContestantFromPlacementGroups(episode, id));
+      episode.bottomIds = dangerIds.filter((id) => id !== savedId).slice(0, 2);
+      episode.lowIds = [...new Set([...originalLowIds.filter((id) => !dangerIds.includes(id)), savedId])];
+      setSafeIds(season, episode);
+      season.heartSuccessor.balances[ownerId] = 0;
+      const use = { ownerId, savedId, bottomGroupIds: dangerIds.slice(), episodeNumber: episode.number, episodeLabel: episode.label };
+      season.heartSuccessor.uses.push(use);
+      episode.heartSuccessorUses = [use];
+      episode.heartSuccessorSavedIds = [savedId];
+      episode.heartSuccessorReplacementIds = [];
+      episode.heartSuccessorBottomIds = dangerIds.slice();
+      episode.heartSuccessorPlacementLowIds = originalLowIds.filter((id) => !dangerIds.includes(id));
+      saveState(); renderEpisode();
+      return [use];
+    }
+    return [];
+  }
+
+  function rupaulBattleDescriptor(ids, context, kind = "elimination", options = {}) {
+    return { ids: ids.slice(), context, kind, lipSync: null, resolved: false, ...options };
+  }
+
+  async function prepareRupaulLipSyncs(season, episode) {
+    if (episode.rupaulLipSyncPrepared) return true;
+    if (!(episode.bottomIds||[]).length && !(episode.top2Ids||[]).length) {
+      episode.rupaulLipSyncPrepared = true;
+      return true;
+    }
+    await applyRupaulPreLipSyncTwists(season, episode);
+    const battles = [];
+    if (isTeamsFormat(season) && episode.teamFormatEpisode && episode.bottomIds?.length) {
+      if (episode.teamTopFourLipSync) {
+        battles.push(rupaulBattleDescriptor(episode.bottomIds.slice(), "Team Lip Sync For Your Life", "elimination", { teamTopFour: true }));
+      } else {
+        const bottomPairs = (episode.rupaulTeamBottomPairs || activeTeamPairs(season).filter((pair) => pair.ids.some((id) => episode.bottomIds.includes(id)))).slice(0, 2);
+        const performers = [];
+        for (const pair of bottomPairs) {
+          const picked = await openRupaulPhotoPicker(`${pair.name}: choose the lip syncer`, pair.ids, { min: 1, max: 1, tone: "bottom" });
+          if (!picked?.[0]) return false;
+          performers.push(picked[0]);
+        }
+        if (performers.length >= 2) battles.push(rupaulBattleDescriptor(performers, "Team Lip Sync For Your Life", "team_pair", { teamPairs: bottomPairs.map((pair) => ({ ...pair, ids: pair.ids.slice() })) }));
+      }
+    } else {
+      if (episode.top2Ids?.length >= 2) battles.push(rupaulBattleDescriptor(episode.top2Ids.slice(0,2), isLegacyFormat(season) ? "Lip Sync For Your Legacy" : "Lip Sync For The Win", "for_win"));
+      if (episode.specialPremiere === "rate_a_queen_s17_split" && episode.rateAQueenS17FinalPremiere && episode.bottomIds?.[0] && season.rateAQueenS17FirstBottomId) {
+        const survivalIds = [...new Set([season.rateAQueenS17FirstBottomId, episode.bottomIds[0]])];
+        episode.bottomIds = survivalIds.slice();
+        battles.push(rupaulBattleDescriptor(survivalIds, "Lip Sync For Your Life", "elimination"));
+      } else if (episode.specialPremiere === "uk3" && episode.bottomIds?.length >= 2) battles.push(rupaulBattleDescriptor(episode.bottomIds.slice(), "Lip Sync For Your Life", "elimination"));
+      else if (!episode.top2Ids?.length && episode.bottomIds?.length) battles.push(rupaulBattleDescriptor(episode.bottomIds.slice(), "Lip Sync For Your Life", "elimination"));
+    }
+    if (isAssassinFormat(season) && episode.winnerIds?.length && episode.bottomIds?.length) {
+      const assassinId = await openRupaulAssassinPicker(season);
+      if (!assassinId) return false;
+      episode.rumocracyVotes = episode.rumocracyVotes?.length ? episode.rumocracyVotes : buildRumocracyVotes(season, episode);
+      battles.length = 0;
+      battles.push(rupaulBattleDescriptor([episode.winnerIds[0], assassinId], "Lip Sync For Your Legacy", "assassin", { assassinId }));
+    }
+    if (isLegacyFormat(season) && episode.top2Ids?.length) episode.legacyLipsticks = episode.top2Ids.map((id) => ({ voterId:id, lipstickId:chooseEliminationVote(season,id,episode.bottomIds,episode,"legacy") }));
+    for (let i=0;i<battles.length;i+=1) {
+      const battle = battles[i];
+      const song = await openRupaulSongPicker(season, battles.length > 1 ? `Choose the Lip Sync Song #${i+1}` : "Choose the Lip Sync Song");
+      if (!song) return false;
+      battle.lipSync = createLipSyncFromSong(season, battle.ids, song, battle.context);
+      if (battle.assassinId) { battle.lipSync.assassinId = battle.assassinId; battle.lipSync.isAssassinLipSync = true; }
+    }
+    episode.rupaulBattles = battles;
+    episode.lipSync = battles[0]?.lipSync || null;
+    episode.extraLipSyncs = battles.slice(1).map((battle) => battle.lipSync);
+    episode.rupaulLipSyncPrepared = true;
+    saveState(); renderEpisode();
+    return true;
+  }
+
+  function openRupaulLipSyncResultPicker(season, episode, battle, options = {}) {
+    const ids = battle.ids || [];
+    const forWin = battle.kind === "for_win" || battle.kind === "assassin" || options.forWin;
+    const porkchop = !!options.porkchop;
+    const selected = new Set();
+    const allowDouble = options.allowDouble !== false;
+    const canDoubleWin = allowDouble && !forWin && !porkchop && ids.length === 2 && season.doubleShantaysUsed < 3;
+    const finaleTarget = isTeamsFormat(season) ? Number(season.teamsFinalistOverride || 3) : Number(season.config?.finalistSize || 4);
+    const isLastCompetitiveElimination = episode?.type === "competitive" && Number(season.activeIds?.length || 0) <= finaleTarget + 1;
+    const canDoubleLoss = allowDouble && !forWin && !porkchop && !isLastCompetitiveElimination && ids.length === 2 && season.doubleSashaysUsed < 2;
+    const defaultMin = forWin ? 1 : (ids.length > 2 ? 0 : 1);
+    const minSurvivors = Number.isFinite(Number(options.minSurvivors)) ? clamp(Number(options.minSurvivors), 0, ids.length) : defaultMin;
+    const maxSurvivors = Number.isFinite(Number(options.maxSurvivors)) ? clamp(Number(options.maxSurvivors), minSurvivors, ids.length) : (forWin ? 1 : ids.length);
+    const valid = () => forWin ? selected.size === 1 : selected.size >= minSurvivors && selected.size <= maxSurvivors;
+    return showRupaulModal(forWin ? "Choose the Lip Sync Winner" : "Who stays?", () => `<div class="rupaul-lipsync-song-title"><strong>${escapeHtml(battle.lipSync?.song?.title || "")}</strong><span>${escapeHtml(battle.lipSync?.song?.artist || "")}</span></div><div class="rupaul-photo-grid rupaul-lipsync-choice-grid">${ids.map((id) => rupaulQueenCard(id, selected.has(id), "stay")).join("")}</div>${!forWin && ids.length===2 ? `<div class="rupaul-double-actions">${canDoubleWin ? '<button class="secondary-btn rupaul-double-win" type="button">Double Shantay</button>' : ''}${canDoubleLoss ? '<button class="secondary-btn rupaul-double-loss" type="button">Double Sashay</button>' : ''}</div>` : ""}<div class="modal-actions"><button class="primary-btn rupaul-confirm" type="button" ${valid() ? "" : "disabled"}>Confirm</button></div>`, (root, close, render) => {
+      root.querySelectorAll(".rupaul-photo-choice").forEach((button) => button.addEventListener("click", () => {
+        const id=button.dataset.id;
+        if (forWin) { selected.clear(); selected.add(id); }
+        else if (selected.has(id)) selected.delete(id);
+        else if (selected.size < maxSurvivors) selected.add(id);
+        render();
+      }));
+      root.querySelector(".rupaul-double-win")?.addEventListener("click", () => close({ survivors:ids.slice(), resultType:"double_shantay" }));
+      root.querySelector(".rupaul-double-loss")?.addEventListener("click", () => close({ survivors:[], resultType:"double_sashay" }));
+      root.querySelector(".rupaul-confirm")?.addEventListener("click", () => {
+        if (!valid()) return;
+        if (forWin) close({ winnerId:[...selected][0], survivors:[...selected], resultType:"win" });
+        else close({ survivors:[...selected], resultType:"manual" });
+      });
+    });
+  }
+
+  function applyRupaulEliminationSaveTwists(season, episode, eliminatedId, lipSync) {
+    if (!eliminatedId) return false;
+    const chocolateSaved = applyChocolateBar(season, episode, eliminatedId);
+    if (chocolateSaved) { if (lipSync) lipSync.resultType="chocolate_save"; return true; }
+    if (applyLuckyCowSave(season, episode, eliminatedId, lipSync)) return true;
+    markLuckyCowFailure(season, episode, eliminatedId);
+    if (maybeCreateBadonkaPull(season, episode, eliminatedId, lipSync)) return !(episode.eliminatedIds||[]).includes(eliminatedId);
+    return false;
+  }
+
+  async function runRupaulLipSyncResultFlow(season, episode) {
+    if (episode.rupaulResultsConfirmed) return true;
+    if (!(episode.rupaulBattles||[]).length) {
+      episode.resultText = episode.rupaulOutcome === "slayers" ? "The contestants have slayed the challenge. Nobody is going home." : "The episode ends without a lip sync.";
+      return finishRupaulEpisode(season, episode);
+    }
+    for (const battle of episode.rupaulBattles) {
+      if (battle.resolved) continue;
+      if (battle.kind === "elimination" && maybeResolveBottomUnplannedExit(season, episode, battle.ids, battle.lipSync)) { battle.resolved=true; continue; }
+      const decision = await openRupaulLipSyncResultPicker(season, episode, battle);
+      if (!decision) return false;
+      const lipSync = battle.lipSync;
+      if (battle.kind === "team_pair") {
+        const survivors = decision.survivors || [];
+        const pairs = battle.teamPairs || [];
+        const survivorPairs = pairs.filter((pair) => pair.ids.some((id) => survivors.includes(id)));
+        const eliminatedPairs = pairs.filter((pair) => !survivorPairs.some((saved) => saved.id === pair.id));
+        if (decision.resultType === "double_shantay") { season.doubleShantaysUsed += 1; lipSync.resultType = "double_shantay"; }
+        else if (decision.resultType === "double_sashay") { season.doubleSashaysUsed += 1; lipSync.resultType = "double_sashay"; }
+        else lipSync.resultType = eliminatedPairs.length > 1 ? "team_double_elimination" : "team_pair_elimination";
+        const savedIds = survivorPairs.flatMap((pair) => pair.ids);
+        const eliminatedIds = eliminatedPairs.flatMap((pair) => pair.ids);
+        lipSync.winnerIds = survivors.slice();
+        lipSync.winnerId = survivors[0] || null;
+        lipSync.loserId = battle.ids.find((id) => !survivors.includes(id)) || null;
+        episode.savedIds.push(...savedIds);
+        episode.eliminatedIds.push(...eliminatedIds);
+        episode.teamLipSyncParticipantIds = battle.ids.slice();
+        episode.teamPartnerSafeIds = savedIds.filter((id) => !battle.ids.includes(id));
+        episode.teamPartnerElimIds = eliminatedIds.filter((id) => !battle.ids.includes(id));
+        battle.ids.forEach((id) => updateLipSyncStats(season, id, survivors.includes(id)));
+        episode.resultText = eliminatedIds.length
+          ? `${sentenceList(savedIds, season, false)}, shantay you stay. ${sentenceList(eliminatedIds, season, false)}, sashay away.`
+          : `${sentenceList(savedIds, season, false)}, shantay you all stay.`;
+      } else if (battle.kind === "for_win") {
+        const winnerId = decision.winnerId;
+        lipSync.winnerId = winnerId; lipSync.winnerIds=[winnerId]; lipSync.loserId=battle.ids.find((id)=>id!==winnerId);
+        if (isLegacyFormat(season) || episode.rupaulTournamentEpisode) {
+          episode.legacyLipSyncLoserId = lipSync.loserId || null;
+        }
+        episode.winnerIds=[winnerId];
+        if (episode.allWinnersEpisode) {
+          const amount=episode.number===season.allWinnersTalentEpisode?3:1;
+          battle.ids.forEach((id)=>addAllWinnersStarAward(season,episode,id,episode.allWinnersBlockedId===id?0:amount,episode.allWinnersBlockedId===id?"blocked_top2":"top2"));
+        }
+        if (episode.rupaulTournamentEpisode) {
+          if (!episode.rupaulTournamentPointsAwarded) {
+            battle.ids.forEach((id)=>addTournamentPoints(season,id,2,episode,"Top 2 MVQ"));
+            if(winnerId)addTournamentPoints(season,winnerId,1,episode,"Lip Sync Win Bonus");
+            runTournamentPointCeremony(season,episode,rupaulCompetingIds(season,episode));
+            episode.rupaulTournamentPointsAwarded = true;
+          }
+          if (isFinalRupaulTournamentBracketEpisode(season, episode) && !episode.rupaulTournamentAdvancersChosen) {
+            const chosen = await chooseRupaulTournamentAdvancers(season, episode);
+            if (!chosen) return false;
+          }
+        }
+        if (isLegacyFormat(season) && episode.bottomIds?.length) {
+          const elim=(episode.legacyLipsticks||[]).find((vote)=>vote.voterId===winnerId)?.lipstickId || episode.bottomIds[0];
+          episode.legacyEliminationChoiceId=elim; episode.eliminatedIds=[elim];
+          applyRupaulEliminationSaveTwists(season,episode,elim,lipSync);
+        }
+        battle.ids.forEach((id)=>updateLipSyncStats(season,id,id===winnerId));
+        episode.resultText=`${displayName(season.contestants[winnerId])}, you're a winner, baby!`;
+      } else if (battle.kind === "assassin") {
+        const winnerId=decision.winnerId; lipSync.winnerId=winnerId; lipSync.loserId=battle.ids.find((id)=>id!==winnerId);
+        const assassinWon = !!season.contestants[winnerId]?.isAssassin;
+        episode.assassinTopLostId = assassinWon ? episode.winnerIds?.[0] || null : null;
+        lipSync.resultType = assassinWon ? "assassin_group_vote" : "assassin_sole_vote";
+        const eliminatedId=resolveAssassinEliminationDecision(season,episode,lipSync);
+        episode.eliminatedIds=eliminatedId?[eliminatedId]:[];
+        applyRupaulEliminationSaveTwists(season,episode,eliminatedId,lipSync);
+        updateLipSyncStats(season,episode.winnerIds[0],winnerId===episode.winnerIds[0]);
+        season.votingStats = season.votingStats || [];
+        if (!season.votingStats.some((row) => row.label === episode.label && row.assassinId === battle.assassinId)) {
+          season.votingStats.push({
+            label: episode.label,
+            votes: (episode.rumocracyVotes || []).map((vote) => ({ ...vote })),
+            winnerId: episode.winnerIds[0],
+            assassinId: battle.assassinId,
+            lipSyncWinnerId: winnerId,
+            assassinWon,
+            soleChoiceId: episode.assassinWinnerChoiceId,
+            groupChoiceId: episode.assassinGroupChoiceId,
+            groupTieBrokenByTop: !!episode.assassinGroupTieBrokenByTop,
+            eliminatedId,
+            bottomIds: (episode.bottomIds || []).slice(),
+            activeStartIds: (episode.activeStartIds || []).slice()
+          });
+        }
+        episode.resultText=eliminatedId?`${displayName(season.contestants[eliminatedId])}, sashay away.`:"Nobody is eliminated.";
+      } else {
+        const survivors=decision.survivors||[];
+        const eliminated=battle.ids.filter((id)=>!survivors.includes(id));
+        if (decision.resultType==="double_shantay") { season.doubleShantaysUsed+=1; lipSync.resultType="double_shantay"; if (battle.teamTopFour) season.teamsFinalistOverride=4; }
+        else if (decision.resultType==="double_sashay") { season.doubleSashaysUsed+=1; lipSync.resultType="double_sashay"; }
+        else lipSync.resultType=eliminated.length>1?"multi_elimination":"elimination";
+        lipSync.winnerIds=survivors.slice(); lipSync.winnerId=survivors[0]||null; lipSync.loserId=eliminated[0]||null;
+        episode.savedIds.push(...survivors);
+        episode.eliminatedIds.push(...eliminated);
+        eliminated.slice().forEach((id)=>applyRupaulEliminationSaveTwists(season,episode,id,lipSync));
+        battle.ids.forEach((id)=>updateLipSyncStats(season,id,!(episode.eliminatedIds||[]).includes(id)));
+        episode.resultText=(episode.eliminatedIds||[]).length?`${sentenceList(episode.eliminatedIds,season,false)}, sashay away.`:`${sentenceList(survivors,season,false)}, shantay you stay.`;
+      }
+      battle.resolved=true;
+    }
+    if (episode.allWinnersEpisode) await completeRupaulAllWinnersChoices(season,episode);
+    return finishRupaulEpisode(season, episode);
+  }
+
+  async function completeRupaulAllWinnersChoices(season, episode) {
+    const winnerId=episode.winnerIds?.[0];
+    const giftWeek=episode.number===season.allWinnersMidseasonEpisode;
+    if (giftWeek) {
+      episode.allWinnersStarGiveaways=[];
+      for (const giverId of episode.top2Ids||[]) {
+        const pool=season.activeIds.filter((id)=>id!==giverId);
+        const picked=await openRupaulPhotoPicker(`${fullDisplayName(season.contestants[giverId])}: give a star`,pool,{min:1,max:1,tone:"winner"});
+        if (picked?.[0]) episode.allWinnersStarGiveaways.push({giverId,receiverId:picked[0]});
+      }
+      season.allWinnersPendingGiveaways=episode.allWinnersStarGiveaways.slice();
+    }
+    episode.allWinnersBlockAllowed=episode.number<=season.allWinnersBlockCutoffEpisode;
+    if (episode.allWinnersBlockAllowed && winnerId) {
+      const pool=season.activeIds.filter((id)=>id!==winnerId && !(episode.top2Ids||[]).includes(id));
+      const picked=pool.length?await openRupaulPhotoPicker("Choose who to block",pool,{min:1,max:1,tone:"bottom"}):null;
+      const target=picked?.[0]||null;
+      episode.allWinnersBlockTargetId=target; episode.allWinnersTrackBlockedId=target; season.allWinnersPendingBlockedId=target;
+      if(target)season.allWinnersBlockCounts[target]=Number(season.allWinnersBlockCounts[target]||0)+1;
+    }
+    episode.allWinnersStarCountsSnapshot={...season.allWinnersStarCounts};
+  }
+
+  function finishRupaulEpisode(season, episode) {
+    if (episode.rupaulFinalized) return true;
+    runUntucked(season, episode);
+    addFameGamesRunwayToUntucked(season, episode);
+    const index=season.episodes.indexOf(episode);
+    if(index>=0)season.episodes.splice(index,1);
+    episode.rupaulPending=false; episode.rupaulFinalized=true; episode.rupaulResultsConfirmed=true;
+    finalizeEpisode(season,episode);
+    if (episode.specialPremiere === "late_entry" && season.lateEntryId && !season.activeIds.includes(season.lateEntryId)) {
+      reviveContestant(season, season.lateEntryId);
+      episode.lateEntryRevealId = season.lateEntryId;
+      addReturnEpisodeNote(season, season.lateEntryId, "Late Entry");
+    }
+    if (episode.specialPremiere === "rate_a_queen_s17_split" && !episode.rateAQueenS17FinalPremiere && episode.bottomIds?.[0]) season.rateAQueenS17FirstBottomId = episode.bottomIds[0];
+    if (episode.specialPremiere === "rate_a_queen_merge") season.rateAQueenMergeDone = true;
+    if (season.config.premiereType === "split_s14" && episode.rupaulPremiereSequence) {
+      season.rupaulS14PremiereElims = [...new Set([...(season.rupaulS14PremiereElims || []), ...(episode.eliminatedIds || [])])];
+    }
+    if (episode.rupaulPremiereSequence) {
+      season.rupaulPremiereIndex=Number(season.rupaulPremiereIndex||0)+1;
+      if(season.rupaulPremiereIndex>=episode.rupaulPremiereTotal){
+        season.rupaulPremiereComplete=true;
+        if (season.config.premiereType === "split_s14" && (season.rupaulS14PremiereElims || []).length) {
+          season.rupaulS14PremiereElims.forEach((id) => { reviveContestant(season, id); addReturnEpisodeNote(season, id, "Split Premiere Return"); });
+        }
+      }
+    }
+    if (episode.rupaulPorkchopGroupEpisode) {
+      season.rupaulPorkchopPhase=Number(season.rupaulPorkchopPhase||1)+1;
+      if(season.rupaulPorkchopPhase>=3){season.activeIds=season.castOrder.slice();season.rupaulPremiereComplete=true;}
+    }
+    if (episode.rupaulMidRatePart) {
+      const flow=season.rupaulMidRateState;
+      if(flow){const bottomId=episode.bottomIds?.[0]||rupaulRankedIds(episode,rupaulCompetingIds(season,episode)).at(-1);if(bottomId)flow.bottomIds.push(bottomId);flow.index+=1;}
+    }
+    if (episode.rupaulDirectComeback) markComebackUsed(season);
+    if (episode.allWinnersEpisode && episode.number === season.allWinnersTalentEpisode && !(season.allWinnersFinalistIds || []).length) chooseAllWinnersFinalists(season, episode);
+    if (episode.rupaulTournamentEpisode || episode.rupaulTournamentMergeEpisode) advanceRupaulTournamentState(season, episode);
+    if (episode.rupaulTopFourRumixEpisode) {
+      season.rupaulTopFourRumixDone = true;
+      season.topFourRumixColumnAdded = true;
+      (episode.activeStartIds || season.activeIds).forEach((id) => {
+        const entry = [...(season.stats?.[id]?.track || [])].reverse().find((item) => item.label === episode.label);
+        if (entry) { entry.token = "TOP4"; entry.display = "TOP4"; entry.extraClasses = (entry.extraClasses || []).filter((name) => !/^token-safe/.test(name)); }
+      });
+      const column = (season.trackColumnLabels || []).find((item) => item.label === episode.label);
+      if (column) { column.title = "Final RuMix Performance (RuMix)"; column.challengeType = "RuMix"; }
+    }
+    state.currentEpisodeIndex=season.episodes.length-1; state.currentStep="results";
+    saveState(); renderEpisodeSelect(); renderEpisode();
+    return true;
+  }
+
+  function rupaulPremiereOptions(season) {
+    if(season.rupaulPremiereComplete)return null;
+    const type=season.config.premiereType||"regular";
+    if(type==="porkchop")return {porkchop:true};
+    const split=["split_s6","split_s12","split_s14","rate_a_queen_s16","rate_a_queen_s17"].includes(type);
+    const total=type==="rate_a_queen_s16"?3:(split?2:1);
+    const index=Number(season.rupaulPremiereIndex||0);
+    if(index>=total){season.rupaulPremiereComplete=true;return null;}
+    const options={premiere:true,label:`Episode ${season.episodeCounter}`,rupaulPremiereSequence:true,rupaulPremiereTotal:total};
+    if(type==="rate_a_queen_s16"&&index===2){
+      options.premiere=false;options.competingIds=season.activeIds.slice();options.runOnlyIds=[];options.specialPremiere="rate_a_queen_merge";options.rupaulSplitSequence=false;
+    } else if(split){
+      const first=season.splitPremiereFirstGroupIds||season.castOrder.slice(0,Math.ceil(season.castOrder.length/2));
+      const second=season.castOrder.filter((id)=>!first.includes(id));
+      options.competingIds=(index===0?first:second).slice(); options.runOnlyIds=season.castOrder.filter((id)=>!options.competingIds.includes(id)); options.splitGroup=`Group ${index+1}`; options.rupaulSplitSequence=true;
+      if(index>0&&season.rupaulSplitChallengeType)options.forcedChallengeType=season.rupaulSplitChallengeType;
+      if(type==="split_s12")options.specialPremiere="non_elim_top2";
+      if(type==="rate_a_queen_s16"){options.specialPremiere="rate_a_queen_split";options.forcedChallengeType="talent_show";}
+      if(type==="rate_a_queen_s17"){options.specialPremiere="rate_a_queen_s17_split";options.forcedChallengeType="talent_show";options.rateAQueenS17FinalPremiere=index===1;}
+    } else {
+      if(type==="slayers")options.specialPremiere="slayers";
+      if(type==="non_elim_top2")options.specialPremiere="non_elim_top2";
+      if(type==="uk3")options.specialPremiere="uk3";
+      if(type==="late_entry")options.specialPremiere="late_entry";
+    }
+    return options;
+  }
+
+  async function createRupaulPorkchopOpening(season) {
+    const episode=createEpisodeShell(season,{type:"porkchop_premiere",premiere:true,label:"Episode 1",noMiniChallenge:true,noGuestJudge:true});
+    episode.challenge={id:"porkchop_premiere_lip_syncs",name:"Porkchop Lip Syncs",type:"lip_sync",teamMode:"solo"};
+    episode.rupaulPending=true;episode.rupaulPorkchopOpening=true;episode.rupaulPorkchopOpeningComplete=false;
+    episode.rupaulPorkchopPairs=[];
+    const shuffled=shuffle(season.activeIds.slice());
+    while(shuffled.length){const size=shuffled.length===3?3:Math.min(2,shuffled.length);const ids=shuffled.splice(0,size);if(ids.length>1)episode.rupaulPorkchopPairs.push(ids);}
+    season.episodes.push(episode);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
+    return episode;
+  }
+
+  async function runRupaulPorkchopOpening(season,episode){
+    if(episode.rupaulPorkchopOpeningComplete)return true;
+    const winners=[],losers=[],battles=[];
+    for(let i=0;i<episode.rupaulPorkchopPairs.length;i+=1){const ids=episode.rupaulPorkchopPairs[i];const song=await openRupaulSongPicker(season,`Choose the Porkchop Lip Sync Song #${i+1}`);if(!song)return false;const lipSync=createLipSyncFromSong(season,ids,song,`Porkchop Lip Sync #${i+1}`);const decision=await openRupaulLipSyncResultPicker(season,episode,{ids,lipSync,kind:"for_win"},{porkchop:true,forWin:true});if(!decision)return false;lipSync.winnerId=decision.winnerId;lipSync.loserId=ids.find((id)=>id!==decision.winnerId);lipSync.resultType="porkchop_battle";winners.push(decision.winnerId);ids.filter((id)=>id!==decision.winnerId).forEach((id)=>losers.push(id));ids.forEach((id)=>updateLipSyncStats(season,id,id===decision.winnerId));battles.push(lipSync);}
+    episode.extraLipSyncs=battles;episode.winnerIds=winners;episode.safeIds=losers;
+    const loading=createPorkchopLoadingDock(season,episode,losers);const chopped=loading?.choppedId||null;
+    episode.porkchopPremiere={winnerIds:winners.slice(),loserIds:losers.slice(),choppedId:chopped,winnersGroup:[...winners,...(chopped?[chopped]:[])],losersGroup:losers.filter((id)=>id!==chopped),loadingDock:loading};
+    season.rupaulPorkchopGroups={winners:episode.porkchopPremiere.winnersGroup,losers:episode.porkchopPremiere.losersGroup};season.rupaulPorkchopPhase=1;
+    episode.rupaulPorkchopOpeningComplete=true;episode.resultText=chopped?`${fullDisplayName(season.contestants[chopped])} receives the chop in the Porkchop Loading Dock.`:"The Porkchop battles are complete.";
+    return finishRupaulEpisode(season,episode);
+  }
+
+  async function prepareNextRupaulPorkchopEpisode(season){
+    if(!season.rupaulPorkchopGroups)return createRupaulPorkchopOpening(season);
+    const phase=Number(season.rupaulPorkchopPhase||1);
+    if(phase>=3){season.activeIds=season.castOrder.slice();season.rupaulPremiereComplete=true;return prepareNextRupaulEpisode(season);}
+    const ids=(phase===1?season.rupaulPorkchopGroups.winners:season.rupaulPorkchopGroups.losers).slice();
+    const episode=createRupaulDraftEpisode(season,{premiere:true,label:`Episode ${season.episodeCounter}`,competingIds:ids,runwayParticipantIds:ids,runOnlyIds:season.castOrder.filter((id)=>!ids.includes(id)),forcedChallengeType:"rumix",specialPremiere:"porkchop_top2",splitGroup:phase===1?"Porkchop Winners":"Porkchop Group"});
+    episode.rupaulPorkchopGroupEpisode=true;await initializeRupaulDraftChallenge(season,episode);
+  }
+
+  function applyRupaulFinaleTrack(season, finale, finalists) {
+    const finalistSet=new Set(finalists||[]);
+    season.castOrder.forEach((id)=>{
+      const isFinalist=finalistSet.has(id);
+      const isWinner=(finale.winnerIds||[]).includes(id);
+      const isRunnerUp=(season.runnerUpIds||[]).includes(id);
+      const isFinalElim=(finale.eliminatedIds||[]).includes(id);
+      const isMx=(finale.missCongenialityIds||[]).includes(id);
+      const isGb=finale.goldenBoot?.id===id;
+      const isFame=finale.fameGamesWinnerId===id;
+      let token=isWinner?"WINNER":isRunnerUp?"RU":isFinalElim?"ELIM":isFame?"FAME_GAMES":"GUEST";
+      let display=token;const extraClasses=[];
+      if(isFinalElim)extraClasses.push("finale-elim");
+      if(isWinner&&isMx){display="WINNER+<br/>MX. CON";extraClasses.push("winner-mx-con");}
+      else if(isWinner&&isGb){display="WINNER+<br/>GB";extraClasses.push("winner-gb");}
+      else if(isRunnerUp&&isMx){display="RU+<br/>MX. CON";extraClasses.push("ru-mx-con");}
+      else if(isRunnerUp&&isGb){display="RU+<br/>GB";extraClasses.push("ru-gb");}
+      else if(isFinalElim&&isMx){display="ELIM+<br/>MX. CON";extraClasses.push("elim-mx-con");}
+      else if(isFinalElim&&isGb){display="ELIM+<br/>GB";extraClasses.push("elim-gb");}
+      else if(isFame&&!isFinalist){token="FAME_GAMES";display="FAME<br/>GAMES";}
+      else if(isMx&&!isFinalist){token="MX. CON";display="MX. CON";}
+      else if(isGb&&!isFinalist){token="GB";display="GB";}
+      if(!(season.stats[id].track||[]).some((entry)=>entry.label==="Finale"))season.stats[id].track.push({label:"Finale",token,display,extraClasses});
+    });
+    if(!(season.trackColumnLabels||[]).some((column)=>column.label==="Finale"))season.trackColumnLabels.push({label:"Finale",title:"Grand Finale",challengeType:"Finale"});
+  }
+
+  async function prepareRupaulStandardFinale(season){
+    const finale=createEpisodeShell(season,{type:"finale",title:"Grand Finale",label:"Finale"});
+    finale.rupaulPending=true;finale.rupaulFinalePending=true;finale.challenge=null;finale.runway=null;
+    finale.finalePerformances=["lsftc","lsftf"].includes(season.config.finaleType)?[]:createFinalePerformances(season);
+    const missCon=calculateMissCongeniality(season);finale.missCongenialityIds=missCon.winners||[];finale.missCongenialityVotes=missCon.votes||{};finale.missCongenialityVoteDetails=missCon.details||[];
+    finale.goldenBoot=calculateGoldenBoot(season);
+    if(season.config.specialFameGames)resolveFameGamesWinner(season,finale);
+    if (season.config.finaleType === "jury_finale") {
+      const usedSongs = (season.usedLipSyncIds || []).slice();
+      simulateJuryFinale(season, finale);
+      season.usedLipSyncIds = usedSongs;
+      finale.lipSync = null;
+      finale.winnerIds = [];
+      finale.resultText = "The jury ballots are sealed.";
+    }
+    season.episodes.push(finale);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
+  }
+
+  async function runRupaulFinaleFlow(season,finale){
+    if(finale.rupaulFinaleComplete)return true;
+    const finalists=(finale.activeStartIds?.length?finale.activeStartIds:season.activeIds).slice();
+    if(season.config.finaleType==="jury_finale"){
+      if (!(finale.juryBallots || []).length) {
+        const usedSongs=(season.usedLipSyncIds||[]).slice();
+        simulateJuryFinale(season,finale);
+        season.usedLipSyncIds=usedSongs;
+        finale.lipSync = null;
+        finale.winnerIds = [];
+      }
+      const top=finale.top2Ids.slice();
+      const song=await openRupaulSongPicker(season,"Choose the Final Lip Sync Song");if(!song)return false;
+      const ls=createLipSyncFromSong(season,top,song,"Final Lip Sync for the Crown");
+      const d=await openRupaulLipSyncResultPicker(season,finale,{ids:top,lipSync:ls,kind:"for_win"},{forWin:true,allowDouble:false});if(!d)return false;
+      ls.winnerId=d.winnerId;ls.winnerIds=[d.winnerId];ls.loserId=top.find((id)=>id!==d.winnerId)||null;ls.resultType="crown_final";ls.isFinalRound=true;
+      finale.lipSync=ls;finale.winnerIds=[d.winnerId];finale.eliminatedIds=finalists.filter((id)=>!top.includes(id));
+    }else if(season.config.finaleType==="lsftc"&&finalists.length>=4){
+      const shuffled=shuffle(finalists),pairs=crownSmackdownGroups(shuffled);const roundWinners=[];finale.extraLipSyncs=[];
+      for(let i=0;i<pairs.length;i+=1){const ids=pairs[i];if(ids.length<2){roundWinners.push(...ids);continue;}const song=await openRupaulSongPicker(season,`Choose the Round 1 Song #${i+1}`);if(!song)return false;const ls=createLipSyncFromSong(season,ids,song,"Lip Sync for the Crown");const d=await openRupaulLipSyncResultPicker(season,finale,{ids,lipSync:ls,kind:"for_win"},{forWin:true,allowDouble:false});if(!d)return false;ls.winnerId=d.winnerId;ls.winnerIds=[d.winnerId];ls.loserId=ids.find((id)=>id!==d.winnerId)||null;ls.roundNumber=1;roundWinners.push(d.winnerId);finale.extraLipSyncs.push(ls);ids.forEach((id)=>updateLipSyncStats(season,id,id===d.winnerId));}
+      const song=await openRupaulSongPicker(season,"Choose the Final Lip Sync Song");if(!song)return false;const ls=createLipSyncFromSong(season,roundWinners,song,"Final Lip Sync for the Crown");const d=await openRupaulLipSyncResultPicker(season,finale,{ids:roundWinners,lipSync:ls,kind:"for_win"},{forWin:true,allowDouble:false});if(!d)return false;ls.winnerId=d.winnerId;ls.winnerIds=[d.winnerId];ls.loserId=roundWinners.find((id)=>id!==d.winnerId)||null;ls.isFinalRound=true;finale.lipSync=ls;finale.top2Ids=roundWinners;finale.winnerIds=[d.winnerId];finale.eliminatedIds=finalists.filter((id)=>!roundWinners.includes(id));roundWinners.forEach((id)=>updateLipSyncStats(season,id,id===d.winnerId));
+    }else{
+      const topCount=Math.min(2,finalists.length);const top=await openRupaulPhotoPicker("Choose the Top Two",finalists,{min:topCount,max:topCount,tone:"winner"});if(!top)return false;const song=await openRupaulSongPicker(season,"Choose the Final Lip Sync Song");if(!song)return false;const ls=createLipSyncFromSong(season,top,song,"Final Lip Sync");const d=await openRupaulLipSyncResultPicker(season,finale,{ids:top,lipSync:ls,kind:"for_win"},{forWin:true,allowDouble:false});if(!d)return false;ls.winnerId=d.winnerId;ls.winnerIds=[d.winnerId];ls.loserId=top.find((id)=>id!==d.winnerId)||null;finale.top2Ids=top;finale.lipSync=ls;finale.winnerIds=[d.winnerId];finale.eliminatedIds=finalists.filter((id)=>!top.includes(id));top.forEach((id)=>updateLipSyncStats(season,id,id===d.winnerId));
+    }
+    season.seasonComplete=true;season.winnerId=finale.winnerIds[0];season.winnerIds=finale.winnerIds.slice();season.runnerUpIds=(finale.top2Ids||[]).filter((id)=>!finale.winnerIds.includes(id));finale.resultText=`The Next Drag Superstar is... ${sentenceList(finale.winnerIds,season,false)}!`;finale.rupaulFinaleComplete=true;finale.rupaulPending=false;finale.rupaulFinalized=true;finale.resultsRevealed=false;
+    applyRupaulFinaleTrack(season,finale,finalists);state.currentStep="winner";saveState();renderEpisodeSelect();renderEpisode();return true;
+  }
+
+  function ensureRupaulAllWinnersFinalists(season) {
+    if ((season.allWinnersFinalistIds || []).length === 4) return season.allWinnersFinalistIds.slice();
+    season.allWinnersFinalistIds = allWinnersRankByStars(season).slice(0, Math.min(4, season.castOrder.length));
+    return season.allWinnersFinalistIds.slice();
+  }
+
+  async function runRupaulStoredKnockoutBracket(season, episode, key, ids, label, resultPrefix) {
+    const initial = (ids || []).filter(Boolean);
+    let flow = episode[key];
+    if (!flow) {
+      flow = { initialIds: initial.slice(), currentIds: shuffle(initial), nextIds: [], round: 1, groupIndex: 0, groups: [], lipSyncs: [], pendingBattle: null, winnerId: null, complete: initial.length <= 1 };
+      if (flow.complete) flow.winnerId = initial[0] || null;
+      episode[key] = flow;
+      saveState();
+    }
+    while (!flow.complete) {
+      if (flow.currentIds.length <= 1) {
+        flow.winnerId = flow.currentIds[0] || null;
+        flow.complete = true;
+        break;
+      }
+      if (!flow.groups.length) {
+        flow.groups = crownSmackdownGroups(flow.currentIds).map((group) => group.slice());
+        flow.groupIndex = 0;
+        flow.nextIds = [];
+      }
+      if (flow.groupIndex >= flow.groups.length) {
+        flow.currentIds = flow.nextIds.slice();
+        flow.nextIds = [];
+        flow.groups = [];
+        flow.groupIndex = 0;
+        flow.round += 1;
+        saveState();
+        continue;
+      }
+      const group = flow.groups[flow.groupIndex].slice();
+      if (group.length <= 1) {
+        flow.nextIds.push(...group);
+        flow.groupIndex += 1;
+        saveState();
+        continue;
+      }
+      const finalRound = flow.groups.length === 1 && flow.currentIds.length === group.length;
+      const battleLabel = finalRound ? `${label} Final Lip Sync` : `${label} Round ${flow.round}, Lip Sync ${flow.groupIndex + 1}`;
+      if (!flow.pendingBattle) {
+        const song = await openRupaulSongPicker(season, `Choose the Song — ${battleLabel}`);
+        if (!song) return null;
+        const lipSync = createLipSyncFromSong(season, group, song, battleLabel);
+        lipSync.roundNumber = flow.round;
+        lipSync.roundPosition = flow.groupIndex + 1;
+        lipSync.isFinalRound = finalRound;
+        lipSync.resultType = finalRound ? `${resultPrefix}_final` : `${resultPrefix}_round`;
+        flow.pendingBattle = { ids: group.slice(), lipSync };
+        saveState();
+      }
+      const pending = flow.pendingBattle;
+      const decision = await openRupaulLipSyncResultPicker(season, episode, { ids: pending.ids, lipSync: pending.lipSync, kind: "for_win" }, { forWin: true, allowDouble: false });
+      if (!decision?.winnerId) return null;
+      pending.lipSync.winnerId = decision.winnerId;
+      pending.lipSync.winnerIds = [decision.winnerId];
+      pending.lipSync.loserId = pending.ids.find((id) => id !== decision.winnerId) || null;
+      pending.ids.forEach((id) => updateLipSyncStats(season, id, id === decision.winnerId));
+      flow.lipSyncs.push(pending.lipSync);
+      flow.nextIds.push(decision.winnerId);
+      flow.pendingBattle = null;
+      flow.groupIndex += 1;
+      saveState();
+      renderEpisode();
+    }
+    flow.winnerId = flow.winnerId || flow.currentIds[0] || flow.nextIds[0] || null;
+    flow.complete = true;
+    saveState();
+    return flow;
+  }
+
+  async function prepareRupaulAllWinnersFinale(season) {
+    const finalists = ensureRupaulAllWinnersFinalists(season);
+    const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+    finale.allWinnersFinale = true;
+    finale.lsftcFinale = true;
+    finale.rupaulPending = true;
+    finale.rupaulAllWinnersFinalePending = true;
+    finale.activeStartIds = finalists.slice();
+    finale.allWinnersFinalistIds = finalists.slice();
+    finale.challenge = null;
+    finale.runway = null;
+    finale.finalePerformances = [];
+    const missCon = calculateMissCongeniality(season);
+    finale.missCongenialityIds = missCon.winners || [];
+    finale.missCongenialityVotes = missCon.votes || {};
+    finale.missCongenialityVoteDetails = missCon.details || [];
+    finale.goldenBoot = calculateGoldenBoot(season);
+    season.rupaulAllWinnersFinalePrepared = true;
+    season.episodes.push(finale);
+    state.currentEpisodeIndex = season.episodes.length - 1;
+    state.currentStep = "status";
+    saveState(); renderEpisodeSelect(); renderEpisode(); showScreen("episode-screen");
+    return finale;
+  }
+
+  async function runRupaulAllWinnersFinaleFlow(season, finale) {
+    if (finale.rupaulFinaleComplete) return true;
+    const finalists = (finale.allWinnersFinalistIds || ensureRupaulAllWinnersFinalists(season)).slice();
+    const nonFinalists = season.castOrder.filter((id) => !finalists.includes(id));
+    const hersesFlow = await runRupaulStoredKnockoutBracket(season, finale, "rupaulHersesFlow", nonFinalists, "Queen of She Done Already Done Had Herses", "qosdadhh");
+    if (!hersesFlow) return false;
+    const crownFlow = await runRupaulStoredKnockoutBracket(season, finale, "rupaulCrownFlow", finalists, "Lip Sync for the Crown", "all_winners");
+    if (!crownFlow) return false;
+    const herses = { lipSyncs: (hersesFlow.lipSyncs || []).slice(), winnerId: hersesFlow.winnerId, finalLipSync: (hersesFlow.lipSyncs || []).at(-1) || null };
+    const crown = { lipSyncs: (crownFlow.lipSyncs || []).slice(), winnerId: crownFlow.winnerId, finalLipSync: (crownFlow.lipSyncs || []).at(-1) || null };
+    finale.allWinnersHersesSmackdown = herses;
+    finale.allWinnersCrownSmackdown = crown;
+    finale.extraLipSyncs = crown.lipSyncs.slice();
+    finale.lipSync = crown.finalLipSync;
+    finale.winnerIds = [crown.winnerId].filter(Boolean);
+    finale.top2Ids = crown.finalLipSync?.ids?.slice() || finalists.slice(0, 2);
+    const outcome = allWinnersFinaleOutcomeInfo(finale, finalists, finale.winnerIds);
+    finale.eliminatedIds = outcome.finalElimIds.slice();
+    finale.allWinnersQueenOfHersesId = herses.winnerId || null;
+    season.allWinnersQueenOfHersesId = herses.winnerId || null;
+    season.activeIds = finalists.slice();
+    season.seasonComplete = true;
+    season.winnerId = finale.winnerIds[0] || null;
+    season.winnerIds = finale.winnerIds.slice();
+    season.runnerUpIds = outcome.runnerUpIds.slice();
+    season.castOrder.forEach((id) => {
+      const hersesInfo = allWinnersHersesInfo(herses, id);
+      let token = "GUEST", display = "GUEST";
+      const extraClasses = [];
+      if (finale.winnerIds.includes(id)) { token = "WINNER"; display = "WINNER"; }
+      else if (season.runnerUpIds.includes(id)) { token = "RU"; display = "RU"; }
+      else if (outcome.finalElimIds.includes(id)) { token = "ELIM"; display = "ELIM"; extraClasses.push("finale-elim"); }
+      else if (hersesInfo) { token = hersesInfo.token; display = hersesInfo.display; extraClasses.push(...(hersesInfo.extraClasses || [])); }
+      if (!(season.stats[id].track || []).some((entry) => entry.label === "Finale")) season.stats[id].track.push({ label: "Finale", token, display, extraClasses });
+    });
+    if (!(season.trackColumnLabels || []).some((column) => column.label === "Finale")) season.trackColumnLabels.push({ label: "Finale", title: "Grand Finale", challengeType: "Finale" });
+    finale.resultText = `${sentenceList(finale.winnerIds, season, false)} wins the All Winners crown${herses.winnerId ? `, and ${fullDisplayName(season.contestants[herses.winnerId])} is Queen of She Done Already Done Had Herses` : ""}.`;
+    finale.rupaulFinaleComplete = true;
+    finale.rupaulPending = false;
+    finale.rupaulFinalized = true;
+    finale.resultsRevealed = false;
+    state.currentStep = "winner";
+    saveState(); renderEpisodeSelect(); renderEpisode();
+    return true;
+  }
+
+  async function prepareNextRupaulAllWinnersEpisode(season){
+    if(!season.allWinnersTotalEpisodes) setupAllWinnersState(season);
+    if(season.episodeCounter > season.allWinnersCompetitiveEpisodes) return prepareRupaulAllWinnersFinale(season);
+    const number=season.episodeCounter;
+    const episode=createRupaulDraftEpisode(season,{allWinnersEpisode:true,label:`Episode ${number}`,forcedChallengeType:allWinnersForcedChallengeType(season,number)});
+    episode.allWinnersBlockedId=number===season.allWinnersTalentEpisode?null:season.allWinnersPendingBlockedId;
+    season.allWinnersPendingBlockedId=null;
+    const gifts=(season.allWinnersPendingGiveaways||[]).slice();
+    if(gifts.length){
+      episode.allWinnersStarGiveawaysAtStart=gifts;
+      episode.noMiniChallenge=true;
+      season.allWinnersPendingGiveaways=[];
+      gifts.forEach((gift)=>addAllWinnersStarAward(season,episode,gift.receiverId,1,"gift",gift.giverId));
+    }
+    await initializeRupaulDraftChallenge(season,episode);
+  }
+
+  async function prepareRupaulSpecialSmackdown(season,type="special_lalaparuza",options={}){
+    const episode=createEpisodeShell(season,{type,label:options.label||`Episode ${season.episodeCounter}`,noMiniChallenge:true,noGuestJudge:true});
+    episode.rupaulPending=true;episode.rupaulSpecialFlow=true;episode.rupaulSpecialMode=options.mode||type;
+    episode.rupaulSpecialIds=(options.ids||season.activeIds).slice();
+    episode.challenge={id:`${type}_${episode.number}`,name:options.name||(type==="special_slayoffs"?"Slay-Offs":type==="lsftf"?"Lip Sync for the Finale":type==="reunion_lalaparuza"?"Reunion LaLaPaRuZa":"LaLaPaRuZa"),type:"lip_sync",teamMode:"solo"};
+    // Lip-sync-only specials already have their structural challenge. Mark the normal
+    // challenge/runway/judging gates complete so the shared episode pipeline cannot
+    // replace them with a random maxi challenge before the first battle.
+    episode.rupaulChallengeConfirmed=true;
+    episode.rupaulRunwayConfirmed=true;
+    episode.rupaulPlacementsConfirmed=true;
+    if(episode.rupaulSpecialMode==="reunion_lalaparuza"){
+      episode.activeStartIds=season.castOrder.slice();
+      episode.runOnlyIds=season.activeIds.slice();
+    }else episode.activeStartIds=episode.rupaulSpecialIds.slice();
+    season.episodes.push(episode);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
+  }
+
+  async function createRupaulSpecialBattle(season,episode,ids,label,kind="for_win"){
+    const song=await openRupaulSongPicker(season,`Choose the Song — ${label}`);if(!song)return null;
+    const lipSync=createLipSyncFromSong(season,ids,song,label);
+    const decision=await openRupaulLipSyncResultPicker(season,episode,{ids,lipSync,kind},kind==="for_win"?{forWin:true}:{});if(!decision)return null;
+    return {lipSync,decision};
+  }
+
+  async function runRupaulSpecialLipSyncFlow(season,episode){
+    if(episode.rupaulSpecialCompleted)return true;
+    const mode=episode.rupaulSpecialMode||episode.type;
+    const participants=(episode.rupaulSpecialIds||season.activeIds).slice();
+
+    if(mode==="lalaparuza_comeback"){
+      const lipSyncs=[];episode.returnedIds=[];episode.eliminatedIds=[];episode.savedIds=[];episode.safeIds=[];
+      for(let i=0;i<(episode.rupaulLalaparuzaPairs||[]).length;i+=1){
+        const pair=episode.rupaulLalaparuzaPairs[i];const ids=pair.ids.slice();
+        const song=await openRupaulSongPicker(season,`Choose the Song — Lip Sync #${i+1}`);if(!song)return false;
+        const lipSync=createLipSyncFromSong(season,ids,song,`LaLaPaRuZa Comeback Lip Sync #${i+1}`);lipSync.resultType="lalaparuza_comeback";
+        const decision=await openRupaulLipSyncResultPicker(season,episode,{ids,lipSync,kind:"elimination"},{});if(!decision)return false;
+        const survivors=decision.survivors||[];const elimId=pair.eliminatedId,activeId=pair.activeId;
+        lipSync.winnerIds=survivors.slice();lipSync.winnerId=survivors[0]||null;lipSync.loserId=ids.find((id)=>!survivors.includes(id))||null;
+        if(decision.resultType==="double_shantay"){season.doubleShantaysUsed+=1;lipSync.resultType="double_shantay";}
+        else if(decision.resultType==="double_sashay"){season.doubleSashaysUsed+=1;lipSync.resultType="double_sashay";}
+        if(survivors.includes(elimId)){reviveContestant(season,elimId);episode.returnedIds.push(elimId);episode.comebackPlacements[elimId]="RTRN";}else episode.comebackPlacements[elimId]="OUT";
+        if(survivors.includes(activeId)){episode.savedIds.push(activeId);episode.comebackPlacements[activeId]="SAFE";}else{episode.eliminatedIds.push(activeId);episode.comebackPlacements[activeId]="ELIM";}
+        ids.forEach((id)=>updateLipSyncStats(season,id,survivors.includes(id)));lipSyncs.push(lipSync);saveState();
+      }
+      (episode.runOnlyIds||[]).forEach((id)=>{episode.comebackPlacements[id]="RUN";episode.safeIds.push(id);});
+      episode.extraLipSyncs=lipSyncs;episode.lipSync=null;episode.comeback.returnedId=episode.returnedIds[0]||null;episode.resultText=episode.returnedIds.length?`${sentenceList(episode.returnedIds,season,false)} ${episode.returnedIds.length===1?"has":"have"} returned to the competition.`:"No eliminated contestant returned to the competition.";markComebackUsed(season);episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(mode==="mid_season_rate_a_queen_bottom"){
+      const ids=participants.slice(0,2);
+      if(ids.length<2){episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);}
+      const song=await openRupaulSongPicker(season,"Choose the Rate-A-Queen Bottom Lip Sync Song");if(!song)return false;
+      const lipSync=createLipSyncFromSong(season,ids,song,"Rate-A-Queen Lip Sync For Your Life");
+      lipSync.resultType="mid_season_rate_a_queen_bottom1";
+      const decision=await openRupaulLipSyncResultPicker(season,episode,{ids,lipSync,kind:"elimination"},{});if(!decision)return false;
+      const survivors=decision.survivors||[];const eliminated=ids.filter((id)=>!survivors.includes(id));
+      lipSync.winnerIds=survivors.slice();lipSync.winnerId=survivors[0]||null;lipSync.loserId=eliminated[0]||null;
+      if(decision.resultType==="double_shantay"){season.doubleShantaysUsed+=1;lipSync.resultType="double_shantay";}
+      else if(decision.resultType==="double_sashay"){season.doubleSashaysUsed+=1;lipSync.resultType="double_sashay";}
+      episode.lipSync=lipSync;episode.extraLipSyncs=[];episode.bottomIds=ids.slice();episode.savedIds=survivors.slice();episode.eliminatedIds=eliminated;
+      ids.forEach((id)=>updateLipSyncStats(season,id,survivors.includes(id)));
+      episode.resultText=eliminated.length?`${sentenceList(eliminated,season,false)}, sashay away.`:"Both contestants remain in the competition.";
+      episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(mode==="game_within_a_game"){
+      const order=(episode.rupaulGameOrder||participants).slice();const lipSyncs=[];let champion=order[0]||null;
+      for(let i=1;i<order.length;i+=1){const challenger=order[i];const ids=[champion,challenger].filter(Boolean);if(ids.length<2)continue;const label=`Game Within a Game Lip Sync #${i}`;const song=await openRupaulSongPicker(season,`Choose the Song — ${label}`);if(!song)return false;const lipSync=createLipSyncFromSong(season,ids,song,label);lipSync.resultType="game_within_a_game";lipSync.gameWithinAGame=true;lipSync.gameWithinAGameFinal=i===order.length-1;lipSync.roundNumber=i;const decision=await openRupaulLipSyncResultPicker(season,episode,{ids,lipSync,kind:"for_win"},{forWin:true,allowDouble:false});if(!decision?.winnerId)return false;champion=decision.winnerId;lipSync.winnerId=champion;lipSync.winnerIds=[champion];lipSync.loserId=ids.find((id)=>id!==champion)||null;ids.forEach((id)=>updateLipSyncStats(season,id,id===champion));lipSyncs.push(lipSync);episode.extraLipSyncs=lipSyncs.slice();episode.lipSync=null;saveState();renderEpisode();await Promise.resolve();}
+      if(champion)reviveContestant(season,champion);episode.returnedIds=[champion].filter(Boolean);episode.runOnlyIds=(episode.rupaulOriginalActiveIds||[]).slice();episode.runOnlyIds.forEach((id)=>episode.comebackPlacements[id]="RUN");order.forEach((id)=>episode.comebackPlacements[id]=id===champion?"IN":"OUT");episode.extraLipSyncs=lipSyncs;episode.lipSync=null;episode.comeback.returnedId=champion;episode.resultText=champion?`${displayName(season.contestants[champion])}, shantay you stay! You have earned your spot back in the competition.`:"The Game Within a Game is complete.";markComebackUsed(season);episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(mode==="special_slayoffs"){
+      const bracket=await runRupaulStoredKnockoutBracket(season,episode,"rupaulSlayOffsBracket",participants,"Slay-Offs","slayoffs");if(!bracket)return false;
+      const bracketWinner=bracket.winnerId;const round1Losers=[...new Set((bracket.lipSyncs||[]).filter((ls)=>Number(ls.roundNumber||1)===1).flatMap((ls)=>(ls.ids||[]).filter((id)=>id!==ls.winnerId)))];
+      const top2Loser=(bracket.lipSyncs||[]).at(-1)?.ids?.find((id)=>id!==bracketWinner)||null;
+      const round2Losers=[...new Set((bracket.lipSyncs||[]).filter((ls)=>Number(ls.roundNumber||1)===2).flatMap((ls)=>(ls.ids||[]).filter((id)=>id!==ls.winnerId)))];
+      let savedId=episode.slayOffsSavedId||null;
+      if(!savedId&&round1Losers.length){const picked=await openRupaulPhotoPicker("Who does the Slay-Offs winner save?",round1Losers,{min:1,max:1,tone:"winner"});if(!picked?.[0])return false;savedId=picked[0];episode.slayOffsSavedId=savedId;saveState();}
+      const bottom=round1Losers.filter((id)=>id!==savedId);if(bottom.length){const song=await openRupaulSongPicker(season,"Choose the Slay-Offs Bottom Lip Sync Song");if(!song)return false;const lipSync=createLipSyncFromSong(season,bottom,song,"Slay-Offs Bottom Lip Sync");lipSync.resultType="slayoffs_bottom";const decision=await openRupaulLipSyncResultPicker(season,episode,{ids:bottom,lipSync,kind:"elimination"},{allowDouble:false,minSurvivors:1,maxSurvivors:1});if(!decision)return false;const survivors=decision.survivors||[];const eliminated=bottom.filter((id)=>!survivors.includes(id));lipSync.winnerIds=survivors.slice();lipSync.winnerId=survivors[0]||null;lipSync.loserId=eliminated[0]||null;bottom.forEach((id)=>updateLipSyncStats(season,id,survivors.includes(id)));episode.lipSync=lipSync;episode.savedIds=survivors.slice();episode.eliminatedIds=eliminated;episode.slayOffsBottomSurvivorId=survivors[0]||null;}
+      episode.extraLipSyncs=(bracket.lipSyncs||[]).slice();episode.winnerIds=[bracketWinner].filter(Boolean);episode.top2Ids=[top2Loser].filter(Boolean);episode.highIds=round2Losers.filter((id)=>id!==top2Loser);episode.lowIds=[savedId].filter(Boolean);episode.bottomIds=round1Losers.filter((id)=>id!==savedId);episode.resultText=(episode.eliminatedIds||[]).length?`${sentenceList(episode.eliminatedIds,season,false)}, sashay away.`:"Nobody is eliminated from the Slay-Offs.";season.specialSlayOffsUsed=true;episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(mode==="reunion_lalaparuza"){
+      const bracket=await runRupaulStoredKnockoutBracket(season,episode,"rupaulReunionBracket",participants,"Reunion LaLaPaRuZa","reunion_lalaparuza");if(!bracket)return false;episode.extraLipSyncs=(bracket.lipSyncs||[]).slice();episode.lipSync=episode.extraLipSyncs.at(-1)||null;episode.reunionWinnerId=bracket.winnerId;episode.winnerIds=[bracket.winnerId].filter(Boolean);episode.safeIds=season.activeIds.slice();episode.runOnlyIds=season.activeIds.slice();episode.reunionLostRound={};(bracket.lipSyncs||[]).forEach((ls)=>(ls.ids||[]).filter((id)=>id!==ls.winnerId).forEach((id)=>{if(!episode.reunionLostRound[id])episode.reunionLostRound[id]=Number(ls.roundNumber||1);}));episode.resultText=bracket.winnerId?`${displayName(season.contestants[bracket.winnerId])} is Queen of She Done Already Done Had Herses!`:"The reunion tournament is complete.";season.specialReunionLalaparuzaUsed=true;episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(mode.startsWith("tournament_")&&mode.endsWith("_wildcard")){
+      const bracket=await runRupaulStoredKnockoutBracket(season,episode,"rupaulTournamentWildcardBracket",participants,episode.challenge.name,"tournament_wildcard");if(!bracket)return false;const winner=bracket.winnerId;const stage=mode.includes("pre_merge")?"pre_merge":"pre_finale";if(winner)reviveContestant(season,winner);episode.extraLipSyncs=(bracket.lipSyncs||[]).slice();episode.lipSync=episode.extraLipSyncs.at(-1)||null;episode.returnedIds=[winner].filter(Boolean);episode.comebackParticipantIds=participants.slice();episode.comebackPlacements=Object.fromEntries(participants.map((id)=>[id,id===winner?"RTRN":"OUT"]));episode.tournamentWildcard={stage,candidates:participants.slice(),returnedId:winner,revealed:true};season.tournamentWildcardReturns.push(episode.tournamentWildcard);const flow=season.rupaulTournamentState;if(stage==="pre_merge"){flow.preMergeWildcardDone=true;flow.phase="merge";if(winner&&!flow.mergedIds.includes(winner))flow.mergedIds.push(winner);season.activeIds=flow.mergedIds.slice();}else{flow.preFinaleWildcardDone=true;flow.phase="finale";}episode.resultText=winner?`${displayName(season.contestants[winner])} wins the ${episode.challenge.name} and returns to the competition.`:"The wildcard is complete.";episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if(["special_lalaparuza","lsftf"].includes(mode)){
+      let danger=participants.slice(),round=1,safe=[];const lipSyncs=[];episode.lalaparuzaRoundWinners={};
+      while(danger.length>2){const groups=makeLalaparuzaGroups(shuffle(danger));const next=[];for(let i=0;i<groups.length;i+=1){const ids=groups[i];if(ids.length<2){next.push(ids[0]);continue;}const battle=await createRupaulSpecialBattle(season,episode,ids,`Round ${round} Lip Sync #${i+1}`,"for_win");if(!battle)return false;const winner=battle.decision.winnerId;battle.lipSync.winnerId=winner;battle.lipSync.winnerIds=[winner];battle.lipSync.loserId=ids.find((id)=>id!==winner)||null;battle.lipSync.roundNumber=round;battle.lipSync.resultType=mode==="lsftf"?`lsftf_round_${round}`:`lalaparuza_round_${round}`;safe.push(winner);episode.lalaparuzaRoundWinners[winner]=round;next.push(...ids.filter((id)=>id!==winner));ids.forEach((id)=>updateLipSyncStats(season,id,id===winner));lipSyncs.push(battle.lipSync);}danger=next;round+=1;}
+      if(danger.length>=2){const battle=await createRupaulSpecialBattle(season,episode,danger,"Final Lip Sync","elimination");if(!battle)return false;const survivors=battle.decision.survivors||[];const eliminated=danger.filter((id)=>!survivors.includes(id));battle.lipSync.winnerIds=survivors.slice();battle.lipSync.winnerId=survivors[0]||null;battle.lipSync.loserId=eliminated[0]||null;if(battle.decision.resultType==="double_shantay"){season.doubleShantaysUsed+=1;battle.lipSync.resultType="double_shantay";}else if(battle.decision.resultType==="double_sashay"){season.doubleSashaysUsed+=1;battle.lipSync.resultType="double_sashay";}else battle.lipSync.resultType=mode==="lsftf"?"lsftf_final":"lalaparuza_final";safe.push(...survivors);survivors.forEach((id)=>episode.lalaparuzaRoundWinners[id]=round);episode.eliminatedIds=eliminated;episode.savedIds=safe.slice();danger.forEach((id)=>updateLipSyncStats(season,id,survivors.includes(id)));lipSyncs.push(battle.lipSync);}
+      episode.extraLipSyncs=lipSyncs.slice(0,-1);episode.lipSync=lipSyncs.at(-1)||null;episode.safeIds=[...new Set(safe)];if(mode==="lsftf"){episode.type="lsftf";episode.resultText=(episode.eliminatedIds||[]).length?`${sentenceList(episode.eliminatedIds,season,false)}, you will not advance to the finale.`:"All contestants advance to the finale.";}else{season.specialLalaparuzaUsed=true;episode.resultText=(episode.eliminatedIds||[]).length?`${sentenceList(episode.eliminatedIds,season,false)}, sashay away.`:"Nobody is eliminated from the smackdown.";}episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+    }
+
+    const bracket=await runRupaulStoredKnockoutBracket(season,episode,"rupaulGenericSpecialBracket",participants,episode.challenge.name,"special");if(!bracket)return false;episode.extraLipSyncs=(bracket.lipSyncs||[]).slice();episode.lipSync=episode.extraLipSyncs.at(-1)||null;episode.winnerIds=[bracket.winnerId].filter(Boolean);episode.safeIds=participants.filter((id)=>id!==bracket.winnerId);episode.resultText=bracket.winnerId?`${fullDisplayName(season.contestants[bracket.winnerId])} wins the lip sync tournament.`:"The tournament is complete.";episode.rupaulSpecialCompleted=true;return finishRupaulEpisode(season,episode);
+  }
+
+  function setupRupaulTournamentState(season){
+    if(!season.tournamentBrackets?.length){
+      const count=Number(season.config.tournamentBracketCount||2);const size=Math.ceil(season.castOrder.length/count);
+      season.tournamentBrackets=Array.from({length:count},(_,i)=>({id:`bracket_${i+1}`,name:`Bracket ${i+1}`,color:["#F749E4","#FB8212","#B039CE","#FFE500"][i]||"#F749E4",ids:season.castOrder.slice(i*size,(i+1)*size)})).filter((b)=>b.ids.length);
+    }
+    season.tournamentPoints=season.tournamentPoints||Object.fromEntries(season.castOrder.map((id)=>[id,0]));
+    season.tournamentPointHistory=season.tournamentPointHistory||[];
+    season.tournamentWildcardReturns=season.tournamentWildcardReturns||[];
+    const old=season.rupaulTournamentState||{};
+    season.rupaulTournamentState={
+      phase: old.phase || (old.complete ? "pre_merge" : "brackets"),
+      bracketIndex:Number(old.bracketIndex||0),
+      episodeInBracket:Number(old.episodeInBracket||0),
+      mergedIds:[...new Set(old.mergedIds||[])],
+      eliminatedBeforeMerge:[...new Set(old.eliminatedBeforeMerge||[])],
+      preMergeWildcardDone:!!old.preMergeWildcardDone,
+      mergeEpisodeIndex:Number(old.mergeEpisodeIndex||0),
+      preFinaleWildcardDone:!!old.preFinaleWildcardDone,
+      finalePrepared:!!old.finalePrepared,
+      complete:!!old.complete
+    };
+  }
+
+  function tournamentWildcardCandidates(season, poolIds) {
+    return [...new Set(poolIds || [])]
+      .filter((id) => season.eliminatedIds.includes(id))
+      .sort((a,b)=>Number(season.tournamentPoints[b]||0)-Number(season.tournamentPoints[a]||0)||trackRecordPower(season,b)-trackRecordPower(season,a))
+      .slice(0,3);
+  }
+
+  async function prepareRupaulTournamentWildcard(season, stage, poolIds) {
+    const flow=season.rupaulTournamentState;
+    const fullPool=[...new Set(poolIds||[])].filter((id)=>season.eliminatedIds.includes(id))
+      .sort((a,b)=>Number(season.tournamentPoints[b]||0)-Number(season.tournamentPoints[a]||0)||trackRecordPower(season,b)-trackRecordPower(season,a));
+    if(fullPool.length<2){
+      if(stage==="pre_merge") { flow.preMergeWildcardDone=true; flow.phase="merge"; }
+      else { flow.preFinaleWildcardDone=true; flow.phase="finale"; }
+      saveState();
+      return prepareNextRupaulTournamentEpisode(season);
+    }
+    if(stage==="pre_merge"){
+      const pickCount=Math.min(3,fullPool.length);
+      const picked=await openRupaulPhotoPicker("Choose the Wildcard Lottery contestants",fullPool,{min:pickCount,max:pickCount,tone:"winner"});
+      if(!picked?.length)return false;
+      const returnedId=randomItem(picked);
+      if(returnedId)reviveContestant(season,returnedId);
+      const entry={stage,candidates:picked.slice(),returnedId,revealed:false};
+      season.tournamentWildcardReturns.push(entry);
+      flow.preMergeWildcardDone=true;flow.phase="merge";
+      if(returnedId&&!flow.mergedIds.includes(returnedId))flow.mergedIds.push(returnedId);
+      season.activeIds=flow.mergedIds.filter((id)=>!season.eliminatedIds.includes(id));
+      const episode=createEpisodeShell(season,{type:"tournament_wildcard",title:"Pre-Merge Wildcard Lottery",label:`Episode ${season.episodeCounter}`,noMiniChallenge:true,noGuestJudge:true});
+      episode.challenge=null;episode.runway=null;episode.activeStartIds=season.activeIds.slice();episode.eliminatedStartIds=season.eliminatedIds.slice();
+      episode.tournamentWildcard=entry;episode.returnedIds=[returnedId].filter(Boolean);episode.rupaulPending=false;episode.rupaulFinalized=true;episode.rupaulResultsConfirmed=true;
+      episode.resultText=returnedId?`${fullDisplayName(season.contestants[returnedId])} wins the Wildcard Lottery and returns to the competition.`:"The Wildcard Lottery is complete.";
+      season.episodes.push(episode);season.episodeCounter+=1;
+      state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="wildcard";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
+      return episode;
+    }
+    const candidates=tournamentWildcardCandidates(season,fullPool);
+    return prepareRupaulSpecialSmackdown(season,`tournament_${stage}_wildcard`,{mode:`tournament_${stage}_wildcard`,ids:candidates,name:"Pre-Finale Wildcard"});
+  }
+
+  function advanceRupaulTournamentState(season,episode){
+    setupRupaulTournamentState(season);const flow=season.rupaulTournamentState;
+    if(episode.rupaulTournamentMergeEpisode){
+      flow.mergeEpisodeIndex+=1;
+      const target=Math.max(1,Number(season.config.tournamentMergeEpisodes||2));
+      if(flow.mergeEpisodeIndex>=target||season.activeIds.length<=4) flow.phase="pre_finale";
+      return;
+    }
+    if(!episode.rupaulTournamentEpisode)return;
+    const bracket=season.tournamentBrackets[flow.bracketIndex];
+    flow.episodeInBracket+=1;
+    const count=Number(season.config.tournamentBracketEpisodes||3);
+    if(flow.episodeInBracket>=count&&bracket){
+      const ranked=bracket.ids.slice().sort((a,b)=>Number(season.tournamentPoints[b]||0)-Number(season.tournamentPoints[a]||0)||trackRecordPower(season,b)-trackRecordPower(season,a));
+      const advancers=(episode.rupaulChosenTournamentAdvancers||ranked.slice(0,Number(season.config.tournamentAdvancers||2))).slice();
+      const outs=bracket.ids.filter((id)=>!advancers.includes(id));
+      flow.mergedIds.push(...advancers);flow.mergedIds=[...new Set(flow.mergedIds)];
+      flow.eliminatedBeforeMerge.push(...outs);flow.eliminatedBeforeMerge=[...new Set(flow.eliminatedBeforeMerge)];
+      episode.tournamentAdvancingIds=advancers;episode.tournamentEliminatedIds=outs;episode.pointCeremonyFinal=true;
+      advancers.forEach((id)=>addTournamentAdvancementToTrack(season,id,episode.label));
+      outs.forEach((id)=>{if(!season.eliminatedIds.includes(id))season.eliminatedIds.push(id);addTournamentEliminationToTrack(season,id,episode.label);});
+      flow.bracketIndex+=1;flow.episodeInBracket=0;
+      if(flow.bracketIndex>=season.tournamentBrackets.length){flow.phase="pre_merge";season.activeIds=flow.mergedIds.slice();}
+      else season.activeIds=season.tournamentBrackets[flow.bracketIndex].ids.slice();
+    }
+  }
+
+  async function prepareRupaulTournamentFinale(season){
+    const finale=createEpisodeShell(season,{type:"finale",title:"Grand Finale",label:"Finale"});
+    finale.rupaulPending=true;finale.rupaulTournamentFinalePending=true;finale.lsftcFinale=true;finale.challenge=null;finale.runway=null;finale.finalePerformances=[];
+    finale.activeStartIds=season.activeIds.slice();finale.missCongenialityIds=[];finale.goldenBoot=null;
+    season.rupaulTournamentState.finalePrepared=true;season.rupaulTournamentFinalePrepared=true;
+    season.episodes.push(finale);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");return finale;
+  }
+
+  async function runRupaulTournamentFinaleFlow(season,finale){
+    if(finale.rupaulFinaleComplete)return true;
+    const finalists=(finale.activeStartIds||season.activeIds).slice();
+    const crown=await runRupaulStoredKnockoutBracket(season,finale,"rupaulTournamentCrownFlow",finalists,"Lip Sync for the Crown","tournament_crown");
+    if(!crown)return false;
+    finale.allWinnersCrownSmackdown={lipSyncs:(crown.lipSyncs||[]).slice(),winnerId:crown.winnerId,finalLipSync:(crown.lipSyncs||[]).at(-1)||null};
+    finale.extraLipSyncs=(crown.lipSyncs||[]).slice();finale.lipSync=finale.extraLipSyncs.at(-1)||null;finale.winnerIds=[crown.winnerId].filter(Boolean);finale.top2Ids=finale.lipSync?.ids?.slice()||finalists.slice(0,2);
+    season.seasonComplete=true;season.winnerId=crown.winnerId||null;season.winnerIds=[crown.winnerId].filter(Boolean);season.runnerUpIds=(finale.top2Ids||[]).filter((id)=>id!==crown.winnerId);
+    season.castOrder.forEach((id)=>{
+      const returned=(season.tournamentWildcardReturns||[]).some((entry)=>entry.stage==="pre_finale"&&entry.returnedId===id);
+      let token="GUEST",display="GUEST";const extraClasses=[];
+      if(finalists.includes(id)){if(id===crown.winnerId){token="WINNER";display="WINNER";}else if(season.runnerUpIds.includes(id)){token="RU";display="RU";}else{token="ELIM";display="ELIM";extraClasses.push("finale-elim");}}
+      if(returned&&finalists.includes(id))display=`RTRN+<br/>${display}`;
+      if(!(season.stats[id].track||[]).some((entry)=>entry.label==="Finale"))season.stats[id].track.push({label:"Finale",token,display,extraClasses});
+    });
+    if(!(season.trackColumnLabels||[]).some((column)=>column.label==="Finale"))season.trackColumnLabels.push({label:"Finale",title:"Grand Finale",challengeType:"Finale"});
+    finale.resultText=`The Next Drag Superstar is... ${sentenceList(finale.winnerIds,season,false)}!`;finale.rupaulFinaleComplete=true;finale.rupaulPending=false;finale.rupaulFinalized=true;state.currentStep="winner";saveState();renderEpisodeSelect();renderEpisode();return true;
+  }
+
+  async function prepareNextRupaulTournamentEpisode(season){
+    setupRupaulTournamentState(season);const flow=season.rupaulTournamentState;
+    if(flow.phase==="brackets"){
+      const bracket=season.tournamentBrackets[flow.bracketIndex];
+      if(!bracket){flow.phase="pre_merge";season.activeIds=flow.mergedIds.slice();return prepareNextRupaulTournamentEpisode(season);}
+      season.activeIds=bracket.ids.slice();
+      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,title:`${bracket.name} Episode ${flow.episodeInBracket+1}`,competingIds:bracket.ids,runOnlyIds:season.castOrder.filter((id)=>!bracket.ids.includes(id)),rupaulTournamentEpisode:true,tournamentBracketId:bracket.id,tournamentBracketName:bracket.name,tournamentBracketColor:bracket.color});
+      await initializeRupaulDraftChallenge(season,episode);return;
+    }
+    if(flow.phase==="pre_merge"){
+      season.activeIds=flow.mergedIds.filter((id)=>!season.eliminatedIds.includes(id));
+      if(season.config.tournamentPreMergeWildcard&&!flow.preMergeWildcardDone)return prepareRupaulTournamentWildcard(season,"pre_merge",flow.eliminatedBeforeMerge);
+      flow.preMergeWildcardDone=true;flow.phase="merge";saveState();return prepareNextRupaulTournamentEpisode(season);
+    }
+    if(flow.phase==="merge"){
+      const count=Math.max(1,Number(season.config.tournamentMergeEpisodes||2));
+      if(flow.mergeEpisodeIndex>=count||season.activeIds.length<=4){flow.phase="pre_finale";saveState();return prepareNextRupaulTournamentEpisode(season);}
+      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,title:`Merge Episode ${flow.mergeEpisodeIndex+1}`,competingIds:season.activeIds.slice(),rupaulTournamentMergeEpisode:true});
+      await initializeRupaulDraftChallenge(season,episode);return;
+    }
+    if(flow.phase==="pre_finale"){
+      if(season.config.tournamentPreFinaleWildcard&&!flow.preFinaleWildcardDone)return prepareRupaulTournamentWildcard(season,"pre_finale",season.eliminatedIds.slice());
+      flow.preFinaleWildcardDone=true;flow.phase="finale";saveState();return prepareNextRupaulTournamentEpisode(season);
+    }
+    if(flow.phase==="finale")return prepareRupaulTournamentFinale(season);
+    return prepareRupaulTournamentFinale(season);
+  }
+
+  async function prepareRupaulDirectComeback(season){
+    const format=comebackFormat(season);let options={};
+    if(format==="choose_return"){
+      const eligible=comebackEligibleEliminated(season);const picked=await openRupaulPhotoPicker("Choose a contestant to return",eligible,{min:1,max:1,tone:"winner"});if(!picked?.[0])return false;
+      reviveContestant(season,picked[0]);options={returnedIds:[picked[0]],comebackParticipantIds:[picked[0]],comebackPlacements:{[picked[0]]:"RTRN"},comeback:{format,returnedId:picked[0],candidates:eligible,eligible,title:"A Contestant Returns"}};
+    }else options=directComebackOptions(season)||{};
+    const episode=createRupaulDraftEpisode(season,{...options,rupaulDirectComeback:true});await initializeRupaulDraftChallenge(season,episode);return true;
+  }
+
+
+  function rupaulComebackChallengeTypes(format) {
+    if (format === "conjoined_twins") return ["makeover"];
+    if (format === "reinas_de_la_comedia") return ["acting", "improv", "roast"];
+    if (["attention_girl_groups", "kitty_girl_groups"].includes(format)) return ["girlgroups"];
+    if (format === "revenge_of_the_queens") return ["girlgroups", "rumix", "dance"];
+    return [];
+  }
+
+  function rupaulComebackPairs(season, activeIds, eliminatedIds) {
+    const active = shuffle(activeIds.slice()), eliminated = shuffle(eliminatedIds.slice());
+    const count = Math.min(active.length, eliminated.length);
+    return Array.from({ length: count }, (_, index) => ({
+      name: `Pair ${index + 1}`,
+      ids: [active[index], eliminated[index]],
+      activeId: active[index],
+      eliminatedId: eliminated[index]
+    }));
+  }
+
+  async function prepareRupaulChallengeComeback(season, format, eligible) {
+    const activeIds = season.activeIds.slice();
+    let participants = [...new Set([...activeIds, ...eligible])];
+    const options = {
+      type: `comeback_${format}`,
+      label: `Episode ${season.episodeCounter}`,
+      title: ["attention_girl_groups", "kitty_girl_groups", "revenge_of_the_queens"].includes(format) ? "Comeback" : (comebackDescriptions[format] ? challengeTypeLabel(format) : "Comeback Challenge"),
+      competingIds: participants.slice(),
+      runwayParticipantIds: participants.slice(),
+      rupaulAllowedChallengeTypes: rupaulComebackChallengeTypes(format)
+    };
+    const episode = createRupaulDraftEpisode(season, options);
+    episode.rupaulComebackChallengePending = true;
+    episode.rupaulComebackFormat = format;
+    episode.rupaulComebackParticipantIds = participants.slice();
+    episode.comebackParticipantIds = eligible.slice();
+    episode.comebackPlacements = {};
+    episode.comeback = { format, candidates: eligible.slice(), eligible: eligible.slice(), title: ["attention_girl_groups", "kitty_girl_groups", "revenge_of_the_queens"].includes(format) ? "Comeback" : (comebackDescriptions[format] || "Comeback Challenge") };
+    episode.activeStartIds = participants.slice();
+    if (["conjoined_twins", "reinas_de_la_comedia", "revenge_of_the_queens"].includes(format)) {
+      const pairs = rupaulComebackPairs(season, activeIds, eligible);
+      participants = [...new Set(pairs.flatMap((pair) => pair.ids))];
+      episode.rupaulComebackParticipantIds = participants.slice();
+      episode.competingIds = participants.slice();
+      episode.runwayParticipantIds = participants.slice();
+      episode.activeStartIds = participants.slice();
+      episode.teams = { mode: "pairs", groups: pairs };
+      episode.rupaulComebackPairs = pairs;
+    } else {
+      episode.teams = { mode: "groups", groups: [
+        { name: "Remaining Contestants", ids: activeIds.slice(), side: "active" },
+        { name: "Eliminated Contestants", ids: eligible.slice(), side: "eliminated" }
+      ] };
+    }
+    await initializeRupaulComebackChallenge(season, episode);
+    return true;
+  }
+
+  async function initializeRupaulComebackChallenge(season, episode) {
+    if (episode.rupaulChallengeConfirmed) return true;
+    const challenge = comebackChallenge(episode.rupaulComebackFormat);
+    if (!challenge) return false;
+    episode.challenge = challenge;
+    episode.challengeSelectionLocked = true;
+    const type = challengeTypeKey(challenge.type);
+    const separate = !NO_SEPARATE_RUNWAY_TYPES.has(type);
+    if (separate) {
+      const temporary = getRunwayData().find((runway) => !(season.usedRunwayIds || []).includes(runway.id)) || getRunwayData()[0];
+      episode.rupaulChosenRunway = clone(temporary);
+    }
+    episode.guestJudge = pickGuestJudge(type);
+    if (POST_MINI_COMEBACK_FORMATS.has(episode.rupaulComebackFormat)) runMiniChallenge(season, episode);
+    else { episode.miniChallenge = null; episode.miniWinnerIds = []; }
+    const originalActive = season.activeIds.slice();
+    season.activeIds = episode.rupaulComebackParticipantIds.slice();
+    runChallengeAndRunway(season, episode);
+    season.activeIds = originalActive;
+    episode.rupaulChallengeConfirmed = true;
+    episode.rupaulRunwayConfirmed = !separate;
+    state.currentStep = "status";
+    saveState(); renderEpisodeSelect(); renderEpisode(); showScreen("episode-screen");
+    return true;
+  }
+
+  function rupaulComebackRankedGroups(episode) {
+    return (episode.teams?.groups || []).map((group) => ({
+      ...group,
+      avg: average((group.ids || []).map((id) => scoreForEpisodeId(episode, id, "total")))
+    })).sort((a, b) => b.avg - a.avg);
+  }
+
+  function rupaulAutomaticReturnVotes(season, episode, voters, candidates) {
+    const votes=(voters||[]).map((voterId)=>{
+      const choice=(candidates||[]).map((id)=>({id,score:Number(season.relationships[pairKey(voterId,id)]||0)*5+scoreForEpisodeId(episode,id,"total")*.35+(season.stats?.[id]?.popularity||50)*.08+randInt(-4,4)})).sort((a,b)=>b.score-a.score)[0]?.id||candidates[0];
+      return {voterId,receiverId:choice};
+    });
+    const totals={};votes.forEach((vote)=>{totals[vote.receiverId]=Number(totals[vote.receiverId]||0)+1;});
+    const winner=(candidates||[]).slice().sort((a,b)=>Number(totals[b]||0)-Number(totals[a]||0)||scoreForEpisodeId(episode,b,"total")-scoreForEpisodeId(episode,a,"total"))[0]||null;
+    return {votes,totals,winnerId:winner};
+  }
+
+  async function runRupaulComebackJudging(season, episode) {
+    if (episode.rupaulPlacementsConfirmed) return true;
+    const format = episode.rupaulComebackFormat;
+    const eligible = episode.comeback?.eligible || [];
+    const activeIds = season.activeIds.slice();
+
+    if (["conjoined_twins", "reinas_de_la_comedia"].includes(format)) {
+      const groups = rupaulComebackRankedGroups(episode);
+      const winningPair = await openRupaulTeamPicker("Choose the winning pair", groups.slice(0, Math.min(3, groups.length)), "winner");
+      if (!winningPair) return false;
+      const returneeId = winningPair.eliminatedId || winningPair.ids.find((id) => eligible.includes(id));
+      const activeWinnerId = winningPair.activeId || winningPair.ids.find((id) => activeIds.includes(id));
+      if (returneeId) reviveContestant(season, returneeId);
+      episode.returnedIds = [returneeId].filter(Boolean);
+      episode.winnerIds = [activeWinnerId, returneeId].filter(Boolean);
+      episode.comeback.returnedId = returneeId || null;
+      episode.comeback.winPair = winningPair.ids.slice();
+      const winToken = format === "reinas_de_la_comedia" ? "DWIN" : "WIN";
+      eligible.forEach((id) => { episode.comebackPlacements[id] = id === returneeId ? winToken : "OUT"; });
+      if (activeWinnerId) episode.comebackPlacements[activeWinnerId] = winToken;
+
+      const activeOrder = groups.map((group)=>group.activeId || group.ids.find((id)=>activeIds.includes(id))).filter(Boolean);
+      const remaining = activeOrder.filter((id)=>id!==activeWinnerId);
+      const highCount = remaining.length >= 5 ? 2 : remaining.length >= 3 ? 1 : 0;
+      episode.highIds = remaining.slice(0, highCount);
+      const dangerCount = format === "reinas_de_la_comedia" ? Math.min(5, remaining.length) : Math.min(4, remaining.length);
+      const dangerPool = remaining.slice(-dangerCount).filter((id)=>!episode.highIds.includes(id));
+      const targetBottom = format === "reinas_de_la_comedia" ? Math.min(3, dangerPool.length) : Math.min(2, dangerPool.length);
+      const bottoms = await openRupaulPhotoPicker(format === "reinas_de_la_comedia" ? "Choose the bottom contestants" : "Choose the bottom two", dangerPool, { min:targetBottom, max:targetBottom, tone:"bottom" });
+      if (!bottoms || bottoms.length < targetBottom) return false;
+      episode.bottomIds = bottoms.slice();
+      const unselectedDanger = dangerPool.filter((id)=>!bottoms.includes(id));
+      episode.lowIds = unselectedDanger.slice(-Math.min(format === "reinas_de_la_comedia" && bottoms.length===2 ? 2 : 1, unselectedDanger.length));
+      episode.safeIds = remaining.filter((id)=>!episode.highIds.includes(id)&&!episode.lowIds.includes(id)&&!episode.bottomIds.includes(id));
+      episode.rupaulComebackBattleIds = episode.bottomIds.slice();
+      episode.rupaulComebackEliminationMode = true;
+      episode.resultText = returneeId ? `${fullDisplayName(season.contestants[returneeId])}, you're back in the race, baby!` : "The comeback challenge is complete.";
+    } else if (format === "attention_girl_groups") {
+      const eliminatedRanked = rupaulRankedIds(episode, eligible);
+      const activeRanked = rupaulRankedIds(episode, activeIds);
+      const eliminatedPool = eliminatedRanked.slice(0, Math.min(3, eliminatedRanked.length));
+      const activeTopPool = activeRanked.slice(0, Math.min(3, activeRanked.length));
+      const returnPick = await openRupaulPhotoPicker("Choose the eliminated comeback candidate", eliminatedPool, { min: 1, max: 1, tone: "winner" });
+      if (!returnPick?.[0]) return false;
+      const winnerPick = await openRupaulPhotoPicker("Choose the challenge winner", activeTopPool, { min: 1, max: 1, tone: "winner" });
+      if (!winnerPick?.[0]) return false;
+      const challengeWinner = winnerPick[0];
+      const activeDangerPool = [...activeRanked].reverse().filter((id) => id !== challengeWinner).slice(0, Math.min(3, Math.max(0, activeRanked.length - 1)));
+      const bottomPick = await openRupaulPhotoPicker("Choose the remaining contestant up for elimination", activeDangerPool, { min: 1, max: 1, tone: "bottom" });
+      if (!bottomPick?.[0]) return false;
+      const returnCandidate = returnPick[0];
+      const activeCandidate = bottomPick[0];
+      episode.rupaulComebackBattleIds = [returnCandidate, activeCandidate].filter(Boolean);
+      episode.rupaulComebackReturnCandidateId = returnCandidate;
+      episode.rupaulComebackActiveCandidateId = activeCandidate;
+      episode.winnerIds = [challengeWinner];
+      episode.bottomIds = [activeCandidate];
+      episode.safeIds = activeIds.filter((id)=>id!==challengeWinner&&id!==activeCandidate);
+      episode.top2Ids = [returnCandidate];
+      episode.rupaulComebackEliminationMode = true;
+    } else if (format === "kitty_girl_groups") {
+      const groups = rupaulComebackRankedGroups(episode);
+      const activeGroup = groups.find((group) => group.side === "active") || groups.find((group)=>group.name==="Remaining Contestants");
+      const eliminatedGroup = groups.find((group) => group.side === "eliminated") || groups.find((group)=>group.name==="Eliminated Contestants");
+      const choice = await openRupaulTeamPicker("Choose the winning group", [activeGroup, eliminatedGroup].filter(Boolean), "winner");
+      if (!choice) return false;
+      const side = choice.side || (choice.name === activeGroup?.name ? "active" : "eliminated");
+      episode.kittyGirlGroups = { activeGroup: activeGroup?.ids || activeIds, eliminatedGroup: eliminatedGroup?.ids || eligible, winningSide: side };
+      episode.winnerIds = side === "active" ? (activeGroup?.ids || activeIds).slice() : [];
+      episode.safeIds = side === "active" ? activeIds.filter((id)=>!episode.winnerIds.includes(id)) : [];
+      episode.rupaulComebackBattleIds = [];
+      if (side === "eliminated") {
+        const returnVote = rupaulAutomaticReturnVotes(season, episode, eligible, eligible);
+        const chopCandidates = activeIds.slice();
+        const chopVotes = (activeIds||[]).map((voterId)=>({voterId,receiverId:chooseEliminationVote(season,voterId,chopCandidates.filter((id)=>id!==voterId),episode,"legacy")}));
+        const chopTotals={};chopVotes.forEach((vote)=>{if(vote.receiverId)chopTotals[vote.receiverId]=Number(chopTotals[vote.receiverId]||0)+1;});
+        const choppedId=chopCandidates.slice().sort((a,b)=>Number(chopTotals[b]||0)-Number(chopTotals[a]||0)||scoreForEpisodeId(episode,a,"total")-scoreForEpisodeId(episode,b,"total"))[0]||null;
+        episode.kittyGirlGroups.returnVote=returnVote;episode.kittyGirlGroups.chopVotes={votes:chopVotes,totals:chopTotals,winnerId:choppedId};
+      }
+    } else if (format === "revenge_of_the_queens") {
+      const rankedPairs = rupaulComebackRankedGroups(episode).filter((pair)=>pair.eliminatedId || pair.ids.some((id)=>eligible.includes(id)));
+      const candidates=rankedPairs.slice(0,Math.min(3,rankedPairs.length));
+      const topPairs = await openRupaulTeamMultiPicker("Choose the top comeback pairs", candidates, { min:Math.min(2,candidates.length), max:Math.min(2,candidates.length), tone:"winner" });
+      if (!topPairs?.length) return false;
+      const returnees = topPairs.map((pair) => pair.eliminatedId || pair.ids.find((id) => eligible.includes(id))).filter(Boolean);
+      const activeWinners = topPairs.map((pair)=>pair.activeId || pair.ids.find((id)=>activeIds.includes(id))).filter(Boolean);
+      episode.rupaulComebackBattleIds = returnees;
+      episode.top2Ids = returnees.slice();
+      episode.winnerIds = activeWinners.slice();
+      episode.revengeActiveWinnerIds = activeWinners.slice();
+      episode.comeback.topPairs = topPairs.map((pair) => pair.ids.slice());
+      const activeOrder=rankedPairs.map((pair)=>pair.activeId||pair.ids.find((id)=>activeIds.includes(id))).filter(Boolean);
+      const remaining=activeOrder.filter((id)=>!activeWinners.includes(id));
+      episode.bottomIds=remaining.slice(-Math.min(2,remaining.length));
+      const nonBottom=remaining.filter((id)=>!episode.bottomIds.includes(id));
+      episode.highIds=nonBottom.slice(0,nonBottom.length>=4?2:nonBottom.length>=2?1:0);
+      const afterHigh=nonBottom.filter((id)=>!episode.highIds.includes(id));episode.lowIds=afterHigh.length?afterHigh.slice(-1):[];episode.safeIds=afterHigh.filter((id)=>!episode.lowIds.includes(id));
+      episode.comeback.bottomChoiceIds=episode.bottomIds.slice();
+    }
+    episode.rupaulPlacementsConfirmed = true;
+    saveState(); renderEpisode();
+    return true;
+  }
+
+  async function prepareRupaulComebackLipSync(season, episode) {
+    if (episode.rupaulLipSyncPrepared) return true;
+    const ids = (episode.rupaulComebackBattleIds || []).filter(Boolean);
+    if (ids.length < 2) { episode.rupaulLipSyncPrepared = true; saveState(); return true; }
+    const song = await openRupaulSongPicker(season, "Choose the Comeback Lip Sync Song");
+    if (!song) return false;
+    const context = episode.rupaulComebackEliminationMode ? "Comeback Lip Sync For Your Life" : "Comeback Lip Sync";
+    const lipSync = createLipSyncFromSong(season, ids, song, context);
+    const kind = episode.rupaulComebackEliminationMode ? "elimination" : "for_win";
+    episode.rupaulComebackBattle = rupaulBattleDescriptor(ids, context, kind, { lipSync });
+    episode.lipSync = lipSync;
+    episode.rupaulLipSyncPrepared = true;
+    saveState(); renderEpisode();
+    return true;
+  }
+
+  async function resolveRupaulComebackResult(season, episode) {
+    if (episode.rupaulResultsConfirmed) return true;
+    const format = episode.rupaulComebackFormat;
+    const eligible = episode.comeback?.eligible || [];
+    const originalActive = season.activeIds.filter((id)=>!eligible.includes(id));
+    const battle = episode.rupaulComebackBattle;
+
+    if (format === "kitty_girl_groups") {
+      let returneeId=null, eliminatedId=null;
+      if (episode.kittyGirlGroups?.winningSide === "eliminated") {
+        returneeId=episode.kittyGirlGroups.returnVote?.winnerId||null;eliminatedId=episode.kittyGirlGroups.chopVotes?.winnerId||null;
+        if(returneeId)reviveContestant(season,returneeId);
+      }
+      episode.returnedIds=[returneeId].filter(Boolean);episode.eliminatedIds=[eliminatedId].filter(Boolean);episode.savedIds=originalActive.filter((id)=>id!==eliminatedId);episode.comeback.returnedId=returneeId;
+      eligible.forEach((id)=>episode.comebackPlacements[id]=id===returneeId?"RTRN":"OUT");originalActive.forEach((id)=>episode.comebackPlacements[id]=id===eliminatedId?"ELIM":episode.winnerIds.includes(id)?"WIN":"SAFE");
+      episode.resultText=returneeId?`${fullDisplayName(season.contestants[returneeId])}, you're back in the race, baby! ${fullDisplayName(season.contestants[eliminatedId])}, sashay away.`:"The remaining contestants win the comeback challenge. Nobody returns.";
+      markComebackUsed(season);episode.rupaulResultsConfirmed=true;return finishRupaulEpisode(season,episode);
+    }
+
+    if (!battle) { markComebackUsed(season); episode.rupaulResultsConfirmed=true; return finishRupaulEpisode(season, episode); }
+    const eliminationMode = battle.kind === "elimination";
+    const eliminationOptions = format === "reinas_de_la_comedia" ? { allowDouble:false, minSurvivors:1, maxSurvivors:1 } : {};
+    const decision = await openRupaulLipSyncResultPicker(season, episode, battle, eliminationMode ? eliminationOptions : { forWin: true, allowDouble: false });
+    if (!decision) return false;
+    let returneeId = null, eliminatedIds = [];
+    if (eliminationMode) {
+      const survivors=decision.survivors||[];eliminatedIds=battle.ids.filter((id)=>!survivors.includes(id));battle.lipSync.winnerIds=survivors.slice();battle.lipSync.winnerId=survivors[0]||null;battle.lipSync.loserId=eliminatedIds[0]||null;
+      if(decision.resultType==="double_shantay"){season.doubleShantaysUsed+=1;battle.lipSync.resultType="double_shantay";}else if(decision.resultType==="double_sashay"){season.doubleSashaysUsed+=1;battle.lipSync.resultType="double_sashay";}else battle.lipSync.resultType=eliminatedIds.length>1?"multi_elimination":"elimination";
+      battle.ids.forEach((id)=>updateLipSyncStats(season,id,survivors.includes(id)));
+      if(format==="attention_girl_groups"){
+        const candidate=episode.rupaulComebackReturnCandidateId,activeCandidate=episode.rupaulComebackActiveCandidateId;
+        if(candidate&&survivors.includes(candidate)){returneeId=candidate;reviveContestant(season,candidate);}if(activeCandidate&&!survivors.includes(activeCandidate)&&!eliminatedIds.includes(activeCandidate))eliminatedIds.push(activeCandidate);
+      } else if(["conjoined_twins","reinas_de_la_comedia"].includes(format)) returneeId=episode.comeback.returnedId||episode.returnedIds?.[0]||null;
+    } else {
+      const winnerId=decision.winnerId;if(!winnerId)return false;battle.lipSync.winnerId=winnerId;battle.lipSync.winnerIds=[winnerId];battle.lipSync.loserId=battle.ids.find((id)=>id!==winnerId)||null;battle.ids.forEach((id)=>updateLipSyncStats(season,id,id===winnerId));
+      if(format==="revenge_of_the_queens"){returneeId=winnerId;reviveContestant(season,winnerId);const bottomChoices=episode.comeback.bottomChoiceIds||episode.bottomIds||[];const chop=chooseEliminationVote(season,winnerId,bottomChoices,episode,"legacy")||bottomChoices.at(-1)||null;eliminatedIds=[chop].filter(Boolean);episode.comeback.eliminatedActiveId=chop;}
+    }
+    episode.returnedIds=[...new Set([...(episode.returnedIds||[]),...([returneeId].filter(Boolean))])];episode.eliminatedIds=[...new Set(eliminatedIds.filter((id)=>originalActive.includes(id)))];episode.savedIds=originalActive.filter((id)=>!episode.eliminatedIds.includes(id));episode.comeback.returnedId=returneeId||episode.comeback.returnedId||null;
+    eligible.forEach((id)=>{
+      const returned=episode.returnedIds.includes(id);
+      episode.comebackPlacements[id]=!returned?"OUT":format==="revenge_of_the_queens"?"WIN":format==="reinas_de_la_comedia"?"DWIN":format==="conjoined_twins"?"WIN":"RTRN";
+    });episode.eliminatedIds.forEach((id)=>episode.comebackPlacements[id]="ELIM");
+    episode.resultText=episode.returnedIds.length?`${sentenceList(episode.returnedIds,season,false)} ${episode.returnedIds.length===1?"is":"are"} back in the race, baby!${episode.eliminatedIds.length?` ${sentenceList(episode.eliminatedIds,season,false)}, sashay away.`:""}`:"No eliminated contestant returns to the competition.";
+    markComebackUsed(season);episode.rupaulResultsConfirmed=true;return finishRupaulEpisode(season,episode);
+  }
+
+  async function ensureRupaulComebackStep(season, episode, step) {
+    if (!episode.rupaulChallengeConfirmed) return initializeRupaulComebackChallenge(season, episode);
+    const runwayGate = ["runway", "judging", "placements", "lipsync", "results", "trackrecord"].includes(step);
+    if (runwayGate && !episode.rupaulRunwayConfirmed && episode.runway && !episode.runwayUsesChallengeScore) {
+      const runway = await openRupaulRunwayPicker(season); if (!runway) return false;
+      updateRupaulRunwayName(season, episode, runway); episode.rupaulRunwayConfirmed = true; saveState(); renderEpisode();
+    }
+    if (["placements", "lipsync", "results", "trackrecord"].includes(step) && !episode.rupaulPlacementsConfirmed) {
+      if (!await runRupaulComebackJudging(season, episode)) return false;
+      if (!episode.rupaulPending) return false;
+      state.currentStep = "judging"; saveState(); renderEpisode(); return false;
+    }
+    if (["lipsync", "results", "trackrecord"].includes(step) && !episode.rupaulLipSyncPrepared) {
+      if (!await prepareRupaulComebackLipSync(season, episode)) return false;
+    }
+    if (["results", "trackrecord"].includes(step) && !episode.rupaulResultsConfirmed) return resolveRupaulComebackResult(season, episode);
+    return true;
+  }
+
+  async function prepareRupaulLalaparuzaComebackEpisode(season,eligible){
+    const active=season.activeIds.slice();if(!eligible.length||!active.length){markComebackUsed(season);return prepareNextRupaulEpisode(season);}
+    const episode=createEpisodeShell(season,{type:"comeback_lalaparuza_comeback",title:`Episode ${season.episodeCounter}`,label:`Episode ${season.episodeCounter}`,noMiniChallenge:true,noGuestJudge:true});
+    episode.rupaulPending=true;episode.rupaulSpecialFlow=true;episode.rupaulSpecialMode="lalaparuza_comeback";episode.challenge={id:`lalaparuza_comeback_${episode.number}`,name:"LaLaPaRuZa Comeback",type:"lip_sync",teamMode:"solo"};episode.runway=null;episode.rupaulChallengeConfirmed=true;episode.rupaulRunwayConfirmed=true;episode.rupaulPlacementsConfirmed=true;episode.comeback={format:"lalaparuza_comeback",candidates:eligible.slice(),eligible:eligible.slice(),returnedId:null,title:"LaLaPaRuZa Comeback"};episode.comebackPlacements={};
+    const previousWinner=season.castOrder.length%2===1?(season.episodes||[]).slice().reverse().flatMap((ep)=>ep.winnerIds||[]).find((id)=>active.includes(id))||null:null;const battleActive=shuffle(active.filter((id)=>id!==previousWinner));
+    episode.rupaulLalaparuzaPairs=eligible.map((eliminatedId,index)=>battleActive[index]?{name:`Lip Sync #${index+1}`,ids:[eliminatedId,battleActive[index]],eliminatedId,activeId:battleActive[index]}:null).filter(Boolean);const battled=new Set(episode.rupaulLalaparuzaPairs.map((pair)=>pair.activeId));episode.runOnlyIds=active.filter((id)=>!battled.has(id));episode.lalaparuzaImmuneId=previousWinner&&episode.runOnlyIds.includes(previousWinner)?previousWinner:null;episode.rupaulSpecialIds=episode.rupaulLalaparuzaPairs.flatMap((pair)=>pair.ids);episode.activeStartIds=[...new Set([...active,...eligible])];season.episodes.push(episode);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");return episode;
+  }
+
+  async function prepareRupaulGameWithinGameEpisode(season,eligible){
+    if(eligible.length<2){markComebackUsed(season);return prepareNextRupaulEpisode(season);}const episode=createEpisodeShell(season,{type:"comeback_game_within_a_game",title:`Episode ${season.episodeCounter}`,label:`Episode ${season.episodeCounter}`,noMiniChallenge:true,noGuestJudge:true});episode.rupaulPending=true;episode.rupaulSpecialFlow=true;episode.rupaulSpecialMode="game_within_a_game";episode.challenge={id:`game_within_a_game_${episode.number}`,name:"Game Within a Game",type:"lip_sync",teamMode:"solo"};episode.runway=null;episode.rupaulChallengeConfirmed=true;episode.rupaulRunwayConfirmed=true;episode.rupaulPlacementsConfirmed=true;episode.rupaulGameOrder=eligible.slice();episode.rupaulOriginalActiveIds=season.activeIds.slice();episode.rupaulSpecialIds=eligible.slice();episode.activeStartIds=[...new Set([...season.activeIds,...eligible])];episode.comeback={format:"game_within_a_game",candidates:eligible.slice(),eligible:eligible.slice(),returnedId:null,title:"Game Within a Game"};episode.comebackPlacements={};season.episodes.push(episode);state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");return episode;
+  }
+
+  async function prepareRupaulSpecialComeback(season){
+    const format=comebackFormat(season);const eligible=comebackEligibleEliminated(season);
+    if(!eligible.length){markComebackUsed(season);return prepareNextRupaulEpisode(season);}
+    if(format==="lalaparuza_comeback")return prepareRupaulLalaparuzaComebackEpisode(season,eligible);
+    if(format==="game_within_a_game")return prepareRupaulGameWithinGameEpisode(season,eligible);
+    return prepareRupaulChallengeComeback(season,format,eligible);
+  }
+
+  function setupRupaulMidRateState(season){
+    if(season.rupaulMidRateState)return;
+    const ids=shuffle(season.activeIds.slice()),first=Math.ceil(ids.length/2);
+    season.rupaulMidRateState={batches:[ids.slice(0,first),ids.slice(first)],index:0,bottomIds:[],complete:false,bottomBattleDone:false};
+    season.specialMidSeasonRateAQueenUsed=true;
+  }
+
+  async function prepareNextRupaulMidRatePart(season){
+    setupRupaulMidRateState(season);const flow=season.rupaulMidRateState;
+    if(flow.index<flow.batches.length){
+      const ids=flow.batches[flow.index];
+      const voters=flow.batches[flow.index===0?1:0] || season.activeIds.filter((id)=>!ids.includes(id));
+      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,competingIds:ids,runOnlyIds:season.activeIds.filter((id)=>!ids.includes(id)),forcedChallengeType:"talent_show",specialPremiere:"mid_season_rate_a_queen",rupaulMidRatePart:true});
+      episode.rateAQueenTargetIds=ids.slice();
+      episode.rateAQueenVoterIds=voters.slice();
+      await initializeRupaulDraftChallenge(season,episode);return;
+    }
+    flow.bottomIds=[...new Set(flow.bottomIds||[])];
+    if(!flow.bottomBattleDone&&flow.bottomIds.length>=2){flow.bottomBattleDone=true;flow.complete=true;return prepareRupaulSpecialSmackdown(season,"mid_season_rate_a_queen_bottom",{mode:"mid_season_rate_a_queen_bottom",ids:flow.bottomIds.slice(0,2),name:"Rate-A-Queen Lip Sync For Your Life"});}
+    flow.complete=true;return prepareNextRupaulEpisode(season);
+  }
+
+
+  async function prepareRupaulFameGamesEpisode(season) {
+    const eliminated=fameGamesEligibleEliminated(season);
+    if(season.fameGamesEpisodeUsed||eliminated.length<2){season.fameGamesEpisodeUsed=true;return prepareNextRupaulEpisode(season);}
+    const episode=createRupaulDraftEpisode(season,{type:"fame_games",label:`Episode ${season.episodeCounter}`,title:`Episode ${season.episodeCounter}`,competingIds:eliminated.slice(),runOnlyIds:season.activeIds.slice(),forcedChallengeType:"talent_show",specialPremiere:"fame_games",rupaulFameGamesPending:true,noMiniChallenge:true,noGuestJudge:true});
+    episode.fameGamesEpisode=true;episode.activeStartIds=season.castOrder.slice();episode.runOnlyIds=season.activeIds.slice();episode.runwayParticipantIds=[];episode.challengeSelectionLocked=true;
+    await initializeRupaulFameGamesChallenge(season,episode);return episode;
+  }
+
+  async function initializeRupaulFameGamesChallenge(season,episode){
+    if(episode.rupaulChallengeConfirmed)return true;
+    const challenge=chooseRupaulPresetChallenge(season,episode)||{id:`fame_games_talent_show_${episode.number}`,name:"Fame Games Talent Show",type:"talent_show",teamMode:"solo",requiredSkills:{comedy:.2,dance:.2,acting:.2,improv:.2,lipsync:.2}};
+    episode.challenge=challenge;episode.runway=null;episode.guestJudge=null;episode.miniChallenge=null;
+    const original=season.activeIds.slice();season.activeIds=episode.competingIds.slice();runChallengeAndRunway(season,episode);season.activeIds=original;
+    episode.runway=null;episode.runwayGroups={};episode.rupaulChallengeConfirmed=true;episode.rupaulRunwayConfirmed=true;state.currentStep="status";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");return true;
+  }
+
+  async function runRupaulFameGamesFlow(season,episode,step){
+    if(!episode.rupaulChallengeConfirmed) return initializeRupaulFameGamesChallenge(season,episode);
+    if(["placements","lipsync","results","trackrecord"].includes(step)&&!episode.rupaulPlacementsConfirmed){
+      const ranked=rupaulRankedIds(episode,episode.competingIds);const pool=ranked.slice(0,Math.min(4,ranked.length));
+      const top=await openRupaulPhotoPicker("Choose the Fame Games Top Two",pool,{min:2,max:2,tone:"winner"});if(!top)return false;
+      episode.top2Ids=top.slice();episode.winnerIds=[];episode.highIds=[];episode.lowIds=[];episode.bottomIds=[];episode.safeIds=episode.competingIds.filter((id)=>!top.includes(id));episode.rupaulPlacementsConfirmed=true;saveState();renderEpisode();state.currentStep="judging";return false;
+    }
+    if(["lipsync","results","trackrecord"].includes(step)&&!episode.rupaulLipSyncPrepared){
+      const song=await openRupaulSongPicker(season,"Choose the Fame Games Lip Sync Song");if(!song)return false;
+      const lipSync=createLipSyncFromSong(season,episode.top2Ids.slice(),song,"Fame Games Lip Sync For The Win");lipSync.resultType="fame_games_multiplier";episode.lipSync=lipSync;episode.rupaulFameGamesBattle=rupaulBattleDescriptor(episode.top2Ids.slice(),"Fame Games Lip Sync For The Win","for_win",{lipSync});episode.rupaulLipSyncPrepared=true;saveState();renderEpisode();
+    }
+    if(["results","trackrecord"].includes(step)&&!episode.rupaulResultsConfirmed){
+      const battle=episode.rupaulFameGamesBattle;const decision=await openRupaulLipSyncResultPicker(season,episode,battle,{forWin:true,allowDouble:false});if(!decision?.winnerId)return false;
+      const winner=decision.winnerId;battle.lipSync.winnerId=winner;battle.lipSync.winnerIds=[winner];battle.lipSync.loserId=battle.ids.find((id)=>id!==winner)||null;battle.ids.forEach((id)=>updateLipSyncStats(season,id,id===winner));
+      episode.winnerIds=[winner];episode.top2Ids=episode.top2Ids.filter((id)=>id!==winner);episode.safeIds=episode.competingIds.filter((id)=>!episode.winnerIds.includes(id)&&!episode.top2Ids.includes(id));
+      const multiplier=randomItem([2,3,4]);episode.fameGamesMultiplier=multiplier;episode.fameGamesMultiplierId=winner;episode.fameGamesWheelSpun=false;episode.resultText=`${displayName(season.contestants[winner])}, condragulations, you win the Fame Games lip sync.`;episode.fameGamesAdvantageText=`${displayName(season.contestants[winner])}, your Fame Games votes will be multiplied by ${multiplier}.`;
+      season.fameGames={multiplierId:winner,multiplier,winnerId:null};season.fameGamesEpisodeUsed=true;season.rupaulFameGamesDone=true;episode.rupaulResultsConfirmed=true;return finishRupaulEpisode(season,episode);
+    }
+    return true;
+  }
+
+  async function prepareRupaulTopFourRumixEpisode(season){
+    const ids=season.activeIds.slice();
+    const episode=createRupaulDraftEpisode(season,{type:"competitive",label:`Episode ${season.episodeCounter}`,title:`Episode ${season.episodeCounter}`,competingIds:ids,forcedChallengeType:"rumix",specialPremiere:"top4_rumix",rupaulTopFourRumixEpisode:true,noMiniChallenge:true});
+    episode.challengeSelectionLocked=true;
+    await initializeRupaulDraftChallenge(season,episode);
+    // This episode is inserted from the previous episode's Track Record button.
+    // Re-assert Status after the synchronous preset challenge setup so the old
+    // Track Record step cannot remain visually active on the new pending episode.
+    state.currentEpisodeIndex=season.episodes.indexOf(episode);
+    await setEpisodeStep("status",{skipRupaulGate:true,scroll:false});
+    renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
+    return episode;
+  }
+
+  function prepareRupaulCuntTestEpisode(season) {
+    const ids = season.activeIds.slice();
+    if (ids.length !== 5) return prepareNextRupaulEpisode(season);
+    const episode = createEpisodeShell(season, {
+      type: "cunt_test",
+      title: `Episode ${season.episodeCounter}`,
+      label: `Episode ${season.episodeCounter}`,
+      noMiniChallenge: true,
+      noGuestJudge: true,
+      competingIds: ids.slice(),
+      runwayParticipantIds: []
+    });
+    episode.challenge = {
+      id: `the_cunt_test_${season.episodeCounter}`,
+      name: "The C.U.N.T.-test",
+      type: "multiple",
+      teamMode: "solo",
+      requiredSkills: { dance: 0.25, lipsync: 0.20, design: 0.20, acting: 0.20, runway: 0.15 }
+    };
+    episode.runway = null;
+    episode.hideJudging = true;
+    episode.noImmunityAward = true;
+    episode.rupaulPending = true;
+    episode.rupaulCuntTestPending = true;
+    episode.rupaulCuntTestComplete = false;
+    episode.rupaulResultsConfirmed = false;
+    episode.rupaulReservedChallengeIds = [];
+    episode.cuntTest = {
+      rounds: [],
+      remainingIds: ids.slice(),
+      winnerIds: [],
+      bottomIds: [],
+      survivorId: null,
+      eliminatedId: null,
+      lipSync: null
+    };
+    episode.scores = [];
+    episode.maxiGroups = { slayed: [], great: [], good: [], bad: [], flopped: [] };
+    season.episodes.push(episode);
+    state.currentEpisodeIndex = season.episodes.length - 1;
+    state.currentStep = "status";
+    saveState();
+    renderEpisodeSelect();
+    renderEpisode();
+    showScreen("episode-screen");
+    return true;
+  }
+
+  async function runNextRupaulCuntTestRound(season, episode, roundIndex) {
+    const data = episode.cuntTest;
+    if (!data || data.rounds?.[roundIndex]) return true;
+    if (roundIndex !== (data.rounds || []).length) return false;
+    const remainingIds = (data.remainingIds || []).slice();
+    if (!remainingIds.length) return false;
+    const forcedTypes = ["rumix", "design", "acting"];
+    const pickerContext = {
+      competingIds: remainingIds.slice(),
+      rupaulAllowedChallengeTypes: [forcedTypes[roundIndex]],
+      rupaulForceSolo: true,
+      rupaulReservedChallengeIds: episode.rupaulReservedChallengeIds || []
+    };
+    const challenge = await openRupaulChallengePicker(season, pickerContext);
+    if (!challenge) return false;
+    episode.rupaulReservedChallengeIds = [...new Set([...(episode.rupaulReservedChallengeIds || []), challenge.id])];
+    const round = scoreCuntTestRound(season, episode, challenge, remainingIds, roundIndex);
+    const topPool = (round.scores || []).slice(0, Math.min(3, round.scores.length)).map((score) => score.id);
+    const picked = await openRupaulPhotoPicker(`Choose the Part #${roundIndex + 1} winner`, topPool, { min: 1, max: 1, tone: "winner" });
+    if (!picked?.[0]) return false;
+    round.winnerId = picked[0];
+    round.winnerRevealed = true;
+    data.rounds.push(round);
+    data.winnerIds.push(round.winnerId);
+    data.remainingIds = remainingIds.filter((id) => id !== round.winnerId);
+    episode.winnerIds = data.winnerIds.slice();
+    if (data.rounds.length === 3) {
+      data.bottomIds = data.remainingIds.slice(0, 2);
+      episode.bottomIds = data.bottomIds.slice();
+    }
+    episode.scores = (episode.activeStartIds || []).map((id) => {
+      const entries = data.rounds.flatMap((item) => (item.scores || []).filter((score) => score.id === id));
+      const total = entries.length ? average(entries.map((score) => score.total)) : 0;
+      const challengeScore = entries.length ? average(entries.map((score) => score.challengeScore)) : total;
+      return { id, challengeScore, runwayScore: challengeScore, balanceAdjustment: 0, total };
+    }).sort((a, b) => b.total - a.total);
+    episode.maxiGroups = bandScores(episode.scores, "challengeScore");
+    saveState();
+    renderEpisode();
+    return true;
+  }
+
+  async function prepareRupaulCuntTestLipSync(season, episode) {
+    const data = episode.cuntTest;
+    if (data?.lipSync) return true;
+    if ((data?.rounds || []).length < 3 || (data?.bottomIds || []).length !== 2) return false;
+    const song = await openRupaulSongPicker(season, "Choose the Lip Sync for the Final Spot Song");
+    if (!song) return false;
+    const lipSync = createLipSyncFromSong(season, data.bottomIds.slice(), song, "Lip Sync for the Final Spot");
+    lipSync.resultType = "cunt_test_final_spot";
+    data.lipSync = lipSync;
+    episode.lipSync = lipSync;
+    episode.rupaulCuntBattle = rupaulBattleDescriptor(data.bottomIds.slice(), "Lip Sync for the Final Spot", "elimination", { lipSync });
+    saveState();
+    renderEpisode();
+    return true;
+  }
+
+  async function resolveRupaulCuntTest(season, episode) {
+    if (episode.rupaulCuntTestComplete) return true;
+    const data = episode.cuntTest;
+    if (!data?.lipSync) return false;
+    const battle = episode.rupaulCuntBattle || rupaulBattleDescriptor(data.bottomIds.slice(), "Lip Sync for the Final Spot", "elimination", { lipSync: data.lipSync });
+    const decision = await openRupaulLipSyncResultPicker(season, episode, battle, { allowDouble: false });
+    if (!decision || decision.survivors?.length !== 1) return false;
+    const survivorId = decision.survivors[0];
+    const eliminatedId = data.bottomIds.find((id) => id !== survivorId) || null;
+    data.survivorId = survivorId;
+    data.eliminatedId = eliminatedId;
+    data.lipSync.winnerId = survivorId;
+    data.lipSync.winnerIds = [survivorId];
+    data.lipSync.loserId = eliminatedId;
+    data.lipSync.eliminatedId = eliminatedId;
+    data.lipSync.resultType = "cunt_test_final_spot";
+    data.lipSync.roundResultText = `${fullDisplayName(season.contestants[survivorId] || {})}, shantay you stay. You have earned the final spot in the finale. ${fullDisplayName(season.contestants[eliminatedId] || {})}, sashay away.`;
+    episode.winnerIds = data.winnerIds.slice();
+    episode.bottomIds = data.bottomIds.slice();
+    episode.savedIds = [survivorId];
+    episode.eliminatedIds = eliminatedId ? [eliminatedId] : [];
+    episode.resultText = `${sentenceList(data.winnerIds, season, false)} earned their finale spots through the maxi challenges. ${fullDisplayName(season.contestants[survivorId] || {})} survives the final lip sync and completes the Top 4.`;
+    episode.notes.push("The C.U.N.T.-test replaces the Top 5 competitive episode. Three maxi winners advance, and the remaining two lip sync for the final Top 4 spot.");
+    (episode.rupaulReservedChallengeIds || []).forEach((id) => {
+      if (id && !season.usedChallengeIds.includes(id)) season.usedChallengeIds.push(id);
+    });
+    (data.rounds || []).forEach((round) => {
+      if (round.challenge?.type) season.usedChallengeTypes.push(challengeTypeKey(round.challenge.type));
+    });
+    updateLipSyncStats(season, survivorId, true);
+    updateLipSyncStats(season, eliminatedId, false);
+    episode.rupaulCuntTestComplete = true;
+    episode.rupaulResultsConfirmed = true;
+    return finishRupaulEpisode(season, episode);
+  }
+
+  async function ensureRupaulCuntTestStep(season, episode, step) {
+    if (step === "cuntpart1") return runNextRupaulCuntTestRound(season, episode, 0);
+    if (step === "cuntpart2") return runNextRupaulCuntTestRound(season, episode, 1);
+    if (step === "cuntpart3") return runNextRupaulCuntTestRound(season, episode, 2);
+    if (step === "lipsync") return prepareRupaulCuntTestLipSync(season, episode);
+    if (["results", "trackrecord"].includes(step)) {
+      if (!dataReadyForRupaulCuntResult(episode)) return false;
+      return resolveRupaulCuntTest(season, episode);
+    }
+    return true;
+  }
+
+  function dataReadyForRupaulCuntResult(episode) {
+    return !!episode?.cuntTest?.lipSync;
+  }
+
+  async function prepareNextRupaulEpisode(season){
+    if(!season||season.seasonComplete){openStatsScreen();return;}
+    const pending=(season.episodes||[]).at(-1);if(pending?.rupaulPending&&!pending.rupaulFinalized){state.currentEpisodeIndex=season.episodes.length-1;renderEpisodeSelect();renderEpisode();showScreen("episode-screen");return;}
+    if(isAllWinnersFormat(season))return prepareNextRupaulAllWinnersEpisode(season);
+    if(isTournamentFormat(season))return prepareNextRupaulTournamentEpisode(season);
+    if(season.config.premiereType==="porkchop"&&!season.rupaulPremiereComplete)return prepareNextRupaulPorkchopEpisode(season);
+    const premiere=rupaulPremiereOptions(season);if(premiere){if(premiere.porkchop)return prepareNextRupaulPorkchopEpisode(season);const episode=createRupaulDraftEpisode(season,premiere);await initializeRupaulDraftChallenge(season,episode);return;}
+    if(season.rupaulMidRateState&&!season.rupaulMidRateState.complete)return prepareNextRupaulMidRatePart(season);
+    if(season.config.finaleType==="cunt_test"&&season.activeIds.length===5&&!season.rupaulCuntTestUsed){season.rupaulCuntTestUsed=true;return prepareRupaulCuntTestEpisode(season);}
+    const target=isTeamsFormat(season)?(season.teamsFinalistOverride||3):season.config.finalistSize;
+    if(season.activeIds.length>target||shouldRunSpecialComeback(season)||shouldRunDirectComeback(season)){
+      if(season.lalaparuzaQueued)return prepareRupaulSpecialSmackdown(season,"special_lalaparuza",{mode:"special_lalaparuza"});
+      if(shouldRunSpecialLalaparuza(season))return prepareRupaulSpecialSmackdown(season,"special_lalaparuza");
+      if(shouldRunSpecialSlayOffs(season))return prepareRupaulSpecialSmackdown(season,"special_slayoffs");
+      if(shouldRunMidSeasonRateAQueen(season))return prepareNextRupaulMidRatePart(season);
+      if(shouldRunSpecialComeback(season))return prepareRupaulSpecialComeback(season);
+      if(shouldRunDirectComeback(season))return prepareRupaulDirectComeback(season);
+      const episode=createRupaulDraftEpisode(season,{});await initializeRupaulDraftChallenge(season,episode);return;
+    }
+    if(season.config.finaleType==="lsftf"&&season.activeIds.length===4&&!season.rupaulLsftfDone){season.rupaulLsftfDone=true;return prepareRupaulSpecialSmackdown(season,"lsftf",{mode:"lsftf",ids:season.activeIds.slice(),name:"Lip Sync for the Finale"});}
+    if(season.config.specialReunionLalaparuza&&!season.specialReunionLalaparuzaUsed){const ids=fameGamesEligibleEliminated(season);if(ids.length>1)return prepareRupaulSpecialSmackdown(season,"reunion_lalaparuza",{mode:"reunion_lalaparuza",ids,name:"Reunion LaLaPaRuZa"});season.specialReunionLalaparuzaUsed=true;}
+    if(season.config.specialFameGames&&!season.fameGamesEpisodeUsed)return prepareRupaulFameGamesEpisode(season);
+    if(seasonWillUseTopFourRumixTrackColumn(season)&&!season.rupaulTopFourRumixDone&&!season.topFourRumixColumnAdded&&season.activeIds.length===4)return prepareRupaulTopFourRumixEpisode(season);
+    return prepareRupaulStandardFinale(season);
+  }
+
+  async function ensureRupaulDecisionBeforeStep(step){
+    const season=state.season,episode=currentEpisode();if(!isRupaulMode(season)||!episode?.rupaulPending)return true;
+    if(episode.rupaulPorkchopOpening&&["maxi","results","trackrecord"].includes(step)&&!episode.rupaulPorkchopOpeningComplete)return runRupaulPorkchopOpening(season,episode);
+    if(episode.rupaulSpecialFlow&&["lipsync","results","trackrecord"].includes(step)&&!episode.rupaulSpecialCompleted)return runRupaulSpecialLipSyncFlow(season,episode);
+    if(episode.rupaulAllWinnersFinalePending&&["lipsync","lsftc","winner","results","trackrecord"].includes(step)&&!episode.rupaulFinaleComplete)return runRupaulAllWinnersFinaleFlow(season,episode);
+    if(episode.rupaulTournamentFinalePending&&["lipsync","lsftc","winner","results","trackrecord"].includes(step)&&!episode.rupaulFinaleComplete)return runRupaulTournamentFinaleFlow(season,episode);
+    if(episode.rupaulFameGamesPending)return runRupaulFameGamesFlow(season,episode,step);
+    if(episode.rupaulFinalePending){
+      if(["lipsync","lsftc","winner","results","trackrecord"].includes(step)&&!episode.rupaulFinaleComplete)return runRupaulFinaleFlow(season,episode);
+      return true;
+    }
+    if(episode.rupaulCuntTestPending)return ensureRupaulCuntTestStep(season,episode,step);
+    if(episode.rupaulComebackChallengePending)return ensureRupaulComebackStep(season,episode,step);
+    if(episode.rupaulTopFourRumixEpisode&&["results","trackrecord"].includes(step)&&!episode.rupaulFinalized)return finishRupaulEpisode(season,episode);
+    if(!episode.rupaulChallengeConfirmed)return initializeRupaulDraftChallenge(season,episode);
+    const runwayGate=["runway","judging","placements","goldenbeaver","rumocracy","lipsync","results","trackrecord"].includes(step);
+    if(runwayGate&&!episode.rupaulRunwayConfirmed&&episode.runway&&!episode.runwayUsesChallengeScore){const runway=await openRupaulRunwayPicker(season);if(!runway)return false;updateRupaulRunwayName(season,episode,runway);episode.rupaulRunwayConfirmed=true;saveState();renderEpisode();}
+    if(["placements","goldenbeaver","rumocracy","lipsync","results","trackrecord"].includes(step)&&!episode.rupaulPlacementsConfirmed){if(!await runRupaulJudgingFlow(season,episode))return false;state.currentStep="judging";saveState();renderEpisode();scrollToEpisodeSection("judging");return false;}
+    if(["lipsync","results","trackrecord"].includes(step)&&!episode.rupaulLipSyncPrepared){if(!await prepareRupaulLipSyncs(season,episode))return false;saveState();renderEpisode();}
+    if(["results","trackrecord"].includes(step)&&!episode.rupaulResultsConfirmed){if(!await runRupaulLipSyncResultFlow(season,episode))return false;}
+    return true;
+  }
+
+
   function chooseWinnerFromCandidates(season, episode, candidates) {
     const ids = (candidates || []).filter((id) => season.activeIds.includes(id));
     return ids[0] || null;
@@ -4040,6 +6604,9 @@ Options: ${names}`, "") || "";
   }
 
   async function startSeason() {
+    if (startSeason.inProgress) return;
+    startSeason.inProgress = true;
+    try {
     readConfigFromInputs();
     const validation = validateSetupConfig(state.config);
     if (validation) { alert(validation); return; }
@@ -4048,7 +6615,7 @@ Options: ${names}`, "") || "";
       return;
     }
     state.season = createSeasonState();
-    if (shouldChoosePremiereChallengeType(state.season)) {
+    if (!isRupaulMode(state.season) && shouldChoosePremiereChallengeType(state.season)) {
       const chosenPremiereType = await choosePremiereChallengeType(state.season);
       state.season.premiereChallengeType = chosenPremiereType;
       state.season.config.premiereChallengeType = chosenPremiereType;
@@ -4062,6 +6629,12 @@ Options: ${names}`, "") || "";
     if (state.season.config.eliminationFormat === "tournament") await chooseTournamentBrackets(state.season);
     if (state.season.config.eliminationFormat === "teams") await chooseTeamPairs(state.season);
     await chooseInitialRelationships(state.season);
+    if (isRupaulMode(state.season)) {
+      showScreen("episode-screen");
+      await prepareNextRupaulEpisode(state.season);
+      saveState();
+      return;
+    }
     await simulateFullSeason(state.season);
     const pendingChooseReturnIndex = (state.season.episodes || []).findIndex((ep) => ep?.comebackPending && ep?.comeback?.format === "choose_return");
     state.currentEpisodeIndex = pendingChooseReturnIndex >= 0 ? pendingChooseReturnIndex : 0;
@@ -4071,6 +6644,9 @@ Options: ${names}`, "") || "";
     renderEpisode();
     showScreen("episode-screen");
     scrollToEpisodeSection(state.currentStep || "status");
+    } finally {
+      startSeason.inProgress = false;
+    }
   }
 
   async function setupPremierePreChoices(season) {
@@ -4807,7 +7383,8 @@ Options: ${names}`, "") || "";
     const crown = createLipSyncSmackdown(season, finalists, "Lip Sync for the Crown");
     finale.allWinnersHersesSmackdown = herses;
     finale.allWinnersCrownSmackdown = crown;
-    finale.extraLipSyncs = [];
+    finale.lsftcFinale = true;
+    finale.extraLipSyncs = (crown.lipSyncs || []).slice();
     finale.lipSync = crown.finalLipSync || null;
     finale.winnerIds = [crown.winnerId].filter(Boolean);
     finale.top2Ids = crown.finalLipSync?.ids || finalists.slice(0, 2);
@@ -4946,7 +7523,14 @@ Options: ${names}`, "") || "";
     const combinedDisplay = (priorToken === "WIN" || priorToken === "TOP2") ? `${priorToken}+<br/>ELIM` : "ELIM";
     entry.token = "ELIM";
     entry.display = combinedDisplay;
-    entry.extraClasses = (entry.extraClasses || []).filter((className) => !["double-elim", "tournament-elim-suffix"].includes(className));
+    entry.extraClasses = (entry.extraClasses || []).filter((className) => ![
+      "double-elim",
+      "tournament-elim-suffix",
+      "tournament-win-elim",
+      "tournament-top2-elim"
+    ].includes(className));
+    if (priorToken === "WIN") entry.extraClasses.push("tournament-win-elim");
+    if (priorToken === "TOP2") entry.extraClasses.push("tournament-top2-elim");
     entry.eliminated = true;
   }
 
@@ -4974,9 +7558,9 @@ Options: ${names}`, "") || "";
     episode.winnerIds = [];
     episode.highIds = [];
     episode.lowIds = [];
-    episode.bottomIds = ranked.slice(2);
-    episode.safeIds = [];
-    episode.notes.push(`${episode.tournamentBracketName} competes for MVQ points. The Top 2 lip sync for the legacy, and everyone else votes in the Point Ceremony.`);
+    episode.bottomIds = [];
+    episode.safeIds = ranked.slice(2);
+    episode.notes.push(`${episode.tournamentBracketName} competes for MVQ points. The Top 2 lip sync for the legacy, and everyone else is safe and votes in the Point Ceremony.`);
   }
 
   function resolveTournamentTopTwoLipSync(season, episode) {
@@ -5019,8 +7603,40 @@ Options: ${names}`, "") || "";
     }).sort((a, b) => b.score - a.score)[0]?.id || eligibleIds[0];
   }
 
+  function isFinalRupaulTournamentBracketEpisode(season, episode) {
+    if (!episode?.rupaulTournamentEpisode) return false;
+    const flow=season.rupaulTournamentState||{};
+    return Number(flow.episodeInBracket||0)+1>=Number(season.config.tournamentBracketEpisodes||3);
+  }
+
+  async function chooseRupaulTournamentAdvancers(season, episode) {
+    const flow=season.rupaulTournamentState||{};
+    const bracket=season.tournamentBrackets?.[Number(flow.bracketIndex||0)];
+    const ids=(bracket?.ids||rupaulCompetingIds(season,episode)).slice();
+    const count=Math.min(Number(season.config.tournamentAdvancers||2),ids.length);
+    const ranked=ids.slice().sort((a,b)=>Number(season.tournamentPoints[b]||0)-Number(season.tournamentPoints[a]||0)||trackRecordPower(season,b)-trackRecordPower(season,a));
+    const cutoffScore=Number(season.tournamentPoints[ranked[Math.max(0,count-1)]]||0);
+    const guaranteed=ranked.filter((id)=>Number(season.tournamentPoints[id]||0)>cutoffScore);
+    const tied=ranked.filter((id)=>Number(season.tournamentPoints[id]||0)===cutoffScore);
+    const openSpots=Math.max(0,count-guaranteed.length);
+    let selected=tied.slice(0,openSpots);
+    if(tied.length>openSpots&&openSpots>0){
+      const picked=await openRupaulPhotoPicker(`Choose ${openSpots===1?"the tied advancer":`${openSpots} tied advancers`}`,tied,{min:openSpots,max:openSpots,tone:"winner"});
+      if(!picked?.length)return false;
+      selected=picked.slice();
+    }
+    const advancers=[...guaranteed,...selected].slice(0,count);
+    episode.rupaulChosenTournamentAdvancers=advancers.slice();
+    episode.tournamentAdvancingIds=advancers.slice();
+    episode.tournamentEliminatedIds=ids.filter((id)=>!advancers.includes(id));
+    episode.rupaulTournamentAdvancersChosen=true;
+    saveState();
+    return advancers;
+  }
+
   function runTournamentPointCeremony(season, episode, bracketIds) {
-    const voters = (episode.bottomIds || []).slice();
+    if (episode.pointCeremony) return episode.pointCeremony;
+    const voters = (episode.safeIds || []).slice();
     const eligible = bracketIds.slice();
     const votes = voters.map((voterId) => {
       const choices = eligible.filter((id) => id !== voterId);
@@ -5029,6 +7645,7 @@ Options: ${names}`, "") || "";
       return { voterId, receiverId };
     });
     episode.pointCeremony = { votes, totals: Object.fromEntries(bracketIds.map((id) => [id, Number(season.tournamentPoints[id] || 0)])) };
+    return episode.pointCeremony;
   }
 
   function finalizeTournamentBracketEpisode(season, episode) {
@@ -5872,7 +8489,8 @@ Options: ${names}`, "") || "";
 
   function pickLipSyncAssassin(season) {
     const inSeason = new Set(season.castOrder || []);
-    const outsideSeason = (state.roster || []).filter((q) => !inSeason.has(q.id));
+    const usedAssassins = new Set(season.usedAssassinIds || []);
+    const outsideSeason = (state.roster || []).filter((q) => !inSeason.has(q.id) && !usedAssassins.has(q.id));
     const candidates = outsideSeason.filter((q) => Number(q.skills?.lipsync || 0) > 9);
     const fallback = outsideSeason.slice().sort((a, b) => Number(b.skills?.lipsync || 0) - Number(a.skills?.lipsync || 0));
     const picked = clone(randomItem(candidates.length ? candidates : fallback));
@@ -5880,6 +8498,7 @@ Options: ${names}`, "") || "";
     const id = `assassin_${picked.id}`;
     const profile = { ...picked, id, fullName: picked.fullName || picked.name || picked.nickname || "Lip Sync Assassin", nickname: picked.nickname || picked.name || "Lip Sync Assassin", isAssassin: true };
     season.contestants[id] = profile;
+    season.usedAssassinIds = [...new Set([...(season.usedAssassinIds || []), picked.id])];
     return id;
   }
 
@@ -5977,7 +8596,7 @@ Options: ${names}`, "") || "";
     const type = challengeTypeKey(episode.challenge?.type);
     const isRunwayMainChallenge = NO_SEPARATE_RUNWAY_TYPES.has(type);
     const hasSeparateRunway = !isRunwayMainChallenge;
-    const runway = hasSeparateRunway ? pickRunway(season) : {
+    const runway = hasSeparateRunway ? (episode.rupaulChosenRunway ? clone(episode.rupaulChosenRunway) : pickRunway(season)) : {
       id: `challenge_runway_${episode.challenge?.id || type}_${episode.number}`,
       name: episode.challenge?.name || challengeTypeLabel(type),
       challengeRunway: true
@@ -6200,6 +8819,13 @@ Options: ${names}`, "") || "";
   function scoreLegacyPerformance(queen, challenge) {
     const type = challengeTypeKey(challenge?.type);
     const weightedSkill = legacyWeightedSkill(queen, challenge);
+    if (isRupaulMode()) {
+      // Keep enough variance for an upset, but make the queen's relevant
+      // challenge skills the dominant part of the result.
+      if (type === "talent_show") return legacyJudgingDraw(24, 26) - weightedSkill * 2.40;
+      if (LEGACY_COMBINED_CHALLENGE_TYPES.has(type)) return legacyJudgingDraw(35, 37) - weightedSkill * 3.50;
+      return legacyJudgingDraw(24, 26) - weightedSkill * 2.30;
+    }
     if (type === "talent_show") return legacyJudgingDraw(15, 35) - legacyJudgingDraw(1, 35);
     if (LEGACY_COMBINED_CHALLENGE_TYPES.has(type)) return legacyJudgingDraw(25, 45) - weightedSkill * 2;
     return legacyJudgingDraw(15, 35) - weightedSkill;
@@ -6374,6 +9000,9 @@ Options: ${names}`, "") || "";
   }
 
   function scoreLegacyRunway(queen) {
+    // RuPaul Mode deliberately uses a tighter luck band and a stronger skill
+    // coefficient so the visual judging pool is meaningfully score-led.
+    if (isRupaulMode()) return legacyJudgingDraw(21, 23) - Number(queen?.skills?.runway || 0) * 2.10;
     return randInt(12, 35) - Number(queen?.skills?.runway || 0);
   }
 
@@ -6411,15 +9040,30 @@ Options: ${names}`, "") || "";
 
   function bandScores(scores, field) {
     const groups = { slayed: [], great: [], good: [], bad: [], flopped: [] };
+    if (!scores.length) return groups;
     if (field === "legacyPerformanceScore" || field === "legacyRunwayRaw") {
-      scores.forEach((score) => {
-        const value = Number(score[field]);
-        if (value < 6) groups.slayed.push(score.id);
-        else if (value < 16) groups.great.push(score.id);
-        else if (value < 26) groups.good.push(score.id);
-        else if (value < 31) groups.bad.push(score.id);
-        else groups.flopped.push(score.id);
-      });
+      if (isRupaulMode()) {
+        const values = scores.map((score) => Number(score[field])).sort((a,b)=>a-b);
+        const q = (p) => values[Math.max(0, Math.min(values.length - 1, Math.floor((values.length - 1) * p)))];
+        const q10=q(.10),q30=q(.30),q60=q(.60),q80=q(.80);
+        scores.forEach((score)=>{
+          const value=Number(score[field]);
+          if(value<=q10)groups.slayed.push(score.id);
+          else if(value<=q30)groups.great.push(score.id);
+          else if(value<=q60)groups.good.push(score.id);
+          else if(value<=q80)groups.bad.push(score.id);
+          else groups.flopped.push(score.id);
+        });
+      } else {
+        scores.forEach((score) => {
+          const value = Number(score[field]);
+          if (value < 6) groups.slayed.push(score.id);
+          else if (value < 16) groups.great.push(score.id);
+          else if (value < 26) groups.good.push(score.id);
+          else if (value < 31) groups.bad.push(score.id);
+          else groups.flopped.push(score.id);
+        });
+      }
       return groups;
     }
 
@@ -6626,8 +9270,10 @@ Options: ${names}`, "") || "";
   function resolveGoldenBeaverSave(season, episode) {
     if (!isGoldenBeaverFormat(season) || !seasonEliminationFormatApplies(season, episode) || episode.type !== "competitive") return;
     const winnerId = (episode.winnerIds || [])[0];
-    const bottomThree = (episode.goldenBeaverBottomIds || episode.bottomIds || []).slice(0, 3);
+    const bottomSource = episode.goldenBeaverBottomIds?.length ? episode.goldenBeaverBottomIds : (episode.bottomIds || []);
+    const bottomThree = bottomSource.slice(0, 3);
     if (!winnerId || bottomThree.length < 3) return;
+    episode.goldenBeaverBottomIds = bottomThree.slice();
     const savedId = chooseGoldenBeaverSave(season, winnerId, bottomThree, episode) || bottomThree[0];
     episode.goldenBeaverSavedId = savedId;
     episode.lowIds = [savedId];
@@ -8148,6 +10794,8 @@ Options: ${names}`, "") || "";
       if ((episode.bottomIds || []).includes(id)) return "LOW_ROSCON_BTM2";
     }
     if (episode.winnerIds.includes(id)) return "WIN";
+    const bracketTopTwoWin = episode.rupaulTournamentEpisode && episode.top2Ids.includes(id);
+    if (bracketTopTwoWin) return "WIN";
     if (isLegacyFormat(state.season) && seasonEliminationFormatApplies(state.season, episode) && (episode.bottomIds || []).length && episode.top2Ids.includes(id)) return "WIN";
     if (episode.top2Ids.includes(id)) return "TOP2";
     if (episode.eliminatedIds.includes(id)) return "ELIM";
@@ -10814,40 +13462,170 @@ Options: ${names}`, "") || "";
       : `${displayName(season.contestants[crownWinner])} wins the crown.`;
   }
 
+  const JURY_STRATEGIES = {
+    balanced: { label: "Balanced Juror", relationship: 0.45, merit: 0.45, popularity: 0.10 },
+    loyalist: { label: "Loyalist", relationship: 0.60, merit: 0.30, popularity: 0.10 },
+    competitor: { label: "Competitor", relationship: 0.25, merit: 0.65, popularity: 0.10 },
+    fan_minded: { label: "Fan-Minded Juror", relationship: 0.30, merit: 0.35, popularity: 0.35 }
+  };
+
+  function juryJurorEligibility(season, id) {
+    const track = season?.stats?.[id]?.track || [];
+    const disqualifyingEntry = [...track].reverse().find((entry) => {
+      const token = String(entry?.token || "").toUpperCase();
+      return token.includes("QUIT") || token === "DEPT" || token === "DISQ";
+    });
+    if (!disqualifyingEntry) return { eligible: true, reason: "" };
+    const token = String(disqualifyingEntry.token || "").toUpperCase();
+    const reason = token === "DEPT" ? "Medical departure" : token === "DISQ" ? "Disqualified" : "Withdrew";
+    return { eligible: false, reason, token };
+  }
+
+  function weightedJuryStrategy(entries) {
+    const total = entries.reduce((sum, entry) => sum + Math.max(0, Number(entry.weight || 0)), 0);
+    if (total <= 0) return entries[0]?.key || "balanced";
+    let roll = Math.random() * total;
+    for (const entry of entries) {
+      roll -= Math.max(0, Number(entry.weight || 0));
+      if (roll <= 0) return entry.key;
+    }
+    return entries.at(-1)?.key || "balanced";
+  }
+
+  function juryStrategyForJuror(season, jurorId, finalists) {
+    const relations = finalists.map((id) => Number(season.relationships?.[pairKey(jurorId, id)] || 0));
+    const strongestBond = relations.length ? Math.max(...relations) : 0;
+    const strongestGrudge = relations.length ? Math.min(...relations) : 0;
+    const stats = season.stats?.[jurorId] || {};
+    const jurorPower = trackRecordPower(season, jurorId);
+    const popularity = Number(stats.popularity || 50);
+    return weightedJuryStrategy([
+      { key: "balanced", weight: 38 },
+      { key: "loyalist", weight: 14 + ((strongestBond >= 6 || strongestGrudge <= -6) ? 34 : 0) },
+      { key: "competitor", weight: 14 + (jurorPower >= 65 ? 28 : 0) + Math.min(18, Number(stats.wins || 0) * 6 + Number(stats.highs || 0) * 2) },
+      { key: "fan_minded", weight: 10 + (popularity >= 65 ? 28 : 0) }
+    ]);
+  }
+
+  function juryVoteReason(profileKey, candidate) {
+    const profile = JURY_STRATEGIES[profileKey] || JURY_STRATEGIES.balanced;
+    const relationContribution = candidate.relationshipScore * profile.relationship;
+    const meritContribution = candidate.merit * profile.merit;
+    const popularityContribution = candidate.popularity * profile.popularity;
+    if (candidate.relation >= 7 && relationContribution >= Math.max(meritContribution, popularityContribution) * 0.82) return "Closest Ally";
+    if (candidate.relation < 0 && candidate.merit >= 72 && meritContribution >= relationContribution) return "Respected Rival";
+    if (meritContribution > relationContribution && meritContribution >= popularityContribution) return "Strongest Track Record";
+    if (popularityContribution > relationContribution && popularityContribution > meritContribution) return "Fan Favorite";
+    if (candidate.relation >= 4) return "Closest Ally";
+    return "Balanced Decision";
+  }
+
+  function resolveJuryTopTwo(finalists, votes) {
+    const sorted = finalists.slice().sort((a, b) => Number(votes[b] || 0) - Number(votes[a] || 0));
+    const cutoffScore = Number(votes[sorted[1]] || 0);
+    const automaticIds = sorted.filter((id) => Number(votes[id] || 0) > cutoffScore);
+    const tiedIds = sorted.filter((id) => Number(votes[id] || 0) === cutoffScore);
+    const availableSlots = Math.max(0, 2 - automaticIds.length);
+    if (tiedIds.length > availableSlots) {
+      const chosenIds = shuffle(tiedIds).slice(0, availableSlots);
+      return {
+        top2Ids: [...automaticIds, ...chosenIds].slice(0, 2),
+        tie: {
+          score: cutoffScore,
+          tiedIds,
+          automaticIds,
+          availableSlots,
+          chosenIds,
+          label: "RuPaul's Choice",
+          revealed: false
+        }
+      };
+    }
+    return { top2Ids: sorted.slice(0, 2), tie: null };
+  }
+
+  function juryVisibleVoteTotals(ep) {
+    const finalists = ep?.activeStartIds || state.season?.activeIds || [];
+    const totals = Object.fromEntries(finalists.map((id) => [id, 0]));
+    const ballots = ep?.juryBallots || [];
+    const revealCount = clamp(Number(ep?.juryRevealCount || 0), 0, ballots.length);
+    ballots.slice(0, revealCount).forEach((ballot) => {
+      if (ballot.firstId) totals[ballot.firstId] = Number(totals[ballot.firstId] || 0) + 2;
+      if (ballot.secondId) totals[ballot.secondId] = Number(totals[ballot.secondId] || 0) + 1;
+    });
+    return totals;
+  }
+
+  function juryFinalDecisionRevealed(ep) {
+    return !!ep?.juryResultsRevealed && (!ep?.juryTie || !!ep.juryTie.revealed);
+  }
+
   function simulateJuryFinale(season, finale) {
     const finalists = season.activeIds.slice();
-    const jurors = season.eliminatedIds.slice();
-    const votes = Object.fromEntries(finalists.map((id) => [id, 0]));
-    const ballots = [];
-    jurors.forEach((jurorId) => {
-      const ranked = finalists.map((id) => {
-        const relation = season.relationships[pairKey(jurorId, id)] || 0;
-        const bestInCompetition = trackRecordPower(season, id);
-        const social = (season.stats[id].popularity || 0) * 0.08;
-        return {
-          id,
-          score: relation * 4.35 + bestInCompetition * 0.34 + social + randInt(-3, 3),
-          relation,
-          bestInCompetition
-        };
-      }).sort((a, b) => b.score - a.score || b.bestInCompetition - a.bestInCompetition);
-      const first = ranked[0]?.id || null;
-      const second = ranked.find((entry) => entry.id !== first)?.id || null;
-      if (first) votes[first] += 2;
-      if (second) votes[second] += 1;
-      ballots.push({ jurorId, firstId: first, secondId: second });
+    const jurorPool = [...new Set((season.eliminatedIds || []).filter((id) => id && !finalists.includes(id)))];
+    const eligibleJurors = [];
+    const excludedJurors = [];
+    jurorPool.forEach((id) => {
+      const eligibility = juryJurorEligibility(season, id);
+      if (eligibility.eligible) eligibleJurors.push(id);
+      else excludedJurors.push({ id, reason: eligibility.reason, token: eligibility.token || "" });
     });
-    const top2 = Object.entries(votes).sort((a, b) => b[1] - a[1] || finaleScore(season, b[0]) - finaleScore(season, a[0])).slice(0, 2).map(([id]) => id);
+
+    const votes = Object.fromEntries(finalists.map((id) => [id, 0]));
+    const ballots = eligibleJurors.map((jurorId) => {
+      const strategy = juryStrategyForJuror(season, jurorId, finalists);
+      const profile = JURY_STRATEGIES[strategy] || JURY_STRATEGIES.balanced;
+      const ranked = finalists.map((id) => {
+        const relation = Number(season.relationships?.[pairKey(jurorId, id)] || 0);
+        const relationshipScore = clamp((relation + 10) * 5, 0, 100);
+        const merit = trackRecordPower(season, id);
+        const popularity = clamp(Number(season.stats?.[id]?.popularity || 50), 0, 100);
+        let score = relationshipScore * profile.relationship + merit * profile.merit + popularity * profile.popularity;
+        if (relation >= 7) score += 7;
+        if (relation <= -7) score -= 10;
+        score += randInt(-6, 6);
+        return { id, score, relation, relationshipScore, merit, popularity };
+      }).sort((a, b) => b.score - a.score || b.merit - a.merit || b.popularity - a.popularity);
+
+      const first = ranked[0] || null;
+      const second = ranked.find((entry) => entry.id !== first?.id) || null;
+      if (first?.id) votes[first.id] += 2;
+      if (second?.id) votes[second.id] += 1;
+      return {
+        jurorId,
+        strategy,
+        strategyLabel: profile.label,
+        firstId: first?.id || null,
+        firstReason: first ? juryVoteReason(strategy, first) : "",
+        secondId: second?.id || null,
+        secondReason: second ? juryVoteReason(strategy, second) : ""
+      };
+    });
+
+    const decision = resolveJuryTopTwo(finalists, votes);
+    const top2 = decision.top2Ids;
     const finalElimIds = finalists.filter((id) => !top2.includes(id));
+    finale.juryEligibleIds = eligibleJurors;
+    finale.juryExcludedIds = excludedJurors;
     finale.juryVotes = votes;
     finale.juryBallots = ballots;
+    finale.juryRevealCount = 0;
+    finale.juryResultsRevealed = false;
+    finale.juryTie = decision.tie;
+    finale.juryFinalOrder = finalists.slice().sort((a, b) => Number(votes[b] || 0) - Number(votes[a] || 0));
     season.juryVotes = votes;
     finale.top2Ids = top2;
     finale.eliminatedIds = finalElimIds;
     finale.lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, top2, "Final Lip Sync for the Crown"));
+    finale.lipSync.resultType = "crown_final";
+    finale.lipSync.roundNumber = 1;
+    finale.lipSync.roundPosition = 1;
+    finale.lipSync.isFinalRound = true;
     const crownWinner = chooseCrownWinner(season, top2, finale.lipSync);
     finale.lipSync.performanceWinnerId = finale.lipSync.winnerId;
     finale.lipSync.winnerId = crownWinner;
+    finale.lipSync.winnerIds = [crownWinner];
+    finale.lipSync.loserId = top2.find((id) => id !== crownWinner) || finale.lipSync.loserId;
     finale.winnerIds = [crownWinner];
     finale.resultText = `${sentenceList(top2, season, false)}, condragulations, you are the top two of the season.`;
   }
@@ -10992,9 +13770,10 @@ Options: ${names}`, "") || "";
     renderPointCeremonyPanel(ep);
     renderEpisodeTrackRecordPanel(ep);
     updateVisibleEpisodeSections(ep);
+    updateJuryProceedGate(ep);
     applyLipSyncRevealGating(ep);
     activateWinnerRevealAnimation(ep);
-    setEpisodeStep(state.currentStep || "status", { scroll: false });
+    setEpisodeStep(state.currentStep || "status", { scroll: false, skipRupaulGate: true });
     if (els.episodeSelect) els.episodeSelect.value = String(state.currentEpisodeIndex);
   }
 
@@ -11762,7 +14541,7 @@ Options: ${names}`, "") || "";
     }
     if (!isRateAQueenEpisode(ep) && ep.judgedInTeams && ep.winningTeamIds?.length) {
       parts.push(textEvent("This week you'll be judged in teams.", "storyline"));
-      parts.push(groupBlock("Winning Team", ep.winningTeamIds, state.season, { className: "placement-group token-high" }));
+      parts.push(groupBlock(ep.teams?.mode === "pairs" ? "Winning Pair" : "Winning Team", ep.winningTeamIds, state.season, { className: "placement-group token-high" }));
       if (ep.teamWinMode === "solo" && ep.winnerIds?.length) {
         parts.push(textEvent("But one of you has snatched our attention...", "storyline"));
         parts.push(groupBlock("Challenge Winner", ep.winnerIds, state.season, { className: "placement-group token-win", subtitle: `${sentenceList(ep.winnerIds, state.season, false)}, condragulations, you're the winner of this week's maxi-challenge.` }));
@@ -11774,12 +14553,7 @@ Options: ${names}`, "") || "";
       const text = `${names}, you're safe. You may leave the stage.`;
       parts.push(groupBlock("", ep.safeIds, state.season, { subtitle: text }));
     }
-    if (state.config.mode === "rupaul" && ep.winnerIds?.length) {
-      const winnerPool = [...new Set([...(ep.winnerIds || []), ...(ep.highIds || []), ...(ep.top2Ids || [])])];
-      parts.push(rupaulSelectControl("winner", "RuPaul mode: choose the challenge winner", winnerPool, ep.winnerIds[0]));
-    }
     els.judgingStack.innerHTML = parts.join("");
-    if (parts.length) attachRupaulControls(ep);
   }
 
   function placementGroupLine(ids, type) {
@@ -11964,40 +14738,162 @@ Options: ${names}`, "") || "";
 
   function renderJuryVotingPanel(ep) {
     const finalists = ep.activeStartIds || state.season.activeIds || [];
-    const top2 = ep.top2Ids || [];
-    const ballotRows = (ep.juryBallots || []).map((ballot) => `
-      <article class="mx-vote-card jury-mx-vote-card">
-        <div class="jury-voter-row">${contestantCard(ballot.jurorId)}</div>
-        <div class="jury-pick-row">
-          <div class="jury-point-pick">
-            ${ballot.firstId ? contestantCard(ballot.firstId) : `<span class="empty-state">—</span>`}
-            <span class="vote-arrow">2 POINTS</span>
-          </div>
-          <div class="jury-point-pick">
-            ${ballot.secondId ? contestantCard(ballot.secondId) : `<span class="empty-state">—</span>`}
-            <span class="vote-arrow">1 POINT</span>
-          </div>
-        </div>
-      </article>
-    `).join("");
-    const totals = finalists.slice().sort((a, b) => Number(ep.juryVotes?.[b] || 0) - Number(ep.juryVotes?.[a] || 0) || finaleScore(state.season, b) - finaleScore(state.season, a));
-    const scoreRows = totals.map((id) => {
-      const points = Number(ep.juryVotes?.[id] || 0);
+    const ballots = ep.juryBallots || [];
+    const revealCount = clamp(Number(ep.juryRevealCount || 0), 0, ballots.length);
+    const revealedBallots = ballots.slice(0, revealCount);
+    const allBallotsRevealed = revealCount >= ballots.length;
+    const visibleTotals = ep.juryResultsRevealed ? (ep.juryVotes || {}) : juryVisibleVoteTotals(ep);
+    const finalDecisionRevealed = juryFinalDecisionRevealed(ep);
+    const top2 = finalDecisionRevealed ? (ep.top2Ids || []) : [];
+    const tie = ep.juryTie || null;
+    const order = ep.juryResultsRevealed
+      ? finalists.slice().sort((a, b) => Number(ep.juryVotes?.[b] || 0) - Number(ep.juryVotes?.[a] || 0))
+      : finalists.slice();
+
+    const jurorIds = ep.juryEligibleIds || ballots.map((ballot) => ballot.jurorId).filter(Boolean);
+    const jurorStrip = jurorIds.length
+      ? `<div class="contestant-strip small-strip jury-juror-strip">${jurorIds.map((id) => contestantCard(id, "", { nick: true })).join("")}</div>`
+      : `<p class="empty-state jury-no-jurors">No eligible eliminated contestants remain, so the finalist tie will be settled by RuPaul.</p>`;
+
+    const scoreRows = order.map((id) => {
+      const points = Number(visibleTotals?.[id] || 0);
+      const isTied = !!(ep.juryResultsRevealed && tie?.tiedIds?.includes(id) && !tie.revealed);
+      const autoAdvance = !!(ep.juryResultsRevealed && tie?.automaticIds?.includes(id));
+      const isTopTwo = top2.includes(id);
+      const isCut = finalDecisionRevealed && !isTopTwo;
       return `
-        <article class="mx-vote-card jury-score-mx-card ${top2.includes(id) ? "is-top-two" : ""}">
-          ${contestantCard(id)}
-          <strong>${points}</strong>
-          <span class="vote-arrow">VOTES</span>
+        <article class="jury-live-score-card ${isTopTwo ? "is-top-two" : ""} ${isCut ? "is-cut" : ""} ${isTied ? "is-tied" : ""} ${autoAdvance ? "is-auto-advance" : ""}">
+          ${contestantCard(id, "", { nick: true })}
+          <div class="jury-point-total"><strong>${points}</strong><span>POINT${points === 1 ? "" : "S"}</span></div>
+          ${autoAdvance ? `<span class="jury-status-chip">ADVANCES</span>` : ""}
         </article>
       `;
     }).join("");
+
+    const juryBallotIdentity = (id, roleClass = "") => {
+      if (!id) return `<span class="empty-state jury-ballot-empty">—</span>`;
+      const item = state.season?.contestants?.[id] || {};
+      return `
+        <div class="jury-ballot-identity ${escapeHtml(roleClass)}">
+          <img src="${escapeHtml(item.image || PLACEHOLDER)}" alt="${escapeHtml(fullDisplayName(item))}">
+          <strong>${escapeHtml(nickDisplayName(item))}</strong>
+        </div>
+      `;
+    };
+
+    const ballotRows = revealedBallots.map((ballot, index) => {
+      const latest = index === revealedBallots.length - 1;
+      return `
+        <article class="jury-ballot-reveal-card ${latest ? "is-latest" : ""}">
+          <div class="jury-ballot-voter">
+            ${juryBallotIdentity(ballot.jurorId, "is-juror")}
+          </div>
+          <div class="jury-ballot-choice is-first">
+            <span class="jury-choice-points"><strong>2</strong><small>POINTS</small></span>
+            ${juryBallotIdentity(ballot.firstId)}
+          </div>
+          <div class="jury-ballot-choice is-second">
+            <span class="jury-choice-points"><strong>1</strong><small>POINT</small></span>
+            ${juryBallotIdentity(ballot.secondId)}
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    let actionHtml = "";
+    if (!allBallotsRevealed) {
+      actionHtml = `
+        <div class="jury-vote-actions">
+          <button class="primary-btn jury-reveal-next-btn" type="button">Reveal Next Ballot</button>
+          <span>${revealCount} of ${ballots.length} ballots revealed</span>
+        </div>
+      `;
+    } else if (!ep.juryResultsRevealed) {
+      actionHtml = `
+        <div class="jury-vote-actions">
+          <button class="primary-btn jury-reveal-results-btn" type="button">Reveal Jury Results</button>
+          <span>All ballots are locked in.</span>
+        </div>
+      `;
+    }
+
+    let tieHtml = "";
+    if (ep.juryResultsRevealed && tie) {
+      const tiedCards = (tie.tiedIds || []).map((id) => {
+        const chosen = !!tie.revealed && (tie.chosenIds || []).includes(id);
+        const notChosen = !!tie.revealed && !chosen;
+        return `<div class="jury-rupaul-candidate ${chosen ? "is-chosen" : ""} ${notChosen ? "is-not-chosen" : ""}">${contestantCard(id, `${Number(ep.juryVotes?.[id] || 0)} points`, { nick: true })}</div>`;
+      }).join("");
+      tieHtml = `
+        <article class="jury-rupaul-choice-panel ${tie.revealed ? "is-revealed" : ""}">
+          <span class="jury-rupaul-kicker">RUPAUL'S CHOICE</span>
+          <h3>${tie.revealed ? "The decision has been made." : "The jury vote is tied."}</h3>
+          <p>${tie.revealed
+            ? escapeHtml(`RuPaul's Choice is ${sentenceList(tie.chosenIds || [], state.season, false)}.`)
+            : escapeHtml(`${sentenceList(tie.tiedIds || [], state.season, false)} are tied for ${Number(tie.availableSlots || 1) === 1 ? "the final place" : "the remaining places"} in the Top 2.`)}</p>
+          <div class="jury-rupaul-candidates">${tiedCards}</div>
+          ${tie.revealed ? "" : `<button class="primary-btn jury-reveal-rupaul-btn" type="button">Reveal RuPaul's Choice</button>`}
+        </article>
+      `;
+    }
+
+    const announcement = finalDecisionRevealed
+      ? `<article class="jury-top-two-final">
+          <span>THE TOP 2</span>
+          <div class="contestant-strip small-strip jury-top-two-strip">${(ep.top2Ids || []).map((id) => resultContestantCard(id, true, false, false, false)).join("")}</div>
+          <p>${escapeHtml(`${sentenceList(ep.top2Ids || [], state.season, false)}, condragulations, you are the top two of the season.`)}</p>
+        </article>`
+      : "";
+
     return `
-      <div class="mx-vote-grid jury-vote-grid">${ballotRows || `<article class="mx-vote-card"><span class="empty-state">No jurors voted.</span></article>`}</div>
-      <div class="mx-vote-grid jury-total-grid">${scoreRows}</div>
-      <p class="announcement-line">${escapeHtml(sentenceList(top2, state.season, false))}, condragulations, you are the top two of the season.</p>
+      <section class="jury-voting-experience">
+        <article class="jury-intro-card">
+          <span class="jury-kicker">THE JURY</span>
+          <h3>The eliminated contestants decide the Top 2.</h3>
+          <p>Each eligible juror awards 2 points to their first choice and 1 point to their second choice.</p>
+          ${jurorStrip}
+        </article>
+        <div class="jury-live-scoreboard">${scoreRows}</div>
+        ${revealedBallots.length ? `<div class="jury-revealed-ballots">${ballotRows}</div>` : `<article class="jury-awaiting-card"><p>The ballots are sealed. Reveal them one at a time to watch the scoreboard change.</p></article>`}
+        ${actionHtml}
+        ${tieHtml}
+        ${announcement}
+      </section>
     `;
   }
 
+  function revealNextJuryBallot(ep) {
+    if (!ep || state.season?.config?.finaleType !== "jury_finale") return;
+    const ballots = ep.juryBallots || [];
+    ep.juryRevealCount = Math.min(ballots.length, Number(ep.juryRevealCount || 0) + 1);
+    saveState();
+    renderEpisode();
+  }
+
+  function revealJuryResults(ep) {
+    if (!ep || state.season?.config?.finaleType !== "jury_finale") return;
+    const ballots = ep.juryBallots || [];
+    if (Number(ep.juryRevealCount || 0) < ballots.length) return;
+    ep.juryResultsRevealed = true;
+    saveState();
+    renderEpisode();
+  }
+
+  function revealJuryRupaulChoice(ep) {
+    if (!ep?.juryTie || state.season?.config?.finaleType !== "jury_finale") return;
+    ep.juryTie.revealed = true;
+    saveState();
+    renderEpisode();
+  }
+
+  function updateJuryProceedGate(ep) {
+    const primary = $('.episode-panel[data-panel="placements"] .proceed-row .primary-btn.proceed-btn');
+    if (!primary) return;
+    const isJury = ep?.type === "finale" && state.season?.config?.finaleType === "jury_finale";
+    const locked = isJury && !juryFinalDecisionRevealed(ep);
+    primary.disabled = locked;
+    if (locked) primary.textContent = "Complete Jury Vote";
+  }
 
 
   function renderRateQueenPanel(ep) {
@@ -12280,6 +15176,24 @@ Options: ${names}`, "") || "";
       if (els.bottomTwoBox) els.bottomTwoBox.innerHTML = "";
       return;
     }
+    if (ep.specialPremiere === "uk3") {
+      const topTwoIds = (ep.top2Ids || []).slice();
+      const highIds = (ep.highIds || []).filter((id) => !topTwoIds.includes(id));
+      els.placementsGrid.innerHTML = [
+        groupBlock("Top Two", topTwoIds, state.season, {
+          className: "placement-group token-top2",
+          subtitle: `${sentenceList(topTwoIds, state.season, false)}, you are the top two of the week and will lip sync for the win.`
+        }),
+        placementGroup("High", highIds, "high"),
+        placementGroup("Safe", ep.safeIds || [], "safe"),
+        groupBlock("Bottom Two", ep.bottomIds || [], state.season, {
+          className: "placement-group token-btm2",
+          subtitle: `${sentenceList(ep.bottomIds || [], state.season, false)}, you must lip sync for your lives.`
+        })
+      ].filter(Boolean).join("");
+      if (els.bottomTwoBox) els.bottomTwoBox.innerHTML = "";
+      return;
+    }
     const cards = [];
     if (isAllWinnersFormat(state.season) && ep.allWinnersEpisode) {
       const starNote = ep.number === state.season.allWinnersMidseasonEpisode ? "This week, each Top All Star earns one Legendary Legend Star to keep and one to give away next week." : ep.number === state.season.allWinnersTalentEpisode ? "This week, each Top All Star earns three Legendary Legend Stars." : "Each Top All Star is eligible to earn one Legendary Legend Star.";
@@ -12318,7 +15232,7 @@ Options: ${names}`, "") || "";
     }
     if (ep.tournamentBracketId) {
       cards.push(groupBlock("Top Two", ep.top2Ids || [], state.season, { className: "placement-group token-top2", subtitle: `${sentenceList(ep.top2Ids || [], state.season, false)}, you are the top two of the bracket.` }));
-      cards.push(groupBlock("Bottom", ep.bottomIds || [], state.season, { className: "placement-group token-bottom", subtitle: `${sentenceList(ep.bottomIds || [], state.season, false)}, I'm sorry my dears, but you're in the bottom.` }));
+      cards.push(groupBlock("Safe", ep.safeIds || [], state.season, { className: "placement-group token-safe", subtitle: `${sentenceList(ep.safeIds || [], state.season, false)}, you are safe and will vote in the Point Ceremony.` }));
       els.placementsGrid.innerHTML = cards.filter(Boolean).join("") || `<span class="empty-state">No placements to display.</span>`;
       if (els.bottomTwoBox) els.bottomTwoBox.innerHTML = "";
       return;
@@ -12374,14 +15288,7 @@ Options: ${names}`, "") || "";
         cards.push(placementGroup(ep.assassinThreeTeamBottom ? "Bottom Team" : "Bottom", placementBottomIds, "bottom"));
       }
     }
-    if (state.config.mode === "rupaul" && ep.winnerIds?.length) {
-      const winnerPool = [...new Set([...(ep.winnerIds || []), ...(ep.highIds || []), ...(ep.top2Ids || [])])];
-      cards.push(rupaulSelectControl("winner", "RuPaul mode: choose the challenge winner", winnerPool, ep.winnerIds[0]));
-    }
-    const dangerPool = [...new Set([...(ep.rosconAnnouncedLowIds?.length ? ep.rosconAnnouncedLowIds : ep.heartSuccessorPlacementLowIds?.length ? ep.heartSuccessorPlacementLowIds : ep.lowIds || []), ...(ep.rosconAnnouncedBottomIds?.length ? ep.rosconAnnouncedBottomIds : ep.heartSuccessorBottomIds?.length ? ep.heartSuccessorBottomIds : ep.bottomIds || [])])];
-    if (state.config.mode === "rupaul" && dangerPool.length >= 3) cards.push(rupaulSelectControl("save", "RuPaul mode: choose who is saved from the bottom group", dangerPool, (ep.lowIds || [])[0]));
     els.placementsGrid.innerHTML = cards.filter(Boolean).join("") || `<span class="empty-state">No placements to display.</span>`;
-    attachRupaulControls(ep);
     if (els.bottomTwoBox) els.bottomTwoBox.innerHTML = "";
   }
 
@@ -12427,7 +15334,7 @@ Options: ${names}`, "") || "";
     els.s17LsfylResultsBoard.innerHTML = survivalLipSyncs.map((ls) => renderLipSyncResultBlock(ls, ep, revealed)).join("");
     const resultLine = isMidSeasonRateAQueen ? (ep.midSeasonRateAQueen?.bottomLipSyncResultText || ep.s17SurvivalResultText || "The bottom-one lip sync is complete.") : (ep.s17SurvivalResultText || ep.resultText || "The lip sync is complete.");
     if (els.s17LsfylCrowningMessage) els.s17LsfylCrowningMessage.innerHTML = revealed ? `${escapeHtml(resultLine)}${renderChocolatePanel(ep, revealed)}` : "";
-    if (els.revealS17LsfylResultsBtn) els.revealS17LsfylResultsBtn.style.display = "none";
+    if (els.revealS17LsfylResultsBtn) els.revealS17LsfylResultsBtn.style.display = revealed ? "none" : "inline-flex";
   }
 
   function renderLipSyncPanel(ep) {
@@ -12536,7 +15443,15 @@ Options: ${names}`, "") || "";
   }
 
   function lipSyncRevealsInPlace(ep, lipSync) {
-    if (!ep || !lipSync || isCrownLipSync(lipSync, ep)) return false;
+    if (!ep || !lipSync) return false;
+    if (ep.type === "finale" && ep.allWinnersFinale) {
+      const hersesLipSyncs = ep.allWinnersHersesSmackdown?.lipSyncs || [];
+      if (hersesLipSyncs.includes(lipSync)) return true;
+      const crownParts = allWinnersCrownParts(ep);
+      if (crownParts.openingRounds.includes(lipSync)) return true;
+      if (lipSync === crownParts.finalLipSync) return false;
+    }
+    if (isCrownLipSync(lipSync, ep)) return false;
     if (ep.type === "porkchop_premiere" || ep.type === "lsftf" || ep.type === "reunion_lalaparuza") return true;
     if (["lalaparuza_comeback", "game_within_a_game"].includes(ep.comeback?.format)) return true;
     if (["special_lalaparuza", "special_slayoffs"].includes(ep.type)) return (ep.extraLipSyncs || []).includes(lipSync);
@@ -12786,8 +15701,8 @@ Options: ${names}`, "") || "";
   function renderAllWinnersFinalistsReveal(ep, revealed) {
     if (!isAllWinnersFormat(state.season) || !ep.allWinnersFinalistIds?.length || !revealed) return "";
     const counts = ep.allWinnersStarCountsSnapshot || state.season.allWinnersStarCounts || {};
-    const rows = state.season.castOrder.slice().sort((a, b) => Number(counts[b] || 0) - Number(counts[a] || 0)).map((id) => `
-      <tr class="${ep.allWinnersFinalistIds.includes(id) ? "is-finalist" : ""}"><td>${statContestantInline(id)}</td><td>${escapeHtml(Number(counts[id] || 0))}</td></tr>
+    const rows = state.season.castOrder.slice().sort((a, b) => Number(counts[b] || 0) - Number(counts[a] || 0) || fullDisplayName(state.season.contestants[a]).localeCompare(fullDisplayName(state.season.contestants[b]))).map((id) => `
+      <tr class="${ep.allWinnersFinalistIds.includes(id) ? "is-finalist" : ""}"><th>${statContestantInline(id)}</th><td class="legendary-star-total star-cell"><strong>${escapeHtml(Number(counts[id] || 0))}</strong></td></tr>
     `).join("");
     return `
       <article class="challenge-card all-winners-finalists-card">
@@ -12795,7 +15710,7 @@ Options: ${names}`, "") || "";
         <p>The four contestants with the most Legendary Legend Stars advance to the finale.</p>
         ${ep.allWinnersFinalistTieText ? `<p>${escapeHtml(ep.allWinnersFinalistTieText)}</p>` : ""}
         <div class="contestant-strip small-strip award-strip finalist-strip">${ep.allWinnersFinalistIds.map((id) => contestantCard(id, `${Number(counts[id] || 0)} Stars`)).join("")}</div>
-        <div class="stat-table-shell compact-star-table"><table class="stats-table modern-stat-table star-count-summary"><thead><tr><th>Contestant</th><th>Stars</th></tr></thead><tbody>${rows}</tbody></table></div>
+        <div class="stat-table-shell compact-star-table all-winners-finalist-table-shell"><table class="stats-table modern-stat-table star-count-summary"><caption>Final Legendary Legend Star totals</caption><thead><tr><th>Contestant</th><th>Stars</th></tr></thead><tbody>${rows}</tbody></table></div>
       </article>
     `;
   }
@@ -12826,8 +15741,9 @@ Options: ${names}`, "") || "";
   }
 
   function allWinnersCrownParts(ep) {
-    const crown = ep.allWinnersCrownSmackdown || { lipSyncs: [ep.lipSync].filter(Boolean), winnerId: ep.winnerIds?.[0] };
-    const lipSyncs = crown.lipSyncs || [];
+    const fallbackLipSyncs = [...(ep?.extraLipSyncs || []), ep?.lipSync].filter((lipSync, index, rows) => lipSync && rows.indexOf(lipSync) === index);
+    const crown = ep.allWinnersCrownSmackdown || { lipSyncs: fallbackLipSyncs, finalLipSync: ep.lipSync || fallbackLipSyncs.at(-1) || null, winnerId: ep.winnerIds?.[0] };
+    const lipSyncs = (crown.lipSyncs || fallbackLipSyncs).filter(Boolean);
     const finalLipSync = crown.finalLipSync || ep.lipSync || lipSyncs.at(-1) || null;
     const openingRounds = lipSyncs.filter((ls) => ls && ls !== finalLipSync);
     return { crown, lipSyncs, finalLipSync, openingRounds };
@@ -12842,7 +15758,7 @@ Options: ${names}`, "") || "";
       ? renderLipSyncCard(finalLipSync, ep, { revealInPlace: false, className: "lsftc-final-performance" })
       : `<article class="event-card"><p>No final lip sync was needed.</p></article>`;
     return `
-      <section class="all-winners-finale-section lsftc-section">
+      <section class="lsftc-finale-section lsftc-section">
         <article class="challenge-card finale-section-intro">
           <h3>Lip Sync for The Crown</h3>
           <p>The opening battles determine who advances to the final lip sync.</p>
@@ -12930,29 +15846,14 @@ Options: ${names}`, "") || "";
   }
 
   function renderJuryFinaleResults(ep, revealed) {
-    const finalists = ep.activeStartIds || state.season.activeIds || [];
     const top2 = ep.top2Ids || [];
-    const voteRows = (ep.juryBallots || []).map((ballot) => {
-      const juror = state.season.contestants[ballot.jurorId] || { id: ballot.jurorId };
-      return `
-        <article class="event-card jury-ballot-card">
-          <div class="jury-voter">${contestantCard(ballot.jurorId, "", { nick: true })}</div>
-          <div class="jury-vote-picks">
-            <span><strong>2</strong> ${ballot.firstId ? contestantCard(ballot.firstId, "", { nick: true }) : "—"}</span>
-            <span><strong>1</strong> ${ballot.secondId ? contestantCard(ballot.secondId, "", { nick: true }) : "—"}</span>
-          </div>
-        </article>`;
-    }).join("");
-    const totals = finalists.slice().sort((a, b) => Number(ep.juryVotes?.[b] || 0) - Number(ep.juryVotes?.[a] || 0) || finaleScore(state.season, b) - finaleScore(state.season, a));
     return `
       <section class="jury-finale-results">
-        <article class="challenge-card finale-section-intro"><h3>Jury Vote</h3></article>
-        <div class="jury-ballot-grid">${voteRows || `<article class="event-card"><p>No jurors voted.</p></article>`}</div>
-        <div class="jury-score-grid">
-          ${totals.map((id) => `<article class="placement-card jury-score-card ${top2.includes(id) ? "is-winner" : ""}">${contestantCard(id, "", { nick: true })}<strong>${Number(ep.juryVotes?.[id] || 0)} point${Number(ep.juryVotes?.[id] || 0) === 1 ? "" : "s"}</strong></article>`).join("")}
-        </div>
-        <article class="event-card jury-top-two-announcement"><p>${escapeHtml(sentenceList(top2, state.season, false))}, condragulations, you are the top two of the season.</p></article>
-        ${revealed ? `<div class="contestant-strip small-strip lip-sync-result-row finale-result-row">${top2.map((id) => resultContestantCard(id, ep.winnerIds?.includes(id), !ep.winnerIds?.includes(id), true)).join("")}</div>` : ""}
+        <article class="jury-top-two-final">
+          <span>THE TOP 2</span>
+          <div class="contestant-strip small-strip jury-top-two-strip">${top2.map((id) => resultContestantCard(id, revealed && ep.winnerIds?.includes(id), revealed && !ep.winnerIds?.includes(id), true)).join("")}</div>
+          <p>${escapeHtml(`${sentenceList(top2, state.season, false)}, condragulations, you are the top two of the season.`)}</p>
+        </article>
       </section>
     `;
   }
@@ -13049,7 +15950,7 @@ Options: ${names}`, "") || "";
       } else if (ep.specialPremiere === "late_entry" && ep.lateEntryRevealId) {
         els.revealBoard.innerHTML = `
           <article class="event-card late-entry-results"><p>I have someone else I want to add to the competition... Welcome a new contestant...</p></article>
-          <div class="contestant-strip small-strip award-strip">${contestantCard(ep.lateEntryRevealId)}</div>
+          ${revealed ? `<div class="contestant-strip small-strip award-strip late-entry-contestant-reveal">${contestantCard(ep.lateEntryRevealId)}</div>` : ""}
         `;
       } else if (ep.type === "special_lalaparuza") {
         els.revealBoard.innerHTML = ep.lipSync ? renderLipSyncResultBlock(ep.lipSync, ep, revealed) : `<article class="event-card"><p>${escapeHtml(ep.resultText || "The LaLaPaRuZa is complete.")}</p></article>`;
@@ -13143,6 +16044,8 @@ Options: ${names}`, "") || "";
         els.crowningMessage.innerHTML = revealed ? escapeHtml(ep.resultText || "The C.U.N.T.-test is complete.") : "";
       } else if (ep.type === "lsftf") {
         els.crowningMessage.innerHTML = revealed ? escapeHtml(ep.resultText || "The lip sync for the finale is complete.") : "";
+      } else if (ep.specialPremiere === "late_entry") {
+        els.crowningMessage.innerHTML = "";
       } else if (isAllWinnersFormat(state.season) && ep.allWinnersEpisode) {
         els.crowningMessage.innerHTML = revealed ? escapeHtml(ep.resultText || "The episode ends with no elimination.") : "";
       } else if (["attention_girl_groups", "kitty_girl_groups", "revenge_of_the_queens", "lalaparuza_comeback"].includes(ep.comeback?.format)) {
@@ -13155,11 +16058,10 @@ Options: ${names}`, "") || "";
       }
     }
     renderUnplannedExitResult(ep);
-    if (state.config.mode === "rupaul" && ep.lipSync?.ids?.length && els.revealBoard) {
-      els.revealBoard.insertAdjacentHTML("beforeend", rupaulSelectControl("lipSyncWinner", "RuPaul mode: choose the lip sync winner", ep.lipSync.ids, ep.lipSync.winnerId));
-      attachRupaulControls(ep);
+    if (els.revealResultsBtn) {
+      els.revealResultsBtn.textContent = ep.specialPremiere === "late_entry" ? "Reveal" : "Reveal Results";
+      els.revealResultsBtn.style.display = revealed ? "none" : "inline-flex";
     }
-    if (els.revealResultsBtn) els.revealResultsBtn.style.display = revealed ? "none" : "inline-flex";
     $all(".show-eliminated-btn").forEach((btn) => btn.addEventListener("click", () => {
       ep.eliminationRevealed = true;
       saveState();
@@ -13276,14 +16178,14 @@ Options: ${names}`, "") || "";
     const advancing = ep.tournamentAdvancingIds || [];
     const eliminated = ep.tournamentEliminatedIds || [];
     els.pointCeremonyStack.innerHTML = `
-      <article class="challenge-card point-ceremony-intro"><h3>Point Ceremony</h3><p>The bottom contestants award one MVQ point each.</p></article>
+      <article class="challenge-card point-ceremony-intro"><h3>Point Ceremony</h3><p>The safe contestants award one MVQ point each.</p></article>
       <div class="mx-vote-grid point-ceremony-vote-grid">
         ${votes.map((vote) => `<article class="mx-vote-card point-ceremony-vote">${contestantCard(vote.voterId)}<span class="vote-arrow">gave 1 point to</span>${contestantCard(vote.receiverId)}</article>`).join("")}
       </div>
       <div class="callout-grid point-total-grid">
         ${Object.entries(totals).sort((a, b) => Number(b[1]) - Number(a[1])).map(([id, total]) => `<article class="placement-card point-total-card ${advancing.includes(id) ? "is-winner" : eliminated.includes(id) ? "is-eliminated" : ""}">${contestantCard(id)}<strong>${Number(total)} point${Number(total) === 1 ? "" : "s"}</strong>${advancing.includes(id) ? `<span class="placement-tag">ADVANCED</span>` : eliminated.includes(id) ? `<span class="placement-tag">ELIMINATED</span>` : ""}</article>`).join("")}
       </div>
-      ${ep.pointCeremonyFinal && advancing.length ? `<article class="challenge-card point-ceremony-advance-line"><p>${escapeHtml(`${sentenceList(advancing, state.season, false)}, condragulations! You are advancing to the semi-finals.`)}</p></article>` : ""}
+      ${ep.pointCeremonyFinal && advancing.length ? `<article class="challenge-card point-ceremony-advancers"><h3>Advancing to the Merge</h3><div class="contestant-strip small-strip award-strip">${advancing.map((id)=>contestantCard(id,"ADVANCED")).join("")}</div><p>${escapeHtml(`${sentenceList(advancing, state.season, false)}, condragulations!`)}</p></article>` : ""}
     `;
   }
 
@@ -13324,6 +16226,7 @@ Options: ${names}`, "") || "";
 
   function updateVisibleEpisodeSections(ep) {
     const isFinale = ep.type === "finale";
+    const juryResolved = isFinale && state.season?.config?.finaleType === "jury_finale" ? juryFinalDecisionRevealed(ep) : true;
     const visible = (isFinale && ((isAllWinnersFormat(state.season) && ep.allWinnersFinale) || ep.lsftcFinale)) ? {
       wildcard: !!ep.tournamentWildcard,
       status: true,
@@ -13365,17 +16268,17 @@ Options: ${names}`, "") || "";
       placements: state.season?.config?.finaleType === "jury_finale" ? !!ep.juryVotes : !!(ep.eliminatedIds || []).length,
       luckycow: false,
       rumocracy: false,
-      lipsync: [ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean).length > 0,
+      lipsync: juryResolved && ([ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean).length > 0 || !!ep.rupaulFinalePending),
       qosdadhh: false,
       lsftc: false,
-      winner: true,
+      winner: juryResolved && (!ep.rupaulFinalePending || !!ep.rupaulFinaleComplete),
       results: false,
       badonkadunktank: false,
       s17lsfyl: false,
       s17lsfylresults: false,
       untucked: false,
       pointceremony: false,
-      trackrecord: true
+      trackrecord: juryResolved
     } : {
       wildcard: !!ep.tournamentWildcard,
       status: true,
@@ -13392,7 +16295,7 @@ Options: ${names}`, "") || "";
       placements: !!ep.challenge,
       luckycow: !!(ep.luckyCow?.active && (ep.luckyCow.votes || []).length),
       rumocracy: !!(isAssassinFormat(state.season) && ep.rumocracyVotes?.length),
-      lipsync: [ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean).length > 0,
+      lipsync: [ep.lipSync, ...(ep.extraLipSyncs || [])].filter(Boolean).length > 0 || !!ep.rupaulSpecialFlow || !!(ep.rupaulPending && ep.rupaulPlacementsConfirmed && (((ep.top2Ids || []).length >= 2) || ((ep.bottomIds || []).length >= 1))),
       qosdadhh: false,
       lsftc: false,
       winner: false,
@@ -13439,7 +16342,7 @@ Options: ${names}`, "") || "";
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || !!(ep.rupaulCuntTestPending && (ep.cuntTest?.rounds || []).length >= 3), qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "porkchop_premiere") {
@@ -13450,7 +16353,7 @@ Options: ${names}`, "") || "";
     if (["special_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
       const isFameGames = ep?.type === "fame_games";
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza" || !!ep.rupaulSpecialFlow, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "lsftf") {
@@ -13460,7 +16363,7 @@ Options: ${names}`, "") || "";
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || !!(ep.rupaulCuntTestPending && (ep.cuntTest?.rounds || []).length >= 3), qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (isFinale && ep?.lsftcFinale && !isAllWinnersFormat(state.season)) {
@@ -13483,8 +16386,9 @@ Options: ${names}`, "") || "";
 
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
+      const lipSyncOnlyComeback = ["lalaparuza_comeback", "game_within_a_game"].includes(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: !lipSyncOnlyComeback, runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && !lipSyncOnlyComeback && ep?.comeback?.format !== "kitty_girl_groups"), ratequeen: false, goldenbeaver: false, placements: !lipSyncOnlyComeback, luckycow: false, rumocracy: false, lipsync: !!ep?.rupaulSpecialFlow || [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0 || !!(ep?.rupaulComebackChallengePending && ep?.rupaulPlacementsConfirmed && (ep?.rupaulComebackBattleIds || []).length >= 2), qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     applyDynamicEpisodeStepOrder(ep);
@@ -13508,7 +16412,7 @@ Options: ${names}`, "") || "";
     const ep = currentEpisode();
     if (!visibleMap && ep?.type === "cunt_test") {
       const order = episodeStepOrder(ep);
-      const visible = { status: true, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, lipsync: !!ep.lipSync, results: true, trackrecord: true };
+      const visible = { status: true, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, lipsync: !!ep.lipSync || !!(ep.rupaulCuntTestPending && (ep.cuntTest?.rounds || []).length >= 3), results: true, trackrecord: true };
       let idx = order.indexOf(step);
       if (idx < 0) idx = direction > 0 ? -1 : order.length;
       for (let i = idx + direction; i >= 0 && i < order.length; i += direction) {
@@ -13568,7 +16472,7 @@ Options: ${names}`, "") || "";
       placements: !!ep?.challenge,
       luckycow: !!(ep?.luckyCow?.active && (ep?.luckyCow?.votes || []).length),
       rumocracy: !!(isAssassinFormat(state.season) && ep?.rumocracyVotes?.length),
-      lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0,
+      lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0 || !!ep?.rupaulSpecialFlow || !!(ep?.rupaulPending && ep?.rupaulPlacementsConfirmed && ((((ep?.top2Ids) || []).length >= 2) || (((ep?.bottomIds) || []).length >= 1))),
       qosdadhh: false,
       lsftc: false,
       winner: ep?.type === "finale",
@@ -13586,7 +16490,7 @@ Options: ${names}`, "") || "";
     if (["special_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
       const isFameGames = ep?.type === "fame_games";
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza", qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: isFameGames, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza" || !!ep.rupaulSpecialFlow, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "lsftf") {
@@ -13596,7 +16500,7 @@ Options: ${names}`, "") || "";
     }
     if (ep?.type === "cunt_test") {
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, cuntpart1: true, cuntpart2: true, cuntpart3: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || !!(ep.rupaulCuntTestPending && (ep.cuntTest?.rounds || []).length >= 3), qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     if (ep?.type === "finale" && ep?.lsftcFinale && !isAllWinnersFormat(state.season)) {
@@ -13616,8 +16520,9 @@ Options: ${names}`, "") || "";
 
     if ((ep?.type || "").startsWith("comeback_")) {
       const standalone = STANDALONE_COMEBACK_FORMATS.has(ep?.comeback?.format);
+      const lipSyncOnlyComeback = ["lalaparuza_comeback", "game_within_a_game"].includes(ep?.comeback?.format);
       Object.assign(visible, {
-        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: ep?.comeback?.format !== "lalaparuza_comeback", runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && ep?.comeback?.format !== "kitty_girl_groups" && ep?.comeback?.format !== "lalaparuza_comeback"), ratequeen: false, goldenbeaver: false, placements: ep?.comeback?.format !== "lalaparuza_comeback", luckycow: false, rumocracy: false, lipsync: [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
+        wildcard: false, status: true, comeback: !!ep?.comeback, guest: !!(!standalone && ep?.guestJudge), mini: !!(!standalone && ep?.miniChallenge), teams: !!(!standalone && ep?.teams && ep?.teams.mode !== "solo" && ep?.teams.groups?.length), famegames: false, maxi: !lipSyncOnlyComeback, runway: false, judging: !!(!standalone && ep?.challenge && !ep?.hideJudging && !lipSyncOnlyComeback && ep?.comeback?.format !== "kitty_girl_groups"), ratequeen: false, goldenbeaver: false, placements: !lipSyncOnlyComeback, luckycow: false, rumocracy: false, lipsync: !!ep?.rupaulSpecialFlow || [ep?.lipSync, ...((ep?.extraLipSyncs) || [])].filter(Boolean).length > 0 || !!(ep?.rupaulComebackChallengePending && ep?.rupaulPlacementsConfirmed && (ep?.rupaulComebackBattleIds || []).length >= 2), qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
       });
     }
     const order = episodeStepOrder(ep);
@@ -13637,6 +16542,9 @@ Options: ${names}`, "") || "";
       const primary = $(".proceed-row .primary-btn.proceed-btn", panel);
       const secondary = $(".proceed-row .secondary-btn.proceed-btn", panel);
       if (primary) {
+        // Episode panels are reused. Clear any reveal/jury lock left by the
+        // previous episode before the current episode's own gates run.
+        primary.disabled = false;
         primary.dataset.next = next || "__nextEpisode";
         primary.textContent = next ? "Proceed" : "Next Episode";
       }
@@ -13658,7 +16566,7 @@ Options: ${names}`, "") || "";
     }
   }
 
-  function goToNextEpisode() {
+  async function goToNextEpisode() {
     if (!state.season) return;
     finalizeBadonkaAttemptBeforeLeaving(currentEpisode());
     if (state.currentEpisodeIndex < state.season.episodes.length - 1) {
@@ -13667,6 +16575,8 @@ Options: ${names}`, "") || "";
       saveState();
       renderEpisode();
       scrollToEpisodeSection(state.currentStep || "status");
+    } else if (isRupaulMode(state.season) && !state.season.seasonComplete) {
+      await prepareNextRupaulEpisode(state.season);
     } else {
       saveState();
       openStatsScreen();
@@ -13772,7 +16682,7 @@ Options: ${names}`, "") || "";
     const cellClassFor = (ep, id) => {
       if ((ep.tournamentEliminatedIds || []).includes(id)) return "point-eliminated token-elim";
       if ((ep.top2Ids || []).includes(id)) return ep.lipSync?.winnerId === id ? "point-top-win token-win" : "point-top-loss token-top2";
-      if ((ep.bottomIds || []).includes(id)) return "point-bottom token-btm";
+      if ((ep.safeIds || []).includes(id)) return "point-safe token-safe";
       return "point-neutral";
     };
     const rows = state.season.castOrder.map((id) => {
@@ -13786,7 +16696,7 @@ Options: ${names}`, "") || "";
       const nameAttrs = tournamentTrackNameCellAttrs(state.season, id);
       return `<tr><th${nameAttrs}>${tournamentContestantNameHtml(state.season, id, statContestantInline(id))}</th>${cells}</tr>`;
     }).join("");
-    els.pointSummaryWrap.innerHTML = `<div class="point-summary-key"><span><b class="point-key-box point-top-win"></b>Won Lip Sync (+3)</span><span><b class="point-key-box point-top-loss"></b>Top 2 (+2)</span><span><b class="point-key-box point-bottom"></b>Bottom</span><span><b class="point-key-box point-eliminated"></b>Eliminated</span></div><div class="stat-table-shell point-summary-shell"><table class="stats-table modern-stat-table point-summary-table"><caption>Summary of points</caption><thead><tr><th>Contestant</th>${labels.map((label) => `<th>${escapeHtml(statEpisodeLabel(label))}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
+    els.pointSummaryWrap.innerHTML = `<div class="point-summary-key"><span><b class="point-key-box point-top-win"></b>Won Lip Sync (+3)</span><span><b class="point-key-box point-top-loss"></b>Top 2 (+2)</span><span><b class="point-key-box point-safe"></b>Safe</span><span><b class="point-key-box point-eliminated"></b>Eliminated</span></div><div class="stat-table-shell point-summary-shell"><table class="stats-table modern-stat-table point-summary-table"><caption>Summary of points</caption><thead><tr><th>Contestant</th>${labels.map((label) => `<th>${escapeHtml(statEpisodeLabel(label))}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function renderPointBracketStats() {
@@ -13800,7 +16710,7 @@ Options: ${names}`, "") || "";
       return;
     }
     const histories = season.tournamentPointHistory || [];
-    const key = `<div class="point-summary-key point-bracket-key"><span><b class="point-key-box point-top-win"></b>Won Lip Sync for Your Legacy</span><span><b class="point-key-box point-top-loss"></b>Lost Lip Sync for Your Legacy</span><span><b class="point-key-box point-bottom"></b>Bottom</span><span><b class="point-key-box point-advanced"></b>Advanced</span><span><b class="point-key-box point-eliminated"></b>Eliminated</span></div>`;
+    const key = `<div class="point-summary-key point-bracket-key"><span><b class="point-key-box point-top-win"></b>Won Lip Sync for Your Legacy</span><span><b class="point-key-box point-top-loss"></b>Lost Lip Sync for Your Legacy</span><span><b class="point-key-box point-safe"></b>Safe</span><span><b class="point-key-box point-advanced"></b>Advanced</span><span><b class="point-key-box point-eliminated"></b>Eliminated</span></div>`;
     const tables = brackets.map((bracket, bracketIndex) => {
       const episodes = bracketEpisodes.filter((ep) => ep.tournamentBracketId === bracket.id);
       if (!episodes.length) return "";
@@ -13822,8 +16732,9 @@ Options: ${names}`, "") || "";
           if ((ep.top2Ids || []).includes(id)) {
             if (ep.lipSync?.winnerId === id) { cls = "point-top-win token-win"; placementTag = "WIN"; }
             else { cls = "point-top-loss token-top2"; placementTag = "TOP2"; }
-          } else if ((ep.bottomIds || []).includes(id)) {
-            cls = "point-bottom token-btm";
+          } else if ((ep.safeIds || []).includes(id)) {
+            cls = "point-safe token-safe";
+            placementTag = "SAFE";
           }
           const amountText = amount ? `+${Number.isInteger(amount) ? amount : amount.toFixed(1).replace(/\.0$/, "")}` : "0";
           const detailParts = [placementTag, ...voterNicknames].filter(Boolean);
@@ -13852,20 +16763,21 @@ Options: ${names}`, "") || "";
     const rows = seasonPlacementOrder().map((id) => {
       const cells = episodes.map((ep) => {
         const summary = starAwardSummaryFor(ep, id);
-        return `<td class="legendary-star-cell ${escapeHtml(summary.className)}" title="${escapeHtml(summary.title)}">${escapeHtml(summary.text)}</td>`;
+        return `<td class="legendary-star-cell star-cell ${escapeHtml(summary.className)}" title="${escapeHtml(summary.title)}">${escapeHtml(summary.text)}</td>`;
       }).join("");
       const total = Number(state.season.allWinnersStarCounts?.[id] || state.season.stats[id]?.legendaryStars || 0);
-      return `<tr><th>${statContestantInline(id)}</th>${cells}<td class="legendary-star-total"><strong>${escapeHtml(total)}</strong></td></tr>`;
+      return `<tr><th>${statContestantInline(id)}</th>${cells}<td class="legendary-star-total star-cell"><strong>${escapeHtml(total)}</strong></td></tr>`;
     }).join("");
     const legend = `
-      <div class="star-count-legend">
-        <span><i class="legend-swatch star-talent"></i>Talent-show Top Two: +3 stars.</span>
-        <span><i class="legend-swatch star-top2"></i>Top Two: +1 star.</span>
-        <span><i class="legend-swatch star-gift"></i>Gifted Legendary Legend Star.</span>
-        <span><i class="legend-swatch star-blocked"></i>Top Two but blocked: +0 stars.</span>
+      <div class="point-summary-key star-count-key">
+        <span><b class="point-key-box star-talent"></b>Talent-show Top Two: +3</span>
+        <span><b class="point-key-box star-top2"></b>Top Two: +1</span>
+        <span><b class="point-key-box star-gift"></b>Gifted star: +1</span>
+        <span><b class="point-key-box star-blocked"></b>Blocked Top Two: +0</span>
+        <span><b class="point-key-box star-none"></b>No star</span>
       </div>
     `;
-    els.starCountWrap.innerHTML = `<div class="stat-table-shell"><table class="stats-table modern-stat-table star-count-table"><thead><tr><th>Contestant</th>${episodes.map((ep) => `<th>${escapeHtml(statEpisodeLabel(ep.label))}</th>`).join("")}<th>Total Stars</th></tr></thead><tbody>${rows}</tbody></table></div>${legend}`;
+    els.starCountWrap.innerHTML = `${legend}<div class="stat-table-shell star-count-table-shell"><table class="stats-table modern-stat-table star-count-table"><thead><tr><th>Contestant</th>${episodes.map((ep) => `<th>${escapeHtml(statEpisodeLabel(ep.label))}</th>`).join("")}<th>Total Stars</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function statsRenderFallback(container, label, error) {
@@ -13913,8 +16825,32 @@ Options: ${names}`, "") || "";
     return sections.reduce((renderedAny, [label, renderer, container]) => safelyRenderStatsSection(label, renderer, container) || renderedAny, false);
   }
 
+  function syncStatisticsTrackRecordMetrics() {
+    const referenceTable = els.episodeTrackWrap?.querySelector(".track-table");
+    const referenceRow = referenceTable?.querySelector("tbody tr");
+    const referencePhoto = referenceTable?.querySelector("tbody .track-photo-cell");
+    const referenceEpisodeHead = referenceTable?.querySelector("thead .track-episode-row");
+    const referenceChallengeHead = referenceTable?.querySelector("thead .track-challenge-row");
+    const target = els.trackWrap;
+    if (!target) return;
+
+    const setMetric = (name, element, dimension = "height") => {
+      const rect = element?.getBoundingClientRect?.();
+      const value = Number(rect?.[dimension] || 0);
+      if (value > 0.5) target.style.setProperty(name, `${value}px`);
+    };
+
+    setMetric("--episode-track-row-height", referenceRow);
+    setMetric("--episode-track-photo-size", referencePhoto);
+    setMetric("--episode-track-head-height", referenceEpisodeHead);
+    setMetric("--episode-track-subhead-height", referenceChallengeHead);
+  }
+
   function openStatsScreen() {
     if (!state.season) return;
+    // Capture the visible episode Track Record before its screen is hidden.
+    // The Statistics table then uses those exact rendered dimensions.
+    syncStatisticsTrackRecordMetrics();
     showScreen("stats-screen");
     renderStats();
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -13950,7 +16886,147 @@ Options: ${names}`, "") || "";
     return ordered;
   }
 
+  function ordinalPlacement(number) {
+    const value = Math.max(1, Math.floor(Number(number) || 1));
+    const mod100 = value % 100;
+    const suffix = mod100 >= 11 && mod100 <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" }[value % 10] || "th");
+    return `${value}${suffix}`;
+  }
+
+  function seasonPlacementGroups(season = state.season) {
+    if (!season) return [];
+    const validIds = new Set((season.castOrder || []).filter((id) => season.contestants?.[id] && season.stats?.[id]));
+    const used = new Set();
+    const groups = [];
+    const addGroup = (ids) => {
+      const group = [...new Set((ids || []).filter((id) => validIds.has(id) && !used.has(id)))];
+      if (!group.length) return;
+      group.forEach((id) => used.add(id));
+      groups.push(group);
+    };
+    const finale = (season.episodes || []).find((ep) => ep.type === "finale") || null;
+    const winners = (season.winnerIds?.length ? season.winnerIds : (season.winnerId ? [season.winnerId] : [])).filter((id) => validIds.has(id));
+    addGroup(winners);
+
+    if (isAllWinnersFormat(season) && finale?.allWinnersFinale) {
+      const finalists = (finale.allWinnersFinalistIds?.length ? finale.allWinnersFinalistIds : season.allWinnersFinalistIds || finale.activeStartIds || []).filter((id) => validIds.has(id));
+      const outcome = allWinnersFinaleOutcomeInfo(finale, finalists, winners);
+      addGroup(outcome.runnerUpIds);
+      addGroup(outcome.finalElimIds);
+
+      const herses = finale.allWinnersHersesSmackdown || null;
+      const hersesPlacements = allWinnersHersesPlacementOrder(season, finale)
+        .map((id) => ({ id, rank: Number(allWinnersHersesInfo(herses, id)?.orderRank || 0) }))
+        .filter((entry) => validIds.has(entry.id) && !used.has(entry.id));
+      let currentHersesRank = null;
+      let currentHersesGroup = [];
+      hersesPlacements.forEach((entry) => {
+        if (currentHersesRank == null || entry.rank === currentHersesRank) {
+          currentHersesRank = entry.rank;
+          currentHersesGroup.push(entry.id);
+          return;
+        }
+        addGroup(currentHersesGroup);
+        currentHersesRank = entry.rank;
+        currentHersesGroup = [entry.id];
+      });
+      addGroup(currentHersesGroup);
+
+      const remaining = allWinnersRankByStars(season).filter((id) => validIds.has(id) && !used.has(id));
+      let currentStars = null;
+      let currentStarGroup = [];
+      remaining.forEach((id) => {
+        const stars = Number(season.allWinnersStarCounts?.[id] || season.stats?.[id]?.legendaryStars || 0);
+        if (currentStars == null || stars === currentStars) {
+          currentStars = stars;
+          currentStarGroup.push(id);
+          return;
+        }
+        addGroup(currentStarGroup);
+        currentStars = stars;
+        currentStarGroup = [id];
+      });
+      addGroup(currentStarGroup);
+      (season.castOrder || []).forEach((id) => addGroup([id]));
+      return groups;
+    }
+
+    if (finale) {
+      const finalElims = (finale.eliminatedIds || []).filter((id) => validIds.has(id) && !winners.includes(id));
+      const storedRunners = (season.runnerUpIds || []).filter((id) => validIds.has(id) && !winners.includes(id) && !finalElims.includes(id));
+      const inferredRunners = (finale.activeStartIds || season.activeIds || []).filter((id) => validIds.has(id) && !winners.includes(id) && !finalElims.includes(id));
+      addGroup(storedRunners.length ? storedRunners : inferredRunners);
+      addGroup(finalElims);
+    }
+
+    (season.episodes || []).slice().reverse().forEach((ep) => addGroup(ep?.eliminatedIds || []));
+    (season.eliminatedIds || []).slice().reverse().forEach((id) => addGroup([id]));
+    (seasonPlacementOrder() || []).forEach((id) => addGroup([id]));
+    (season.castOrder || []).forEach((id) => addGroup([id]));
+    return groups;
+  }
+
+  function seasonRankGroupData(season = state.season) {
+    const winnerSet = new Set((season?.winnerIds?.length ? season.winnerIds : (season?.winnerId ? [season.winnerId] : [])).filter(Boolean));
+    let start = 1;
+    return seasonPlacementGroups(season).map((group) => {
+      const end = start + group.length - 1;
+      const isDoubleCrowning = start === 1 && group.length > 1 && group.every((id) => winnerSet.has(id));
+      const label = isDoubleCrowning
+        ? "1st"
+        : start === end
+          ? ordinalPlacement(start)
+          : group.length === 2
+            ? `${ordinalPlacement(start)}/${ordinalPlacement(end)}`
+            : `${ordinalPlacement(start)}-${ordinalPlacement(end)}`;
+      const data = { ids: group.slice(), label, start, end };
+      start = end + 1;
+      return data;
+    });
+  }
+
+  function seasonRankLabels(season = state.season) {
+    const labels = new Map();
+    seasonRankGroupData(season).forEach((group) => group.ids.forEach((id) => labels.set(id, group.label)));
+    return labels;
+  }
+
+  function seasonRankCellData(season = state.season) {
+    const cells = new Map();
+    seasonRankGroupData(season).forEach((group) => {
+      group.ids.forEach((id, index) => {
+        cells.set(id, index === 0 ? { label: group.label, rowspan: group.ids.length } : null);
+      });
+    });
+    return cells;
+  }
+
+  function allWinnersStarsThroughEpisode(season, id, episodeIndex = null) {
+    if (!isAllWinnersFormat(season)) return null;
+    if (episodeIndex == null || !Number.isFinite(Number(episodeIndex))) return Number(season.allWinnersStarCounts?.[id] || season.stats?.[id]?.legendaryStars || 0);
+    const lastIndex = Math.min(Number(episodeIndex), Math.max(0, (season.episodes || []).length - 1));
+    for (let index = lastIndex; index >= 0; index -= 1) {
+      const snapshot = season.episodes[index]?.allWinnersStarCountsSnapshot;
+      if (snapshot && Object.prototype.hasOwnProperty.call(snapshot, id)) return Number(snapshot[id] || 0);
+    }
+    return 0;
+  }
+
+  function trackPpeCellHtml(season, id, ppe, episodeIndex = null) {
+    if (!isAllWinnersFormat(season)) return escapeHtml(ppe);
+    const stars = allWinnersStarsThroughEpisode(season, id, episodeIndex);
+    return `<span class="track-ppe-value">${escapeHtml(ppe)}</span><span class="track-ppe-stars" title="${escapeHtml(`${stars} Legendary Legend Star${stars === 1 ? "" : "s"}`)}">★ ${escapeHtml(stars)}</span>`;
+  }
+
   function tokenClass(token) { return `token-${String(token || "").toLowerCase().replace(/[^a-z0-9]+/g, "-")}`; }
+
+  function tournamentCombinedElimClass(entry) {
+    if (String(entry?.token || "") !== "ELIM") return "";
+    const displayText = String(entry?.display || "").replace(/<br\s*\/?\s*>/gi, "").replace(/\s+/g, "").toUpperCase();
+    if (displayText === "WIN+ELIM") return "tournament-win-elim";
+    if (displayText === "TOP2+ELIM") return "tournament-top2-elim";
+    return "";
+  }
 
   function statEpisodeLabel(label) {
     const value = String(label || "").trim();
@@ -14508,8 +17584,9 @@ Options: ${names}`, "") || "";
     const display = String(entry?.display || "").toUpperCase();
     if (token === "WINNER") return 0;
     if (token === "RU" || display.includes("RUNNER")) return 1;
-    if (token === "RUN") return 2;
-    if (token === "TOP4") return 3;
+    if (token === "ELIM" && (entry?.extraClasses || []).includes("finale-elim")) return 2;
+    if (token === "RUN") return 3;
+    if (token === "TOP4") return 4;
     if (isQuitOrDisqTrackToken(token)) return 14;
     if (token === "WIN" || token === "DWIN" || token === "PWIN" || token === "REUNION_WIN" || token === "FAME_GAMES") {
       const extra = Array.isArray(entry?.extraClasses) ? entry.extraClasses : [];
@@ -14600,7 +17677,8 @@ Options: ${names}`, "") || "";
     const columns = trackColumnDefinitions(season).filter((col) => !limited || labelsThroughEpisode.has(col.label));
     const labels = columns.map((col) => col.label);
     const titleByLabel = new Map(columns.map((col) => [col.label, col.title || col.label]));
-    const rowIds = limited ? episodeTrackRecordOrder(season, season.episodes[episodeIndex], labelsThroughEpisode) : seasonPlacementOrder();
+    const rowIds = limited ? episodeTrackRecordOrder(season, season.episodes[episodeIndex], labelsThroughEpisode) : seasonPlacementGroups(season).flat();
+    const rankCells = limited ? null : seasonRankCellData(season);
     const rows = rowIds.map((id) => {
       const stats = season.stats[id];
       const byLabel = new Map(stats.track.filter((entry) => !limited || labelsThroughEpisode.has(entry.label)).map((x) => [x.label, x]));
@@ -14611,7 +17689,8 @@ Options: ${names}`, "") || "";
         if (token === "RTRN") out = false;
         const blank = !token;
         const afterElim = out && blank;
-        const extra = (entry?.extraClasses || []).join(" ");
+        const combinedTournamentElimClass = tournamentCombinedElimClass(entry);
+        const extra = [...(entry?.extraClasses || []), combinedTournamentElimClass].filter(Boolean).join(" ");
         const finalClass = String(label).toLowerCase() === "finale" ? " finale-col" : "";
         const classes = blank || afterElim ? "no-cell" : `${escapeHtml(tokenClass(token))} ${escapeHtml(extra)}`;
         const cellTitle = titleByLabel.get(label) || label;
@@ -14625,16 +17704,23 @@ Options: ${names}`, "") || "";
       const contestantName = fullDisplayName(contestant);
       const contestantImage = contestant.image || PLACEHOLDER;
       const ppe = limited ? trackPpeForLabels(id, labelsThroughEpisode) : trackPpeFor(id);
+      const ppeHtml = trackPpeCellHtml(season, id, ppe, limited ? episodeIndex : null);
       const contestantExportImage = contestant.exportImage || contestantImage;
-      return `<tr><th${trackNameAttrs}>${tournamentContestantNameHtml(season, id, escapeHtml(contestantName))}</th><td class="track-photo-cell"><img class="track-contestant-photo" src="${escapeHtml(contestantImage)}" data-export-src="${escapeHtml(contestantExportImage)}" alt="${escapeHtml(contestantName)}"></td>${cells}<td class="track-cell ppe-cell">${escapeHtml(ppe)}</td></tr>`;
+      const rankInfo = limited ? null : rankCells.get(id);
+      const rankSpan = Math.max(1, Number(rankInfo?.rowspan || 1));
+      const rankRowspanAttr = rankSpan > 1 ? ` rowspan="${rankSpan}"` : "";
+      const rankCell = limited || !rankInfo ? "" : `<td class="track-rank-cell"${rankRowspanAttr}><span class="track-rank-value">${escapeHtml(rankInfo.label || "—")}</span></td>`;
+      return `<tr>${rankCell}<th${trackNameAttrs}>${tournamentContestantNameHtml(season, id, escapeHtml(contestantName))}</th><td class="track-photo-cell"><img class="track-contestant-photo" src="${escapeHtml(contestantImage)}" data-export-src="${escapeHtml(contestantExportImage)}" alt="${escapeHtml(contestantName)}"></td>${cells}<td class="track-cell ppe-cell">${ppeHtml}</td></tr>`;
     }).join("");
-    const episodeHeadRow = `<tr class="track-episode-row"><th class="track-contestant-head" colspan="2" rowspan="2">Contestant</th>${columns.map((col) => {
+    const rankHead = limited ? "" : `<th class="track-rank-head" rowspan="2">Rank</th>`;
+    const episodeHeadRow = `<tr class="track-episode-row">${rankHead}<th class="track-contestant-head" colspan="2" rowspan="2">Contestant</th>${columns.map((col) => {
       const isFinale = String(col.label).toLowerCase() === "finale";
       return `<th class="${isFinale ? "finale-col" : ""}"${isFinale ? ' rowspan="2"' : ""} title="${escapeHtml(col.title || col.label)}">${trackHeaderHtml(col)}</th>`;
-    }).join("")}<th class="ppe-col" rowspan="2">PPE</th></tr>`;
+    }).join("")}<th class="ppe-col" rowspan="2">PPE${isAllWinnersFormat(season) ? '<span class="track-ppe-head-stars">Stars</span>' : ""}</th></tr>`;
     const challengeHeadRow = `<tr class="track-challenge-row">${columns.filter((col) => String(col.label).toLowerCase() !== "finale").map((col) => `<th class="track-challenge-type-head" title="${escapeHtml(col.title || col.label)}">${trackChallengeHeaderHtml(col)}</th>`).join("")}</tr>`;
-    const colgroup = `<colgroup><col class="track-name-col"><col class="track-photo-col">${columns.map((col) => `<col class="${String(col.label).toLowerCase() === "finale" ? "track-finale-col" : "track-episode-col"}">`).join("")}<col class="track-ppe-col"></colgroup>`;
-    return `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table${limited ? " episode-track-table" : ""}">${colgroup}<thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
+    const rankCol = limited ? "" : '<col class="track-rank-col">';
+    const colgroup = `<colgroup>${rankCol}<col class="track-name-col"><col class="track-photo-col">${columns.map((col) => `<col class="${String(col.label).toLowerCase() === "finale" ? "track-finale-col" : "track-episode-col"}">`).join("")}<col class="track-ppe-col"></colgroup>`;
+    return `<div class="stat-table-shell"><table class="stats-table modern-stat-table track-table${limited ? " episode-track-table" : ""}${isAllWinnersFormat(season) ? " all-winners-track-table" : ""}">${colgroup}<thead>${episodeHeadRow}${challengeHeadRow}</thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function renderEpisodeTrackRecordPanel(ep) {
@@ -14705,7 +17791,9 @@ Options: ${names}`, "") || "";
       return ep.allWinnersCrownSmackdown.lipSyncs.filter((ls) => ls && (ls.ids || []).length);
     }
     const direct = [ep.lipSync].filter((ls) => ls && (ls.ids || []).length);
-    if (ep.lsftcFinale && direct.length) return direct;
+    if (ep.lsftcFinale) {
+      return [...(ep.extraLipSyncs || []), ...direct].filter((ls) => ls && (ls.ids || []).length);
+    }
     return direct.length ? direct : (ep.extraLipSyncs || []).filter((ls) => ls && (ls.ids || []).length && /(?:crown|lsftc|all_winners)/i.test(`${ls.context || ""} ${ls.resultType || ""}`));
   }
 
@@ -16822,7 +19910,7 @@ Options: ${names}`, "") || "";
   }
 
   function bindEvents() {
-    [els.seasonName, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.forceSlayersEpisode, els.forceDoubleShantay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
+    [els.seasonName, els.modeSelect, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.specialLalaparuzaSmackdown, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.forceSlayersEpisode, els.forceDoubleShantay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
     els.searchFilter?.addEventListener("input", applyGlobalFilters);
     els.genderFilter?.addEventListener("change", applyGlobalFilters);
 
@@ -16866,7 +19954,17 @@ Options: ${names}`, "") || "";
 
     document.getElementById("customContestantBtn")?.addEventListener("click", () => openCustomContestantModal());
     els.randomizeCustomSkillsBtn?.addEventListener("click", randomizeCustomSkillInputs);
-    els.customImageUrl?.addEventListener("input", () => renderCustomImagePreview(els.customImageUrl.value));
+    $all("[data-custom-image-source]", els.customContestantModal || document).forEach((button) => {
+      button.addEventListener("click", () => setCustomImageSourceMode(button.dataset.customImageSource));
+    });
+    els.customImageUrl?.addEventListener("input", () => {
+      const url = String(els.customImageUrl.value || "").trim();
+      customImageDraft.url = url;
+      if (url !== customImageDraft.convertedUrl) customImageDraft.urlData = "";
+      refreshCustomImageDraftUi();
+    });
+    els.customImageUploadBtn?.addEventListener("click", () => els.customImageFile?.click?.());
+    els.customImageFile?.addEventListener("change", () => handleCustomImageUpload(els.customImageFile.files?.[0]));
     els.customContestantForm?.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (await saveCustomContestantFromForm()) closeCustomContestantModal();
@@ -16900,8 +19998,23 @@ Options: ${names}`, "") || "";
       else goToNextEpisode();
     });
     document.addEventListener("click", (event) => {
-      const button = event.target.closest?.(".reveal-lip-sync-result-btn");
-      if (button) handleLipSyncReveal(button);
+      const lipSyncButton = event.target.closest?.(".reveal-lip-sync-result-btn");
+      if (lipSyncButton) {
+        handleLipSyncReveal(lipSyncButton);
+        return;
+      }
+      const juryNextButton = event.target.closest?.(".jury-reveal-next-btn");
+      if (juryNextButton) {
+        revealNextJuryBallot(currentEpisode());
+        return;
+      }
+      const juryResultsButton = event.target.closest?.(".jury-reveal-results-btn");
+      if (juryResultsButton) {
+        revealJuryResults(currentEpisode());
+        return;
+      }
+      const juryRupaulButton = event.target.closest?.(".jury-reveal-rupaul-btn");
+      if (juryRupaulButton) revealJuryRupaulChoice(currentEpisode());
     });
     els.revealResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.resultsRevealed = true; saveState(); renderResultsPanel(ep); } });
     els.revealS17LsfylResultsBtn?.addEventListener("click", () => { const ep = currentEpisode(); if (ep) { ep.s17SurvivalRevealed = true; saveState(); renderS17LsfylResultsPanel(ep); } });
