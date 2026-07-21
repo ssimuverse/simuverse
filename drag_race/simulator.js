@@ -52,8 +52,8 @@
     uk3: "One top-two lip sync and one bottom-two lip sync in the premiere.",
     split_s6: "Two split-premiere episodes. Each half eliminates one contestant, then the groups merge.",
     split_s12: "Two split-premiere episodes with top-two lip syncs and no eliminations.",
-    rate_a_queen_s16: "Two talent-show split premieres where the queens Rate-A-Queen, followed by a merged Rate-A-Queen episode.",
-    rate_a_queen_s17: "Two talent-show split premieres where the opposite group rates the competing queens, with the two bottom queens lip syncing in Episode 2.",
+    rate_a_queen_s16: "Two split premieres where only the competing group performs the challenge, walks the runway, and rates one another, followed by a merged Rate-A-Queen episode. The premiere challenge type is chosen before the season starts.",
+    rate_a_queen_s17: "Two split premieres where only the competing group performs the challenge, the full cast walks the runway, and the opposite premiere group rates the competitors. The two lowest-ranked queens lip sync in Episode 2. The premiere challenge type is chosen before the season starts.",
     porkchop: "Three-part premiere: queens open with Porkchop lip sync battles, then the winners and porkchop groups each compete in non-elimination episodes.",
     split_s14: "Two split-premiere episodes with eliminations, but the eliminated contestants return at Episode 3."
   };
@@ -2722,7 +2722,11 @@
       fameGamesEpisodeUsed: false,
       fameGames: null,
       forceSlayersUsed: false,
+      forceSlayersTargetCount: randInt(Math.max(4, Number(state.config.finalistSize || 4) + 1), 8),
       forceDoubleShantayUsed: false,
+      forceDoubleShantayTargetCount: randInt(Math.max(4, Number(state.config.finalistSize || 4) + 1), 9),
+      finalistOverride: 0,
+      expandedFinaleReady: false,
       rateAQueenMergeDone: false,
       rateAQueenS17FirstBottomId: null,
       immunity: {},
@@ -4255,7 +4259,7 @@ Options: ${names}`, "") || "";
   function shouldChoosePremiereChallengeType(season) {
     if (!season) return false;
     if (isAllWinnersFormat(season) || isTournamentFormat(season)) return false;
-    return !["rate_a_queen_s16", "rate_a_queen_s17", "porkchop"].includes(season.config?.premiereType || "regular");
+    return (season.config?.premiereType || "regular") !== "porkchop";
   }
 
   function availablePremiereChallengeTypes(season) {
@@ -4279,7 +4283,7 @@ Options: ${names}`, "") || "";
           <div class="choice-modal-card premiere-challenge-card" role="dialog" aria-modal="true" aria-labelledby="premiereChallengeTitle">
             <p class="eyebrow">Premiere Challenge</p>
             <h3 id="premiereChallengeTitle">Choose the Premiere Challenge Type</h3>
-            <p>Every premiere episode will use this challenge type. Split premieres use two different challenges of the same type.</p>
+            <p>The premiere will use this challenge type. Split-premiere groups use two different challenges of the same type; in RuPaul Mode, you choose each exact challenge when its episode begins.</p>
             <div class="premiere-challenge-grid">
               ${options.map((option) => `
                 <button class="premiere-challenge-option ${selectedType === option.type ? "is-selected" : ""}" type="button" data-type="${escapeHtml(option.type)}">
@@ -4419,6 +4423,46 @@ Options: ${names}`, "") || "";
     return pool.map((challenge) => ({ ...challenge, rupaulUsed: used.has(challenge.id) }));
   }
 
+  function rupaulPremiereFallbackChallenge(season, episode, pool = []) {
+    if (!episode?.premiere || !episode?.forcedChallengeType) return null;
+    const type = challengeTypeKey(episode.forcedChallengeType);
+    const option = PREMIERE_CHALLENGE_TYPE_OPTIONS.find((item) => item.type === type);
+    const label = option?.label || challengeTypeLabel(type) || "Premiere";
+    const part = Math.max(1, Number(season?.rupaulPremiereIndex || 0) + 1);
+    const base = (pool || []).find((challenge) => challengeTypeKey(challenge.type) === type)
+      || getChallengeData().find((challenge) => challengeTypeKey(challenge.type) === type)
+      || null;
+    const requiredSkillsByType = {
+      ball: { design: 0.40, runway: 0.40, comedy: 0.10, acting: 0.10 },
+      design: { design: 0.55, runway: 0.25, comedy: 0.10, improv: 0.10 },
+      girlgroups: { dance: 0.30, comedy: 0.20, acting: 0.15, improv: 0.15, lipsync: 0.20 },
+      rumix: { dance: 0.30, lipsync: 0.25, acting: 0.20, comedy: 0.15, runway: 0.10 },
+      runway: { runway: 0.55, design: 0.25, comedy: 0.10, acting: 0.10 },
+      talent_show: { comedy: 0.20, dance: 0.20, acting: 0.20, improv: 0.20, lipsync: 0.20 }
+    };
+    const fallback = {
+      ...(base ? clone(base) : {}),
+      id: `premiere_${type}_alternate_part_${part}_${episode.number}`,
+      name: `${label} Premiere Challenge — Part ${part}`,
+      type,
+      repeatable: true,
+      premiereEligible: true,
+      teamMode: type === "girlgroups" ? "groups" : "solo",
+      requiredSkills: clone(base?.requiredSkills || requiredSkillsByType[type] || { comedy: 0.20, dance: 0.20, acting: 0.20, improv: 0.20, runway: 0.20 }),
+      rupaulUsed: false,
+      rupaulGeneratedPremiereAlternate: true
+    };
+    if (type === "girlgroups") fallback.allowedGroupSizes = clone(base?.allowedGroupSizes || [2, 3, 4, 5]);
+    return fallback;
+  }
+
+  function rupaulChallengePoolWithPremiereFallback(season, episode) {
+    const pool = rupaulChallengePool(season, episode);
+    if (pool.some((challenge) => !challenge.rupaulUsed)) return pool;
+    const fallback = rupaulPremiereFallbackChallenge(season, episode, pool);
+    return fallback ? [...pool, fallback] : pool;
+  }
+
   function randomRupaulChallenge(season, episode, pool) {
     const unused = (pool || []).filter((challenge) => !challenge.rupaulUsed);
     if (!unused.length) return null;
@@ -4431,17 +4475,20 @@ Options: ${names}`, "") || "";
   }
 
   function rupaulUsesPresetChallenge(episode) {
-    return ["rate_a_queen_split", "rate_a_queen_s17_split", "mid_season_rate_a_queen", "porkchop_top2", "top4_rumix", "fame_games"].includes(episode?.specialPremiere)
+    // Rate-A-Queen episodes remain player-controlled in RuPaul Mode. The
+    // premiere type may filter the list, but the player still chooses the
+    // exact challenge for every split part.
+    return ["porkchop_top2", "top4_rumix", "fame_games"].includes(episode?.specialPremiere)
       || !!episode?.challengeSelectionLocked;
   }
 
   function chooseRupaulPresetChallenge(season, episode) {
-    const pool = rupaulChallengePool(season, episode).filter((challenge) => !challenge.rupaulUsed);
+    const pool = rupaulChallengePoolWithPremiereFallback(season, episode).filter((challenge) => !challenge.rupaulUsed);
     return randomRupaulChallenge(season, episode, pool) || clone(pool[0] || null);
   }
 
   function openRupaulChallengePicker(season, episode) {
-    const pool = rupaulChallengePool(season, episode);
+    const pool = rupaulChallengePoolWithPremiereFallback(season, episode);
     const types = [...new Set(pool.map((challenge) => challengeTypeKey(challenge.type)))];
     let selectedType = episode.forcedChallengeType ? challengeTypeKey(episode.forcedChallengeType) : "";
     let selectedId = "";
@@ -4596,9 +4643,14 @@ Options: ${names}`, "") || "";
   function updateRupaulRunwayName(season, episode, runway) {
     const oldName = episode.runway?.name;
     episode.runway = clone(runway);
-    (episode.scores || []).forEach((score) => {
-      const entries = season.stats?.[score.id]?.runwayScores || [];
-      const row = entries.findLast ? entries.findLast((entry) => entry.label === episode.label && (!oldName || entry.runway === oldName)) : [...entries].reverse().find((entry) => entry.label === episode.label);
+    const participantIds = episode.runwayParticipantIds?.length
+      ? episode.runwayParticipantIds
+      : (episode.scores || []).map((score) => score.id);
+    [...new Set(participantIds)].forEach((id) => {
+      const entries = season.stats?.[id]?.runwayScores || [];
+      const row = entries.findLast
+        ? entries.findLast((entry) => entry.label === episode.label && (!oldName || entry.runway === oldName))
+        : [...entries].reverse().find((entry) => entry.label === episode.label);
       if (row) row.runway = runway.name;
     });
   }
@@ -4666,6 +4718,33 @@ Options: ${names}`, "") || "";
   async function runRupaulSlayersJudging(season, episode) {
     const ids = rupaulCompetingIds(season, episode);
     const ranked = rupaulRankedIds(episode, ids);
+    const pairs = episode.teams?.mode === "pairs"
+      ? (episode.teams.groups || []).filter((group) => group.ids?.length === 2 && group.ids.every((id) => ids.includes(id)))
+        .map((group) => ({ ...group, avg: rupaulGroupScore(episode, group) }))
+        .sort((a, b) => b.avg - a.avg)
+      : [];
+
+    episode.slayersEpisode = true;
+    episode.winnerIds = [];
+    episode.lowIds = [];
+    episode.bottomIds = [];
+    episode.eliminatedIds = [];
+
+    if (pairs.length) {
+      const critiquedPairCount = ids.length <= 8 ? pairs.length : Math.max(1, Math.ceil(pairs.length / 2));
+      const topPairPool = pairs.slice(0, critiquedPairCount);
+      const topPair = await openRupaulTeamPicker("Choose the Top Two pair", topPairPool, "winner");
+      if (!topPair) return false;
+      episode.judgedInTeams = true;
+      episode.winningTeamIds = topPair.ids.slice();
+      episode.teamWinMode = "top2_pair";
+      episode.top2Ids = topPair.ids.slice();
+      episode.highIds = topPairPool.filter((pair) => pair.name !== topPair.name).flatMap((pair) => pair.ids);
+      const assigned = new Set([...episode.top2Ids, ...episode.highIds]);
+      episode.safeIds = ranked.filter((id) => !assigned.has(id));
+      return true;
+    }
+
     const critiquedCount = ranked.length <= 8 ? ranked.length : Math.max(2, Math.ceil(ranked.length / 2));
     const topPool = ranked.slice(0, critiquedCount);
     const topTwo = await openRupaulPhotoPicker("Choose the Top Two", topPool, { min: 2, max: 2, tone: "winner" });
@@ -4673,13 +4752,9 @@ Options: ${names}`, "") || "";
     episode.judgedInTeams = false;
     episode.winningTeamIds = [];
     episode.teamWinMode = "";
-    episode.winnerIds = [];
     episode.top2Ids = topTwo;
     episode.highIds = topPool.filter((id) => !topTwo.includes(id));
     episode.safeIds = ranked.length <= 8 ? [] : ranked.slice(critiquedCount);
-    episode.lowIds = [];
-    episode.bottomIds = [];
-    episode.eliminatedIds = [];
     return true;
   }
 
@@ -5233,8 +5308,8 @@ Options: ${names}`, "") || "";
     const porkchop = !!options.porkchop;
     const selected = new Set();
     const allowDouble = options.allowDouble !== false;
-    const canDoubleWin = allowDouble && !forWin && !porkchop && ids.length === 2 && season.doubleShantaysUsed < 3;
-    const finaleTarget = isTeamsFormat(season) ? Number(season.teamsFinalistOverride || 3) : Number(season.config?.finalistSize || 4);
+    const canDoubleWin = allowDouble && !forWin && !porkchop && !isSplitPremiereEpisode(season, episode) && ids.length === 2 && season.doubleShantaysUsed < 3;
+    const finaleTarget = effectiveFinalistSize(season);
     const isLastCompetitiveElimination = episode?.type === "competitive" && Number(season.activeIds?.length || 0) <= finaleTarget + 1;
     const canDoubleLoss = allowDouble && !forWin && !porkchop && !isLastCompetitiveElimination && ids.length === 2 && season.doubleSashaysUsed < 2;
     const defaultMin = forWin ? 1 : (ids.length > 2 ? 0 : 1);
@@ -5456,29 +5531,62 @@ Options: ${names}`, "") || "";
   }
 
   function rupaulPremiereOptions(season) {
-    if(season.rupaulPremiereComplete)return null;
-    const type=season.config.premiereType||"regular";
-    if(type==="porkchop")return {porkchop:true};
-    const split=["split_s6","split_s12","split_s14","rate_a_queen_s16","rate_a_queen_s17"].includes(type);
-    const total=type==="rate_a_queen_s16"?3:(split?2:1);
-    const index=Number(season.rupaulPremiereIndex||0);
-    if(index>=total){season.rupaulPremiereComplete=true;return null;}
-    const options={premiere:true,label:`Episode ${season.episodeCounter}`,rupaulPremiereSequence:true,rupaulPremiereTotal:total};
-    if(type==="rate_a_queen_s16"&&index===2){
-      options.premiere=false;options.competingIds=season.activeIds.slice();options.runOnlyIds=[];options.specialPremiere="rate_a_queen_merge";options.rupaulSplitSequence=false;
-    } else if(split){
-      const first=season.splitPremiereFirstGroupIds||season.castOrder.slice(0,Math.ceil(season.castOrder.length/2));
-      const second=season.castOrder.filter((id)=>!first.includes(id));
-      options.competingIds=(index===0?first:second).slice(); options.runOnlyIds=season.castOrder.filter((id)=>!options.competingIds.includes(id)); options.splitGroup=`Group ${index+1}`; options.rupaulSplitSequence=true;
-      if(index>0&&season.rupaulSplitChallengeType)options.forcedChallengeType=season.rupaulSplitChallengeType;
-      if(type==="split_s12")options.specialPremiere="non_elim_top2";
-      if(type==="rate_a_queen_s16"){options.specialPremiere="rate_a_queen_split";options.forcedChallengeType="talent_show";}
-      if(type==="rate_a_queen_s17"){options.specialPremiere="rate_a_queen_s17_split";options.forcedChallengeType="talent_show";options.rateAQueenS17FinalPremiere=index===1;}
+    if (season.rupaulPremiereComplete) return null;
+    const type = season.config.premiereType || "regular";
+    if (type === "porkchop") return { porkchop: true };
+    const split = ["split_s6", "split_s12", "split_s14", "rate_a_queen_s16", "rate_a_queen_s17"].includes(type);
+    const total = type === "rate_a_queen_s16" ? 3 : (split ? 2 : 1);
+    const index = Number(season.rupaulPremiereIndex || 0);
+    if (index >= total) {
+      season.rupaulPremiereComplete = true;
+      return null;
+    }
+
+    const selectedType = season.premiereChallengeType || season.config?.premiereChallengeType || "";
+    const options = {
+      premiere: true,
+      label: `Episode ${season.episodeCounter}`,
+      rupaulPremiereSequence: true,
+      rupaulPremiereTotal: total
+    };
+
+    if (type === "rate_a_queen_s16" && index === 2) {
+      options.premiere = false;
+      options.competingIds = season.activeIds.slice();
+      options.runOnlyIds = [];
+      options.specialPremiere = "rate_a_queen_merge";
+      options.rupaulSplitSequence = false;
+    } else if (split) {
+      const premiereIds = season.activeIds.slice();
+      const storedFirst = (season.splitPremiereFirstGroupIds || []).filter((id) => premiereIds.includes(id));
+      const first = storedFirst.length ? storedFirst : premiereIds.slice(0, Math.ceil(premiereIds.length / 2));
+      const second = premiereIds.filter((id) => !first.includes(id));
+      options.competingIds = (index === 0 ? first : second).slice();
+      options.runOnlyIds = premiereIds.filter((id) => !options.competingIds.includes(id));
+      options.splitGroup = `Group ${index + 1}`;
+      options.rupaulSplitSequence = true;
+      const splitChallengeType = season.rupaulSplitChallengeType || selectedType;
+      if (splitChallengeType) options.forcedChallengeType = splitChallengeType;
+      if (type === "split_s12") options.specialPremiere = "non_elim_top2";
+      if (type === "rate_a_queen_s16") {
+        options.specialPremiere = "rate_a_queen_split";
+        options.runwayParticipantIds = options.competingIds.slice();
+        options.rateAQueenTargetIds = options.competingIds.slice();
+        options.rateAQueenVoterIds = options.competingIds.slice();
+      }
+      if (type === "rate_a_queen_s17") {
+        options.specialPremiere = "rate_a_queen_s17_split";
+        options.runwayParticipantIds = premiereIds.slice();
+        options.rateAQueenTargetIds = options.competingIds.slice();
+        options.rateAQueenVoterIds = options.runOnlyIds.slice();
+        options.rateAQueenS17FinalPremiere = index === 1;
+      }
     } else {
-      if(type==="slayers")options.specialPremiere="slayers";
-      if(type==="non_elim_top2")options.specialPremiere="non_elim_top2";
-      if(type==="uk3")options.specialPremiere="uk3";
-      if(type==="late_entry")options.specialPremiere="late_entry";
+      if (selectedType) options.forcedChallengeType = selectedType;
+      if (type === "slayers") options.specialPremiere = "slayers";
+      if (type === "non_elim_top2") options.specialPremiere = "non_elim_top2";
+      if (type === "uk3") options.specialPremiere = "uk3";
+      if (type === "late_entry") options.specialPremiere = "late_entry";
     }
     return options;
   }
@@ -5957,6 +6065,7 @@ Options: ${names}`, "") || "";
     if(!crown)return false;
     finale.allWinnersCrownSmackdown={lipSyncs:(crown.lipSyncs||[]).slice(),winnerId:crown.winnerId,finalLipSync:(crown.lipSyncs||[]).at(-1)||null};
     finale.extraLipSyncs=(crown.lipSyncs||[]).slice();finale.lipSync=finale.extraLipSyncs.at(-1)||null;finale.winnerIds=[crown.winnerId].filter(Boolean);finale.top2Ids=finale.lipSync?.ids?.slice()||finalists.slice(0,2);
+    finale.eliminatedIds=finalists.filter((id)=>!finale.winnerIds.includes(id)&&!finale.top2Ids.includes(id));
     season.seasonComplete=true;season.winnerId=crown.winnerId||null;season.winnerIds=[crown.winnerId].filter(Boolean);season.runnerUpIds=(finale.top2Ids||[]).filter((id)=>id!==crown.winnerId);
     season.castOrder.forEach((id)=>{
       const returned=(season.tournamentWildcardReturns||[]).some((entry)=>entry.stage==="pre_finale"&&entry.returnedId===id);
@@ -6319,19 +6428,52 @@ Options: ${names}`, "") || "";
     season.specialMidSeasonRateAQueenUsed=true;
   }
 
-  async function prepareNextRupaulMidRatePart(season){
-    setupRupaulMidRateState(season);const flow=season.rupaulMidRateState;
-    if(flow.index<flow.batches.length){
-      const ids=flow.batches[flow.index];
-      const voters=flow.batches[flow.index===0?1:0] || season.activeIds.filter((id)=>!ids.includes(id));
-      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,competingIds:ids,runOnlyIds:season.activeIds.filter((id)=>!ids.includes(id)),forcedChallengeType:"talent_show",specialPremiere:"mid_season_rate_a_queen",rupaulMidRatePart:true});
-      episode.rateAQueenTargetIds=ids.slice();
-      episode.rateAQueenVoterIds=voters.slice();
-      await initializeRupaulDraftChallenge(season,episode);return;
+  async function prepareNextRupaulMidRatePart(season) {
+    setupRupaulMidRateState(season);
+    const flow = season.rupaulMidRateState;
+    if (flow.index < flow.batches.length) {
+      const ids = (flow.batches[flow.index] || []).filter((id) => season.activeIds.includes(id));
+      const voters = (flow.batches[flow.index === 0 ? 1 : 0] || season.activeIds.filter((id) => !ids.includes(id)))
+        .filter((id) => season.activeIds.includes(id) && !ids.includes(id));
+      const episode = createRupaulDraftEpisode(season, {
+        type: "mid_season_rate_a_queen",
+        label: `Episode ${season.episodeCounter}`,
+        competingIds: ids.slice(),
+        runwayParticipantIds: season.activeIds.slice(),
+        rateAQueenTargetIds: ids.slice(),
+        rateAQueenVoterIds: voters.slice(),
+        runOnlyIds: voters.slice(),
+        specialPremiere: "mid_season_rate_a_queen",
+        rupaulMidRatePart: true,
+        hideJudging: true,
+        noMiniChallenge: true,
+        noGuestJudge: true,
+        midSeasonRateAQueen: {
+          id: "mid_season_rate_a_queen",
+          name: "Mid-Season Rate-A-Queen",
+          part: flow.index + 1,
+          firstBatch: (flow.batches[0] || []).slice(),
+          secondBatch: (flow.batches[1] || []).slice(),
+          competingIds: ids.slice(),
+          raterIds: voters.slice()
+        }
+      });
+      episode.noImmunityAward = true;
+      await initializeRupaulDraftChallenge(season, episode);
+      return;
     }
-    flow.bottomIds=[...new Set(flow.bottomIds||[])];
-    if(!flow.bottomBattleDone&&flow.bottomIds.length>=2){flow.bottomBattleDone=true;flow.complete=true;return prepareRupaulSpecialSmackdown(season,"mid_season_rate_a_queen_bottom",{mode:"mid_season_rate_a_queen_bottom",ids:flow.bottomIds.slice(0,2),name:"Rate-A-Queen Lip Sync For Your Life"});}
-    flow.complete=true;return prepareNextRupaulEpisode(season);
+    flow.bottomIds = [...new Set(flow.bottomIds || [])];
+    if (!flow.bottomBattleDone && flow.bottomIds.length >= 2) {
+      flow.bottomBattleDone = true;
+      flow.complete = true;
+      return prepareRupaulSpecialSmackdown(season, "mid_season_rate_a_queen_bottom", {
+        mode: "mid_season_rate_a_queen_bottom",
+        ids: flow.bottomIds.slice(0, 2),
+        name: "Rate-A-Queen Lip Sync For Your Life"
+      });
+    }
+    flow.complete = true;
+    return prepareNextRupaulEpisode(season);
   }
 
 
@@ -6552,9 +6694,10 @@ Options: ${names}`, "") || "";
     if(season.config.premiereType==="porkchop"&&!season.rupaulPremiereComplete)return prepareNextRupaulPorkchopEpisode(season);
     const premiere=rupaulPremiereOptions(season);if(premiere){if(premiere.porkchop)return prepareNextRupaulPorkchopEpisode(season);const episode=createRupaulDraftEpisode(season,premiere);await initializeRupaulDraftChallenge(season,episode);return;}
     if(season.rupaulMidRateState&&!season.rupaulMidRateState.complete)return prepareNextRupaulMidRatePart(season);
-    if(season.config.finaleType==="cunt_test"&&season.activeIds.length===5&&!season.rupaulCuntTestUsed){season.rupaulCuntTestUsed=true;return prepareRupaulCuntTestEpisode(season);}
-    const target=isTeamsFormat(season)?(season.teamsFinalistOverride||3):season.config.finalistSize;
-    if(season.activeIds.length>target||shouldRunSpecialComeback(season)||shouldRunDirectComeback(season)){
+    if(season.config.finaleType==="cunt_test"&&season.activeIds.length===5&&!season.rupaulCuntTestUsed&&!season.expandedFinaleReady){season.rupaulCuntTestUsed=true;return prepareRupaulCuntTestEpisode(season);}
+    const target=effectiveFinalistSize(season);
+    const expandedFinaleReady=!!season.expandedFinaleReady&&season.activeIds.length<=target;
+    if(!expandedFinaleReady&&(season.activeIds.length>target||shouldRunSpecialComeback(season)||shouldRunDirectComeback(season))){
       if(season.lalaparuzaQueued)return prepareRupaulSpecialSmackdown(season,"special_lalaparuza",{mode:"special_lalaparuza"});
       if(shouldRunSpecialLalaparuza(season))return prepareRupaulSpecialSmackdown(season,"special_lalaparuza");
       if(shouldRunSpecialSlayOffs(season))return prepareRupaulSpecialSmackdown(season,"special_slayoffs");
@@ -6566,7 +6709,11 @@ Options: ${names}`, "") || "";
     if(season.config.finaleType==="lsftf"&&season.activeIds.length===4&&!season.rupaulLsftfDone){season.rupaulLsftfDone=true;return prepareRupaulSpecialSmackdown(season,"lsftf",{mode:"lsftf",ids:season.activeIds.slice(),name:"Lip Sync for the Finale"});}
     if(season.config.specialReunionLalaparuza&&!season.specialReunionLalaparuzaUsed){const ids=fameGamesEligibleEliminated(season);if(ids.length>1)return prepareRupaulSpecialSmackdown(season,"reunion_lalaparuza",{mode:"reunion_lalaparuza",ids,name:"Reunion LaLaPaRuZa"});season.specialReunionLalaparuzaUsed=true;}
     if(season.config.specialFameGames&&!season.fameGamesEpisodeUsed)return prepareRupaulFameGamesEpisode(season);
-    if(seasonWillUseTopFourRumixTrackColumn(season)&&!season.rupaulTopFourRumixDone&&!season.topFourRumixColumnAdded&&season.activeIds.length===4)return prepareRupaulTopFourRumixEpisode(season);
+    if(seasonWillUseTopFourRumixTrackColumn(season)&&!season.rupaulTopFourRumixDone&&!season.topFourRumixColumnAdded&&season.activeIds.length===4){
+      addTopFourRumixTrackColumn(season);
+      season.rupaulTopFourRumixDone=true;
+      saveState();
+    }
     return prepareRupaulStandardFinale(season);
   }
 
@@ -6615,7 +6762,7 @@ Options: ${names}`, "") || "";
       return;
     }
     state.season = createSeasonState();
-    if (!isRupaulMode(state.season) && shouldChoosePremiereChallengeType(state.season)) {
+    if (shouldChoosePremiereChallengeType(state.season)) {
       const chosenPremiereType = await choosePremiereChallengeType(state.season);
       state.season.premiereChallengeType = chosenPremiereType;
       state.season.config.premiereChallengeType = chosenPremiereType;
@@ -6968,7 +7115,7 @@ Options: ${names}`, "") || "";
   }
 
   async function simulateSeasonFromCurrentState(season) {
-    while (!season.seasonComplete && (season.activeIds.length > (isTeamsFormat(season) ? (season.teamsFinalistOverride || 3) : season.config.finalistSize) || shouldRunSpecialComeback(season))) {
+    while (!season.seasonComplete && !season.expandedFinaleReady && (season.activeIds.length > effectiveFinalistSize(season) || shouldRunSpecialComeback(season))) {
       if (season.lalaparuzaQueued) simulateLalaparuzaEpisode(season);
       else if (shouldRunSpecialLalaparuza(season)) simulateSpecialLalaparuzaSmackdown(season);
       else if (shouldRunSpecialSlayOffs(season)) simulateSpecialSlayOffs(season);
@@ -7432,6 +7579,7 @@ Options: ${names}`, "") || "";
 
   function seasonWillUseTopFourRumixTrackColumn(season) {
     if (!isRegularFormat(season)) return false;
+    if (season.finalistOverride || season.expandedFinaleReady) return false;
     if (Number(season.config?.finalistSize || 0) !== 4) return false;
     if (season.config?.finaleType === "lsftf" || season.config?.finaleType === "cunt_test") return false;
     if (season.config?.specialFameGames || season.config?.specialReunionLalaparuza) return false;
@@ -7907,9 +8055,7 @@ Options: ${names}`, "") || "";
       simulateRateAQueenS17Premiere(season, originalActive, groupA, groupB);
       return;
     }
-    const sharedType = style === "s16"
-      ? "talent_show"
-      : (season.premiereChallengeType || season.config?.premiereChallengeType || pickSplitPremiereType(season, groupA, groupB));
+    const sharedType = season.premiereChallengeType || season.config?.premiereChallengeType || pickSplitPremiereType(season, groupA, groupB);
     const specialPremiere = style === "s16" ? "rate_a_queen_split" : (style === "s12" ? "split_top2" : "split_elim");
 
     season.activeIds = groupA;
@@ -7933,11 +8079,12 @@ Options: ${names}`, "") || "";
   }
 
   function simulateRateAQueenS17Premiere(season, originalActive, groupA, groupB) {
+    const sharedType = season.premiereChallengeType || season.config?.premiereChallengeType || pickSplitPremiereType(season, groupA, groupB);
     season.activeIds = originalActive.slice();
     simulateRegularEpisode(season, {
       premiere: true,
       splitGroup: "Group One",
-      forcedChallengeType: "talent_show",
+      forcedChallengeType: sharedType,
       specialPremiere: "rate_a_queen_s17_split",
       label: "Episode 1",
       competingIds: groupA.slice(),
@@ -7953,7 +8100,7 @@ Options: ${names}`, "") || "";
     simulateRegularEpisode(season, {
       premiere: true,
       splitGroup: "Group Two",
-      forcedChallengeType: "talent_show",
+      forcedChallengeType: sharedType,
       specialPremiere: "rate_a_queen_s17_split",
       label: "Episode 2",
       competingIds: groupB.slice(),
@@ -7970,7 +8117,7 @@ Options: ${names}`, "") || "";
   }
 
   function pickSplitPremiereType(season, groupA, groupB) {
-    const premiereTypes = ["runway", "design", "talent_show", "rumix"];
+    const premiereTypes = ["ball", "design", "girlgroups", "rumix", "runway", "talent_show"];
     const validFor = (group) => new Set(getChallengeData().filter((challenge) => {
       const type = challengeTypeKey(challenge.type);
       return premiereTypes.includes(type) && canUseTeamChallenge(challenge, group.length);
@@ -8305,6 +8452,20 @@ Options: ${names}`, "") || "";
 
   function isTeamsFormat(season = state.season) {
     return eliminationFormat(season) === "teams";
+  }
+
+  function effectiveFinalistSize(season = state.season) {
+    if (isTeamsFormat(season)) return Number(season?.teamsFinalistOverride || 3);
+    return Math.max(1, Number(season?.finalistOverride || season?.config?.finalistSize || state.config.finalistSize || 4));
+  }
+
+  function isSplitPremiereEpisode(season, episode) {
+    if (!episode?.premiere) return false;
+    const premiereType = season?.config?.premiereType || "";
+    if (!["split_s6", "split_s12", "split_s14", "rate_a_queen_s16", "rate_a_queen_s17"].includes(premiereType)) return false;
+    return !!episode.splitGroup
+      || !!episode.rupaulSplitSequence
+      || ["split_elim", "split_top2", "rate_a_queen_split", "rate_a_queen_s17_split"].includes(episode.specialPremiere);
   }
 
   function setTeamPairs(season, pairSlots) {
@@ -8729,7 +8890,8 @@ Options: ${names}`, "") || "";
 
     episode.scores = scores;
     episode.maxiGroups = bandScores(scores, "legacyPerformanceScore");
-    episode.runwayGroups = hasSeparateRunway
+    const hasRunwayOnlyParticipants = runwayIds.some((id) => !challengeIds.includes(id));
+    episode.runwayGroups = (hasSeparateRunway || hasRunwayOnlyParticipants)
       ? bandScores(runwayScores, "legacyRunwayRaw")
       : bandScores(scores, "legacyPerformanceScore");
 
@@ -9626,7 +9788,7 @@ Options: ${names}`, "") || "";
     episode.safeIds = ranked.slice(2, -1);
     episode.skipLipSyncThisEpisode = false;
     episode.noImmunityAward = true;
-    episode.notes.push("Mid-Season Rate-A-Queen: the non-competing group ranked the Talent Show performers. The Top 2 lip sync for the win, and the lowest-ranked queen is placed in the bottom one.");
+    episode.notes.push("Mid-Season Rate-A-Queen: the opposite group ranked the maxi-challenge competitors. The Top 2 lip sync for the win, and the lowest-ranked queen is placed in the bottom one.");
   }
 
   function assignRateAQueenMergePlacements(season, episode) {
@@ -9648,7 +9810,10 @@ Options: ${names}`, "") || "";
       const flop = (groups.flopped || []).length;
       const weakCount = bad + flop;
 
-      if (!season.config.disableNonElimination && season.config.forceSlayersEpisode && !season.forceSlayersUsed && count <= 8 && count >= 4) {
+      const minimumForcedSlayersCount = Math.max(4, Number(season.config?.finalistSize || 4) + 1);
+      if (!Number.isFinite(Number(season.forceSlayersTargetCount))) season.forceSlayersTargetCount = randInt(minimumForcedSlayersCount, 8);
+      const forcedSlayersTarget = clamp(Number(season.forceSlayersTargetCount), minimumForcedSlayersCount, 8);
+      if (!season.config.disableNonElimination && season.config.forceSlayersEpisode && !season.forceSlayersUsed && count <= forcedSlayersTarget && count >= 4) {
         season.forceSlayersUsed = true;
         season.legacyEveryoneSlayedUsed = true;
         return "everyone_top";
@@ -9700,9 +9865,24 @@ Options: ${names}`, "") || "";
 
   function assignEveryoneTop(season, episode) {
     const ranked = rankedIds(episode);
+    const rankById = new Map(ranked.map((id, index) => [id, index]));
+    const pairs = episode.teams?.mode === "pairs"
+      ? (episode.teams.groups || []).filter((group) => group.ids?.length === 2)
+        .map((group) => ({ ...group, rank: average(group.ids.map((id) => rankById.get(id) ?? ranked.length)) }))
+        .sort((a, b) => a.rank - b.rank)
+      : [];
     season.nonElimTop2Used = true;
-    episode.top2Ids = ranked.slice(0, 2);
-    episode.highIds = ranked.slice(2);
+    episode.slayersEpisode = true;
+    if (pairs.length) {
+      episode.top2Ids = pairs[0].ids.slice();
+      episode.winningTeamIds = pairs[0].ids.slice();
+      episode.judgedInTeams = true;
+      episode.teamWinMode = "top2_pair";
+      episode.highIds = ranked.filter((id) => !episode.top2Ids.includes(id));
+    } else {
+      episode.top2Ids = ranked.slice(0, 2);
+      episode.highIds = ranked.slice(2);
+    }
     episode.safeIds = [];
     episode.lowIds = [];
     episode.bottomIds = [];
@@ -10541,15 +10721,18 @@ Options: ${names}`, "") || "";
   }
 
   function maybeDoubleShantay(season, episode, ids, performances) {
-    if (season.config.disableDoubleShantaysSashays || season.doubleShantaysUsed >= 1 || ids.length !== 2) return false;
+    if (season.config.disableDoubleShantaysSashays || season.doubleShantaysUsed >= 1 || ids.length !== 2 || isSplitPremiereEpisode(season, episode)) return false;
     const raw = (performances || []).map((performance) => Number(performance.rawScore ?? 0));
     const organic = raw.length === 2 && raw[0] > 7 && raw[1] > 7 && legacyChance(51);
     const count = season.activeIds.length;
+    const minimumForcedDoubleShantayCount = Math.max(4, Number(season.config?.finalistSize || 4) + 1);
+    if (!Number.isFinite(Number(season.forceDoubleShantayTargetCount))) season.forceDoubleShantayTargetCount = randInt(minimumForcedDoubleShantayCount, 9);
+    const forcedTarget = clamp(Number(season.forceDoubleShantayTargetCount), minimumForcedDoubleShantayCount, 9);
     if (organic) {
-      if (season.config.forceDoubleShantay && count <= 9 && count >= 5) season.forceDoubleShantayUsed = true;
+      if (season.config.forceDoubleShantay && !season.forceDoubleShantayUsed && count <= 9 && count >= 4) season.forceDoubleShantayUsed = true;
       return true;
     }
-    if (season.config.forceDoubleShantay && !season.forceDoubleShantayUsed && count <= 9 && count >= 5) {
+    if (season.config.forceDoubleShantay && !season.forceDoubleShantayUsed && count <= forcedTarget && count >= 4) {
       season.forceDoubleShantayUsed = true;
       return true;
     }
@@ -10680,11 +10863,30 @@ Options: ${names}`, "") || "";
     return impacts;
   }
 
+  function maybeExpandFinaleAfterPenultimateSave(season, episode) {
+    if (!season || !episode || episode.premiere || episode.type === "finale") return false;
+    const configuredFinalists = Number(season.config?.finalistSize || 4);
+    if (![2, 3, 4].includes(configuredFinalists)) return false;
+    const startingCount = Number(episode.activeStartIds?.length || 0);
+    if (startingCount !== configuredFinalists + 1 || season.activeIds.length !== startingCount) return false;
+    const lipSyncs = [episode.lipSync, ...(episode.extraLipSyncs || [])].filter(Boolean);
+    const doubleShantay = lipSyncs.some((lipSync) => lipSync.resultType === "double_shantay");
+    const slayers = !!episode.slayersEpisode || episode.rupaulOutcome === "slayers";
+    if (!doubleShantay && !slayers) return false;
+    season.finalistOverride = startingCount;
+    season.expandedFinaleReady = true;
+    episode.finalistOverride = startingCount;
+    episode.notes = episode.notes || [];
+    episode.notes.push(`The non-elimination result sends all ${startingCount} remaining contestants directly to the finale.`);
+    return true;
+  }
+
   function finalizeEpisode(season, episode) {
     if (episode.challenge?.id) season.usedChallengeIds.push(episode.challenge.id);
     if (episode.challenge?.type) season.usedChallengeTypes.push(challengeTypeKey(episode.challenge.type));
     if (episode.runway?.id && !episode.runway.challengeRunway) season.usedRunwayIds.push(episode.runway.id);
     applyEliminations(season, episode);
+    maybeExpandFinaleAfterPenultimateSave(season, episode);
     processHeartSuccessorInheritance(season, episode);
     awardNextEpisodeImmunity(season, episode);
     generateHiddenNarrativeEvents(season, episode);
@@ -11255,21 +11457,17 @@ Options: ${names}`, "") || "";
     stats.favoritism = Number(stats.favoritism || 0);
     stats.unfavoritism = Number(stats.unfavoritism || 0);
     stats.ppe = Number(stats.ppe || 0);
-    stats.ppeEpisodes = Number(stats.ppeEpisodes || 0) + 1;
+    stats.ppeEpisodes = Number(stats.ppeEpisodes || 0);
 
     if (token === "WIN_QUIT") {
       stats.favoritism += 5;
-      stats.ppe += 5;
       return;
     }
-    if (token === "BTM2_QUIT") {
+    if (token === "BTM2_QUIT" || token === "QUIT" || token === "DEPT" || token === "DISQ") {
       stats.unfavoritism += 5;
       return;
     }
-    if (token === "QUIT" || token === "DEPT" || token === "DISQ") {
-      stats.unfavoritism += 5;
-      return;
-    }
+    stats.ppeEpisodes += 1;
     if (token === "WIN" || token === "DWIN") {
       const legacyLoser = isLegacyFormat(season) && episode.legacyLipSyncLoserId === id;
       stats.favoritism += legacyLoser ? 4 : 5;
@@ -11781,17 +11979,20 @@ Options: ${names}`, "") || "";
     return true;
   }
 
-  function midSeasonRateAQueenChallenge(part) {
-    const base = clone(getChallengeData().find((challenge) => challengeTypeKey(challenge.type) === "talent_show") || fallbackChallenges.find((challenge) => challengeTypeKey(challenge.type) === "talent_show"));
+  function midSeasonRateAQueenChallenge(season, episode, part) {
+    const originalActiveIds = season.activeIds.slice();
+    season.activeIds = (episode.competingIds || []).slice();
+    const picked = pickChallenge(season, episode);
+    season.activeIds = originalActiveIds;
+    if (picked) return picked;
     return {
-      ...(base || {}),
-      id: `mid_season_rate_a_queen_talent_show_part_${part}`,
-      name: "Mid-Season Rate-A-Queen Talent Show",
-      type: "talent_show",
+      id: `mid_season_rate_a_queen_challenge_part_${part}`,
+      name: `Mid-Season Rate-A-Queen Challenge — Part ${part}`,
+      type: "acting",
       repeatable: true,
       teamMode: "solo",
-      description: "The queens perform in a two-part Talent Show, then the opposite group ranks them from first to last.",
-      requiredSkills: (base && base.requiredSkills) || { comedy: 0.20, dance: 0.20, acting: 0.20, improv: 0.20, lipsync: 0.20 }
+      description: "One group competes in the maxi challenge while the opposite group ranks them from first to last.",
+      requiredSkills: { acting: 0.35, comedy: 0.25, improv: 0.20, runway: 0.20 }
     };
   }
 
@@ -11801,7 +12002,6 @@ Options: ${names}`, "") || "";
       title: `Episode ${season.episodeCounter}`,
       label: `Episode ${season.episodeCounter}`,
       specialPremiere: "mid_season_rate_a_queen",
-      forcedChallengeType: "talent_show",
       competingIds: competingIds.slice(),
       runwayParticipantIds: allIds.slice(),
       rateAQueenTargetIds: competingIds.slice(),
@@ -11820,11 +12020,14 @@ Options: ${names}`, "") || "";
         raterIds: raterIds.slice()
       }
     });
-    episode.challenge = midSeasonRateAQueenChallenge(part);
+    episode.challenge = midSeasonRateAQueenChallenge(season, episode, part);
     episode.guestJudge = null;
     episode.miniChallenge = null;
     episode.noImmunityAward = true;
-    episode.teams = { mode: "solo", groups: [] };
+    const originalActiveIds = season.activeIds.slice();
+    season.activeIds = competingIds.slice();
+    maybeCreateTeams(season, episode);
+    season.activeIds = originalActiveIds;
     runChallengeAndRunway(season, episode);
     assignMidSeasonRateAQueenPlacements(season, episode);
     resolveLipSyncsAndEliminations(season, episode);
@@ -13709,8 +13912,9 @@ Options: ${names}`, "") || "";
       : event.token === "DEPT" ? "Medical Departure"
         : event.token === "WIN_QUIT" ? "Winner Withdraws"
           : "Withdrawal";
+    const exitTokenClass = event.token === "DEPT" ? "token-dept" : "token-elim";
     return `
-      <article class="challenge-card unplanned-exit-card token-elim ${compact ? "is-compact" : ""}">
+      <article class="challenge-card unplanned-exit-card ${exitTokenClass} ${compact ? "is-compact" : ""}">
         <p class="announcement-line">${escapeHtml(label)}</p>
         <div class="contestant-strip small-strip">${contestantCard(event.id, label, { className: "is-eliminated" })}</div>
         <p>${escapeHtml(event.text || "A contestant has left the competition.")}</p>
@@ -14307,19 +14511,19 @@ Options: ${names}`, "") || "";
       const intro = part === 1 ? `
         ${episodeThemeCopy(
           "Mid-Season Rate-A-Queen",
-          "You'll be competing in two separate episodes in the Talent Show, where you'll be rating each other. The bottom contestants from each episode will lip sync for their life, and one of you will go home.",
+          "You'll compete in two separate Rate-A-Queen episodes. In each part, one group performs the maxi challenge while everyone walks the runway, and the opposite group ranks the competitors. The lowest-ranked contestant from each part will lip sync for their life.",
           "",
           "midseason-raq-intro-copy"
         )}
         <div class="midseason-raq-batch-grid">
-          ${groupBlock("First Talent Show Group", firstBatch, state.season, { className: "midseason-raq-batch-card", subtitle: `${sentenceList(firstBatch, state.season, false)} will compete in the first part of the Talent Show.` })}
-          ${groupBlock("Second Talent Show Group", secondBatch, state.season, { className: "midseason-raq-batch-card", subtitle: `${sentenceList(secondBatch, state.season, false)} will compete in the second part of the Talent Show.` })}
+          ${groupBlock("Part 1 Group", firstBatch, state.season, { className: "midseason-raq-batch-card", subtitle: `${sentenceList(firstBatch, state.season, false)} will perform the first maxi challenge.` })}
+          ${groupBlock("Part 2 Group", secondBatch, state.season, { className: "midseason-raq-batch-card", subtitle: `${sentenceList(secondBatch, state.season, false)} will perform the second maxi challenge.` })}
         </div>
       ` : "";
       if (els.challengeSummary) {
         const partCopy = episodeThemeCopy(
-          ep.challenge?.name || "Talent Show",
-          part === 1 ? "Part 1 of the Talent Show begins. The other group watches and prepares to rank these performances." : "Part 2 of the Talent Show begins. The first group now ranks these performances.",
+          ep.challenge?.name || "Maxi Challenge",
+          part === 1 ? "Part 1 begins. The other group watches the maxi challenge, everyone walks the runway, and the other group prepares to rank the competitors." : "Part 2 begins. The first group watches the maxi challenge, everyone walks the runway, and the first group ranks the competitors.",
           "",
           "midseason-raq-summary-copy"
         );
@@ -14912,7 +15116,7 @@ Options: ${names}`, "") || "";
       </article>
     `).join("");
     const intro = ep.specialPremiere === "mid_season_rate_a_queen"
-      ? "This week, the contestants will be ranking each other. The non-competing group ranks this Talent Show group from first to last, balancing performance and relationships equally."
+      ? "The opposite group ranks this part's maxi-challenge competitors from first to last, balancing performance and relationships equally. All remaining contestants participate in the runway."
       : ep.specialPremiere === "rate_a_queen_s17_split"
         ? "The queens from the opposite premiere group rank this week's competing queens from first to last, balancing the performances and their relationships equally."
         : "Each contestant ranks their queer peers from first to last, balancing this week's performance and their relationships equally.";
@@ -16878,9 +17082,15 @@ Options: ${names}`, "") || "";
     }
 
     const winners = (season.winnerIds?.length ? season.winnerIds : (season.winnerId ? [season.winnerId] : [])).filter((id) => validIds.has(id));
-    const finalElims = (finale?.eliminatedIds || []).filter((id) => validIds.has(id) && !winners.includes(id));
+    const finaleTrackElims = (season.castOrder || []).filter((id) => (season.stats?.[id]?.track || []).some((entry) => entry.label === "Finale" && entry.token === "ELIM"));
+    const finalElims = [...new Set([...(finale?.eliminatedIds || []), ...finaleTrackElims])].filter((id) => validIds.has(id) && !winners.includes(id));
     const runners = (finale?.activeStartIds || season.activeIds || []).filter((id) => validIds.has(id) && !winners.includes(id) && !finalElims.includes(id));
-    const remainingElims = (season.eliminatedIds || []).slice().reverse().filter((id) => validIds.has(id) && !winners.includes(id) && !runners.includes(id) && !finalElims.includes(id));
+    const chronologicalExits = [];
+    (season.episodes || []).forEach((episode) => {
+      (episode?.departureIds || []).forEach((id) => chronologicalExits.push(id));
+      (episode?.eliminatedIds || []).forEach((id) => chronologicalExits.push(id));
+    });
+    const remainingElims = [...chronologicalExits.reverse(), ...(season.eliminatedIds || []).slice().reverse()].filter((id) => validIds.has(id) && !winners.includes(id) && !runners.includes(id) && !finalElims.includes(id));
     [...winners, ...runners, ...finalElims, ...remainingElims].forEach(add);
     (season.castOrder || []).forEach(add);
     return ordered;
@@ -16952,14 +17162,18 @@ Options: ${names}`, "") || "";
     }
 
     if (finale) {
-      const finalElims = (finale.eliminatedIds || []).filter((id) => validIds.has(id) && !winners.includes(id));
+      const finaleTrackElims = (season.castOrder || []).filter((id) => (season.stats?.[id]?.track || []).some((entry) => entry.label === "Finale" && entry.token === "ELIM"));
+      const finalElims = [...new Set([...(finale.eliminatedIds || []), ...finaleTrackElims])].filter((id) => validIds.has(id) && !winners.includes(id));
       const storedRunners = (season.runnerUpIds || []).filter((id) => validIds.has(id) && !winners.includes(id) && !finalElims.includes(id));
       const inferredRunners = (finale.activeStartIds || season.activeIds || []).filter((id) => validIds.has(id) && !winners.includes(id) && !finalElims.includes(id));
       addGroup(storedRunners.length ? storedRunners : inferredRunners);
       addGroup(finalElims);
     }
 
-    (season.episodes || []).slice().reverse().forEach((ep) => addGroup(ep?.eliminatedIds || []));
+    (season.episodes || []).slice().reverse().forEach((ep) => {
+      addGroup(ep?.eliminatedIds || []);
+      addGroup(ep?.departureIds || []);
+    });
     (season.eliminatedIds || []).slice().reverse().forEach((id) => addGroup([id]));
     (seasonPlacementOrder() || []).forEach((id) => addGroup([id]));
     (season.castOrder || []).forEach((id) => addGroup([id]));
@@ -17117,7 +17331,7 @@ Options: ${names}`, "") || "";
   function trackEntryPpeValue(entry) {
     const token = String(entry?.token || "");
     const extra = Array.isArray(entry?.extraClasses) ? entry.extraClasses : [];
-    if (isQuitOrDisqTrackToken(token)) return 0;
+    if (isUnplannedExitToken(token)) return null;
     if (token === "WIN" && extra.includes("legacy-loser-win")) return 4.5;
     const points = { WIN: 5, DWIN: 5, TOP2: 4.5, HIGH: 4, HIGH_BLK: 4, SAFE: 3, RTRN: 3, IN: 3, BLK: 3, LALA_R1: 3, LALA_R2: 3, LALA_R3: 3, LALA_R4: 3, LALA_R5: 3, LOW: 2, LOW_ROSCON_BTM2: 1, LOW_ROSCON_ELIM: 0, BTM: 1, CHOC: 1, DEPT: 0, OUT: 0, ELIM: 0 };
     return /^BTM\d+$/.test(token) ? 1 : points[token];
@@ -17215,13 +17429,58 @@ Options: ${names}`, "") || "";
     return color;
   }
 
-  function downloadCanvasPng(canvas, filename) {
+  function trackExportCanvasScale(width, height) {
+    const preferred = Math.max(2, Math.ceil(window.devicePixelRatio || 1));
+    const safeWidth = Math.max(1, Number(width || 1));
+    const safeHeight = Math.max(1, Number(height || 1));
+    const maxDimension = 16384;
+    const maxPixels = 90000000;
+    const dimensionLimit = Math.min(maxDimension / safeWidth, maxDimension / safeHeight);
+    const areaLimit = Math.sqrt(maxPixels / Math.max(1, safeWidth * safeHeight));
+    return Math.max(0.25, Math.min(preferred, dimensionLimit, areaLimit));
+  }
+
+  function canvasToPngBlob(canvas) {
+    return new Promise((resolve, reject) => {
+      if (!canvas?.toBlob) {
+        try {
+          const dataUrl = canvas.toDataURL("image/png");
+          const [header, data] = dataUrl.split(",");
+          const mime = header.match(/data:([^;]+)/)?.[1] || "image/png";
+          const bytes = atob(data || "");
+          const array = new Uint8Array(bytes.length);
+          for (let index = 0; index < bytes.length; index += 1) array[index] = bytes.charCodeAt(index);
+          resolve(new Blob([array], { type: mime }));
+        } catch (error) {
+          reject(error);
+        }
+        return;
+      }
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("The browser could not create the track-record image."));
+      }, "image/png");
+    });
+  }
+
+  async function downloadCanvasPng(canvas, filename) {
+    const blob = await canvasToPngBlob(canvas);
+    if (navigator.msSaveOrOpenBlob) {
+      navigator.msSaveOrOpenBlob(blob, filename);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.download = filename;
-    link.href = canvas.toDataURL("image/png");
+    link.href = objectUrl;
+    link.rel = "noopener";
+    link.style.display = "none";
     document.body.appendChild(link);
     link.click();
-    link.remove();
+    window.setTimeout(() => {
+      link.remove();
+      URL.revokeObjectURL(objectUrl);
+    }, 1500);
   }
 
   function splitTextToFit(ctx, text, maxWidth, maxLines = 3) {
@@ -17335,7 +17594,7 @@ Options: ${names}`, "") || "";
     const tableHeight = Math.max(1, Math.ceil(tableRect.height - spacing.vertical * (layout.rowCount + 1)));
     const titleHeight = 48;
     const height = tableHeight + titleHeight;
-    const scale = Math.max(2, Math.ceil(window.devicePixelRatio || 1));
+    const scale = trackExportCanvasScale(width, height);
     const canvas = document.createElement("canvas");
     canvas.width = width * scale;
     canvas.height = height * scale;
@@ -17421,7 +17680,7 @@ Options: ${names}`, "") || "";
       const firstY = y + (cellHeight - totalTextHeight) / 2 + lineHeight / 2;
       lines.forEach((line, index) => context.fillText(line, textX, firstY + index * lineHeight, Math.max(1, cellWidth - 10)));
     }
-    downloadCanvasPng(canvas, filename);
+    await downloadCanvasPng(canvas, filename);
   }
 
   async function downloadTrackRecordPng() {
@@ -17541,20 +17800,25 @@ Options: ${names}`, "") || "";
       const objectUrl = URL.createObjectURL(svgBlob);
       try {
         const output = await loadTrackExportImage(objectUrl);
-        const scale = Math.max(2, Math.ceil(window.devicePixelRatio || 1));
+        const scale = trackExportCanvasScale(width, height);
         const canvas = document.createElement("canvas");
         canvas.width = width * scale;
         canvas.height = height * scale;
         const context = canvas.getContext("2d");
         context.scale(scale, scale);
         context.drawImage(output, 0, 0, width, height);
-        downloadCanvasPng(canvas, filename);
+        await downloadCanvasPng(canvas, filename);
       } finally {
         URL.revokeObjectURL(objectUrl);
       }
     } catch (error) {
       console.warn("Styled Track Record export failed; using the measured table fallback.", error);
-      await downloadTrackRecordCanvasFallback(source, filename);
+      try {
+        await downloadTrackRecordCanvasFallback(source, filename);
+      } catch (fallbackError) {
+        console.error("Track Record export failed.", fallbackError);
+        alert("The track record could not be downloaded. Try closing other tabs or using a smaller browser zoom, then press Download again.");
+      }
     } finally {
       if (button) {
         button.disabled = false;
