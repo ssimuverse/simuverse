@@ -15198,3 +15198,164 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: #111 !important;
   border-color: #b47ab4 !important;
 }
+
+/* Golden Baguette + Golden Dam */
+.golden-baguette-badge {
+  color: #2b1800;
+  border-color: rgba(255, 209, 102, .82);
+  background: linear-gradient(135deg, #ffd166, #f5b942);
+  box-shadow: 0 0 16px rgba(255, 209, 102, .28);
+}
+
+.is-baguette-holder,
+.is-baguette-saved {
+  border-color: rgba(255, 209, 102, .92) !important;
+  box-shadow: inset 0 0 0 3px rgba(255, 209, 102, .52), 0 0 28px rgba(255, 209, 102, .32) !important;
+}
+
+.golden-baguette-intro-card,
+.golden-dam-intro-card {
+  width: min(900px, 100%);
+  margin: 0 auto 18px;
+}
+
+.baguette-holder-strip,
+.golden-baguette-bottom-three,
+.baguette-final-pair,
+.golden-dam-voters,
+.golden-dam-bottom-three,
+.golden-dam-final-pair,
+.baguette-donor-strip,
+.baguette-recipient-strip {
+  justify-content: center;
+}
+
+.golden-baguette-bottom-three,
+.golden-dam-bottom-three {
+  margin: 16px auto;
+}
+
+.golden-baguette-result-panel,
+.golden-dam-result-panel {
+  width: min(920px, 100%);
+  margin: 18px auto 0;
+  text-align: center;
+}
+
+.baguette-passing-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 18px;
+  width: min(900px, 100%);
+  margin: 0 auto 16px;
+}
+
+.baguette-flow-symbol {
+  color: var(--gold);
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 950;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255, 209, 102, .44);
+}
+
+.baguette-passing-card {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.golden-dam-group-block {
+  display: grid;
+  gap: 10px;
+  width: min(1080px, 100%);
+  margin: 16px auto;
+  padding: 16px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 22px;
+  background: rgba(255,255,255,.055);
+}
+
+.golden-dam-group-block > h4 {
+  margin: 0;
+  text-align: center;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.golden-dam-vote-grid {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.golden-dam-tally-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  width: min(900px, 100%);
+  margin: 20px auto;
+}
+
+.golden-dam-tally-card {
+  padding: 8px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  background: rgba(255,255,255,.06);
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.golden-dam-tally-card.is-dam-saved {
+  border-color: rgba(255, 209, 102, .86);
+  box-shadow: 0 0 26px rgba(255, 209, 102, .30);
+  transform: translateY(-2px);
+}
+
+.golden-dam-tally-card.is-dam-bottom {
+  border-color: rgba(255, 71, 126, .68);
+}
+
+.golden-dam-tie-copy {
+  color: var(--gold);
+  font-weight: 800 !important;
+}
+
+.golden-baguette-table-shell,
+.golden-dam-stats-table {
+  min-width: 860px;
+}
+
+.golden-baguette-stats-table td,
+.golden-baguette-stats-table th,
+.golden-dam-stats-table td,
+.golden-dam-stats-table th {
+  vertical-align: middle;
+}
+
+.baguette-stat-plus {
+  display: inline-block;
+  margin: 0 6px;
+  color: var(--gold);
+  font-weight: 950;
+}
+
+@media (max-width: 720px) {
+  .baguette-passing-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .baguette-flow-symbol {
+    transform: rotate(90deg);
+  }
+
+  .golden-dam-vote-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .golden-dam-vote-card .vote-arrow {
+    padding: 3px 0;
+  }
+}
