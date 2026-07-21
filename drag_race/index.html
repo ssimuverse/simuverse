@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=51" />
+  <link rel="stylesheet" href="style.css?v=52" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=51" defer></script>
+  <script src="simulator.js?v=52" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -73,6 +73,7 @@
                   <option value="legacy">Lip Sync For Your Legacy</option>
                   <option value="assassin">Lip Sync Assassin</option>
                   <option value="golden_beaver">Golden Beaver</option>
+                  <option value="golden_dam">Golden Dam</option>
                   <option value="all_winners">All Winners</option>
                   <option value="tournament">Tournament</option>
                   <option value="teams">Teams</option>
@@ -193,6 +194,7 @@
                   <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
                   <label class="toggle-row"><input type="checkbox" id="twistRosconReinas"><span>El Roscón de Reinas</span></label>
                   <label class="toggle-row"><input type="checkbox" id="twistHeartSuccessor"><span>Heart Successor</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="twistGoldenBaguette"><span>Golden Baguette</span></label>
                 </div>
               </section>
 
@@ -331,8 +333,10 @@
           <button class="section-toggle" data-step="ratequeen">Rate-A-Queen</button>
           <button class="section-toggle" data-step="placements">Placements</button>
           <button class="section-toggle" data-step="heartsuccessor">Heart Successor</button>
+          <button class="section-toggle" data-step="goldenbaguette">Golden Baguette</button>
           <button class="section-toggle" data-step="luckycow">Lucky Cow</button>
           <button class="section-toggle" data-step="goldenbeaver">Golden Beaver</button>
+          <button class="section-toggle" data-step="goldendam">Golden Dam</button>
           <button class="section-toggle" data-step="rumocracy">RuMocracy</button>
           <button class="section-toggle" data-step="lipsync">Lip Sync</button>
           <button class="section-toggle" data-step="qosdadhh">QoSDADHH</button>
@@ -345,6 +349,7 @@
           <button class="section-toggle" data-step="s17lsfylresults">Lip Sync for Your Life Results</button>
           <button class="section-toggle" data-step="untucked">Untucked</button>
           <button class="section-toggle" data-step="heartinheritance">Heart Inheritance</button>
+          <button class="section-toggle" data-step="baguettepassing">Baguette Passing</button>
           <button class="section-toggle" data-step="pointceremony">Point Ceremony</button>
           <button class="section-toggle" data-step="trackrecord">Track Record</button>
         </div>
@@ -507,6 +512,15 @@
             </div>
           </section>
 
+          <section class="episode-panel" data-panel="goldenbaguette">
+            <div class="section-title">Golden Baguette</div>
+            <div class="event-stack" id="goldenBaguetteStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
+              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
+            </div>
+          </section>
+
           <section class="episode-panel" data-panel="luckycow">
             <div class="section-title">Lucky Cow</div>
             <div class="event-stack" id="luckyCowStack"></div>
@@ -519,6 +533,15 @@
           <section class="episode-panel" data-panel="goldenbeaver">
             <div class="section-title">Golden Beaver</div>
             <div class="event-stack" id="goldenBeaverStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
+              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="goldendam">
+            <div class="section-title">Golden Dam</div>
+            <div class="event-stack" id="goldenDamStack"></div>
             <div class="proceed-row dual">
               <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
               <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
@@ -645,6 +668,15 @@
             </div>
           </section>
 
+          <section class="episode-panel" data-panel="baguettepassing">
+            <div class="section-title">Baguette Passing</div>
+            <div class="event-stack" id="baguettePassingStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
+              <button class="primary-btn proceed-btn" data-next="trackrecord">Proceed</button>
+            </div>
+          </section>
+
           <section class="episode-panel" data-panel="pointceremony">
             <div class="section-title">Point Ceremony</div>
             <div class="event-stack" id="pointCeremonyStack"></div>
@@ -691,6 +723,7 @@
           <button class="stats-tab" data-tab="edgic">EDGIC</button>
           <button class="stats-tab" data-tab="voting">Voting</button>
           <button class="stats-tab" data-tab="heartsuccessor">Heart Successor</button>
+          <button class="stats-tab" data-tab="goldenbaguette">Golden Baguette</button>
           <button class="stats-tab" data-tab="storylines">Storylines</button>
           <button class="stats-tab" data-tab="highlights">Highlights</button>
         </div>
@@ -768,6 +801,12 @@
         <section class="stats-panel" data-tab-panel="heartsuccessor">
           <div class="panel stats-card">
             <div class="table-wrap" id="heartSuccessorStatsWrap"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" data-tab-panel="goldenbaguette">
+          <div class="panel stats-card">
+            <div class="table-wrap" id="goldenBaguetteStatsWrap"></div>
           </div>
         </section>
 
