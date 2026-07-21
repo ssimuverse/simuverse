@@ -15184,3 +15184,17 @@ details.advanced-settings[open] > .advanced-settings-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
+
+
+/* Medical departures retain their own placement color, even when they also use elimination styling. */
+.token-dept,
+.placement-card.token-dept,
+.track-table .track-cell.token-dept,
+.track-table .token-dept,
+.legend-key.token-dept,
+#trackLegend .track-legend-card.token-dept {
+  background: #dda0dd !important;
+  background-image: none !important;
+  color: #111 !important;
+  border-color: #b47ab4 !important;
+}
