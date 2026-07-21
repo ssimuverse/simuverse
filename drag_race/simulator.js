@@ -2705,6 +2705,7 @@
       activeIds: castOrder.slice(),
       eliminatedIds: [],
       returningIds: [],
+      pendingReturnPlacementIds: [],
       episodes: [],
       usedChallengeTypes: [],
       usedChallengeIds: [],
@@ -5553,7 +5554,14 @@ Options: ${names}`, "") || "";
       if(season.rupaulPremiereIndex>=episode.rupaulPremiereTotal){
         season.rupaulPremiereComplete=true;
         if (season.config.premiereType === "split_s14" && (season.rupaulS14PremiereElims || []).length) {
-          season.rupaulS14PremiereElims.forEach((id) => { reviveContestant(season, id); addReturnEpisodeNote(season, id, "Split Premiere Return"); });
+          const returningIds = [...new Set(season.rupaulS14PremiereElims.filter(Boolean))];
+          returningIds.forEach((id) => {
+            reviveContestant(season, id);
+            if (season.stats[id]) season.stats[id].popularity = clamp(Number(season.stats[id].popularity || 50) + 3, 0, 100);
+          });
+          season.pendingReturnPlacementIds = [...new Set([...(season.pendingReturnPlacementIds || []), ...returningIds])];
+          season.notes = season.notes || [];
+          if (returningIds.length) season.notes.push(`${sentenceList(returningIds, season, false)} ${returningIds.length === 1 ? "returns" : "return"} after the split premiere and will receive an RTRN+ placement in Episode 3.`);
         }
       }
     }
@@ -6029,6 +6037,7 @@ Options: ${names}`, "") || "";
       mergedIds:[...new Set(old.mergedIds||[])],
       eliminatedBeforeMerge:[...new Set(old.eliminatedBeforeMerge||[])],
       preMergeWildcardDone:!!old.preMergeWildcardDone,
+      pendingPreMergeWildcard: old.pendingPreMergeWildcard ? clone(old.pendingPreMergeWildcard) : null,
       mergeEpisodeIndex:Number(old.mergeEpisodeIndex||0),
       preFinaleWildcardDone:!!old.preFinaleWildcardDone,
       finalePrepared:!!old.finalePrepared,
@@ -6064,13 +6073,9 @@ Options: ${names}`, "") || "";
       flow.preMergeWildcardDone=true;flow.phase="merge";
       if(returnedId&&!flow.mergedIds.includes(returnedId))flow.mergedIds.push(returnedId);
       season.activeIds=flow.mergedIds.filter((id)=>!season.eliminatedIds.includes(id));
-      const episode=createEpisodeShell(season,{type:"tournament_wildcard",title:"Pre-Merge Wildcard Lottery",label:`Episode ${season.episodeCounter}`,noMiniChallenge:true,noGuestJudge:true});
-      episode.challenge=null;episode.runway=null;episode.activeStartIds=season.activeIds.slice();episode.eliminatedStartIds=season.eliminatedIds.slice();
-      episode.tournamentWildcard=entry;episode.returnedIds=[returnedId].filter(Boolean);episode.rupaulPending=false;episode.rupaulFinalized=true;episode.rupaulResultsConfirmed=true;
-      episode.resultText=returnedId?`${fullDisplayName(season.contestants[returnedId])} wins the Wildcard Lottery and returns to the competition.`:"The Wildcard Lottery is complete.";
-      season.episodes.push(episode);season.episodeCounter+=1;
-      state.currentEpisodeIndex=season.episodes.length-1;state.currentStep="wildcard";saveState();renderEpisodeSelect();renderEpisode();showScreen("episode-screen");
-      return episode;
+      flow.pendingPreMergeWildcard=clone(entry);
+      saveState();
+      return prepareNextRupaulTournamentEpisode(season);
     }
     const candidates=tournamentWildcardCandidates(season,fullPool);
     return prepareRupaulSpecialSmackdown(season,`tournament_${stage}_wildcard`,{mode:`tournament_${stage}_wildcard`,ids:candidates,name:"Pre-Finale Wildcard"});
@@ -6148,7 +6153,17 @@ Options: ${names}`, "") || "";
     if(flow.phase==="merge"){
       const count=Math.max(1,Number(season.config.tournamentMergeEpisodes||2));
       if(flow.mergeEpisodeIndex>=count||season.activeIds.length<=4){flow.phase="pre_finale";saveState();return prepareNextRupaulTournamentEpisode(season);}
-      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,title:`Merge Episode ${flow.mergeEpisodeIndex+1}`,competingIds:season.activeIds.slice(),rupaulTournamentMergeEpisode:true});
+      const pendingWildcard=flow.mergeEpisodeIndex===0&&flow.pendingPreMergeWildcard?clone(flow.pendingPreMergeWildcard):null;
+      const wildcardReturnId=pendingWildcard?.returnedId||null;
+      const episode=createRupaulDraftEpisode(season,{label:`Episode ${season.episodeCounter}`,title:`Merge Episode ${flow.mergeEpisodeIndex+1}`,competingIds:season.activeIds.slice(),returnedIds:[wildcardReturnId].filter(Boolean),tournamentWildcard:pendingWildcard,rupaulTournamentMergeEpisode:true});
+      if(pendingWildcard){
+        episode.tournamentWildcard=pendingWildcard;
+        episode.returnedIds=[...new Set([...(episode.returnedIds||[]),...([wildcardReturnId].filter(Boolean))])];
+        episode.comebackParticipantIds=(pendingWildcard.candidates||[]).slice();
+        episode.comebackPlacements=Object.fromEntries((pendingWildcard.candidates||[]).map((id)=>[id,id===wildcardReturnId?"RTRN":"OUT"]));
+        flow.pendingPreMergeWildcard=null;
+        saveState();
+      }
       await initializeRupaulDraftChallenge(season,episode);return;
     }
     if(flow.phase==="pre_finale"){
@@ -7701,8 +7716,7 @@ Options: ${names}`, "") || "";
     const mergeEpisodes = Number(season.config.tournamentMergeEpisodes || 2);
     for (let i = 0; i < mergeEpisodes && season.activeIds.length > 4; i += 1) {
       const forcedChallengeType = i === 0 ? "snatch_game" : (i === mergeEpisodes - 1 ? "talent_show" : "");
-      simulateRegularEpisode(season, { forcedChallengeType });
-      if (i === 0 && preMergeWildcard && season.episodes.at(-1)) season.episodes.at(-1).tournamentWildcard = preMergeWildcard;
+      simulateRegularEpisode(season, { forcedChallengeType, tournamentWildcard: i === 0 ? preMergeWildcard : null });
       if (season.episodes.length > 60) break;
     }
     const preFinaleWildcard = season.config.tournamentPreFinaleWildcard ? runTournamentWildcard(season, "pre_finale", season.eliminatedIds.slice()) : null;
@@ -7837,7 +7851,8 @@ Options: ${names}`, "") || "";
 
   function runTournamentPointCeremony(season, episode, bracketIds) {
     if (episode.pointCeremony) return episode.pointCeremony;
-    const voters = (episode.safeIds || []).slice();
+    const topTwo = new Set(episode.top2Ids || []);
+    const voters = [...new Set((bracketIds || []).filter((id) => !topTwo.has(id)))];
     const eligible = bracketIds.slice();
     const votes = voters.map((voterId) => {
       const choices = eligible.filter((id) => id !== voterId);
@@ -8188,7 +8203,12 @@ Options: ${names}`, "") || "";
     season.activeIds.push(...ids);
     season.eliminatedIds = season.eliminatedIds.filter((id) => !ids.includes(id));
     season.returningIds = [];
-    ids.forEach((id) => season.stats[id].track.push({ label: `Episode ${season.episodeCounter}`, token: "RTRN" }));
+    return ids;
+  }
+
+  function consumePendingReturnPlacements(season) {
+    const ids = [...new Set((season.pendingReturnPlacementIds || []).filter((id) => season.activeIds.includes(id)))];
+    season.pendingReturnPlacementIds = [];
     return ids;
   }
 
@@ -8221,7 +8241,7 @@ Options: ${names}`, "") || "";
       noGuestJudge: !!options.noGuestJudge,
       activeStartIds: season.activeIds.slice(),
       eliminatedStartIds: season.eliminatedIds.slice(),
-      returnedIds: [...maybeReturnS14Queens(season), ...consumeTournamentPendingReturns(season), ...(Array.isArray(options.returnedIds) ? options.returnedIds : [])].filter(Boolean),
+      returnedIds: [...maybeReturnS14Queens(season), ...consumePendingReturnPlacements(season), ...consumeTournamentPendingReturns(season), ...(Array.isArray(options.returnedIds) ? options.returnedIds : [])].filter(Boolean),
       comeback: options.comeback || null,
       readingComeback: options.readingComeback || null,
       comebackParticipantIds: Array.isArray(options.comebackParticipantIds) ? options.comebackParticipantIds.slice() : [],
@@ -8294,6 +8314,7 @@ Options: ${names}`, "") || "";
       immunityProtectedIds: [],
       edgic: {},
       pointCeremony: null,
+      tournamentWildcard: options.tournamentWildcard ? clone(options.tournamentWildcard) : null,
       tournamentAdvancingIds: [],
       tournamentEliminatedIds: [],
       pointCeremonyFinal: false,
@@ -11164,9 +11185,36 @@ Options: ${names}`, "") || "";
     return season.activeIds.length > midpoint;
   }
 
+  function hasCompetitiveEpisodePlacement(episode, id) {
+    return [
+      episode.winnerIds,
+      episode.top2Ids,
+      episode.highIds,
+      episode.safeIds,
+      episode.lowIds,
+      episode.bottomIds,
+      episode.eliminatedIds,
+      episode.savedIds,
+      episode.runOnlyIds
+    ].some((ids) => Array.isArray(ids) && ids.includes(id));
+  }
+
+  function returneeCompetedForRegularPlacement(episode, id) {
+    if (!(episode.returnedIds || []).includes(id) || !hasCompetitiveEpisodePlacement(episode, id)) return false;
+    const format = episode.comeback?.format || episode.readingComeback?.format || "";
+    if (DIRECT_COMEBACK_FORMATS.has(format) || episode.rupaulDirectComeback) return true;
+    if (episode.tournamentWildcard?.returnedId === id) return true;
+    if (state.season?.config?.premiereType === "split_s14" && Number(episode.number || 0) === 3) return true;
+    return false;
+  }
+
   function placementTokenFor(episode, id) {
     if (episode.unplannedExit?.id === id) return episode.unplannedExit.token;
-    if (episode.comebackPlacements && Object.prototype.hasOwnProperty.call(episode.comebackPlacements, id)) return episode.comebackPlacements[id];
+    if (episode.comebackPlacements && Object.prototype.hasOwnProperty.call(episode.comebackPlacements, id)) {
+      const comebackToken = episode.comebackPlacements[id];
+      const markerShouldYieldToPlacement = comebackToken === "RTRN" && returneeCompetedForRegularPlacement(episode, id);
+      if (!markerShouldYieldToPlacement) return comebackToken;
+    }
     if (episode.type === "porkchop_premiere") {
       const pork = episode.porkchopPremiere || {};
       if (pork.choppedId === id) return "PCHOP";
@@ -11786,7 +11834,7 @@ Options: ${names}`, "") || "";
       if ((episode.kittyGreenOutIds || []).includes(id)) extraClasses.push("kitty-green-out");
       if ((episode.revengeGreenOutIds || []).includes(id)) extraClasses.push("revenge-green-out");
       if ((episode.revengeActiveWinnerIds || []).includes(id) && token === "WIN") extraClasses.push("revenge-active-win");
-      if (!suppressReturnPrefix && (episode.returnedIds || []).includes(id) && !["RTRN", "IN", "OUT", "RUN"].includes(token) && (token !== "ELIM" || ["random_return", "choose_return", "other_queens_choose", "reading_is_fundamental"].includes(comebackFormatForTrack))) display = `RTRN+<br/>${display}`;
+      if (!suppressReturnPrefix && returneeCompetedForRegularPlacement(episode, id) && !["RTRN", "IN", "OUT", "RUN"].includes(token)) display = `RTRN+<br/>${display}`;
       stats.track.push({ label: episode.label, token, display, extraClasses, eliminated: isUnplannedExitToken(token) || token === "LOW_ROSCON_ELIM" });
 
       if (token === "WIN_QUIT") stats.wins += 1;
@@ -15755,6 +15803,7 @@ Options: ${names}`, "") || "";
     }
     if (ep.tournamentBracketId) {
       cards.push(groupBlock("Top Two", ep.top2Ids || [], state.season, { className: "placement-group token-top2", subtitle: `${sentenceList(ep.top2Ids || [], state.season, false)}, you are the top two of the bracket.` }));
+      cards.push(groupBlock("High", ep.highIds || [], state.season, { className: "placement-group token-high", subtitle: `${sentenceList(ep.highIds || [], state.season, false)}, you are high and will vote in the Point Ceremony.` }));
       cards.push(groupBlock("Safe", ep.safeIds || [], state.season, { className: "placement-group token-safe", subtitle: `${sentenceList(ep.safeIds || [], state.season, false)}, you are safe and will vote in the Point Ceremony.` }));
       els.placementsGrid.innerHTML = cards.filter(Boolean).join("") || `<span class="empty-state">No placements to display.</span>`;
       if (els.bottomTwoBox) els.bottomTwoBox.innerHTML = "";
@@ -16708,7 +16757,7 @@ Options: ${names}`, "") || "";
     const advancing = ep.tournamentAdvancingIds || [];
     const eliminated = ep.tournamentEliminatedIds || [];
     els.pointCeremonyStack.innerHTML = `
-      <article class="challenge-card point-ceremony-intro"><h3>Point Ceremony</h3><p>The safe contestants award one MVQ point each.</p></article>
+      <article class="challenge-card point-ceremony-intro"><h3>Point Ceremony</h3><p>Every contestant outside the Top Two awards one MVQ point.</p></article>
       <div class="mx-vote-grid point-ceremony-vote-grid">
         ${votes.map((vote) => `<article class="mx-vote-card point-ceremony-vote">${contestantCard(vote.voterId)}<span class="vote-arrow">gave 1 point to</span>${contestantCard(vote.receiverId)}</article>`).join("")}
       </div>
@@ -16819,7 +16868,7 @@ Options: ${names}`, "") || "";
       famegames: false,
       maxi: !!ep.challenge,
       runway: !!ep.runway && !ep.runwayUsesChallengeScore && !["design", "runway", "ball", "makeover"].includes(normalizeString(ep.challenge?.type)),
-      judging: !!ep.challenge && !ep.hideJudging && !!(ep.safeIds || []).length,
+      judging: !!ep.challenge && !ep.hideJudging,
       ratequeen: !!(ep.rateAQueenBallots || []).length,
       goldenbeaver: !!(isGoldenBeaverFormat(state.season) && seasonEliminationFormatApplies(state.season, ep) && ep.goldenBeaverBottomIds?.length),
       placements: !!ep.challenge,
@@ -16934,6 +16983,8 @@ Options: ${names}`, "") || "";
     });
     const current = visible.wildcard && state.currentStep === "status" && !ep.tournamentWildcard?.revealed ? "wildcard" : (visible[state.currentStep] ? state.currentStep : nextVisibleStep("wildcard", 1, visible) || "status");
     state.currentStep = current;
+    $all(".section-toggle").forEach((btn) => btn.classList.toggle("is-active", btn.dataset.step === current));
+    $all(".episode-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === current));
     updateProceedTargets(visible);
     if (els.allWinnersFinalStatsBtn) {
       const fromWinner = nextVisibleStep("winner", 1, visible);
