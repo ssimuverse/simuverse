@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=53" />
+  <link rel="stylesheet" href="style.css?v=58" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=53" defer></script>
+  <script src="simulator.js?v=58" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -205,6 +205,7 @@
                 </div>
                 <div class="check-grid compact-check-grid special-challenge-grid">
                   <label class="toggle-row"><input type="checkbox" id="specialLalaparuzaSmackdown"><span>LaLaPaRuZa Smackdown</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="specialNonElimLalaparuza"><span>Non-Elimination LaLaPaRuZa</span></label>
                   <label class="toggle-row"><input type="checkbox" id="specialSlayOffs"><span>Slay-Offs</span></label>
                   <label class="toggle-row"><input type="checkbox" id="specialReunionLalaparuza"><span>Reunion LaLaPaRuZa</span></label>
                   <label class="toggle-row"><input type="checkbox" id="specialMidSeasonRateAQueen"><span>Mid-Season Rate-A-Queen</span></label>
@@ -265,7 +266,6 @@
                 <div class="dropdown-checklist" id="seasonFilter" data-placeholder="All Seasons"></div>
               </div>
 
-
               <label class="field compact search-field">
                 <span>Search</span>
                 <input type="text" id="searchFilter" placeholder="Search a queen...">
@@ -313,7 +313,6 @@
             <button class="primary-btn" id="toStatsBtn" type="button">Statistics</button>
           </div>
         </div>
-
 
         <div class="section-toggle-row">
           <button class="section-toggle" data-step="wildcard">Wildcard Lottery</button>
@@ -381,7 +380,6 @@
               <button class="primary-btn proceed-btn" data-next="heartinheritance">Proceed</button>
             </div>
           </section>
-
 
           <section class="episode-panel" data-panel="comeback">
             <div class="section-title">Comeback</div>
