@@ -237,6 +237,7 @@ h1 {
 
 .main-action-btn {
   display: inline-flex;
+  cursor: pointer;
   align-items: center;
   justify-content: center;
   min-height: 42px;
@@ -712,6 +713,261 @@ h1 {
     visibility 0s linear 0s;
 }
 
+
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.community-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 70;
+  width: min(920px, calc(100% - 84px));
+  max-height: calc(100vh - 144px);
+  min-height: 440px;
+  overflow: hidden auto;
+  isolation: isolate;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(var(--accent-rgb), 0.36);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035)),
+    rgba(12, 12, 24, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 38px 110px rgba(0, 0, 0, 0.54),
+    0 0 54px rgba(var(--accent-rgb), 0.16);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, calc(-50% + 22px)) scale(0.975);
+  transition:
+    opacity 0.24s ease,
+    visibility 0s linear 0.24s,
+    transform 0.42s cubic-bezier(.2, .9, .2, 1);
+}
+
+.community-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -4;
+  background:
+    radial-gradient(circle at 14% 8%, rgba(var(--accent-rgb), 0.24), transparent 38%),
+    radial-gradient(circle at 92% 90%, rgba(var(--accent-rgb), 0.12), transparent 42%);
+  pointer-events: none;
+}
+
+.community-modal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  border-radius: inherit;
+  border: 1px solid rgba(var(--accent-rgb), 0.16);
+  box-shadow: inset 0 0 34px rgba(var(--accent-rgb), 0.06);
+  pointer-events: none;
+}
+
+.community-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    opacity 0.24s ease,
+    visibility 0s linear 0s,
+    transform 0.42s cubic-bezier(.2, .9, .2, 1);
+}
+
+.community-modal .box-light {
+  opacity: 0.76;
+  filter: blur(36px);
+}
+
+.community-modal .light-one {
+  width: 260px;
+  height: 260px;
+}
+
+.community-modal .light-two {
+  width: 300px;
+  height: 300px;
+}
+
+.community-modal-content {
+  position: relative;
+  z-index: 12;
+  min-height: 440px;
+  padding: 48px;
+  display: grid;
+  align-content: center;
+  gap: 32px;
+}
+
+.community-modal-copy {
+  max-width: 650px;
+}
+
+.community-modal-kicker {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.community-modal-copy h2 {
+  margin: 0;
+  color: #ff1493;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 4.8rem);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  text-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(var(--accent-rgb), 0.34);
+}
+
+.community-modal-copy > p:last-child {
+  margin: 16px 0 0;
+  max-width: 580px;
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.62;
+}
+
+.community-season-panel {
+  padding: 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(7, 7, 17, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 42px rgba(0, 0, 0, 0.24);
+}
+
+.community-season-list-head {
+  padding: 0 4px 13px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: rgba(248, 244, 255, 0.54);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.community-season-list {
+  display: grid;
+  gap: 10px;
+}
+
+.community-season-item {
+  min-height: 86px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  border-radius: 17px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
+    rgba(12, 12, 24, 0.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 12px 26px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.community-season-item:hover,
+.community-season-item:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(var(--accent-rgb), 0.46);
+  background:
+    linear-gradient(180deg, rgba(var(--accent-rgb), 0.2), rgba(var(--accent-deep-rgb), 0.17)),
+    rgba(12, 12, 24, 0.78);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 16px 34px rgba(0, 0, 0, 0.28),
+    0 0 28px rgba(var(--accent-rgb), 0.14);
+  outline: none;
+}
+
+.community-season-number {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  color: #fff;
+  border: 1px solid rgba(var(--accent-rgb), 0.38);
+  background:
+    radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.25), transparent 34%),
+    linear-gradient(145deg, rgba(var(--accent-rgb), 0.7), rgba(var(--accent-deep-rgb), 0.72));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 24px rgba(var(--accent-rgb), 0.2);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.community-season-details {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.community-season-details strong {
+  overflow: hidden;
+  color: #fff;
+  font-size: 0.96rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.community-season-details > span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.community-season-arrow {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 1rem;
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.community-season-item:hover .community-season-arrow,
+.community-season-item:focus-visible .community-season-arrow {
+  transform: translateX(3px);
+  background: rgba(var(--accent-rgb), 0.24);
+}
+
+
 @media (max-width: 980px) {
   .main-page {
     width: min(100% - 28px, 1120px);
@@ -723,6 +979,22 @@ h1 {
 }
 
 @media (max-width: 760px) {
+  .community-modal {
+    width: calc(100% - 36px);
+    max-height: calc(100vh - 68px);
+    min-height: 0;
+  }
+
+  .community-modal-content {
+    min-height: 0;
+    padding: 54px 26px 28px;
+    gap: 26px;
+  }
+
+  .community-modal-copy h2 {
+    font-size: clamp(2.5rem, 13vw, 4rem);
+  }
+
   .main-page {
     width: min(100% - 22px, 1120px);
     padding-top: 22px;
@@ -799,6 +1071,51 @@ h1 {
 }
 
 @media (max-width: 480px) {
+  .community-modal {
+    width: calc(100% - 24px);
+    max-height: calc(100vh - 42px);
+  }
+
+  .community-modal-content {
+    padding: 52px 18px 20px;
+    gap: 22px;
+  }
+
+  .community-season-panel {
+    padding: 12px;
+  }
+
+  .community-season-list-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .community-season-item {
+    min-height: 78px;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .community-season-number {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .community-season-details strong {
+    font-size: 0.86rem;
+  }
+
+  .community-season-details > span {
+    font-size: 0.72rem;
+  }
+
+  .community-season-arrow {
+    width: 30px;
+    height: 30px;
+  }
+
   body::before {
     background-size: auto, 58px 58px, 58px 58px;
   }
@@ -860,5 +1177,148 @@ h1 {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Compact THE CROWN community archive */
+.community-modal {
+  width: min(620px, calc(100% - 48px));
+  max-height: calc(100vh - 80px);
+  min-height: 0;
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)),
+    rgba(12, 12, 24, 0.96);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.13),
+    0 30px 90px rgba(0, 0, 0, 0.52),
+    0 0 44px rgba(var(--accent-rgb), 0.14);
+}
+
+.community-modal::before {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(var(--accent-rgb), 0.25), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(var(--accent-rgb), 0.1), transparent 44%);
+}
+
+.community-modal .box-light {
+  opacity: 0.54;
+  filter: blur(34px);
+}
+
+.community-modal .light-one {
+  width: 190px;
+  height: 190px;
+}
+
+.community-modal .light-two {
+  width: 220px;
+  height: 220px;
+}
+
+.community-modal-content {
+  min-height: 0;
+  padding: 30px;
+  align-content: initial;
+  gap: 22px;
+}
+
+.community-modal-copy {
+  max-width: none;
+  padding: 2px 48px 0 2px;
+}
+
+.community-modal-copy h2 {
+  font-size: clamp(2.35rem, 8vw, 4.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.065em;
+}
+
+.community-season-panel {
+  padding: 14px;
+  border-radius: 18px;
+}
+
+.community-season-list-head {
+  padding: 0 3px 10px;
+  display: block;
+  color: rgba(248, 244, 255, 0.5);
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+}
+
+.community-season-list {
+  gap: 8px;
+}
+
+.community-season-item {
+  min-height: 68px;
+  padding: 11px 13px;
+  gap: 13px;
+  border-radius: 14px;
+}
+
+.community-season-number {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+}
+
+.community-season-details {
+  display: block;
+}
+
+.community-season-details strong {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.community-season-arrow {
+  width: 30px;
+  height: 30px;
+}
+
+@media (max-width: 680px) {
+  .community-modal {
+    width: min(520px, calc(100% - 28px));
+    max-height: calc(100vh - 36px);
+    min-height: 0;
+    border-radius: 20px;
+  }
+
+  .community-modal-content {
+    min-height: 0;
+    padding: 24px;
+    gap: 18px;
+  }
+
+  .community-modal-copy {
+    padding-right: 42px;
+  }
+
+  .community-modal-copy h2 {
+    font-size: clamp(2.2rem, 14vw, 3.4rem);
+  }
+
+  .community-season-panel {
+    padding: 11px;
+    border-radius: 16px;
+  }
+
+  .community-season-item {
+    min-height: 62px;
+    padding: 9px 10px;
+    gap: 10px;
+  }
+
+  .community-season-number {
+    width: 38px;
+    height: 38px;
+  }
+
+  .community-season-details strong {
+    font-size: 0.82rem;
   }
 }
