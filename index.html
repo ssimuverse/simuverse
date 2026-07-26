@@ -17,6 +17,45 @@
 
   <div class="page-overlay" id="pageOverlay"></div>
 
+  <section
+    class="community-modal"
+    id="communitySeasonsModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="communitySeasonsTitle"
+    aria-hidden="true"
+    style="--accent-rgb: 214, 42, 119; --accent-deep-rgb: 122, 12, 69; --light-a-dur: 7s; --light-b-dur: 8.6s; --light-a-delay: 0s; --light-b-delay: -1s;"
+  >
+    <div class="card-bg" aria-hidden="true"></div>
+    <div class="box-lights" aria-hidden="true">
+      <span class="box-light light-one"></span>
+      <span class="box-light light-two"></span>
+      <span class="box-light light-three"></span>
+    </div>
+
+    <button class="close-btn community-modal-close" type="button" aria-label="Close Community Seasons">×</button>
+
+    <div class="community-modal-content">
+      <div class="community-modal-copy">
+        <h2 id="communitySeasonsTitle">THE CROWN</h2>
+      </div>
+
+      <div class="community-season-panel">
+        <div class="community-season-list-head">AVAILABLE SEASONS</div>
+
+        <div class="community-season-list">
+          <a class="community-season-item" href="drag_race/sdr-01.html">
+            <span class="community-season-number">01</span>
+            <span class="community-season-details">
+              <strong>Simuverse's Drag Race: Season 01</strong>
+            </span>
+            <span class="community-season-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <main class="main-page">
     <header class="main-header">
       <div class="brand-row" aria-label="SIMUVERSE home">
@@ -30,6 +69,14 @@
 
         <nav class="main-actions" aria-label="SIMUVERSE links">
           <a class="main-action-btn" href="https://discord.gg/U6E6BJ2hsV">DISCORD</a>
+          <button
+            class="main-action-btn"
+            id="communitySeasonsBtn"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="communitySeasonsModal"
+            aria-expanded="false"
+          >COMMUNITY SEASONS</button>
           <a class="main-action-btn" href="https://forms.gle/TvVrg3ENdn3gE9Cg6">SUGGESTIONS</a>
         </nav>
       </div>
@@ -64,6 +111,9 @@
 
     const showsGrid = document.getElementById("showsGrid");
     const pageOverlay = document.getElementById("pageOverlay");
+    const communitySeasonsBtn = document.getElementById("communitySeasonsBtn");
+    const communitySeasonsModal = document.getElementById("communitySeasonsModal");
+    const communityModalClose = communitySeasonsModal.querySelector(".community-modal-close");
 
     function buildCard(show, index) {
       const aDur = 7 + (index % 4) * 0.7;
@@ -133,6 +183,7 @@
     let activeCard = null;
     let activePlaceholder = null;
     let isAnimating = false;
+    let communityModalOpen = false;
 
     function getPopupRect() {
       const isSmall = window.innerWidth <= 680;
@@ -259,6 +310,34 @@
       }, 450);
     }
 
+    function openCommunityModal() {
+      if (isAnimating || activeCard || communityModalOpen) return;
+
+      communityModalOpen = true;
+      communitySeasonsBtn.setAttribute("aria-expanded", "true");
+      communitySeasonsModal.setAttribute("aria-hidden", "false");
+      pageOverlay.classList.add("is-active");
+      communitySeasonsModal.classList.add("is-active");
+      document.body.classList.add("modal-open");
+
+      window.setTimeout(() => communityModalClose.focus(), 180);
+    }
+
+    function closeCommunityModal() {
+      if (!communityModalOpen) return;
+
+      communityModalOpen = false;
+      communitySeasonsBtn.setAttribute("aria-expanded", "false");
+      communitySeasonsModal.setAttribute("aria-hidden", "true");
+      pageOverlay.classList.remove("is-active");
+      communitySeasonsModal.classList.remove("is-active");
+      document.body.classList.remove("modal-open");
+      communitySeasonsBtn.focus();
+    }
+
+    communitySeasonsBtn.addEventListener("click", openCommunityModal);
+    communityModalClose.addEventListener("click", closeCommunityModal);
+
     cards.forEach(card => {
       setExpandedState(card, false);
 
@@ -294,10 +373,24 @@
       });
     });
 
-    pageOverlay.addEventListener("click", () => closeCard());
+    pageOverlay.addEventListener("click", () => {
+      if (communityModalOpen) {
+        closeCommunityModal();
+        return;
+      }
+
+      closeCard();
+    });
 
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeCard();
+      if (event.key !== "Escape") return;
+
+      if (communityModalOpen) {
+        closeCommunityModal();
+        return;
+      }
+
+      closeCard();
     });
 
     window.addEventListener("resize", () => {
