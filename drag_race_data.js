@@ -1442,7 +1442,7 @@ window.QUEENS = [
   fullName: "Elliott with 2 Ts",
   nickname: "Elliott",
   image: "images/elliott_with_2_ts.webp",
-  skills: { acting: 5, comedy: 5, dance: 12, design: 9, improv: 3, runway: 8, lipsync: 11 },
+  skills: { acting: 5, comedy: 5, dance: 9, design: 7, improv: 3, runway: 6, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
   seasonsByShow: { "RuPaul's Drag Race": [13] }
 },
@@ -3425,7 +3425,7 @@ window.QUEENS = [
     fullName: "Tiffany Ann Co.",
     nickname: "Tiffany",
     image: "images/tiffany_ann_co.webp",
-    skills: { acting: 6, comedy: 6, dance: 13, design: 8, improv: 5, runway: 10, lipsync: 12 },
+    skills: { acting: 5, comedy: 5, dance: 11, design: 7, improv: 5, runway: 8, lipsync: 9 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
   },
