@@ -678,7 +678,7 @@ window.QUEENS = [
   fullName: "Vivacious",
   nickname: "Vivacious",
   image: "images/vivacious.webp",
-  skills: { acting: 4, comedy: 5, dance: 5, design: 4, improv: 4, runway: 7, lipsync: 7 },
+  skills: { acting: 6, comedy: 7, dance: 9, design: 4, improv: 4, runway: 8, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
   seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [11] }
 },
@@ -1333,7 +1333,7 @@ window.QUEENS = [
   fullName: "Crystal Methyd",
   nickname: "Crystal",
   image: "images/crystal_methyd.webp",
-  skills: { acting: 6, comedy: 8, dance: 8, design: 9, improv: 8, runway: 12, lipsync: 6 },
+  skills: { acting: 9, comedy: 11, dance: 8, design: 9, improv: 9, runway: 12, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
   seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [11] }
 },
@@ -1460,7 +1460,7 @@ window.QUEENS = [
   fullName: "Joey Jay",
   nickname: "Joey",
   image: "images/joey_jay.webp",
-  skills: { acting: 6, comedy: 7, dance: 6, design: 5, improv: 5, runway: 7, lipsync: 7 },
+  skills: { acting: 8, comedy: 10, dance: 10, design: 7, improv: 11, runway: 11, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
   seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [11] }
 },
@@ -1569,7 +1569,7 @@ window.QUEENS = [
   fullName: "Bosco",
   nickname: "Bosco",
   image: "images/bosco.webp",
-  skills: { acting: 11, comedy: 11, dance: 9, design: 7, improv: 12, runway: 13, lipsync: 8 },
+  skills: { acting: 11, comedy: 11, dance: 10, design: 9, improv: 12, runway: 13, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
   seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
 },
@@ -1786,7 +1786,7 @@ window.QUEENS = [
   fullName: "Salina EsTitties",
   nickname: "Salina",
   image: "images/salina_estitties.webp",
-  skills: { acting: 9, comedy: 9, dance: 9, design: 5, improv: 7, runway: 7, lipsync: 11 },
+  skills: { acting: 9, comedy: 10, dance: 9, design: 6, improv: 7, runway: 9, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
   seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [11] }
 },
@@ -2131,7 +2131,7 @@ window.QUEENS = [
     fullName: "Jane Don't",
     nickname: "Jane",
     image: "images/jane_dont.webp",
-    skills: { acting: 12, comedy: 11, dance: 7, design: 13, improv: 12, runway: 12, lipsync: 7 },
+    skills: { acting: 12, comedy: 11, dance: 8, design: 13, improv: 12, runway: 12, lipsync: 7 },
     shows: ["RuPaul's Drag Race"],
     seasonsByShow: { "RuPaul's Drag Race": [18] }
   },
@@ -3380,7 +3380,7 @@ window.QUEENS = [
     fullName: "Makayla Couture",
     nickname: "Makayla",
     image: "images/makayla_couture.webp",
-    skills: { acting: 6, comedy: 5, dance: 13, design: 6, improv: 5, runway: 12, lipsync: 14 },
+    skills: { acting: 7, comedy: 7, dance: 13, design: 6, improv: 6, runway: 12, lipsync: 14 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
   },
