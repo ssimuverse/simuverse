@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=58" />
+  <link rel="stylesheet" href="style.css?v=72" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=58" defer></script>
+  <script src="simulator.js?v=72" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -213,6 +213,22 @@
                 </div>
               </section>
 
+              <section class="advanced-group advanced-group-wide finale-awards-settings">
+                <div class="advanced-group-head">
+                  <p class="eyebrow">Finale</p>
+                  <h3>Awards</h3>
+                </div>
+                <div class="check-grid finale-awards-grid">
+                  <label class="toggle-row"><input type="checkbox" id="awardMxCongeniality" checked><span>Mx. Congeniality</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardGoldenBoot"><span>Golden Boot</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardLostLook"><span>Mx. Lost Look</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardDragPopStar"><span>Drag Pop Star</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardMxMakeup"><span>Mx. Make-Up</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardMxStarving"><span>Mx. Starving</span></label>
+                  <label class="toggle-row"><input type="checkbox" id="awardMxBitch"><span>Mx. Bitch</span></label>
+                </div>
+              </section>
+
               <section class="advanced-group advanced-group-wide">
                 <div class="advanced-group-head">
                   <p class="eyebrow">Control</p>
@@ -323,6 +339,13 @@
           <button class="section-toggle" data-step="mini">Mini Challenge</button>
           <button class="section-toggle" data-step="teams">Teams</button>
           <button class="section-toggle" data-step="famegames">Fame Games</button>
+          <button class="section-toggle" data-step="awardmxcon">Mx. Congeniality</button>
+          <button class="section-toggle" data-step="awardgoldenboot">Golden Boot</button>
+          <button class="section-toggle" data-step="awardlostlook">Mx. Lost Look</button>
+          <button class="section-toggle" data-step="awarddragpopstar">Drag Pop Star</button>
+          <button class="section-toggle" data-step="awardmxmakeup">Mx. Make-Up</button>
+          <button class="section-toggle" data-step="awardmxstarving">Mx. Starving</button>
+          <button class="section-toggle" data-step="awardmxbitch">Mx. Bitch</button>
           <button class="section-toggle" data-step="maxi">Maxi Challenge</button>
           <button class="section-toggle" data-step="cuntpart1">Part #1</button>
           <button class="section-toggle" data-step="cuntpart2">Part #2</button>
@@ -422,8 +445,50 @@
             <div class="event-stack" id="fameGamesFinaleStack"></div>
             <div class="proceed-row dual">
               <button class="secondary-btn proceed-btn" data-next="teams">Back</button>
-              <button class="primary-btn proceed-btn" data-next="maxi">Proceed</button>
+              <button class="primary-btn proceed-btn" data-next="awardmxcon">Proceed</button>
             </div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardmxcon">
+            <div class="section-title">Mx. Congeniality</div>
+            <div class="event-stack finale-single-award-stack" id="mxCongenialityAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardgoldenboot">
+            <div class="section-title">Golden Boot</div>
+            <div class="event-stack finale-single-award-stack" id="goldenBootAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardlostlook">
+            <div class="section-title">Mx. Lost Look</div>
+            <div class="event-stack finale-single-award-stack" id="lostLookAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awarddragpopstar">
+            <div class="section-title">Drag Pop Star</div>
+            <div class="event-stack finale-single-award-stack" id="dragPopStarAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardmxmakeup">
+            <div class="section-title">Mx. Make-Up</div>
+            <div class="event-stack finale-single-award-stack" id="mxMakeupAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardmxstarving">
+            <div class="section-title">Mx. Starving</div>
+            <div class="event-stack finale-single-award-stack" id="mxStarvingAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel finale-award-panel" data-panel="awardmxbitch">
+            <div class="section-title">Mx. Bitch</div>
+            <div class="event-stack finale-single-award-stack" id="mxBitchAwardStack"></div>
+            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
           <section class="episode-panel" data-panel="maxi">
@@ -729,7 +794,10 @@
         <section class="stats-panel is-active" data-tab-panel="track">
           <div class="panel stats-card">
             <div class="stats-toolbar track-toolbar">
-              <button class="secondary-btn" id="downloadTrackRecordBtn" type="button">Download</button>
+              <div class="track-download-controls">
+                <button class="secondary-btn" id="downloadTrackRecordBtn" type="button">Download</button>
+                <label class="track-flag-toggle"><input type="checkbox" id="includeFlagToggle"><span>Include Country Flag</span></label>
+              </div>
             </div>
             <div class="table-wrap" id="trackWrap"></div>
             <div class="legend-rows" id="trackLegend"></div>
