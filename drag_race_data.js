@@ -4473,7 +4473,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 7, design: 7, improv: 9, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "art_simone",
@@ -4483,7 +4483,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 5, design: 8, improv: 4, runway: 10, lipsync: 4 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Drag Race Down Under vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "karen_from_finance",
@@ -4493,7 +4493,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 5, improv: 7, runway: 7, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "scarlet_adams",
@@ -4503,7 +4503,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 10, design: 10, improv: 7, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "elektra_shock",
@@ -4513,7 +4513,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 12, design: 8, improv: 4, runway: 7, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "maxi_shield",
@@ -4523,7 +4523,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 9, improv: 7, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "etcetera_etcetera",
@@ -4533,7 +4533,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 8, dance: 8, design: 7, improv: 8, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "anita_wiglit",
@@ -4543,7 +4543,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 9, dance: 8, design: 6, improv: 10, runway: 8, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Canada's Drag Race: Canada vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "coco_jumbo",
@@ -4553,7 +4553,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 6, improv: 5, runway: 8, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Drag Race Down Under vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "jojo_zaho",
@@ -4563,7 +4563,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 5, improv: 5, runway: 6, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
 
   // Down Under 2
@@ -4575,7 +4575,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 11, dance: 8, design: 5, improv: 8, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "hannah_conda",
@@ -4585,7 +4585,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 12, dance: 11, design: 8, improv: 11, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "RuPaul's Drag Race: UK vs The World": [2] },
-    country: "Australia / New Zealand",
+    country: "Australiad",
   },
   {
     id: "kween_kong",
@@ -4595,7 +4595,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 10, design: 5, improv: 8, runway: 10, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "RuPaul's Drag Race Global All Stars": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "molly_poppinz",
@@ -4605,7 +4605,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 6, design: 9, improv: 7, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "beverly_kills",
@@ -4615,7 +4615,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 4, dance: 10, design: 9, improv: 5, runway: 9, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "yuri_guaii",
@@ -4625,7 +4625,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 11, dance: 6, design: 12, improv: 9, runway: 13, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "The Boulet Brothers' Dragula"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "The Boulet Brothers' Dragula": [6] },
-    country: "New Zealand",
+    country: "NewZealand",
   },
   {
     id: "minnie_cooper",
@@ -4635,7 +4635,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 5, design: 6, improv: 6, runway: 9, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "pomara_fifth",
@@ -4645,7 +4645,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 5, design: 7, improv: 5, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "aubrey_haive",
@@ -4655,7 +4655,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 4, dance: 5, design: 7, improv: 4, runway: 8, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "faux_fur",
@@ -4665,7 +4665,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 4, design: 5, improv: 4, runway: 5, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
 
   // Down Under 3
@@ -4677,7 +4677,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 10, design: 11, improv: 9, runway: 11, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "gabriella_labucci",
@@ -4687,7 +4687,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 9, design: 7, improv: 10, runway: 8, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "flor",
@@ -4697,7 +4697,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 9, design: 8, improv: 8, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3], "Drag Race Down Under vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "hollywould_star",
@@ -4707,7 +4707,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 11, design: 9, improv: 8, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "bumpa_love",
@@ -4717,7 +4717,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 6, design: 8, improv: 8, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "ashley_madison",
@@ -4727,7 +4727,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 5, design: 8, improv: 10, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "rita_menu",
@@ -4737,7 +4737,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 6, improv: 5, runway: 8, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "ivanna_drink",
@@ -4747,7 +4747,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "ivory_glaze",
@@ -4757,7 +4757,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 5, design: 5, improv: 4, runway: 6, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3], "Drag Race Philippines: Slaysian Royale": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "amyl",
@@ -4767,7 +4767,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
 
   // Down Under 4
@@ -4779,7 +4779,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 12, dance: 4, design: 7, improv: 12, runway: 13, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "mandy_moobs",
@@ -4789,7 +4789,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 8, design: 11, improv: 9, runway: 9, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "vybe",
@@ -4799,7 +4799,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 7, design: 10, improv: 11, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4], "Drag Race Down Under vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "freya_armani",
@@ -4809,7 +4809,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 9, design: 9, improv: 6, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "nikita_iman",
@@ -4819,7 +4819,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 7, design: 9, improv: 4, runway: 10, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4], "Drag Race Down Under vs The World": [1] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "max_drag_queen",
@@ -4829,7 +4829,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 12, design: 9, improv: 5, runway: 10, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "brenda_bressed",
@@ -4839,7 +4839,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 6, design: 5, improv: 10, runway: 6, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "lucina_innocence",
@@ -4849,7 +4849,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 5, design: 8, improv: 9, runway: 9, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "karna_ford",
@@ -4859,7 +4859,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 10, design: 3, improv: 5, runway: 5, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "Australia",
   },
   {
     id: "olivia_dreams",
@@ -4869,7 +4869,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 6, design: 5, improv: 3, runway: 6, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
-    country: "Australia / New Zealand",
+    country: "NewZealand",
   },
   {
     id: "paloma",
