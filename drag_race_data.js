@@ -6,7 +6,8 @@ window.QUEENS = [
   image: "images/akashia.webp",
   skills: { acting: 3, comedy: 2, dance: 7, design: 3, improv: 2, runway: 7, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1] },
+  country: "USA",
 },
 {
   id: "bebe_zahara_benet",
@@ -15,7 +16,8 @@ window.QUEENS = [
   image: "images/bebe_zahara_benet.webp",
   skills: { acting: 6, comedy: 7, dance: 8, design: 12, improv: 6, runway: 10, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "jade_sotomayor",
@@ -24,7 +26,8 @@ window.QUEENS = [
   image: "images/jade_sotomayor.webp",
   skills: { acting: 3, comedy: 3, dance: 8, design: 7, improv: 3, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1] },
+  country: "USA",
 },
 {
   id: "nina_flowers",
@@ -33,7 +36,8 @@ window.QUEENS = [
   image: "images/nina_flowers.webp",
   skills: { acting: 7, comedy: 5, dance: 5, design: 11, improv: 6, runway: 10, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1] },
+  country: "USA",
 },
 {
   id: "ongina",
@@ -42,7 +46,8 @@ window.QUEENS = [
   image: "images/ongina.webp",
   skills: { acting: 9, comedy: 8, dance: 7, design: 9, improv: 10, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [5] },
+  country: "USA",
 },
 {
   id: "rebecca_glasscock",
@@ -51,7 +56,8 @@ window.QUEENS = [
   image: "images/rebecca_glasscock.webp",
   skills: { acting: 3, comedy: 3, dance: 6, design: 4, improv: 2, runway: 6, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1] },
+  country: "USA",
 },
 {
   id: "shannel",
@@ -60,7 +66,8 @@ window.QUEENS = [
   image: "images/shannel.webp",
   skills: { acting: 7, comedy: 8, dance: 7, design: 9, improv: 9, runway: 13, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1, 9] }
+  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1, 9] },
+  country: "USA",
 },
 {
   id: "tammie_brown",
@@ -69,7 +76,8 @@ window.QUEENS = [
   image: "images/tammie_brown.webp",
   skills: { acting: 6, comedy: 7, dance: 5, design: 7, improv: 6, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1], "RuPaul's Drag Race All Stars": [1] },
+  country: "USA",
 },
 {
   id: "victoria_porkchop_parker",
@@ -78,7 +86,8 @@ window.QUEENS = [
   image: "images/victoria_porkchop_parker.webp",
   skills: { acting: 3, comedy: 6, dance: 4, design: 3, improv: 6, runway: 5, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [1] },
+  country: "USA",
 },
 
 {
@@ -88,7 +97,8 @@ window.QUEENS = [
   image: "images/jessica_wild.webp",
   skills: { acting: 9, comedy: 11, dance: 10, design: 11, improv: 10, runway: 9, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "jujubee",
@@ -102,7 +112,8 @@ window.QUEENS = [
     "RuPaul's Drag Race All Stars": [1, 5],
     "RuPaul's Drag Race: UK vs The World": [1],
     "Queen of the Universe": [1]
-  }
+  },
+  country: "USA",
 },
 {
   id: "morgan_mcmichaels",
@@ -111,7 +122,8 @@ window.QUEENS = [
   image: "images/morgan_mcmichaels.webp",
   skills: { acting: 6, comedy: 6, dance: 10, design: 9, improv: 5, runway: 10, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [3, 11] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [3, 11] },
+  country: "USA",
 },
 {
   id: "mystique_summers_madison",
@@ -120,7 +132,8 @@ window.QUEENS = [
   image: "images/mystique_summers_madison.webp",
   skills: { acting: 4, comedy: 5, dance: 3, design: 3, improv: 3, runway: 5, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "nicole_paige_brooks",
@@ -129,7 +142,8 @@ window.QUEENS = [
   image: "images/nicole_paige_brooks.webp",
   skills: { acting: 7, comedy: 8, dance: 4, design: 6, improv: 7, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars", "Drag Race Down Under vs The World"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [10], "Drag Race Down Under vs The World": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [10], "Drag Race Down Under vs The World": [1] },
+  country: "USA",
 },
 {
   id: "pandora_boxx",
@@ -138,7 +152,8 @@ window.QUEENS = [
   image: "images/pandora_boxx.webp",
   skills: { acting: 12, comedy: 11, dance: 6, design: 8, improv: 10, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [1, 6] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [1, 6] },
+  country: "USA",
 },
 {
   id: "raven",
@@ -147,7 +162,8 @@ window.QUEENS = [
   image: "images/raven.webp",
   skills: { acting: 5, comedy: 8, dance: 9, design: 10, improv: 5, runway: 8, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [1] },
+  country: "USA",
 },
 {
   id: "sahara_davenport",
@@ -156,7 +172,8 @@ window.QUEENS = [
   image: "images/sahara_davenport.webp",
   skills: { acting: 6, comedy: 6, dance: 10, design: 4, improv: 6, runway: 7, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [2] },
+  country: "USA",
 },
 {
   id: "kylie_sonique_love",
@@ -165,7 +182,8 @@ window.QUEENS = [
   image: "images/kylie_sonique_love.webp",
   skills: { acting: 11, comedy: 9, dance: 10, design: 9, improv: 8, runway: 11, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [6] },
+  country: "USA",
 },
 {
   id: "tatianna",
@@ -174,7 +192,8 @@ window.QUEENS = [
   image: "images/tatianna.webp",
   skills: { acting: 8, comedy: 11, dance: 8, design: 8, improv: 10, runway: 8, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [2], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "king_tyra",
@@ -183,7 +202,8 @@ window.QUEENS = [
   image: "images/king_tyra.webp",
   skills: { acting: 11, comedy: 7, dance: 8, design: 11, improv: 8, runway: 9, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [2] },
+  country: "USA",
 },
 {
   id: "shangela",
@@ -192,7 +212,8 @@ window.QUEENS = [
   image: "images/shangela.webp",
   skills: { acting: 14, comedy: 13, dance: 10, design: 3, improv: 9, runway: 9, lipsync: 12 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [2, 3], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [2, 3], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "alexis_mateo",
@@ -206,7 +227,8 @@ window.QUEENS = [
     "RuPaul's Drag Race All Stars": [1, 5],
     "Canada's Drag Race: Canada vs The World": [2],
     "Drag Race México: Latina Royale": [1]
-  }
+  },
+  country: "USA",
 },
 {
   id: "carmen_carrera",
@@ -215,7 +237,8 @@ window.QUEENS = [
   image: "images/carmen_carrera.webp",
   skills: { acting: 3, comedy: 8, dance: 6, design: 4, improv: 3, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [3] },
+  country: "USA",
 },
 {
   id: "delta_work",
@@ -224,7 +247,8 @@ window.QUEENS = [
   image: "images/delta_work.webp",
   skills: { acting: 4, comedy: 6, dance: 5, design: 5, improv: 5, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [3] },
+  country: "USA",
 },
 {
   id: "india_ferrah",
@@ -233,7 +257,8 @@ window.QUEENS = [
   image: "images/india_ferrah.webp",
   skills: { acting: 6, comedy: 4, dance: 8, design: 6, improv: 3, runway: 10, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [5] },
+  country: "USA",
 },
 {
   id: "manila_luzon",
@@ -242,7 +267,8 @@ window.QUEENS = [
   image: "images/manila_luzon.webp",
   skills: { acting: 12, comedy: 11, dance: 7, design: 14, improv: 10, runway: 13, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1, 4] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1, 4] },
+  country: "USA",
 },
 {
   id: "mariah_paris_balenciaga",
@@ -255,7 +281,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [3],
     "RuPaul's Drag Race All Stars": [5],
     "RuPaul's Drag Race: UK vs The World": [3]
-  }
+  },
+  country: "USA",
 },
 {
   id: "mimi_imfurst",
@@ -264,7 +291,8 @@ window.QUEENS = [
   image: "images/mimi_imfurst.webp",
   skills: { acting: 11, comedy: 6, dance: 6, design: 10, improv: 7, runway: 8, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1] },
+  country: "USA",
 },
 {
   id: "phoenix",
@@ -273,7 +301,8 @@ window.QUEENS = [
   image: "images/phoenix.webp",
   skills: { acting: 3, comedy: 3, dance: 6, design: 5, improv: 3, runway: 5, lipsync: 4 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "raja",
@@ -282,7 +311,8 @@ window.QUEENS = [
   image: "images/raja.webp",
   skills: { acting: 11, comedy: 13, dance: 6, design: 14, improv: 12, runway: 14, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [7] },
+  country: "USA",
 },
 {
   id: "stacy_layne_matthews",
@@ -291,7 +321,8 @@ window.QUEENS = [
   image: "images/stacy_layne_matthews.webp",
   skills: { acting: 6, comedy: 7, dance: 5, design: 4, improv: 10, runway: 5, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [3] },
+  country: "USA",
 },
 {
   id: "venus_d_lite",
@@ -300,7 +331,8 @@ window.QUEENS = [
   image: "images/venus_d_lite.webp",
   skills: { acting: 4, comedy: 5, dance: 8, design: 2, improv: 3, runway: 5, lipsync: 2 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [3] },
+  country: "USA",
 },
 {
   id: "yara_sofia",
@@ -309,7 +341,8 @@ window.QUEENS = [
   image: "images/yara_sofia.webp",
   skills: { acting: 11, comedy: 9, dance: 9, design: 13, improv: 7, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1, 6] }
+  seasonsByShow: { "RuPaul's Drag Race": [3], "RuPaul's Drag Race All Stars": [1, 6] },
+  country: "USA",
 },
 
 {
@@ -319,7 +352,8 @@ window.QUEENS = [
   image: "images/alisa_summers.webp",
   skills: { acting: 4, comedy: 4, dance: 5, design: 2, improv: 3, runway: 5, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "chad_michaels",
@@ -328,7 +362,8 @@ window.QUEENS = [
   image: "images/chad_michaels.webp",
   skills: { acting: 11, comedy: 10, dance: 8, design: 9, improv: 12, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [1] },
+  country: "USA",
 },
 {
   id: "dida_ritz",
@@ -337,7 +372,8 @@ window.QUEENS = [
   image: "images/dida_ritz.webp",
   skills: { acting: 8, comedy: 7, dance: 8, design: 5, improv: 7, runway: 7, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "jiggly_caliente",
@@ -346,7 +382,8 @@ window.QUEENS = [
   image: "images/jiggly_caliente.webp",
   skills: { acting: 4, comedy: 6, dance: 9, design: 4, improv: 4, runway: 7, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [6] },
+  country: "USA",
 },
 {
   id: "kenya_michaels",
@@ -355,7 +392,8 @@ window.QUEENS = [
   image: "images/kenya_michaels.webp",
   skills: { acting: 9, comedy: 6, dance: 6, design: 6, improv: 8, runway: 7, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "lashauwn_beyond",
@@ -364,7 +402,8 @@ window.QUEENS = [
   image: "images/lashauwn_beyond.webp",
   skills: { acting: 4, comedy: 4, dance: 6, design: 11, improv: 5, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "latrice_royale",
@@ -373,7 +412,8 @@ window.QUEENS = [
   image: "images/latrice_royale.webp",
   skills: { acting: 11, comedy: 8, dance: 9, design: 8, improv: 7, runway: 9, lipsync: 13 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [1, 4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [1, 4] },
+  country: "USA",
 },
 {
   id: "madame_laqueer",
@@ -382,7 +422,8 @@ window.QUEENS = [
   image: "images/madame_laqueer.webp",
   skills: { acting: 4, comedy: 7, dance: 6, design: 5, improv: 9, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "milan",
@@ -391,7 +432,8 @@ window.QUEENS = [
   image: "images/milan.webp",
   skills: { acting: 4, comedy: 5, dance: 9, design: 7, improv: 5, runway: 8, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "jaremi_carey",
@@ -400,7 +442,8 @@ window.QUEENS = [
   image: "images/jaremi_carey.webp",
   skills: { acting: 13, comedy: 9, dance: 8, design: 10, improv: 10, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [4], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "sharon_needles",
@@ -409,7 +452,8 @@ window.QUEENS = [
   image: "images/sharon_needles.webp",
   skills: { acting: 12, comedy: 12, dance: 8, design: 12, improv: 11, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "the_princess",
@@ -418,7 +462,8 @@ window.QUEENS = [
   image: "images/the_princess.webp",
   skills: { acting: 4, comedy: 4, dance: 5, design: 7, improv: 4, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 {
   id: "willam",
@@ -427,7 +472,8 @@ window.QUEENS = [
   image: "images/willam.webp",
   skills: { acting: 10, comedy: 8, dance: 7, design: 10, improv: 10, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [4] },
+  country: "USA",
 },
 
 {
@@ -437,7 +483,8 @@ window.QUEENS = [
   image: "images/alaska.webp",
   skills: { acting: 15, comedy: 14, dance: 7, design: 8, improv: 14, runway: 10, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "alyssa_edwards",
@@ -446,7 +493,8 @@ window.QUEENS = [
   image: "images/alyssa_edwards.webp",
   skills: { acting: 4, comedy: 6, dance: 15, design: 6, improv: 10, runway: 9, lipsync: 12 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars", "RuPaul's Drag Race Global All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2], "RuPaul's Drag Race Global All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2], "RuPaul's Drag Race Global All Stars": [1] },
+  country: "USA",
 },
 {
   id: "coco_montrese",
@@ -455,7 +503,8 @@ window.QUEENS = [
   image: "images/coco_montrese.webp",
   skills: { acting: 10, comedy: 10, dance: 11, design: 9, improv: 7, runway: 9, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "detox",
@@ -464,7 +513,8 @@ window.QUEENS = [
   image: "images/detox.webp",
   skills: { acting: 10, comedy: 9, dance: 9, design: 9, improv: 8, runway: 12, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "honey_mahogany",
@@ -473,7 +523,8 @@ window.QUEENS = [
   image: "images/honey_mahogany.webp",
   skills: { acting: 10, comedy: 3, dance: 3, design: 6, improv: 6, runway: 8, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [5] },
+  country: "USA",
 },
 {
   id: "ivy_winters",
@@ -482,7 +533,8 @@ window.QUEENS = [
   image: "images/ivy_winters.webp",
   skills: { acting: 11, comedy: 4, dance: 8, design: 12, improv: 7, runway: 10, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [5] },
+  country: "USA",
 },
 {
   id: "jade_jolie",
@@ -491,7 +543,8 @@ window.QUEENS = [
   image: "images/jade_jolie.webp",
   skills: { acting: 5, comedy: 7, dance: 8, design: 7, improv: 8, runway: 7, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [2] },
+  country: "USA",
 },
 {
   id: "jinkx_monsoon",
@@ -500,7 +553,8 @@ window.QUEENS = [
   image: "images/jinkx_monsoon.webp",
   skills: { acting: 15, comedy: 15, dance: 9, design: 8, improv: 15, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [7] },
+  country: "USA",
 },
 {
   id: "lineysha_sparx",
@@ -509,7 +563,8 @@ window.QUEENS = [
   image: "images/lineysha_sparx.webp",
   skills: { acting: 10, comedy: 4, dance: 7, design: 11, improv: 5, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [5] },
+  country: "USA",
 },
 {
   id: "monica_beverly_hillz",
@@ -518,7 +573,8 @@ window.QUEENS = [
   image: "images/monica_beverly_hillz.webp",
   skills: { acting: 4, comedy: 4, dance: 6, design: 6, improv: 4, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "penny_tration",
@@ -527,7 +583,8 @@ window.QUEENS = [
   image: "images/penny_tration.webp",
   skills: { acting: 4, comedy: 5, dance: 4, design: 5, improv: 5, runway: 5, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [5] },
+  country: "USA",
 },
 {
   id: "roxxxy_andrews",
@@ -536,7 +593,8 @@ window.QUEENS = [
   image: "images/roxxxy_andrews.webp",
   skills: { acting: 8, comedy: 9, dance: 7, design: 13, improv: 9, runway: 11, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2, 9] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [2, 9] },
+  country: "USA",
 },
 {
   id: "serena_chacha",
@@ -545,7 +603,8 @@ window.QUEENS = [
   image: "images/serena_chacha.webp",
   skills: { acting: 3, comedy: 3, dance: 7, design: 4, improv: 5, runway: 5, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [5], "RuPaul's Drag Race All Stars": [6] },
+  country: "USA",
 },
 {
   id: "vivienne_pinay",
@@ -554,7 +613,8 @@ window.QUEENS = [
   image: "images/vivienne_pinay.webp",
   skills: { acting: 7, comedy: 3, dance: 4, design: 5, improv: 3, runway: 6, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [5] },
+  country: "USA",
 },
 {
   id: "adore_delano",
@@ -563,7 +623,8 @@ window.QUEENS = [
   image: "images/adore_delano.webp",
   skills: { acting: 9, comedy: 11, dance: 9, design: 6, improv: 9, runway: 8, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "april_carrion",
@@ -572,7 +633,8 @@ window.QUEENS = [
   image: "images/april_carrion.webp",
   skills: { acting: 5, comedy: 5, dance: 6, design: 9, improv: 5, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "bendelacreme",
@@ -581,7 +643,8 @@ window.QUEENS = [
   image: "images/bendelacreme.webp",
   skills: { acting: 12, comedy: 12, dance: 11, design: 10, improv: 15, runway: 10, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "bianca_del_rio",
@@ -590,7 +653,8 @@ window.QUEENS = [
   image: "images/bianca_del_rio.webp",
   skills: { acting: 11, comedy: 15, dance: 7, design: 13, improv: 15, runway: 10, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "courtney_act",
@@ -599,7 +663,8 @@ window.QUEENS = [
   image: "images/courtney_act.webp",
   skills: { acting: 11, comedy: 8, dance: 10, design: 10, improv: 10, runway: 12, lipsync: 9 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "darienne_lake",
@@ -608,7 +673,8 @@ window.QUEENS = [
   image: "images/darienne_lake.webp",
   skills: { acting: 10, comedy: 8, dance: 6, design: 5, improv: 9, runway: 9, lipsync: 13 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "gia_gunn",
@@ -617,7 +683,8 @@ window.QUEENS = [
   image: "images/gia_gunn.webp",
   skills: { acting: 10, comedy: 4, dance: 8, design: 8, improv: 4, runway: 8, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [4] },
+  country: "USA",
 },
 {
   id: "joslyn_fox",
@@ -626,7 +693,8 @@ window.QUEENS = [
   image: "images/joslyn_fox.webp",
   skills: { acting: 6, comedy: 7, dance: 8, design: 6, improv: 8, runway: 8, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "kelly_mantle",
@@ -635,7 +703,8 @@ window.QUEENS = [
   image: "images/kelly_mantle.webp",
   skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 4, runway: 7, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "laganja_estranja",
@@ -644,7 +713,8 @@ window.QUEENS = [
   image: "images/laganja_estranja.webp",
   skills: { acting: 9, comedy: 5, dance: 14, design: 8, improv: 6, runway: 10, lipsync: 15 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "magnolia_crawford",
@@ -653,7 +723,8 @@ window.QUEENS = [
   image: "images/magnolia_crawford.webp",
   skills: { acting: 4, comedy: 5, dance: 6, design: 4, improv: 5, runway: 7, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6] },
+  country: "USA",
 },
 {
   id: "milk",
@@ -662,7 +733,8 @@ window.QUEENS = [
   image: "images/milk.webp",
   skills: { acting: 6, comedy: 6, dance: 7, design: 8, improv: 8, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "trinity_k_bonet",
@@ -671,7 +743,8 @@ window.QUEENS = [
   image: "images/trinity_k_bonet.webp",
   skills: { acting: 9, comedy: 9, dance: 13, design: 12, improv: 4, runway: 10, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [6] },
+  country: "USA",
 },
 {
   id: "vivacious",
@@ -680,7 +753,8 @@ window.QUEENS = [
   image: "images/vivacious.webp",
   skills: { acting: 6, comedy: 7, dance: 9, design: 4, improv: 4, runway: 8, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [6], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 
 {
@@ -690,7 +764,8 @@ window.QUEENS = [
   image: "images/ginger_minj.webp",
   skills: { acting: 13, comedy: 11, dance: 8, design: 9, improv: 12, runway: 7, lipsync: 12 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [2, 6, 10] }
+  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [2, 6, 10] },
+  country: "USA",
 },
 {
   id: "jaidynn_diore_fierce",
@@ -699,7 +774,8 @@ window.QUEENS = [
   image: "images/jaidynn_diore_fierce.webp",
   skills: { acting: 9, comedy: 7, dance: 8, design: 6, improv: 6, runway: 7, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "jasmine_masters",
@@ -708,7 +784,8 @@ window.QUEENS = [
   image: "images/jasmine_masters.webp",
   skills: { acting: 3, comedy: 4, dance: 6, design: 5, improv: 2, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [4] },
+  country: "USA",
 },
 {
   id: "kandy_ho",
@@ -717,7 +794,8 @@ window.QUEENS = [
   image: "images/kandy_ho.webp",
   skills: { acting: 4, comedy: 4, dance: 7, design: 5, improv: 4, runway: 7, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "katya",
@@ -726,7 +804,8 @@ window.QUEENS = [
   image: "images/katya.webp",
   skills: { acting: 9, comedy: 12, dance: 9, design: 7, improv: 12, runway: 10, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [2] }
+  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [2] },
+  country: "USA",
 },
 {
   id: "kennedy_davenport",
@@ -739,7 +818,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [7],
     "RuPaul's Drag Race All Stars": [3, 11],
     "Canada's Drag Race: Canada vs The World": [2]
-  }
+  },
+  country: "USA",
 },
 {
   id: "max",
@@ -748,7 +828,8 @@ window.QUEENS = [
   image: "images/max.webp",
   skills: { acting: 10, comedy: 7, dance: 5, design: 8, improv: 4, runway: 8, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "miss_fame",
@@ -757,7 +838,8 @@ window.QUEENS = [
   image: "images/miss_fame.webp",
   skills: { acting: 8, comedy: 4, dance: 5, design: 11, improv: 3, runway: 10, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "mrs_kasha_davis",
@@ -766,7 +848,8 @@ window.QUEENS = [
   image: "images/mrs_kasha_davis.webp",
   skills: { acting: 11, comedy: 8, dance: 10, design: 7, improv: 6, runway: 9, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "pearl",
@@ -775,7 +858,8 @@ window.QUEENS = [
   image: "images/pearl.webp",
   skills: { acting: 7, comedy: 10, dance: 8, design: 9, improv: 10, runway: 9, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "frisbee_jenkins",
@@ -784,7 +868,8 @@ window.QUEENS = [
   image: "images/frisbee_jenkins.webp",
   skills: { acting: 6, comedy: 6, dance: 4, design: 4, improv: 6, runway: 6, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "tempest_dujour",
@@ -793,7 +878,8 @@ window.QUEENS = [
   image: "images/tempest_dujour.webp",
   skills: { acting: 6, comedy: 6, dance: 5, design: 3, improv: 6, runway: 7, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 {
   id: "trixie_mattel",
@@ -802,7 +888,8 @@ window.QUEENS = [
   image: "images/trixie_mattel.webp",
   skills: { acting: 13, comedy: 10, dance: 7, design: 11, improv: 11, runway: 10, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [7], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "violet_chachki",
@@ -811,7 +898,8 @@ window.QUEENS = [
   image: "images/violet_chachki.webp",
   skills: { acting: 6, comedy: 7, dance: 8, design: 15, improv: 8, runway: 13, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [7] },
+  country: "USA",
 },
 
 {
@@ -821,7 +909,8 @@ window.QUEENS = [
   image: "images/acid_betty.webp",
   skills: { acting: 9, comedy: 4, dance: 7, design: 10, improv: 5, runway: 11, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "bob_the_drag_queen",
@@ -830,7 +919,8 @@ window.QUEENS = [
   image: "images/bob_the_drag_queen.webp",
   skills: { acting: 15, comedy: 15, dance: 8, design: 9, improv: 15, runway: 8, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8] },
+  country: "USA",
 },
 {
   id: "chi_chi_devayne",
@@ -839,7 +929,8 @@ window.QUEENS = [
   image: "images/chi_chi_devayne.webp",
   skills: { acting: 8, comedy: 4, dance: 13, design: 8, improv: 6, runway: 8, lipsync: 13 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 {
   id: "cynthia_lee_fontaine",
@@ -848,7 +939,8 @@ window.QUEENS = [
   image: "images/cynthia_lee_fontaine.webp",
   skills: { acting: 4, comedy: 4, dance: 7, design: 6, improv: 4, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8, 9], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [8, 9], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "dax_exclamationpoint",
@@ -857,7 +949,8 @@ window.QUEENS = [
   image: "images/dax_exclamationpoint.webp",
   skills: { acting: 5, comedy: 6, dance: 6, design: 5, improv: 6, runway: 5, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8] },
+  country: "USA",
 },
 {
   id: "derrick_barry",
@@ -866,7 +959,8 @@ window.QUEENS = [
   image: "images/derrick_barry.webp",
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 9, runway: 7, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [5] },
+  country: "USA",
 },
 {
   id: "kim_chi",
@@ -875,7 +969,8 @@ window.QUEENS = [
   image: "images/kim_chi.webp",
   skills: { acting: 10, comedy: 7, dance: 4, design: 15, improv: 8, runway: 13, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8] },
+  country: "USA",
 },
 {
   id: "laila_mcqueen",
@@ -884,7 +979,8 @@ window.QUEENS = [
   image: "images/laila_mcqueen.webp",
   skills: { acting: 6, comedy: 6, dance: 4, design: 7, improv: 6, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8] },
+  country: "USA",
 },
 {
   id: "naomi_smalls",
@@ -893,7 +989,8 @@ window.QUEENS = [
   image: "images/naomi_smalls.webp",
   skills: { acting: 9, comedy: 7, dance: 10, design: 14, improv: 10, runway: 12, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [4] },
+  country: "USA",
 },
 {
   id: "naysha_lopez",
@@ -902,7 +999,8 @@ window.QUEENS = [
   image: "images/naysha_lopez.webp",
   skills: { acting: 7, comedy: 5, dance: 7, design: 5, improv: 4, runway: 10, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "robbie_turner",
@@ -911,7 +1009,8 @@ window.QUEENS = [
   image: "images/robbie_turner.webp",
   skills: { acting: 4, comedy: 5, dance: 6, design: 4, improv: 3, runway: 6, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [8] },
+  country: "USA",
 },
 {
   id: "thorgy_thor",
@@ -920,7 +1019,8 @@ window.QUEENS = [
   image: "images/thorgy_thor.webp",
   skills: { acting: 14, comedy: 9, dance: 6, design: 9, improv: 13, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [3] }
+  seasonsByShow: { "RuPaul's Drag Race": [8], "RuPaul's Drag Race All Stars": [3] },
+  country: "USA",
 },
 
 {
@@ -930,7 +1030,8 @@ window.QUEENS = [
   image: "images/aja.webp",
   skills: { acting: 4, comedy: 8, dance: 12, design: 11, improv: 9, runway: 10, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [3, 10] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [3, 10] },
+  country: "USA",
 },
 {
   id: "alexis_michelle",
@@ -939,7 +1040,8 @@ window.QUEENS = [
   image: "images/alexis_michelle.webp",
   skills: { acting: 8, comedy: 8, dance: 11, design: 10, improv: 13, runway: 10, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "charlie_hides",
@@ -948,7 +1050,8 @@ window.QUEENS = [
   image: "images/charlie_hides.webp",
   skills: { acting: 10, comedy: 6, dance: 5, design: 7, improv: 4, runway: 9, lipsync: 2 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [9] },
+  country: "USA",
 },
 {
   id: "eureka",
@@ -961,7 +1064,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [9, 10],
     "RuPaul's Drag Race All Stars": [6],
     "Canada's Drag Race: Canada vs The World": [2]
-  }
+  },
+  country: "USA",
 },
 {
   id: "farrah_moan",
@@ -970,7 +1074,8 @@ window.QUEENS = [
   image: "images/farrah_moan.webp",
   skills: { acting: 9, comedy: 4, dance: 7, design: 3, improv: 6, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4] },
+  country: "USA",
 },
 {
   id: "jaymes_mansfield",
@@ -979,7 +1084,8 @@ window.QUEENS = [
   image: "images/jaymes_mansfield.webp",
   skills: { acting: 8, comedy: 9, dance: 5, design: 9, improv: 9, runway: 10, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "kimora_blac",
@@ -988,7 +1094,8 @@ window.QUEENS = [
   image: "images/kimora_blac.webp",
   skills: { acting: 5, comedy: 5, dance: 4, design: 6, improv: 5, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [9] },
+  country: "USA",
 },
 {
   id: "nina_bonina_brown",
@@ -997,7 +1104,8 @@ window.QUEENS = [
   image: "images/nina_bonina_brown.webp",
   skills: { acting: 4, comedy: 8, dance: 10, design: 9, improv: 10, runway: 10, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [9] },
+  country: "USA",
 },
 {
   id: "peppermint",
@@ -1006,7 +1114,8 @@ window.QUEENS = [
   image: "images/peppermint.webp",
   skills: { acting: 11, comedy: 9, dance: 10, design: 9, improv: 4, runway: 7, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [9] },
+  country: "USA",
 },
 {
   id: "sasha_velour",
@@ -1015,7 +1124,8 @@ window.QUEENS = [
   image: "images/sasha_velour.webp",
   skills: { acting: 9, comedy: 10, dance: 8, design: 10, improv: 11, runway: 13, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [9] },
+  country: "USA",
 },
 {
   id: "shea_coulee",
@@ -1024,7 +1134,8 @@ window.QUEENS = [
   image: "images/shea_coulee.webp",
   skills: { acting: 11, comedy: 10, dance: 13, design: 10, improv: 10, runway: 14, lipsync: 12 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [5, 7] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [5, 7] },
+  country: "USA",
 },
 {
   id: "trinity_the_tuck",
@@ -1033,7 +1144,8 @@ window.QUEENS = [
   image: "images/trinity_the_tuck.webp",
   skills: { acting: 11, comedy: 10, dance: 9, design: 15, improv: 10, runway: 13, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4, 7] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4, 7] },
+  country: "USA",
 },
 {
   id: "valentina",
@@ -1042,7 +1154,8 @@ window.QUEENS = [
   image: "images/valentina.webp",
   skills: { acting: 11, comedy: 7, dance: 10, design: 9, improv: 9, runway: 9, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars", "Host"],
-  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4] }
+  seasonsByShow: { "RuPaul's Drag Race": [9], "RuPaul's Drag Race All Stars": [4] },
+  country: "USA",
 },
 
 {
@@ -1052,7 +1165,8 @@ window.QUEENS = [
   image: "images/aquaria.webp",
   skills: { acting: 6, comedy: 11, dance: 8, design: 15, improv: 12, runway: 14, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "asia_ohara",
@@ -1061,7 +1175,8 @@ window.QUEENS = [
   image: "images/asia_ohara.webp",
   skills: { acting: 11, comedy: 11, dance: 6, design: 6, improv: 7, runway: 11, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "blair_st_clair",
@@ -1070,7 +1185,8 @@ window.QUEENS = [
   image: "images/blair_st_clair.webp",
   skills: { acting: 9, comedy: 8, dance: 6, design: 10, improv: 8, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [5] },
+  country: "USA",
 },
 {
   id: "dusty_ray_bottoms",
@@ -1079,7 +1195,8 @@ window.QUEENS = [
   image: "images/dusty_ray_bottoms.webp",
   skills: { acting: 8, comedy: 8, dance: 6, design: 7, improv: 6, runway: 7, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "kalorie_karbdashian_williams",
@@ -1088,7 +1205,8 @@ window.QUEENS = [
   image: "images/kalorie_karbdashian_williams.webp",
   skills: { acting: 6, comedy: 6, dance: 6, design: 5, improv: 7, runway: 7, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "kameron_michaels",
@@ -1097,7 +1215,8 @@ window.QUEENS = [
   image: "images/kameron_michaels.webp",
   skills: { acting: 5, comedy: 8, dance: 14, design: 10, improv: 8, runway: 8, lipsync: 15 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "mayhem_miller",
@@ -1110,7 +1229,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [10],
     "RuPaul's Drag Race All Stars": [5],
     "RuPaul's Drag Race: UK vs The World": [2]
-  }
+  },
+  country: "USA",
 },
 {
   id: "miz_cracker",
@@ -1119,7 +1239,8 @@ window.QUEENS = [
   image: "images/miz_cracker.webp",
   skills: { acting: 13, comedy: 11, dance: 5, design: 12, improv: 15, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [5] }
+  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [5] },
+  country: "USA",
 },
 {
   id: "monet_x_change",
@@ -1128,7 +1249,8 @@ window.QUEENS = [
   image: "images/monet_x_change.webp",
   skills: { acting: 11, comedy: 11, dance: 14, design: 9, improv: 10, runway: 10, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [4, 7] }
+  seasonsByShow: { "RuPaul's Drag Race": [10], "RuPaul's Drag Race All Stars": [4, 7] },
+  country: "USA",
 },
 {
   id: "mo_heart",
@@ -1141,7 +1263,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [10],
     "RuPaul's Drag Race All Stars": [4],
     "RuPaul's Drag Race: UK vs The World": [1]
-  }
+  },
+  country: "USA",
 },
 {
   id: "the_vixen",
@@ -1150,7 +1273,8 @@ window.QUEENS = [
   image: "images/the_vixen.webp",
   skills: { acting: 5, comedy: 4, dance: 12, design: 9, improv: 3, runway: 8, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [10] },
+  country: "USA",
 },
 {
   id: "vanessa_vanjie_mateo",
@@ -1159,7 +1283,8 @@ window.QUEENS = [
   image: "images/vanessa_vanjie_mateo.webp",
   skills: { acting: 9, comedy: 7, dance: 13, design: 8, improv: 9, runway: 12, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [10, 11], "RuPaul's Drag Race All Stars": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [10, 11], "RuPaul's Drag Race All Stars": [9] },
+  country: "USA",
 },
 {
   id: "yuhua_hamasaki",
@@ -1168,7 +1293,8 @@ window.QUEENS = [
   image: "images/yuhua_hamasaki.webp",
   skills: { acting: 4, comedy: 4, dance: 6, design: 9, improv: 6, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "Drag Race Philippines: Slaysian Royale"],
-  seasonsByShow: { "RuPaul's Drag Race": [10], "Drag Race Philippines: Slaysian Royale": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [10], "Drag Race Philippines: Slaysian Royale": [1] },
+  country: "USA",
 },
 
 {
@@ -1178,7 +1304,8 @@ window.QUEENS = [
   image: "images/akeria_c_davenport.webp",
   skills: { acting: 11, comedy: 9, dance: 11, design: 8, improv: 10, runway: 13, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [6, 11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [6, 11] },
+  country: "USA",
 },
 {
   id: "ariel_versace",
@@ -1187,7 +1314,8 @@ window.QUEENS = [
   image: "images/ariel_versace.webp",
   skills: { acting: 8, comedy: 6, dance: 8, design: 5, improv: 8, runway: 8, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11] },
+  country: "USA",
 },
 {
   id: "brooke_lynn_hytes",
@@ -1196,7 +1324,8 @@ window.QUEENS = [
   image: "images/brooke_lynn_hytes.webp",
   skills: { acting: 8, comedy: 8, dance: 13, design: 12, improv: 8, runway: 10, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11] },
+  country: "USA",
 },
 {
   id: "honey_davenport",
@@ -1205,7 +1334,8 @@ window.QUEENS = [
   image: "images/honey_davenport.webp",
   skills: { acting: 4, comedy: 6, dance: 5, design: 7, improv: 4, runway: 9, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11] },
+  country: "USA",
 },
 {
   id: "kahanna_montrese",
@@ -1214,7 +1344,8 @@ window.QUEENS = [
   image: "images/kahanna_montrese.webp",
   skills: { acting: 6, comedy: 6, dance: 12, design: 8, improv: 6, runway: 13, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "mercedes_iman_diamond",
@@ -1223,7 +1354,8 @@ window.QUEENS = [
   image: "images/mercedes_iman_diamond.webp",
   skills: { acting: 4, comedy: 6, dance: 4, design: 6, improv: 6, runway: 8, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11] },
+  country: "USA",
 },
 {
   id: "nina_west",
@@ -1232,7 +1364,8 @@ window.QUEENS = [
   image: "images/nina_west.webp",
   skills: { acting: 14, comedy: 11, dance: 7, design: 9, improv: 11, runway: 9, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [9] },
+  country: "USA",
 },
 {
   id: "plastique_tiara",
@@ -1241,7 +1374,8 @@ window.QUEENS = [
   image: "images/plastique_tiara.webp",
   skills: { acting: 11, comedy: 10, dance: 10, design: 15, improv: 8, runway: 15, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [9] },
+  country: "USA",
 },
 {
   id: "rajah_ohara",
@@ -1254,7 +1388,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [11],
     "RuPaul's Drag Race All Stars": [6],
     "Canada's Drag Race: Canada vs The World": [1]
-  }
+  },
+  country: "USA",
 },
 {
   id: "scarlet_envy",
@@ -1267,7 +1402,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [11],
     "RuPaul's Drag Race All Stars": [6],
     "RuPaul's Drag Race: UK vs The World": [2]
-  }
+  },
+  country: "USA",
 },
 {
   id: "shuga_cain",
@@ -1276,7 +1412,8 @@ window.QUEENS = [
   image: "images/shuga_cain.webp",
   skills: { acting: 10, comedy: 9, dance: 7, design: 6, improv: 7, runway: 10, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "silky_nutmeg_ganache",
@@ -1289,7 +1426,8 @@ window.QUEENS = [
     "RuPaul's Drag Race": [11],
     "RuPaul's Drag Race All Stars": [6, 11],
     "Canada's Drag Race: Canada vs The World": [1]
-  }
+  },
+  country: "USA",
 },
 {
   id: "soju",
@@ -1298,7 +1436,8 @@ window.QUEENS = [
   image: "images/soju.webp",
   skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [11] },
+  country: "USA",
 },
 {
   id: "yvie_oddly",
@@ -1307,7 +1446,8 @@ window.QUEENS = [
   image: "images/yvie_oddly.webp",
   skills: { acting: 12, comedy: 7, dance: 13, design: 12, improv: 9, runway: 12, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [11], "RuPaul's Drag Race All Stars": [7] },
+  country: "USA",
 },
 
 {
@@ -1317,7 +1457,8 @@ window.QUEENS = [
   image: "images/aiden_zhane.webp",
   skills: { acting: 9, comedy: 3, dance: 6, design: 4, improv: 3, runway: 6, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "brita",
@@ -1326,7 +1467,8 @@ window.QUEENS = [
   image: "images/brita.webp",
   skills: { acting: 7, comedy: 8, dance: 7, design: 4, improv: 6, runway: 8, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "crystal_methyd",
@@ -1335,7 +1477,8 @@ window.QUEENS = [
   image: "images/crystal_methyd.webp",
   skills: { acting: 9, comedy: 11, dance: 8, design: 9, improv: 9, runway: 12, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "dahlia_sin",
@@ -1344,7 +1487,8 @@ window.QUEENS = [
   image: "images/dahlia_sin.webp",
   skills: { acting: 4, comedy: 4, dance: 6, design: 5, improv: 5, runway: 10, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "gigi_goode",
@@ -1353,7 +1497,8 @@ window.QUEENS = [
   image: "images/gigi_goode.webp",
   skills: { acting: 10, comedy: 11, dance: 11, design: 13, improv: 9, runway: 12, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "heidi_n_closet",
@@ -1362,7 +1507,8 @@ window.QUEENS = [
   image: "images/heidi_n_closet.webp",
   skills: { acting: 9, comedy: 9, dance: 11, design: 9, improv: 12, runway: 10, lipsync: 13 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "jackie_cox",
@@ -1371,7 +1517,8 @@ window.QUEENS = [
   image: "images/jackie_cox.webp",
   skills: { acting: 11, comedy: 12, dance: 6, design: 6, improv: 13, runway: 9, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "Canada's Drag Race: All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [12], "Canada's Drag Race: All Stars": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "Canada's Drag Race: All Stars": [1] },
+  country: "USA",
 },
 {
   id: "jaida_essence_hall",
@@ -1380,7 +1527,8 @@ window.QUEENS = [
   image: "images/jaida_essence_hall.webp",
   skills: { acting: 8, comedy: 5, dance: 10, design: 15, improv: 8, runway: 13, lipsync: 12 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [7] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [7] },
+  country: "USA",
 },
 {
   id: "jan",
@@ -1389,7 +1537,8 @@ window.QUEENS = [
   image: "images/jan.webp",
   skills: { acting: 8, comedy: 4, dance: 12, design: 9, improv: 5, runway: 10, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [6] }
+  seasonsByShow: { "RuPaul's Drag Race": [12], "RuPaul's Drag Race All Stars": [6] },
+  country: "USA",
 },
 {
   id: "nicky_doll",
@@ -1398,7 +1547,8 @@ window.QUEENS = [
   image: "images/nicky_doll.webp",
   skills: { acting: 4, comedy: 4, dance: 5, design: 12, improv: 3, runway: 11, lipsync: 5 },
   shows: ["RuPaul's Drag Race", "Host"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "rock_m_sakura",
@@ -1407,7 +1557,8 @@ window.QUEENS = [
   image: "images/rock_m_sakura.webp",
   skills: { acting: 6, comedy: 6, dance: 6, design: 4, improv: 8, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "sherry_pie",
@@ -1416,7 +1567,8 @@ window.QUEENS = [
   image: "images/sherry_pie.webp",
   skills: { acting: 9, comedy: 8, dance: 9, design: 8, improv: 10, runway: 11, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 {
   id: "widow_vondu",
@@ -1425,7 +1577,8 @@ window.QUEENS = [
   image: "images/widow_vondu.webp",
   skills: { acting: 11, comedy: 7, dance: 13, design: 8, improv: 11, runway: 10, lipsync: 15 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [12] }
+  seasonsByShow: { "RuPaul's Drag Race": [12] },
+  country: "USA",
 },
 
 {
@@ -1435,7 +1588,8 @@ window.QUEENS = [
   image: "images/denali.webp",
   skills: { acting: 6, comedy: 10, dance: 14, design: 9, improv: 10, runway: 11, lipsync: 13 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "elliott_with_2_ts",
@@ -1444,7 +1598,8 @@ window.QUEENS = [
   image: "images/elliott_with_2_ts.webp",
   skills: { acting: 5, comedy: 5, dance: 9, design: 7, improv: 3, runway: 6, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 {
   id: "gottmik",
@@ -1453,7 +1608,8 @@ window.QUEENS = [
   image: "images/gottmik.webp",
   skills: { acting: 9, comedy: 11, dance: 7, design: 14, improv: 14, runway: 15, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [9] },
+  country: "USA",
 },
 {
   id: "joey_jay",
@@ -1462,7 +1618,8 @@ window.QUEENS = [
   image: "images/joey_jay.webp",
   skills: { acting: 8, comedy: 10, dance: 10, design: 7, improv: 11, runway: 11, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "kahmora_hall",
@@ -1471,7 +1628,8 @@ window.QUEENS = [
   image: "images/kahmora_hall.webp",
   skills: { acting: 3, comedy: 4, dance: 3, design: 5, improv: 4, runway: 12, lipsync: 4 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 {
   id: "kandy_muse",
@@ -1480,7 +1638,8 @@ window.QUEENS = [
   image: "images/kandy_muse.webp",
   skills: { acting: 11, comedy: 10, dance: 10, design: 7, improv: 8, runway: 10, lipsync: 14 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [8] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [8] },
+  country: "USA",
 },
 {
   id: "lala_ri",
@@ -1489,7 +1648,8 @@ window.QUEENS = [
   image: "images/lala_ri.webp",
   skills: { acting: 6, comedy: 9, dance: 13, design: 7, improv: 10, runway: 9, lipsync: 14 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars", "Drag Race Down Under vs The World"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [8], "Drag Race Down Under vs The World": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [8], "Drag Race Down Under vs The World": [1] },
+  country: "USA",
 },
 {
   id: "olivia_lux",
@@ -1498,7 +1658,8 @@ window.QUEENS = [
   image: "images/olivia_lux.webp",
   skills: { acting: 11, comedy: 5, dance: 11, design: 10, improv: 8, runway: 11, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "rose_us",
@@ -1507,7 +1668,8 @@ window.QUEENS = [
   image: "images/rose_us.webp",
   skills: { acting: 12, comedy: 11, dance: 13, design: 8, improv: 10, runway: 10, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 {
   id: "symone",
@@ -1516,7 +1678,8 @@ window.QUEENS = [
   image: "images/symone.webp",
   skills: { acting: 14, comedy: 7, dance: 7, design: 9, improv: 12, runway: 13, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 {
   id: "tamisha_iman",
@@ -1525,7 +1688,8 @@ window.QUEENS = [
   image: "images/tamisha_iman.webp",
   skills: { acting: 7, comedy: 6, dance: 7, design: 5, improv: 6, runway: 7, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 {
   id: "tina_burner",
@@ -1534,7 +1698,8 @@ window.QUEENS = [
   image: "images/tina_burner.webp",
   skills: { acting: 9, comedy: 7, dance: 10, design: 11, improv: 7, runway: 8, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [13], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "utica_queen",
@@ -1543,7 +1708,8 @@ window.QUEENS = [
   image: "images/utica_queen.webp",
   skills: { acting: 7, comedy: 4, dance: 6, design: 15, improv: 5, runway: 12, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [13] }
+  seasonsByShow: { "RuPaul's Drag Race": [13] },
+  country: "USA",
 },
 
 {
@@ -1553,7 +1719,8 @@ window.QUEENS = [
   image: "images/alyssa_hunter.webp",
   skills: { acting: 5, comedy: 6, dance: 7, design: 10, improv: 7, runway: 13, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "angeria_paris_vanmicheals",
@@ -1562,7 +1729,8 @@ window.QUEENS = [
   image: "images/angeria_paris_vanmicheals.webp",
   skills: { acting: 13, comedy: 11, dance: 10, design: 12, improv: 9, runway: 13, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [9] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [9] },
+  country: "USA",
 },
 {
   id: "bosco",
@@ -1571,7 +1739,8 @@ window.QUEENS = [
   image: "images/bosco.webp",
   skills: { acting: 11, comedy: 11, dance: 10, design: 9, improv: 12, runway: 13, lipsync: 10 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "daya_betty",
@@ -1580,7 +1749,8 @@ window.QUEENS = [
   image: "images/daya_betty.webp",
   skills: { acting: 9, comedy: 8, dance: 9, design: 9, improv: 10, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "deja_skye",
@@ -1589,7 +1759,8 @@ window.QUEENS = [
   image: "images/deja_skye.webp",
   skills: { acting: 9, comedy: 7, dance: 9, design: 8, improv: 13, runway: 8, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "jasmine_kennedie",
@@ -1598,7 +1769,8 @@ window.QUEENS = [
   image: "images/jasmine_kennedie.webp",
   skills: { acting: 7, comedy: 6, dance: 13, design: 7, improv: 6, runway: 10, lipsync: 14 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "jorgeous",
@@ -1607,7 +1779,8 @@ window.QUEENS = [
   image: "images/jorgeous.webp",
   skills: { acting: 8, comedy: 10, dance: 15, design: 10, improv: 9, runway: 11, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [9, 10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [9, 10] },
+  country: "USA",
 },
 {
   id: "june_jambalaya",
@@ -1616,7 +1789,8 @@ window.QUEENS = [
   image: "images/june_jambalaya.webp",
   skills: { acting: 5, comedy: 6, dance: 6, design: 4, improv: 5, runway: 6, lipsync: 6 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 {
   id: "kerri_colby",
@@ -1625,7 +1799,8 @@ window.QUEENS = [
   image: "images/kerri_colby.webp",
   skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 6, runway: 9, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [14], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "kornbread_jete",
@@ -1634,7 +1809,8 @@ window.QUEENS = [
   image: "images/kornbread_jete.webp",
   skills: { acting: 6, comedy: 7, dance: 6, design: 6, improv: 7, runway: 8, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 {
   id: "lady_camden",
@@ -1643,7 +1819,8 @@ window.QUEENS = [
   image: "images/lady_camden.webp",
   skills: { acting: 12, comedy: 11, dance: 12, design: 11, improv: 7, runway: 10, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 {
   id: "maddy_morphosis",
@@ -1652,7 +1829,8 @@ window.QUEENS = [
   image: "images/maddy_morphosis.webp",
   skills: { acting: 8, comedy: 7, dance: 6, design: 5, improv: 6, runway: 9, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 {
   id: "orion_story",
@@ -1661,7 +1839,8 @@ window.QUEENS = [
   image: "images/orion_story.webp",
   skills: { acting: 4, comedy: 6, dance: 6, design: 5, improv: 6, runway: 6, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 {
   id: "willow_pill",
@@ -1670,7 +1849,8 @@ window.QUEENS = [
   image: "images/willow_pill.webp",
   skills: { acting: 11, comedy: 8, dance: 7, design: 10, improv: 10, runway: 12, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [14] }
+  seasonsByShow: { "RuPaul's Drag Race": [14] },
+  country: "USA",
 },
 
 {
@@ -1680,7 +1860,8 @@ window.QUEENS = [
   image: "images/amethyst.webp",
   skills: { acting: 4, comedy: 8, dance: 6, design: 5, improv: 9, runway: 8, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "anetra",
@@ -1689,7 +1870,8 @@ window.QUEENS = [
   image: "images/anetra.webp",
   skills: { acting: 9, comedy: 7, dance: 13, design: 9, improv: 8, runway: 8, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "aura_mayari",
@@ -1698,7 +1880,8 @@ window.QUEENS = [
   image: "images/aura_mayari.webp",
   skills: { acting: 5, comedy: 5, dance: 9, design: 7, improv: 6, runway: 9, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "irene_the_alien",
@@ -1707,7 +1890,8 @@ window.QUEENS = [
   image: "images/irene_the_alien.webp",
   skills: { acting: 12, comedy: 9, dance: 7, design: 9, improv: 10, runway: 11, lipsync: 6 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "jax",
@@ -1716,7 +1900,8 @@ window.QUEENS = [
   image: "images/jax.webp",
   skills: { acting: 5, comedy: 6, dance: 9, design: 8, improv: 6, runway: 8, lipsync: 14 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "loosey_laduca",
@@ -1725,7 +1910,8 @@ window.QUEENS = [
   image: "images/loosey_laduca.webp",
   skills: { acting: 10, comedy: 14, dance: 9, design: 8, improv: 13, runway: 11, lipsync: 9 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "luxx_noir_london",
@@ -1734,7 +1920,8 @@ window.QUEENS = [
   image: "images/luxx_noir_london.webp",
   skills: { acting: 10, comedy: 10, dance: 9, design: 13, improv: 9, runway: 14, lipsync: 9 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "malaysia_babydoll_foxx",
@@ -1743,7 +1930,8 @@ window.QUEENS = [
   image: "images/malaysia_babydoll_foxx.webp",
   skills: { acting: 9, comedy: 7, dance: 7, design: 8, improv: 6, runway: 9, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "marcia_marcia_marcia",
@@ -1752,7 +1940,8 @@ window.QUEENS = [
   image: "images/marcia_marcia_marcia.webp",
   skills: { acting: 9, comedy: 9, dance: 10, design: 8, improv: 9, runway: 8, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "mistress_isabelle_brooks",
@@ -1761,7 +1950,8 @@ window.QUEENS = [
   image: "images/mistress_isabelle_brooks.webp",
   skills: { acting: 11, comedy: 10, dance: 10, design: 10, improv: 10, runway: 13, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [10] }
+  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [10] },
+  country: "USA",
 },
 {
   id: "princess_poppy",
@@ -1770,7 +1960,8 @@ window.QUEENS = [
   image: "images/princess_poppy.webp",
   skills: { acting: 5, comedy: 6, dance: 5, design: 5, improv: 6, runway: 6, lipsync: 8 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "robin_fierce",
@@ -1779,7 +1970,8 @@ window.QUEENS = [
   image: "images/robin_fierce.webp",
   skills: { acting: 7, comedy: 7, dance: 6, design: 11, improv: 7, runway: 10, lipsync: 9 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "salina_estitties",
@@ -1788,7 +1980,8 @@ window.QUEENS = [
   image: "images/salina_estitties.webp",
   skills: { acting: 9, comedy: 10, dance: 9, design: 6, improv: 7, runway: 9, lipsync: 11 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [15], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "sasha_colby",
@@ -1797,7 +1990,8 @@ window.QUEENS = [
   image: "images/sasha_colby.webp",
   skills: { acting: 12, comedy: 8, dance: 13, design: 11, improv: 11, runway: 15, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "spice",
@@ -1806,7 +2000,8 @@ window.QUEENS = [
   image: "images/spice.webp",
   skills: { acting: 8, comedy: 6, dance: 7, design: 8, improv: 5, runway: 11, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 {
   id: "sugar",
@@ -1815,7 +2010,8 @@ window.QUEENS = [
   image: "images/sugar.webp",
   skills: { acting: 9, comedy: 7, dance: 6, design: 6, improv: 5, runway: 11, lipsync: 7 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [15] }
+  seasonsByShow: { "RuPaul's Drag Race": [15] },
+  country: "USA",
 },
 
 {
@@ -1825,7 +2021,8 @@ window.QUEENS = [
   image: "images/amanda_tori_meating.webp",
   skills: { acting: 9, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 9 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "dawn",
@@ -1834,7 +2031,8 @@ window.QUEENS = [
   image: "images/dawn.webp",
   skills: { acting: 8, comedy: 8, dance: 8, design: 13, improv: 8, runway: 13, lipsync: 7 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "geneva_karr",
@@ -1843,7 +2041,8 @@ window.QUEENS = [
   image: "images/geneva_karr.webp",
   skills: { acting: 5, comedy: 7, dance: 10, design: 6, improv: 8, runway: 8, lipsync: 11 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "hershii_liqcour_jete",
@@ -1852,7 +2051,8 @@ window.QUEENS = [
   image: "images/hershii_liqcour_jete.webp",
   skills: { acting: 9, comedy: 9, dance: 8, design: 4, improv: 7, runway: 4, lipsync: 9 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "megami",
@@ -1861,7 +2061,8 @@ window.QUEENS = [
   image: "images/megami.webp",
   skills: { acting: 9, comedy: 7, dance: 10, design: 10, improv: 9, runway: 10, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "mhiya_iman_lepaige",
@@ -1870,7 +2071,8 @@ window.QUEENS = [
   image: "images/mhiya_iman_lepaige.webp",
   skills: { acting: 8, comedy: 6, dance: 9, design: 9, improv: 9, runway: 9, lipsync: 15 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "mirage",
@@ -1879,7 +2081,8 @@ window.QUEENS = [
   image: "images/mirage.webp",
   skills: { acting: 6, comedy: 7, dance: 8, design: 7, improv: 6, runway: 9, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "morphine_love_dion",
@@ -1888,7 +2091,8 @@ window.QUEENS = [
   image: "images/morphine_love_dion.webp",
   skills: { acting: 7, comedy: 6, dance: 10, design: 10, improv: 7, runway: 11, lipsync: 15 },
   shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] }
+  seasonsByShow: { "RuPaul's Drag Race": [16], "RuPaul's Drag Race All Stars": [11] },
+  country: "USA",
 },
 {
   id: "nymphia_wind",
@@ -1897,7 +2101,8 @@ window.QUEENS = [
   image: "images/nymphia_wind.webp",
   skills: { acting: 10, comedy: 11, dance: 12, design: 15, improv: 8, runway: 15, lipsync: 12 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "plane_jane",
@@ -1906,7 +2111,8 @@ window.QUEENS = [
   image: "images/plane_jane.webp",
   skills: { acting: 12, comedy: 12, dance: 9, design: 9, improv: 13, runway: 11, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "plasma",
@@ -1915,7 +2121,8 @@ window.QUEENS = [
   image: "images/plasma.webp",
   skills: { acting: 13, comedy: 9, dance: 9, design: 7, improv: 8, runway: 9, lipsync: 10 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "q",
@@ -1924,7 +2131,8 @@ window.QUEENS = [
   image: "images/q.webp",
   skills: { acting: 10, comedy: 9, dance: 8, design: 15, improv: 8, runway: 15, lipsync: 5 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "sapphira_cristal",
@@ -1933,7 +2141,8 @@ window.QUEENS = [
   image: "images/sapphira_cristal.webp",
   skills: { acting: 8, comedy: 11, dance: 12, design: 10, improv: 11, runway: 13, lipsync: 13 },
   shows: ["RuPaul's Drag Race"],
-  seasonsByShow: { "RuPaul's Drag Race": [16] }
+  seasonsByShow: { "RuPaul's Drag Race": [16] },
+  country: "USA",
 },
 {
   id: "xunami_muse",
@@ -1942,7 +2151,8 @@ window.QUEENS = [
   image: "images/xunami_muse.webp",
   skills: { acting: 7, comedy: 6, dance: 8, design: 8, improv: 6, runway: 10, lipsync: 8 },
   shows: ["RuPaul's Drag Race", "Drag Race México: Latina Royale"],
-  seasonsByShow: { "RuPaul's Drag Race": [16], "Drag Race México: Latina Royale": [1] }
+  seasonsByShow: { "RuPaul's Drag Race": [16], "Drag Race México: Latina Royale": [1] },
+  country: "USA",
 },
   // ===== RuPaul's Drag Race — Season 17 =====
   {
@@ -1952,7 +2162,8 @@ window.QUEENS = [
     image: "images/onya_nurve.webp",
     skills: { acting: 11, comedy: 10, dance: 9, design: 7, improv: 11, runway: 7, lipsync: 10 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "jewels_sparkles",
@@ -1961,7 +2172,8 @@ window.QUEENS = [
     image: "images/jewels_sparkles.webp",
     skills: { acting: 8, comedy: 10, dance: 12, design: 10, improv: 10, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "lexi",
@@ -1970,7 +2182,8 @@ window.QUEENS = [
     image: "images/lexi.webp",
     skills: { acting: 7, comedy: 8, dance: 11, design: 10, improv: 6, runway: 11, lipsync: 11 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "sam_star",
@@ -1979,7 +2192,8 @@ window.QUEENS = [
     image: "images/sam_star.webp",
     skills: { acting: 10, comedy: 10, dance: 8, design: 12, improv: 9, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [11] }
+    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [11] },
+    country: "USA",
   },
   {
     id: "suzie_toot",
@@ -1988,7 +2202,8 @@ window.QUEENS = [
     image: "images/suzie_toot.webp",
     skills: { acting: 12, comedy: 8, dance: 7, design: 6, improv: 8, runway: 7, lipsync: 10 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "lana_ja_rae",
@@ -1997,7 +2212,8 @@ window.QUEENS = [
     image: "images/lana_ja_rae.webp",
     skills: { acting: 5, comedy: 9, dance: 13, design: 7, improv: 3, runway: 9, lipsync: 12 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "lydia_b_kollins",
@@ -2006,7 +2222,8 @@ window.QUEENS = [
     image: "images/lydia_b_kollins.webp",
     skills: { acting: 9, comedy: 11, dance: 6, design: 8, improv: 8, runway: 10, lipsync: 11 },
     shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [10] }
+    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [10] },
+    country: "USA",
   },
   {
     id: "arrietty",
@@ -2015,7 +2232,8 @@ window.QUEENS = [
     image: "images/arrietty.webp",
     skills: { acting: 6, comedy: 3, dance: 7, design: 14, improv: 4, runway: 13, lipsync: 7 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "kori_king",
@@ -2024,7 +2242,8 @@ window.QUEENS = [
     image: "images/kori_king.webp",
     skills: { acting: 7, comedy: 8, dance: 9, design: 5, improv: 11, runway: 6, lipsync: 12 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "acacia_forgot",
@@ -2033,7 +2252,8 @@ window.QUEENS = [
     image: "images/acacia_forgot.webp",
     skills: { acting: 11, comedy: 7, dance: 3, design: 3, improv: 8, runway: 6, lipsync: 5 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "crystal_envy",
@@ -2042,7 +2262,8 @@ window.QUEENS = [
     image: "images/crystal_envy.webp",
     skills: { acting: 6, comedy: 4, dance: 8, design: 11, improv: 5, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "hormona_lisa",
@@ -2051,7 +2272,8 @@ window.QUEENS = [
     image: "images/hormona_lisa.webp",
     skills: { acting: 11, comedy: 7, dance: 3, design: 9, improv: 9, runway: 7, lipsync: 4 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "joella",
@@ -2060,7 +2282,8 @@ window.QUEENS = [
     image: "images/joella.webp",
     skills: { acting: 5, comedy: 6, dance: 8, design: 3, improv: 7, runway: 5, lipsync: 8 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [17] }
+    seasonsByShow: { "RuPaul's Drag Race": [17] },
+    country: "USA",
   },
   {
     id: "lucky_starzzz",
@@ -2069,7 +2292,8 @@ window.QUEENS = [
     image: "images/lucky_starzzz.webp",
     skills: { acting: 3, comedy: 5, dance: 6, design: 5, improv: 7, runway: 8, lipsync: 7 },
     shows: ["RuPaul's Drag Race", "RuPaul's Drag Race All Stars"],
-    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [11] }
+    seasonsByShow: { "RuPaul's Drag Race": [17], "RuPaul's Drag Race All Stars": [11] },
+    country: "USA",
   },
   // ===== RuPaul's Drag Race — Season 18 =====
   {
@@ -2079,7 +2303,8 @@ window.QUEENS = [
     image: "images/athena_dion.webp",
     skills: { acting: 7, comedy: 8, dance: 7, design: 7, improv: 5, runway: 11, lipsync: 7 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "briar_blush",
@@ -2088,7 +2313,8 @@ window.QUEENS = [
     image: "images/briar_blush.webp",
     skills: { acting: 3, comedy: 8, dance: 9, design: 8, improv: 3, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "ciara_myst",
@@ -2097,7 +2323,8 @@ window.QUEENS = [
     image: "images/ciara_myst.webp",
     skills: { acting: 8, comedy: 6, dance: 6, design: 12, improv: 6, runway: 12, lipsync: 6 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "darlene_mitchell",
@@ -2106,7 +2333,8 @@ window.QUEENS = [
     image: "images/darlene_mitchell.webp",
     skills: { acting: 11, comedy: 10, dance: 4, design: 11, improv: 10, runway: 10, lipsync: 6 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "dd_fuego",
@@ -2115,7 +2343,8 @@ window.QUEENS = [
     image: "images/dd_fuego.webp",
     skills: { acting: 9, comedy: 6, dance: 9, design: 9, improv: 6, runway: 10, lipsync: 5 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "discord_addams",
@@ -2124,7 +2353,8 @@ window.QUEENS = [
     image: "images/discord_addams.webp",
     skills: { acting: 9, comedy: 8, dance: 3, design: 12, improv: 4, runway: 11, lipsync: 3 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "jane_dont",
@@ -2133,7 +2363,8 @@ window.QUEENS = [
     image: "images/jane_dont.webp",
     skills: { acting: 12, comedy: 11, dance: 8, design: 13, improv: 12, runway: 12, lipsync: 7 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "juicy_love_dion",
@@ -2142,7 +2373,8 @@ window.QUEENS = [
     image: "images/juicy_love_dion.webp",
     skills: { acting: 10, comedy: 5, dance: 15, design: 6, improv: 5, runway: 12, lipsync: 15 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "kenya_pleaser",
@@ -2151,7 +2383,8 @@ window.QUEENS = [
     image: "images/kenya_pleaser.webp",
     skills: { acting: 8, comedy: 8, dance: 10, design: 7, improv: 8, runway: 5, lipsync: 12 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "mandy_mango",
@@ -2160,7 +2393,8 @@ window.QUEENS = [
     image: "images/mandy_mango.webp",
     skills: { acting: 8, comedy: 5, dance: 9, design: 4, improv: 5, runway: 5, lipsync: 11 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "mia_starr",
@@ -2169,7 +2403,8 @@ window.QUEENS = [
     image: "images/mia_starr.webp",
     skills: { acting: 8, comedy: 4, dance: 14, design: 6, improv: 8, runway: 7, lipsync: 13 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "myki_meeks",
@@ -2178,7 +2413,8 @@ window.QUEENS = [
     image: "images/myki_meeks.webp",
     skills: { acting: 12, comedy: 11, dance: 8, design: 9, improv: 10, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "nini_coco",
@@ -2187,7 +2423,8 @@ window.QUEENS = [
     image: "images/nini_coco.webp",
     skills: { acting: 11, comedy: 8, dance: 10, design: 12, improv: 8, runway: 12, lipsync: 11 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   {
     id: "vita_vontesse_starr",
@@ -2196,7 +2433,8 @@ window.QUEENS = [
     image: "images/vita_vontesse_starr.webp",
     skills: { acting: 3, comedy: 6, dance: 8, design: 14, improv: 4, runway: 11, lipsync: 5 },
     shows: ["RuPaul's Drag Race"],
-    seasonsByShow: { "RuPaul's Drag Race": [18] }
+    seasonsByShow: { "RuPaul's Drag Race": [18] },
+    country: "USA",
   },
   // ===== RuPaul's Drag Race UK — Season 1 =====
   {
@@ -2206,7 +2444,8 @@ window.QUEENS = [
     image: "images/the_vivienne.webp",
     skills: { acting: 12, comedy: 13, dance: 8, design: 10, improv: 14, runway: 11, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race All Stars"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race All Stars": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race All Stars": [7] },
+    country: "UK",
   },
   {
     id: "divina_de_campo",
@@ -2215,7 +2454,8 @@ window.QUEENS = [
     image: "images/divina_de_campo.webp",
     skills: { acting: 11, comedy: 6, dance: 9, design: 12, improv: 9, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1] },
+    country: "UK",
   },
   {
     id: "baga_chipz",
@@ -2224,7 +2464,8 @@ window.QUEENS = [
     image: "images/baga_chipz.webp",
     skills: { acting: 13, comedy: 12, dance: 5, design: 5, improv: 13, runway: 8, lipsync: 7 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1] },
+    country: "UK",
   },
   {
     id: "cheryl_hole",
@@ -2233,7 +2474,8 @@ window.QUEENS = [
     image: "images/cheryl_hole.webp",
     skills: { acting: 8, comedy: 10, dance: 9, design: 5, improv: 9, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World", "Canada's Drag Race: Canada vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1], "Canada's Drag Race: Canada vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1], "Canada's Drag Race: Canada vs The World": [2] },
+    country: "UK",
   },
   {
     id: "blu_hydrangea",
@@ -2242,7 +2484,8 @@ window.QUEENS = [
     image: "images/blu_hydrangea.webp",
     skills: { acting: 5, comedy: 9, dance: 8, design: 10, improv: 10, runway: 12, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [1] },
+    country: "UK",
   },
   {
     id: "crystal_uk",
@@ -2251,7 +2494,8 @@ window.QUEENS = [
     image: "images/crystal.webp",
     skills: { acting: 6, comedy: 5, dance: 6, design: 9, improv: 4, runway: 8, lipsync: 6 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1] },
+    country: "UK",
   },
   {
     id: "sum_ting_wong",
@@ -2260,7 +2504,8 @@ window.QUEENS = [
     image: "images/sum_ting_wong.webp",
     skills: { acting: 8, comedy: 6, dance: 6, design: 7, improv: 6, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK", "Drag Race Philippines: Slaysian Royale"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "Drag Race Philippines: Slaysian Royale": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "UK",
   },
   {
     id: "vinegar_strokes",
@@ -2269,7 +2514,8 @@ window.QUEENS = [
     image: "images/vinegar_strokes.webp",
     skills: { acting: 7, comedy: 6, dance: 6, design: 4, improv: 4, runway: 6, lipsync: 6 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1] },
+    country: "UK",
   },
   {
     id: "scaredy_kat",
@@ -2278,7 +2524,8 @@ window.QUEENS = [
     image: "images/scaredy_kat.webp",
     skills: { acting: 3, comedy: 5, dance: 6, design: 4, improv: 4, runway: 7, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1] },
+    country: "UK",
   },
   {
     id: "gothy_kendoll",
@@ -2287,7 +2534,8 @@ window.QUEENS = [
     image: "images/gothy_kendoll.webp",
     skills: { acting: 9, comedy: 7, dance: 5, design: 8, improv: 5, runway: 9, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [1], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 2 =====
@@ -2298,7 +2546,8 @@ window.QUEENS = [
     image: "images/lawrence_chaney.webp",
     skills: { acting: 13, comedy: 12, dance: 5, design: 12, improv: 9, runway: 11, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "bimini",
@@ -2307,7 +2556,8 @@ window.QUEENS = [
     image: "images/bimini.webp",
     skills: { acting: 11, comedy: 14, dance: 10, design: 7, improv: 11, runway: 11, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "tayce",
@@ -2316,7 +2566,8 @@ window.QUEENS = [
     image: "images/tayce.webp",
     skills: { acting: 10, comedy: 9, dance: 10, design: 5, improv: 9, runway: 12, lipsync: 14 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "ellie_diamond",
@@ -2325,7 +2576,8 @@ window.QUEENS = [
     image: "images/ellie_diamond.webp",
     skills: { acting: 10, comedy: 6, dance: 7, design: 11, improv: 8, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "a_whora",
@@ -2334,7 +2586,8 @@ window.QUEENS = [
     image: "images/a_whora.webp",
     skills: { acting: 7, comedy: 5, dance: 8, design: 15, improv: 10, runway: 10, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "sister_sister",
@@ -2343,7 +2596,8 @@ window.QUEENS = [
     image: "images/sister_sister.webp",
     skills: { acting: 6, comedy: 8, dance: 6, design: 4, improv: 7, runway: 8, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "tia_kofi",
@@ -2352,7 +2606,8 @@ window.QUEENS = [
     image: "images/tia_kofi.webp",
     skills: { acting: 11, comedy: 13, dance: 10, design: 7, improv: 11, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2], "RuPaul's Drag Race: UK vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "UK",
   },
   {
     id: "joe_black",
@@ -2361,7 +2616,8 @@ window.QUEENS = [
     image: "images/joe_black.webp",
     skills: { acting: 5, comedy: 5, dance: 4, design: 5, improv: 4, runway: 8, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "veronica_green",
@@ -2370,7 +2626,8 @@ window.QUEENS = [
     image: "images/veronica_green.webp",
     skills: { acting: 6, comedy: 6, dance: 10, design: 6, improv: 5, runway: 7, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2, 3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2, 3] },
+    country: "UK",
   },
   {
     id: "ginny_lemon",
@@ -2379,7 +2636,8 @@ window.QUEENS = [
     image: "images/ginny_lemon.webp",
     skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 5, runway: 8, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "asttina_mandella",
@@ -2388,7 +2646,8 @@ window.QUEENS = [
     image: "images/asttina_mandella.webp",
     skills: { acting: 6, comedy: 6, dance: 13, design: 8, improv: 6, runway: 10, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
   {
     id: "cherry_valentine",
@@ -2397,7 +2656,8 @@ window.QUEENS = [
     image: "images/cherry_valentine.webp",
     skills: { acting: 5, comedy: 6, dance: 5, design: 7, improv: 6, runway: 11, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [2] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 3 =====
@@ -2408,7 +2668,8 @@ window.QUEENS = [
     image: "images/krystal_versace.webp",
     skills: { acting: 8, comedy: 8, dance: 11, design: 12, improv: 8, runway: 14, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "ella_vaday",
@@ -2417,7 +2678,8 @@ window.QUEENS = [
     image: "images/ella_vaday.webp",
     skills: { acting: 9, comedy: 14, dance: 8, design: 10, improv: 12, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "kitty_scott_claus",
@@ -2426,7 +2688,8 @@ window.QUEENS = [
     image: "images/kitty_scott_claus.webp",
     skills: { acting: 12, comedy: 11, dance: 7, design: 8, improv: 9, runway: 9, lipsync: 7 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race Global All Stars"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3], "RuPaul's Drag Race Global All Stars": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "UK",
   },
   {
     id: "vanity_milan",
@@ -2435,7 +2698,8 @@ window.QUEENS = [
     image: "images/vanity_milan.webp",
     skills: { acting: 8, comedy: 6, dance: 12, design: 7, improv: 8, runway: 8, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK", "Canada's Drag Race: Canada vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3], "Canada's Drag Race: Canada vs The World": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "UK",
   },
   {
     id: "scarlett_harlett",
@@ -2444,7 +2708,8 @@ window.QUEENS = [
     image: "images/scarlett_harlett.webp",
     skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 6, runway: 8, lipsync: 7 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "choriza_may",
@@ -2453,7 +2718,8 @@ window.QUEENS = [
     image: "images/choriza_may.webp",
     skills: { acting: 9, comedy: 9, dance: 5, design: 7, improv: 8, runway: 8, lipsync: 6 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3], "RuPaul's Drag Race: UK vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "UK",
   },
   {
     id: "river_medway",
@@ -2462,7 +2728,8 @@ window.QUEENS = [
     image: "images/river_medway.webp",
     skills: { acting: 8, comedy: 6, dance: 5, design: 9, improv: 5, runway: 7, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "charity_kase",
@@ -2471,7 +2738,8 @@ window.QUEENS = [
     image: "images/charity_kase.webp",
     skills: { acting: 8, comedy: 7, dance: 4, design: 10, improv: 6, runway: 13, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "victoria_scone",
@@ -2480,7 +2748,8 @@ window.QUEENS = [
     image: "images/victoria_scone.webp",
     skills: { acting: 11, comedy: 10, dance: 8, design: 10, improv: 8, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK", "Canada's Drag Race: Canada vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3], "Canada's Drag Race: Canada vs The World": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "UK",
   },
   {
     id: "elektra_fence",
@@ -2489,7 +2758,8 @@ window.QUEENS = [
     image: "images/elektra_fence.webp",
     skills: { acting: 5, comedy: 6, dance: 11, design: 4, improv: 5, runway: 8, lipsync: 13 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
   {
     id: "anubis",
@@ -2498,7 +2768,8 @@ window.QUEENS = [
     image: "images/anubis.webp",
     skills: { acting: 5, comedy: 5, dance: 5, design: 4, improv: 5, runway: 4, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [3] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 4 =====
@@ -2509,7 +2780,8 @@ window.QUEENS = [
     image: "images/danny_beard.webp",
     skills: { acting: 12, comedy: 10, dance: 11, design: 8, improv: 11, runway: 13, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "cheddar_gorgeous",
@@ -2518,7 +2790,8 @@ window.QUEENS = [
     image: "images/cheddar_gorgeous.webp",
     skills: { acting: 12, comedy: 9, dance: 9, design: 8, improv: 13, runway: 14, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "black_peppa",
@@ -2527,7 +2800,8 @@ window.QUEENS = [
     image: "images/black_peppa.webp",
     skills: { acting: 5, comedy: 4, dance: 8, design: 4, improv: 6, runway: 13, lipsync: 13 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "jonbers_blonde",
@@ -2536,7 +2810,8 @@ window.QUEENS = [
     image: "images/jonbers_blonde.webp",
     skills: { acting: 5, comedy: 9, dance: 8, design: 8, improv: 9, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4], "RuPaul's Drag Race: UK vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "UK",
   },
   {
     id: "pixie_polite",
@@ -2545,7 +2820,8 @@ window.QUEENS = [
     image: "images/pixie_polite.webp",
     skills: { acting: 7, comedy: 5, dance: 9, design: 8, improv: 8, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "dakota_schiffer",
@@ -2554,7 +2830,8 @@ window.QUEENS = [
     image: "images/dakota_schiffer.webp",
     skills: { acting: 6, comedy: 9, dance: 9, design: 10, improv: 9, runway: 11, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "le_fil",
@@ -2563,7 +2840,8 @@ window.QUEENS = [
     image: "images/le_fil.webp",
     skills: { acting: 6, comedy: 5, dance: 8, design: 9, improv: 5, runway: 12, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK", "Canada's Drag Race: Canada vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4], "Canada's Drag Race: Canada vs The World": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4], "Canada's Drag Race: Canada vs The World": [2] },
+    country: "UK",
   },
   {
     id: "baby",
@@ -2572,7 +2850,8 @@ window.QUEENS = [
     image: "images/baby.webp",
     skills: { acting: 6, comedy: 6, dance: 9, design: 10, improv: 4, runway: 9, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "sminty_drop",
@@ -2581,7 +2860,8 @@ window.QUEENS = [
     image: "images/sminty_drop.webp",
     skills: { acting: 5, comedy: 6, dance: 5, design: 9, improv: 4, runway: 14, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4], "RuPaul's Drag Race: UK vs The World": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "UK",
   },
   {
     id: "copper_topp",
@@ -2590,7 +2870,8 @@ window.QUEENS = [
     image: "images/copper_topp.webp",
     skills: { acting: 5, comedy: 4, dance: 9, design: 7, improv: 6, runway: 7, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "starlet",
@@ -2599,7 +2880,8 @@ window.QUEENS = [
     image: "images/starlet.webp",
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 13, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
   {
     id: "just_may",
@@ -2608,7 +2890,8 @@ window.QUEENS = [
     image: "images/just_may.webp",
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [4] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [4] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 5 =====
@@ -2619,7 +2902,8 @@ window.QUEENS = [
     image: "images/ginger_johnson.webp",
     skills: { acting: 10, comedy: 12, dance: 11, design: 9, improv: 13, runway: 10, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "michael_marouli",
@@ -2628,7 +2912,8 @@ window.QUEENS = [
     image: "images/michael_marouli.webp",
     skills: { acting: 6, comedy: 10, dance: 9, design: 8, improv: 10, runway: 10, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK", "Drag Race Down Under vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5], "Drag Race Down Under vs The World": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5], "Drag Race Down Under vs The World": [1] },
+    country: "UK",
   },
   {
     id: "tomara_thomas",
@@ -2637,7 +2922,8 @@ window.QUEENS = [
     image: "images/tomara_thomas.webp",
     skills: { acting: 8, comedy: 8, dance: 10, design: 8, improv: 10, runway: 11, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "dedelicious",
@@ -2646,7 +2932,8 @@ window.QUEENS = [
     image: "images/dedelicious.webp",
     skills: { acting: 8, comedy: 5, dance: 8, design: 9, improv: 6, runway: 11, lipsync: 14 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "kate_butch",
@@ -2655,7 +2942,8 @@ window.QUEENS = [
     image: "images/kate_butch.webp",
     skills: { acting: 10, comedy: 9, dance: 9, design: 8, improv: 9, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5], "RuPaul's Drag Race: UK vs The World": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "UK",
   },
   {
     id: "cara_melle",
@@ -2664,7 +2952,8 @@ window.QUEENS = [
     image: "images/cara_melle.webp",
     skills: { acting: 6, comedy: 8, dance: 10, design: 7, improv: 7, runway: 13, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "vicki_vivacious",
@@ -2673,7 +2962,8 @@ window.QUEENS = [
     image: "images/vicki_vivacious.webp",
     skills: { acting: 6, comedy: 6, dance: 9, design: 8, improv: 5, runway: 11, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "banksie",
@@ -2682,7 +2972,8 @@ window.QUEENS = [
     image: "images/banksie.webp",
     skills: { acting: 6, comedy: 6, dance: 6, design: 10, improv: 7, runway: 13, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "miss_naomi_carter",
@@ -2691,7 +2982,8 @@ window.QUEENS = [
     image: "images/miss_naomi_carter.webp",
     skills: { acting: 6, comedy: 6, dance: 8, design: 6, improv: 6, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
   {
     id: "alexis_saint_pete",
@@ -2700,7 +2992,8 @@ window.QUEENS = [
     image: "images/alexis_saint_pete.webp",
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 7, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [5] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [5] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 6 =====
@@ -2711,7 +3004,8 @@ window.QUEENS = [
     image: "images/kyran_thrax.webp",
     skills: { acting: 11, comedy: 9, dance: 10, design: 9, improv: 9, runway: 9, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "la_voix",
@@ -2720,7 +3014,8 @@ window.QUEENS = [
     image: "images/la_voix.webp",
     skills: { acting: 11, comedy: 14, dance: 7, design: 7, improv: 13, runway: 7, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK", "Queen of the Universe"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6], "Queen of the Universe": [1] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6], "Queen of the Universe": [1] },
+    country: "UK",
   },
   {
     id: "marmalade",
@@ -2729,7 +3024,8 @@ window.QUEENS = [
     image: "images/marmalade.webp",
     skills: { acting: 9, comedy: 7, dance: 4, design: 14, improv: 9, runway: 15, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "rileasa_slaves",
@@ -2738,7 +3034,8 @@ window.QUEENS = [
     image: "images/rileasa_slaves.webp",
     skills: { acting: 8, comedy: 6, dance: 10, design: 7, improv: 4, runway: 10, lipsync: 12 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "lill",
@@ -2747,7 +3044,8 @@ window.QUEENS = [
     image: "images/lill.webp",
     skills: { acting: 6, comedy: 9, dance: 5, design: 10, improv: 10, runway: 11, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "charra_tea",
@@ -2756,7 +3054,8 @@ window.QUEENS = [
     image: "images/charra_tea.webp",
     skills: { acting: 7, comedy: 10, dance: 6, design: 10, improv: 9, runway: 10, lipsync: 7 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "actavia",
@@ -2765,7 +3064,8 @@ window.QUEENS = [
     image: "images/actavia.webp",
     skills: { acting: 7, comedy: 4, dance: 11, design: 3, improv: 7, runway: 6, lipsync: 13 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "chanel_o_conor",
@@ -2774,7 +3074,8 @@ window.QUEENS = [
     image: "images/chanel_o_conor.webp",
     skills: { acting: 7, comedy: 4, dance: 6, design: 11, improv: 5, runway: 10, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "kiki_snatch",
@@ -2783,7 +3084,8 @@ window.QUEENS = [
     image: "images/kiki_snatch.webp",
     skills: { acting: 4, comedy: 6, dance: 14, design: 3, improv: 5, runway: 7, lipsync: 13 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "zahirah_zapanta",
@@ -2792,7 +3094,8 @@ window.QUEENS = [
     image: "images/zahirah_zapanta.webp",
     skills: { acting: 4, comedy: 5, dance: 7, design: 5, improv: 5, runway: 10, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK", "RuPaul's Drag Race: UK vs The World"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6], "RuPaul's Drag Race: UK vs The World": [3] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "UK",
   },
   {
     id: "dita_garbo",
@@ -2801,7 +3104,8 @@ window.QUEENS = [
     image: "images/dita_garbo.webp",
     skills: { acting: 5, comedy: 6, dance: 8, design: 10, improv: 5, runway: 7, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
   {
     id: "saki_yew",
@@ -2810,7 +3114,8 @@ window.QUEENS = [
     image: "images/saki_yew.webp",
     skills: { acting: 7, comedy: 5, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [6] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [6] },
+    country: "UK",
   },
 
   // ===== RuPaul's Drag Race UK — Season 7 =====
@@ -2821,7 +3126,8 @@ window.QUEENS = [
     image: "images/bones.webp",
     skills: { acting: 7, comedy: 10, dance: 11, design: 9, improv: 5, runway: 12, lipsync: 11 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "elle_vosque",
@@ -2830,7 +3136,8 @@ window.QUEENS = [
     image: "images/elle_vosque.webp",
     skills: { acting: 10, comedy: 7, dance: 9, design: 10, improv: 9, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "catrin_feelings",
@@ -2839,7 +3146,8 @@ window.QUEENS = [
     image: "images/catrin_feelings.webp",
     skills: { acting: 10, comedy: 9, dance: 8, design: 6, improv: 9, runway: 6, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "silllexa_diction",
@@ -2848,7 +3156,8 @@ window.QUEENS = [
     image: "images/silllexa_diction.webp",
     skills: { acting: 8, comedy: 7, dance: 9, design: 10, improv: 7, runway: 12, lipsync: 10 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "tayris_mongardi",
@@ -2857,7 +3166,8 @@ window.QUEENS = [
     image: "images/tayris_mongardi.webp",
     skills: { acting: 7, comedy: 6, dance: 10, design: 7, improv: 7, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "bonnie_ann_clyde",
@@ -2866,7 +3176,8 @@ window.QUEENS = [
     image: "images/bonnie_ann_clyde.webp",
     skills: { acting: 8, comedy: 10, dance: 6, design: 7, improv: 11, runway: 8, lipsync: 6 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "paige_three",
@@ -2875,7 +3186,8 @@ window.QUEENS = [
     image: "images/paige_three.webp",
     skills: { acting: 9, comedy: 7, dance: 14, design: 10, improv: 7, runway: 10, lipsync: 13 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "sally_tm",
@@ -2884,7 +3196,8 @@ window.QUEENS = [
     image: "images/sally_tm.webp",
     skills: { acting: 7, comedy: 7, dance: 4, design: 13, improv: 7, runway: 12, lipsync: 5 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "chai_t_grande",
@@ -2893,7 +3206,8 @@ window.QUEENS = [
     image: "images/chai_t_grande.webp",
     skills: { acting: 5, comedy: 5, dance: 9, design: 9, improv: 5, runway: 11, lipsync: 8 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "nyongbella",
@@ -2902,7 +3216,8 @@ window.QUEENS = [
     image: "images/nyongbella.webp",
     skills: { acting: 4, comedy: 9, dance: 10, design: 9, improv: 5, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "viola",
@@ -2911,7 +3226,8 @@ window.QUEENS = [
     image: "images/viola.webp",
     skills: { acting: 8, comedy: 5, dance: 6, design: 7, improv: 6, runway: 7, lipsync: 7 },
     shows: ["RuPaul's Drag Race UK", "Queen of the Universe"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7], "Queen of the Universe": [2] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7], "Queen of the Universe": [2] },
+    country: "UK",
   },
   {
     id: "pasty",
@@ -2920,7 +3236,8 @@ window.QUEENS = [
     image: "images/pasty.webp",
     skills: { acting: 5, comedy: 6, dance: 3, design: 3, improv: 6, runway: 5, lipsync: 4 },
     shows: ["RuPaul's Drag Race UK"],
-    seasonsByShow: { "RuPaul's Drag Race UK": [7] }
+    seasonsByShow: { "RuPaul's Drag Race UK": [7] },
+    country: "UK",
   },
   {
     id: "anastarzia_anaquway",
@@ -2930,6 +3247,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 4, design: 12, improv: 6, runway: 8, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "boa",
@@ -2939,6 +3257,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 6, runway: 7, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "ilona_verley",
@@ -2948,6 +3267,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 8, dance: 5, design: 8, improv: 9, runway: 10, lipsync: 10 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "jimbo",
@@ -2961,6 +3281,7 @@ window.QUEENS = [
       "RuPaul's Drag Race: UK vs The World": [1],
       "RuPaul's Drag Race All Stars": [8],
     },
+    country: "Canada",
   },
   {
     id: "juice_boxx",
@@ -2970,6 +3291,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 4, improv: 6, runway: 6, lipsync: 7 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [1], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "kiara",
@@ -2979,6 +3301,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 8, design: 11, improv: 6, runway: 9, lipsync: 11 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "kyne",
@@ -2988,6 +3311,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 6, design: 7, improv: 6, runway: 6, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "lemon",
@@ -3001,6 +3325,7 @@ window.QUEENS = [
       "RuPaul's Drag Race: UK vs The World": [1],
       "Canada's Drag Race: Canada vs The World": [2],
     },
+    country: "Canada",
   },
   {
     id: "priyanka",
@@ -3010,6 +3335,7 @@ window.QUEENS = [
     skills: { acting: 14, comedy: 9, dance: 12, design: 8, improv: 6, runway: 10, lipsync: 13 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "rita_baga",
@@ -3019,6 +3345,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 9, design: 9, improv: 8, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World", "Host"],
     seasonsByShow: { "Canada's Drag Race": [1], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "Canada",
   },
   {
     id: "scarlett_bobo",
@@ -3028,6 +3355,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 9, design: 9, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [1] },
+    country: "Canada",
   },
   {
     id: "tynomi_banks",
@@ -3037,6 +3365,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 7, improv: 5, runway: 7, lipsync: 10 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Canada's Drag Race": [1], "Canada's Drag Race: Canada vs The World": [2] },
+    country: "Canada",
   },
 
   {
@@ -3047,6 +3376,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 7, design: 6, improv: 6, runway: 8, lipsync: 5 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "beth",
@@ -3056,6 +3386,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 6, design: 3, improv: 6, runway: 5, lipsync: 4 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "eve_6000",
@@ -3065,6 +3396,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 5, dance: 5, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "gia_metric",
@@ -3074,6 +3406,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 10, design: 6, improv: 6, runway: 9, lipsync: 10 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "icesis_couture",
@@ -3083,6 +3416,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 11, dance: 9, design: 12, improv: 10, runway: 14, lipsync: 12 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Canada's Drag Race": [2], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "Canada",
   },
   {
     id: "kendall_gender",
@@ -3092,6 +3426,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 9, dance: 8, design: 6, improv: 7, runway: 8, lipsync: 10 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Canada's Drag Race": [2], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "Canada",
   },
   {
     id: "kimora_amour",
@@ -3101,6 +3436,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 5, design: 6, improv: 7, runway: 7, lipsync: 5 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "oceane_aqua_black",
@@ -3110,6 +3446,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 7, dance: 4, design: 7, improv: 7, runway: 7, lipsync: 5 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
   {
     id: "pythia",
@@ -3119,6 +3456,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 8, design: 12, improv: 9, runway: 12, lipsync: 7 },
     shows: ["Canada's Drag Race", "RuPaul's Drag Race Global All Stars", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [2], "RuPaul's Drag Race Global All Stars": [1], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "stephanie_prince",
@@ -3128,6 +3466,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 10, improv: 5, runway: 11, lipsync: 6 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Canada's Drag Race": [2], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "Canada",
   },
   {
     id: "suki_doll",
@@ -3137,6 +3476,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 6, design: 9, improv: 5, runway: 9, lipsync: 5 },
     shows: ["Canada's Drag Race", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Canada's Drag Race": [2], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Canada",
   },
   {
     id: "synthia_kiss",
@@ -3146,6 +3486,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 10, design: 7, improv: 9, runway: 7, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [2] },
+    country: "Canada",
   },
 
   {
@@ -3156,6 +3497,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 7, dance: 6, design: 8, improv: 6, runway: 7, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "chelazon_leroux",
@@ -3165,6 +3507,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 9, dance: 4, design: 7, improv: 5, runway: 7, lipsync: 6 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "gisele_lullaby",
@@ -3174,6 +3517,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 8, design: 11, improv: 10, runway: 12, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "halal_bae",
@@ -3183,6 +3527,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 3, design: 3, improv: 4, runway: 7, lipsync: 5 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "irma_gerd",
@@ -3192,6 +3537,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 7, dance: 7, design: 8, improv: 10, runway: 9, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "jada_shada_hudson",
@@ -3201,6 +3547,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [3], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "kaos",
@@ -3210,6 +3557,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 7, dance: 5, design: 5, improv: 5, runway: 9, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "kimmy_couture",
@@ -3219,6 +3567,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 12, design: 9, improv: 6, runway: 11, lipsync: 12 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "lady_boom_boom",
@@ -3228,6 +3577,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 8, dance: 9, design: 9, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "miss_fiercalicious",
@@ -3237,6 +3587,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 8, design: 7, improv: 7, runway: 11, lipsync: 9 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Canada's Drag Race": [3], "Canada's Drag Race: Canada vs The World": [2] },
+    country: "Canada",
   },
   {
     id: "miss_moco",
@@ -3246,6 +3597,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 4, dance: 6, design: 4, improv: 4, runway: 7, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
   {
     id: "vivian_vanderpuss",
@@ -3255,6 +3607,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 9, design: 7, improv: 8, runway: 9, lipsync: 8 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [3] },
+    country: "Canada",
   },
 
   {
@@ -3265,6 +3618,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 9, design: 6, improv: 8, runway: 11, lipsync: 10 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "aurora_matrix",
@@ -3274,6 +3628,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 12, design: 7, improv: 6, runway: 10, lipsync: 12 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [4], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "denim",
@@ -3283,6 +3638,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 8, design: 10, improv: 5, runway: 11, lipsync: 8 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "kiki_coe",
@@ -3292,6 +3648,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 5, design: 13, improv: 6, runway: 13, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "kitten_kaboodle",
@@ -3301,6 +3658,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 6, design: 9, improv: 9, runway: 9, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "luna_dubois",
@@ -3310,6 +3668,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 8, design: 8, improv: 6, runway: 10, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "melinda_verga",
@@ -3319,6 +3678,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 8, design: 6, improv: 10, runway: 7, lipsync: 10 },
     shows: ["Canada's Drag Race", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Canada's Drag Race": [4], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Canada",
   },
   {
     id: "nearah_nuff",
@@ -3328,6 +3688,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 10, design: 6, improv: 8, runway: 9, lipsync: 13 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [4], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "sisi_superstar",
@@ -3337,6 +3698,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "the_girlfriend_experience",
@@ -3346,6 +3708,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 6, improv: 6, runway: 9, lipsync: 8 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
   {
     id: "venus",
@@ -3355,6 +3718,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 10, design: 9, improv: 10, runway: 12, lipsync: 10 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [4] },
+    country: "Canada",
   },
 
   {
@@ -3365,6 +3729,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 7, design: 12, improv: 7, runway: 12, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "jaylene_tyme",
@@ -3374,6 +3739,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 5, design: 9, improv: 5, runway: 8, lipsync: 6 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "makayla_couture",
@@ -3383,6 +3749,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 13, design: 6, improv: 6, runway: 12, lipsync: 14 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "minhi_wang",
@@ -3392,6 +3759,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 5, design: 10, improv: 8, runway: 12, lipsync: 6 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "perla",
@@ -3401,6 +3769,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 10, design: 8, improv: 6, runway: 7, lipsync: 12 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "sanjina_dabish_queen",
@@ -3410,6 +3779,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 10, design: 4, improv: 9, runway: 7, lipsync: 11 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "tara_nova",
@@ -3419,6 +3789,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 7, design: 7, improv: 5, runway: 7, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "tiffany_ann_co",
@@ -3428,6 +3799,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 11, design: 7, improv: 5, runway: 8, lipsync: 9 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [5], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "the_virgo_queen",
@@ -3437,6 +3809,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 11, design: 10, improv: 6, runway: 13, lipsync: 12 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "uma_gahd",
@@ -3446,6 +3819,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 4, design: 3, improv: 7, runway: 7, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
   {
     id: "xana",
@@ -3455,6 +3829,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 3, design: 8, improv: 9, runway: 10, lipsync: 6 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [5] },
+    country: "Canada",
   },
 
   {
@@ -3465,6 +3840,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 10, design: 12, improv: 7, runway: 12, lipsync: 11 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "eboni_la_belle",
@@ -3474,6 +3850,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 11, dance: 12, design: 9, improv: 9, runway: 6, lipsync: 15 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "pm",
@@ -3483,6 +3860,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 3, dance: 10, design: 2, improv: 8, runway: 5, lipsync: 11 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "sami_landri",
@@ -3492,6 +3870,7 @@ window.QUEENS = [
     skills: { acting: 12, comedy: 12, dance: 5, design: 6, improv: 9, runway: 10, lipsync: 8 },
     shows: ["Canada's Drag Race", "Canada's Drag Race: All Stars"],
     seasonsByShow: { "Canada's Drag Race": [6], "Canada's Drag Race: All Stars": [1] },
+    country: "Canada",
   },
   {
     id: "karamilk",
@@ -3501,6 +3880,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 14, design: 9, improv: 6, runway: 8, lipsync: 13 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "saltina_shaker",
@@ -3510,6 +3890,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 13, design: 6, improv: 9, runway: 9, lipsync: 13 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "mya_foxx",
@@ -3519,6 +3900,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 10, design: 5, improv: 11, runway: 6, lipsync: 10 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "velma_jones",
@@ -3528,6 +3910,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 8, dance: 7, design: 8, improv: 4, runway: 9, lipsync: 7 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "dulce",
@@ -3537,6 +3920,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 7, design: 5, improv: 7, runway: 3, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "hazel",
@@ -3546,6 +3930,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 11, design: 5, improv: 6, runway: 7, lipsync: 12 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "star_doll",
@@ -3555,6 +3940,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 10, design: 8, improv: 4, runway: 10, lipsync: 9 },
     shows: ["Canada's Drag Race"],
     seasonsByShow: { "Canada's Drag Race": [6] },
+    country: "Canada",
   },
   {
     id: "paolo_perfeccion",
@@ -3563,7 +3949,8 @@ window.QUEENS = [
     image: "images/paolo_perfeccion.webp",
     skills: { acting: 5, comedy: 7, dance: 6, design: 4, improv: 6, runway: 10, lipsync: 6 },
     shows: ["Canada's Drag Race"],
-    seasonsByShow: { "Canada's Drag Race": [6] },
+    seasonsByShow: { "Canada's Drag Race": [6, 7] },
+    country: "Canada",
   },
   {
     id: "chelsea_boy",
@@ -3573,6 +3960,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 7, design: 7, improv: 10, runway: 12, lipsync: 6 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "envy_peru",
@@ -3582,6 +3970,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 11, dance: 11, design: 8, improv: 11, runway: 13, lipsync: 11 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "janey_jacke",
@@ -3591,6 +3980,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 13, design: 11, improv: 6, runway: 11, lipsync: 12 },
     shows: ["Drag Race Holland", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Holland": [1], "RuPaul's Drag Race: UK vs The World": [1] },
+    country: "Netherlands",
   },
   {
     id: "madame_madness",
@@ -3600,6 +3990,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 5, design: 6, improv: 5, runway: 8, lipsync: 7 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "mama_queen",
@@ -3609,6 +4000,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 5, design: 6, improv: 6, runway: 10, lipsync: 7 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "megan_schoonbrood",
@@ -3618,6 +4010,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 5, improv: 6, runway: 9, lipsync: 8 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "miss_abby_omg",
@@ -3627,6 +4020,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 11, design: 6, improv: 5, runway: 8, lipsync: 10 },
     shows: ["Drag Race Holland", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Holland": [1], "Drag Race México: Latina Royale": [1] },
+    country: "Netherlands",
   },
   {
     id: "patty_pam_pam",
@@ -3636,6 +4030,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 6, design: 6, improv: 5, runway: 9, lipsync: 7 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "roem",
@@ -3645,6 +4040,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 5, runway: 6, lipsync: 5 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
   {
     id: "sederginne",
@@ -3654,6 +4050,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 7, improv: 5, runway: 13, lipsync: 5 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [1] },
+    country: "Netherlands",
   },
 
   {
@@ -3664,6 +4061,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 5, design: 4, improv: 8, runway: 5, lipsync: 10 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "juicy_kutoure",
@@ -3673,6 +4071,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 5, improv: 4, runway: 4, lipsync: 5 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "keta_minaj",
@@ -3682,6 +4081,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 9, design: 10, improv: 12, runway: 13, lipsync: 9 },
     shows: ["Drag Race Holland", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Holland": [2], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "Netherlands",
   },
   {
     id: "love_masisi",
@@ -3691,6 +4091,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 8, improv: 5, runway: 10, lipsync: 7 },
     shows: ["Drag Race Holland", "Queen of the Universe"],
     seasonsByShow: { "Drag Race Holland": [2], "Queen of the Universe": [2] },
+    country: "Netherlands",
   },
   {
     id: "my_little_puny",
@@ -3700,6 +4101,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 10, design: 7, improv: 9, runway: 10, lipsync: 10 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "reggy_b",
@@ -3709,6 +4111,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 5, improv: 6, runway: 8, lipsync: 8 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "tabitha",
@@ -3718,6 +4121,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 7, dance: 8, design: 6, improv: 5, runway: 7, lipsync: 8 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "the_countess",
@@ -3727,6 +4131,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 4, design: 10, improv: 6, runway: 12, lipsync: 5 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "vanessa_van_cartier",
@@ -3736,6 +4141,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 6, design: 8, improv: 5, runway: 12, lipsync: 8 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "vivaldi",
@@ -3745,6 +4151,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 8, design: 7, improv: 8, runway: 12, lipsync: 8 },
     shows: ["Drag Race Holland"],
     seasonsByShow: { "Drag Race Holland": [2] },
+    country: "Netherlands",
   },
   {
     id: "ava_hangar",
@@ -3754,6 +4161,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 5, design: 5, improv: 6, runway: 6, lipsync: 6 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "divinity",
@@ -3763,6 +4171,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 8, design: 7, improv: 6, runway: 8, lipsync: 7 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "elecktra_bionic",
@@ -3772,6 +4181,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 8, design: 8, improv: 9, runway: 9, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "enorma_jean",
@@ -3781,6 +4191,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 6, design: 6, improv: 8, runway: 7, lipsync: 6 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "farida_kant",
@@ -3790,6 +4201,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 8, design: 11, improv: 5, runway: 11, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "ivana_vamp",
@@ -3799,6 +4211,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 6, improv: 6, runway: 6, lipsync: 5 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "le_riche",
@@ -3808,6 +4221,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 6, design: 8, improv: 9, runway: 8, lipsync: 7 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
   {
     id: "luquisha_lubamba",
@@ -3817,6 +4231,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 5, improv: 7, runway: 6, lipsync: 7 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [1] },
+    country: "Italy",
   },
 
   {
@@ -3827,6 +4242,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 9, design: 6, improv: 5, runway: 9, lipsync: 8 },
     shows: ["Drag Race Italia", "Queen of the Universe"],
     seasonsByShow: { "Drag Race Italia": [2], "Queen of the Universe": [2] },
+    country: "Italy",
   },
   {
     id: "gioffre",
@@ -3836,6 +4252,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 5, design: 7, improv: 5, runway: 8, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "la_diamond",
@@ -3845,6 +4262,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 12, dance: 8, design: 12, improv: 11, runway: 13, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "la_petite_rose_noire",
@@ -3854,6 +4272,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 5, dance: 10, design: 8, improv: 7, runway: 11, lipsync: 11 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "narciso",
@@ -3863,6 +4282,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "nehellenia",
@@ -3872,6 +4292,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 10, design: 8, improv: 10, runway: 12, lipsync: 10 },
     shows: ["Drag Race Italia", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Italia": [2], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Italy",
   },
   {
     id: "obama",
@@ -3881,6 +4302,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 6, design: 8, improv: 9, runway: 8, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "panthera_virus",
@@ -3890,6 +4312,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 6, design: 6, improv: 5, runway: 8, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "skandalove",
@@ -3899,6 +4322,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
   {
     id: "tanissa_yonce",
@@ -3908,6 +4332,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 6, design: 10, improv: 6, runway: 9, lipsync: 7 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [2] },
+    country: "Italy",
   },
 
   {
@@ -3918,6 +4343,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "amy_krania",
@@ -3927,6 +4353,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 5, improv: 5, runway: 5, lipsync: 5 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "la_prada",
@@ -3936,6 +4363,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 6, design: 9, improv: 7, runway: 8, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "la_sheeva",
@@ -3945,6 +4373,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 5, dance: 8, design: 10, improv: 5, runway: 11, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "leila_yarn",
@@ -3954,6 +4383,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 7, dance: 9, design: 8, improv: 9, runway: 12, lipsync: 11 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "lightning_aurora",
@@ -3963,6 +4393,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 8, design: 5, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "lina_galore",
@@ -3972,6 +4403,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 12, dance: 10, design: 10, improv: 12, runway: 14, lipsync: 12 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "melissa_bianchini",
@@ -3981,6 +4413,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 11, design: 9, improv: 8, runway: 14, lipsync: 12 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "morgana_cosmica",
@@ -3990,6 +4423,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 7, design: 7, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "silvana_della_magliana",
@@ -3999,6 +4433,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 8, design: 8, improv: 10, runway: 9, lipsync: 8 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "sissy_lea",
@@ -4008,6 +4443,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 9, improv: 7, runway: 8, lipsync: 5 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "sypario",
@@ -4017,6 +4453,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 10, design: 6, improv: 7, runway: 9, lipsync: 7 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "vezirja",
@@ -4026,6 +4463,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 6, design: 6, improv: 6, runway: 8, lipsync: 5 },
     shows: ["Drag Race Italia"],
     seasonsByShow: { "Drag Race Italia": [3] },
+    country: "Italy",
   },
   {
     id: "kita_mean",
@@ -4035,6 +4473,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 7, design: 7, improv: 9, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "art_simone",
@@ -4044,6 +4483,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 5, design: 8, improv: 4, runway: 10, lipsync: 4 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Drag Race Down Under vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "karen_from_finance",
@@ -4053,6 +4493,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 5, improv: 7, runway: 7, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "scarlet_adams",
@@ -4062,6 +4503,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 10, design: 10, improv: 7, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "elektra_shock",
@@ -4071,6 +4513,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 12, design: 8, improv: 4, runway: 7, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "maxi_shield",
@@ -4080,6 +4523,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 9, improv: 7, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "etcetera_etcetera",
@@ -4089,6 +4533,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 8, dance: 8, design: 7, improv: 8, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "anita_wiglit",
@@ -4098,6 +4543,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 9, dance: 8, design: 6, improv: 10, runway: 8, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Canada's Drag Race: Canada vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "coco_jumbo",
@@ -4107,6 +4553,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 6, improv: 5, runway: 8, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1], "Drag Race Down Under vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "jojo_zaho",
@@ -4116,6 +4563,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 5, improv: 5, runway: 6, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [1] },
+    country: "Australia / New Zealand",
   },
 
   // Down Under 2
@@ -4127,6 +4575,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 11, dance: 8, design: 5, improv: 8, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "hannah_conda",
@@ -4136,6 +4585,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 12, dance: 11, design: 8, improv: 11, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "kween_kong",
@@ -4145,6 +4595,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 10, design: 5, improv: 8, runway: 10, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "molly_poppinz",
@@ -4154,6 +4605,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 6, design: 9, improv: 7, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "beverly_kills",
@@ -4163,6 +4615,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 4, dance: 10, design: 9, improv: 5, runway: 9, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "yuri_guaii",
@@ -4172,6 +4625,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 11, dance: 6, design: 12, improv: 9, runway: 13, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "The Boulet Brothers' Dragula"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "The Boulet Brothers' Dragula": [6] },
+    country: "New Zealand",
   },
   {
     id: "minnie_cooper",
@@ -4181,6 +4635,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 5, design: 6, improv: 6, runway: 9, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "pomara_fifth",
@@ -4190,6 +4645,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 5, design: 7, improv: 5, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "aubrey_haive",
@@ -4199,6 +4655,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 4, dance: 5, design: 7, improv: 4, runway: 8, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
   {
     id: "faux_fur",
@@ -4208,6 +4665,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 4, design: 5, improv: 4, runway: 5, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2] },
+    country: "Australia / New Zealand",
   },
 
   // Down Under 3
@@ -4219,6 +4677,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 10, design: 11, improv: 9, runway: 11, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "gabriella_labucci",
@@ -4228,6 +4687,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 9, design: 7, improv: 10, runway: 8, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "flor",
@@ -4237,6 +4697,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 9, design: 8, improv: 8, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3], "Drag Race Down Under vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "hollywould_star",
@@ -4246,6 +4707,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 11, design: 9, improv: 8, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "bumpa_love",
@@ -4255,6 +4717,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 6, design: 8, improv: 8, runway: 7, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "ashley_madison",
@@ -4264,6 +4727,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 5, design: 8, improv: 10, runway: 9, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "rita_menu",
@@ -4273,6 +4737,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 6, improv: 5, runway: 8, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "ivanna_drink",
@@ -4282,6 +4747,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
   {
     id: "ivory_glaze",
@@ -4291,6 +4757,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 5, design: 5, improv: 4, runway: 6, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "amyl",
@@ -4300,6 +4767,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [3] },
+    country: "Australia / New Zealand",
   },
 
   // Down Under 4
@@ -4311,6 +4779,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 12, dance: 4, design: 7, improv: 12, runway: 13, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "mandy_moobs",
@@ -4320,6 +4789,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 8, design: 11, improv: 9, runway: 9, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "vybe",
@@ -4329,6 +4799,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 7, design: 10, improv: 11, runway: 10, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4], "Drag Race Down Under vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "freya_armani",
@@ -4338,6 +4809,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 9, design: 9, improv: 6, runway: 9, lipsync: 9 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "nikita_iman",
@@ -4347,6 +4819,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 7, design: 9, improv: 4, runway: 10, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under", "Drag Race Down Under vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4], "Drag Race Down Under vs The World": [1] },
+    country: "Australia / New Zealand",
   },
   {
     id: "max_drag_queen",
@@ -4356,6 +4829,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 12, design: 9, improv: 5, runway: 10, lipsync: 11 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "brenda_bressed",
@@ -4365,6 +4839,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 6, design: 5, improv: 10, runway: 6, lipsync: 7 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "lucina_innocence",
@@ -4374,6 +4849,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 5, design: 8, improv: 9, runway: 9, lipsync: 6 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "karna_ford",
@@ -4383,6 +4859,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 10, design: 3, improv: 5, runway: 5, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "olivia_dreams",
@@ -4392,6 +4869,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 6, design: 5, improv: 3, runway: 6, lipsync: 5 },
     shows: ["RuPaul's Drag Race Down Under"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [4] },
+    country: "Australia / New Zealand",
   },
   {
     id: "paloma",
@@ -4401,6 +4879,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 11, dance: 6, design: 7, improv: 9, runway: 9, lipsync: 8 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [1] },
+    country: "France",
   },
   {
     id: "la_grande_dame",
@@ -4410,6 +4889,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 9, design: 13, improv: 8, runway: 14, lipsync: 9 },
     shows: ["Drag Race France", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race France": [1], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "France",
   },
   {
     id: "soa_de_muse",
@@ -4423,6 +4903,7 @@ window.QUEENS = [
       "RuPaul's Drag Race Global All Stars": [1],
       "Drag Race France All Stars": [1],
     },
+    country: "France",
   },
   {
     id: "lolita_banana",
@@ -4432,6 +4913,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 13, design: 11, improv: 6, runway: 9, lipsync: 12 },
     shows: ["Drag Race France", "Host"],
     seasonsByShow: { "Drag Race France": [1] },
+    country: "France",
   },
   {
     id: "la_big_bertha",
@@ -4441,6 +4923,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 7, design: 6, improv: 6, runway: 8, lipsync: 9 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [1], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "elips",
@@ -4450,6 +4933,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 9, dance: 8, design: 8, improv: 8, runway: 8, lipsync: 7 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [1], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "kam_hugh",
@@ -4459,6 +4943,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 6, design: 9, improv: 4, runway: 13, lipsync: 7 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [1], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "la_briochee",
@@ -4468,6 +4953,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 5, improv: 6, runway: 8, lipsync: 5 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [1] },
+    country: "France",
   },
   {
     id: "lova_ladiva",
@@ -4477,6 +4963,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 6, design: 4, improv: 6, runway: 6, lipsync: 5 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [1] },
+    country: "France",
   },
   {
     id: "la_kahena",
@@ -4486,6 +4973,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 3, improv: 5, runway: 6, lipsync: 5 },
     shows: ["Drag Race France", "Canada's Drag Race: Canada vs The World"],
     seasonsByShow: { "Drag Race France": [1], "Canada's Drag Race: Canada vs The World": [2] },
+    country: "France",
   },
 
   // Drag Race France 2
@@ -4497,6 +4985,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 15, design: 11, improv: 11, runway: 13, lipsync: 13 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
   {
     id: "sara_forever",
@@ -4506,6 +4995,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 11, design: 6, improv: 10, runway: 10, lipsync: 10 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
   {
     id: "mami_watta",
@@ -4515,6 +5005,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 12, design: 9, improv: 8, runway: 12, lipsync: 11 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [2], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "punani",
@@ -4524,6 +5015,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 8, design: 9, improv: 10, runway: 10, lipsync: 9 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [2], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "piche",
@@ -4533,6 +5025,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 11, design: 7, improv: 8, runway: 9, lipsync: 11 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [2], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "cookie_kunty",
@@ -4542,6 +5035,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 8, design: 10, improv: 5, runway: 11, lipsync: 10 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
   {
     id: "moon",
@@ -4551,6 +5045,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 9, design: 6, improv: 8, runway: 10, lipsync: 9 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [2], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "ginger_bitch",
@@ -4560,6 +5055,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 7, design: 6, improv: 8, runway: 8, lipsync: 9 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
   {
     id: "kitty_space",
@@ -4569,6 +5065,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 10, improv: 5, runway: 10, lipsync: 7 },
     shows: ["Drag Race France", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race France": [2], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "France",
   },
   {
     id: "vespi",
@@ -4578,6 +5075,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 6, improv: 6, runway: 9, lipsync: 5 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
   {
     id: "rose_fr",
@@ -4587,6 +5085,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [2] },
+    country: "France",
   },
 
   // Drag Race France 3
@@ -4598,6 +5097,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 8, design: 9, improv: 7, runway: 11, lipsync: 9 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "ruby_on_the_nail",
@@ -4607,6 +5107,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 12, dance: 9, design: 6, improv: 10, runway: 11, lipsync: 11 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "leona_winter",
@@ -4616,6 +5117,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 10, design: 10, improv: 8, runway: 10, lipsync: 10 },
     shows: ["Drag Race France", "Queen of the Universe"],
     seasonsByShow: { "Drag Race France": [3], "Queen of the Universe": [1] },
+    country: "France",
   },
   {
     id: "lula_strega",
@@ -4625,6 +5127,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 11, dance: 7, design: 10, improv: 9, runway: 12, lipsync: 7 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "misty_phoenix",
@@ -4634,6 +5137,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 10, design: 9, improv: 9, runway: 10, lipsync: 11 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [3], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "perseo",
@@ -4643,6 +5147,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 9, design: 7, improv: 7, runway: 11, lipsync: 10 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "norma_bell",
@@ -4652,6 +5157,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 10, design: 8, improv: 7, runway: 10, lipsync: 8 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "edeha_noire",
@@ -4661,6 +5167,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 6, improv: 6, runway: 8, lipsync: 9 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "magnetica",
@@ -4670,6 +5177,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 9, design: 6, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Drag Race France", "Drag Race France All Stars"],
     seasonsByShow: { "Drag Race France": [3], "Drag Race France All Stars": [1] },
+    country: "France",
   },
   {
     id: "afrodite_amour",
@@ -4679,6 +5187,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race France"],
     seasonsByShow: { "Drag Race France": [3] },
+    country: "France",
   },
   {
     id: "arantxa_castilla_la_mancha",
@@ -4688,6 +5197,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 6, design: 7, improv: 8, runway: 9, lipsync: 7 },
     shows: ["Drag Race España", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race España": [1], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "Spain",
   },
   {
     id: "carmen_farala",
@@ -4697,6 +5207,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 10, design: 14, improv: 8, runway: 13, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "dovima_nurmi",
@@ -4706,6 +5217,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 5, design: 7, improv: 8, runway: 10, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "drag_vulcano",
@@ -4715,6 +5227,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 7, improv: 6, runway: 9, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "hugaceo_crujiente",
@@ -4724,6 +5237,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 12, improv: 6, runway: 12, lipsync: 8 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "inti",
@@ -4733,6 +5247,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 7, improv: 5, runway: 11, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "killer_queen",
@@ -4742,6 +5257,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 8, design: 9, improv: 11, runway: 9, lipsync: 8 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1] },
+    country: "Spain",
   },
   {
     id: "pupi_poisson",
@@ -4751,6 +5267,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 12, dance: 8, design: 5, improv: 13, runway: 9, lipsync: 9 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [1], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "sagittaria",
@@ -4760,6 +5277,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 8, design: 10, improv: 7, runway: 12, lipsync: 8 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [1], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "the_macarena",
@@ -4769,6 +5287,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 8, design: 8, improv: 5, runway: 8, lipsync: 8 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [1, 3] },
+    country: "Spain",
   },
 
   // España 2
@@ -4780,6 +5299,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 7, design: 4, improv: 5, runway: 9, lipsync: 5 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "diamante_merybrown",
@@ -4789,6 +5309,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 10, design: 5, improv: 5, runway: 8, lipsync: 11 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "drag_sethlas",
@@ -4798,6 +5319,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 11, dance: 10, design: 10, improv: 10, runway: 13, lipsync: 10 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [2], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "estrella_xtravaganza",
@@ -4807,6 +5329,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 7, design: 5, improv: 9, runway: 8, lipsync: 8 },
     shows: ["Drag Race España", "Drag Race Down Under vs The World"],
     seasonsByShow: { "Drag Race España": [2], "Drag Race Down Under vs The World": [1] },
+    country: "Spain",
   },
   {
     id: "jota_carajota",
@@ -4816,6 +5339,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 6, design: 4, improv: 4, runway: 8, lipsync: 7 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "juriji_der_klee",
@@ -4825,6 +5349,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 9, dance: 10, design: 11, improv: 10, runway: 10, lipsync: 7 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [2], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "marina",
@@ -4834,6 +5359,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 11 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "marisa_prisa",
@@ -4843,6 +5369,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 3, design: 2, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "onyx_unleashed",
@@ -4852,6 +5379,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 7, design: 7, improv: 5, runway: 13, lipsync: 7 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [2], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "samantha_ballentines",
@@ -4861,6 +5389,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 11, dance: 9, design: 7, improv: 9, runway: 9, lipsync: 8 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [2], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "sharonne",
@@ -4870,6 +5399,7 @@ window.QUEENS = [
     skills: { acting: 12, comedy: 10, dance: 8, design: 8, improv: 12, runway: 10, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
   {
     id: "venedita_von_dash",
@@ -4879,6 +5409,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 9, design: 9, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [2] },
+    country: "Spain",
   },
 
   // España 3
@@ -4890,6 +5421,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 9, design: 10, improv: 5, runway: 13, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "chanel_anorex",
@@ -4899,6 +5431,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 5, improv: 6, runway: 10, lipsync: 7 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "clover_bish",
@@ -4908,6 +5441,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 9, dance: 11, design: 8, improv: 8, runway: 9, lipsync: 12 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "drag_chuchi",
@@ -4917,6 +5451,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "hornella_gongora",
@@ -4926,6 +5461,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 8, design: 8, improv: 9, runway: 9, lipsync: 9 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [3], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "kelly_roller",
@@ -4935,6 +5471,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 10, dance: 9, design: 6, improv: 6, runway: 8, lipsync: 11 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "maria_edilia",
@@ -4944,6 +5481,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 6, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "pakita",
@@ -4953,6 +5491,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 5, dance: 6, design: 10, improv: 6, runway: 10, lipsync: 10 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [3], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "pink_chadora",
@@ -4962,6 +5501,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 9, dance: 8, design: 7, improv: 11, runway: 10, lipsync: 7 },
     shows: ["Drag Race España", "Drag Race España All Stars"],
     seasonsByShow: { "Drag Race España": [3], "Drag Race España All Stars": [1] },
+    country: "Spain",
   },
   {
     id: "pitita",
@@ -4971,6 +5511,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 6, dance: 8, design: 13, improv: 10, runway: 11, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "vania_vainilla",
@@ -4980,6 +5521,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 12, dance: 8, design: 10, improv: 8, runway: 10, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
   {
     id: "visa",
@@ -4989,6 +5531,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 8, design: 9, improv: 9, runway: 12, lipsync: 12 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [3] },
+    country: "Spain",
   },
 
   // España 4
@@ -5000,6 +5543,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 8, design: 5, improv: 9, runway: 4, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "chloe_vittu",
@@ -5009,6 +5553,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 9, design: 10, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "dita_dubois",
@@ -5018,6 +5563,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 4, design: 4, improv: 6, runway: 6, lipsync: 5 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "kelly_passa",
@@ -5027,6 +5573,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 5, design: 10, improv: 5, runway: 11, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "la_bella_vampi",
@@ -5036,6 +5583,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 8, dance: 6, design: 10, improv: 7, runway: 10, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "la_nina_delantro",
@@ -5045,6 +5593,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 4, dance: 12, design: 5, improv: 5, runway: 10, lipsync: 12 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "le_coco",
@@ -5054,6 +5603,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 9, design: 9, improv: 11, runway: 11, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "mariana_stars",
@@ -5063,6 +5613,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 4, dance: 10, design: 9, improv: 12, runway: 11, lipsync: 11 },
     shows: ["Drag Race España", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race España": [4], "Drag Race México: Latina Royale": [1] },
+    country: "Spain",
   },
   {
     id: "megui_yeillow",
@@ -5072,6 +5623,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 4, dance: 13, design: 6, improv: 8, runway: 9, lipsync: 11 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "miss_khristo",
@@ -5081,6 +5633,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 5, dance: 5, design: 11, improv: 5, runway: 11, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "porca_theclubkid",
@@ -5090,6 +5643,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 6, improv: 7, runway: 10, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
   {
     id: "shani_lasanta",
@@ -5099,6 +5653,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 6, design: 3, improv: 7, runway: 5, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [4] },
+    country: "Spain",
   },
 
   // España 5
@@ -5110,6 +5665,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 3, dance: 9, design: 10, improv: 5, runway: 8, lipsync: 7 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "margarita_kalifata",
@@ -5119,6 +5675,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 6, design: 4, improv: 10, runway: 6, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "nix",
@@ -5128,6 +5685,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 6, design: 9, improv: 5, runway: 8, lipsync: 8 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "satin_greco",
@@ -5137,6 +5695,7 @@ window.QUEENS = [
     skills: { acting: 14, comedy: 10, dance: 10, design: 4, improv: 10, runway: 12, lipsync: 13 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "dafne_mugler",
@@ -5146,6 +5705,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 4, dance: 14, design: 10, improv: 5, runway: 11, lipsync: 13 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "alexandra_del_raval",
@@ -5155,6 +5715,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 3, dance: 8, design: 6, improv: 3, runway: 9, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "ferrxn",
@@ -5164,6 +5725,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 5, design: 6, improv: 10, runway: 5, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "denebola_murnau",
@@ -5173,6 +5735,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 5, design: 11, improv: 5, runway: 13, lipsync: 5 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "krystal_forever",
@@ -5182,6 +5745,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 7, dance: 9, design: 6, improv: 6, runway: 8, lipsync: 10 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "la_escandalo",
@@ -5191,6 +5755,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 7, dance: 6, design: 4, improv: 7, runway: 6, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "eva_harrington",
@@ -5200,6 +5765,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 6, design: 4, improv: 7, runway: 6, lipsync: 6 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "nori",
@@ -5209,6 +5775,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 4, design: 6, improv: 3, runway: 5, lipsync: 3 },
     shows: ["Drag Race España"],
     seasonsByShow: { "Drag Race España": [5] },
+    country: "Spain",
   },
   {
     id: "amadiva",
@@ -5218,6 +5785,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 7, design: 9, improv: 4, runway: 9, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "annee_maywong",
@@ -5227,6 +5795,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 7, design: 12, improv: 8, runway: 11, lipsync: 9 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "b_ella",
@@ -5236,6 +5805,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 7, dance: 6, design: 7, improv: 7, runway: 7, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "bunny_be_fly",
@@ -5245,6 +5815,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 5, design: 7, improv: 5, runway: 6, lipsync: 5 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "dearis_doll",
@@ -5254,6 +5825,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 11, dance: 7, design: 8, improv: 10, runway: 10, lipsync: 10 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "jaja",
@@ -5263,6 +5835,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 7, design: 6, improv: 5, runway: 9, lipsync: 9 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "meannie_b",
@@ -5272,6 +5845,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 4, improv: 5, runway: 5, lipsync: 4 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "morrigan",
@@ -5281,6 +5855,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 4, dance: 6, design: 4, improv: 6, runway: 7, lipsync: 6 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "natalia_pliacam",
@@ -5290,6 +5865,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 12, dance: 7, design: 9, improv: 12, runway: 10, lipsync: 9 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
   {
     id: "petchra",
@@ -5299,6 +5875,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 8, improv: 6, runway: 7, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [1] },
+    country: "Thailand",
   },
 
   // Thailand 2
@@ -5310,6 +5887,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 9, design: 11, improv: 9, runway: 9, lipsync: 12 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "bandit",
@@ -5319,6 +5897,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 7, design: 8, improv: 7, runway: 8, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "genie",
@@ -5328,6 +5907,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 7, design: 7, improv: 8, runway: 8, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "kana_warrior",
@@ -5337,6 +5917,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 8, design: 6, improv: 8, runway: 7, lipsync: 12 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "kandy_zyanide",
@@ -5346,6 +5927,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 10, design: 8, improv: 9, runway: 10, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "katy_killer",
@@ -5355,6 +5937,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 6, improv: 7, runway: 9, lipsync: 6 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "m_stranger_fox",
@@ -5364,6 +5947,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 5, design: 6, improv: 6, runway: 5, lipsync: 5 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "maya_bharo",
@@ -5373,6 +5957,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 6, design: 8, improv: 7, runway: 8, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "miss_gimhuay",
@@ -5382,6 +5967,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 7, design: 9, improv: 8, runway: 11, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "mocha_diva",
@@ -5391,6 +5977,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 6, design: 8, improv: 9, runway: 7, lipsync: 9 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "silver_sonic",
@@ -5400,6 +5987,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 6, design: 6, improv: 5, runway: 7, lipsync: 6 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "srimala",
@@ -5409,6 +5997,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 8, design: 8, improv: 7, runway: 7, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "tormai",
@@ -5418,6 +6007,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 5, design: 6, improv: 5, runway: 7, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
   {
     id: "vanda_miss_joaquim",
@@ -5427,6 +6017,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 8, design: 8, improv: 9, runway: 9, lipsync: 9 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [2] },
+    country: "Thailand",
   },
 
   // Thailand 3
@@ -5438,6 +6029,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 8, design: 10, improv: 5, runway: 9, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "frankie_wonga",
@@ -5447,6 +6039,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 11, design: 8, improv: 11, runway: 10, lipsync: 11 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "gawdland",
@@ -5456,6 +6049,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 11, dance: 10, design: 6, improv: 11, runway: 12, lipsync: 9 },
     shows: ["Drag Race Thailand", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Thailand": [3], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Thailand",
   },
   {
     id: "gigi_ferocious",
@@ -5465,6 +6059,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 11, design: 8, improv: 4, runway: 7, lipsync: 11 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "kara_might",
@@ -5474,6 +6069,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 6, design: 8, improv: 6, runway: 8, lipsync: 6 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "nane_sphera",
@@ -5483,6 +6079,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 5, design: 8, improv: 8, runway: 10, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "shortgun",
@@ -5492,6 +6089,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 3, design: 9, improv: 5, runway: 11, lipsync: 4 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "siam_phusri",
@@ -5501,6 +6099,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 6, design: 4, improv: 4, runway: 10, lipsync: 9 },
     shows: ["Drag Race Thailand", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Thailand": [3], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Thailand",
   },
   {
     id: "spicy_sunshine",
@@ -5510,6 +6109,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "srirasha_hotsauce",
@@ -5519,6 +6119,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 9, design: 3, improv: 7, runway: 3, lipsync: 8 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "zepee",
@@ -5528,6 +6129,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 9, design: 10, improv: 9, runway: 11, lipsync: 11 },
     shows: ["Drag Race Thailand"],
     seasonsByShow: { "Drag Race Thailand": [3] },
+    country: "Thailand",
   },
   {
     id: "precious_paula_nicole",
@@ -5537,6 +6139,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 10, design: 7, improv: 9, runway: 9, lipsync: 9 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "marina_summers",
@@ -5546,6 +6149,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 9, dance: 14, design: 10, improv: 10, runway: 15, lipsync: 13 },
     shows: ["Drag Race Philippines", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Philippines": [1], "RuPaul's Drag Race: UK vs The World": [2] },
+    country: "Philippines",
   },
   {
     id: "eva_le_queen",
@@ -5555,6 +6159,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 9, dance: 8, design: 7, improv: 8, runway: 10, lipsync: 8 },
     shows: ["Drag Race Philippines", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Philippines": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Philippines",
   },
   {
     id: "xilhouete",
@@ -5564,6 +6169,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 6, design: 8, improv: 11, runway: 10, lipsync: 8 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "minty_fresh",
@@ -5573,6 +6179,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 4, design: 12, improv: 4, runway: 11, lipsync: 8 },
     shows: ["Drag Race Philippines", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Philippines": [1], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Philippines",
   },
   {
     id: "brigiding",
@@ -5582,6 +6189,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 9, design: 10, improv: 6, runway: 9, lipsync: 11 },
     shows: ["Drag Race Philippines", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Philippines": [1], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Philippines",
   },
   {
     id: "vinas_deluxe",
@@ -5591,6 +6199,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 10, design: 13, improv: 8, runway: 11, lipsync: 11 },
     shows: ["Drag Race Philippines", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Philippines": [1], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Philippines",
   },
   {
     id: "lady_morgana",
@@ -5600,6 +6209,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 7, improv: 5, runway: 8, lipsync: 11 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "turing",
@@ -5609,6 +6219,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 9, design: 6, improv: 6, runway: 7, lipsync: 9 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "gigi_era",
@@ -5618,6 +6229,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 4, design: 5, improv: 5, runway: 6, lipsync: 7 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "corazon",
@@ -5627,6 +6239,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 4, design: 3, improv: 4, runway: 7, lipsync: 5 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
   {
     id: "prince",
@@ -5636,6 +6249,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 7, lipsync: 4 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [1] },
+    country: "Philippines",
   },
 
   // Philippines 2
@@ -5647,6 +6261,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 11, design: 8, improv: 11, runway: 13, lipsync: 10 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "arizona_brandy",
@@ -5656,6 +6271,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 11, dance: 9, design: 6, improv: 10, runway: 8, lipsync: 12 },
     shows: ["Drag Race Philippines", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Philippines": [2], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Philippines",
   },
   {
     id: "bernie",
@@ -5665,6 +6281,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 11, design: 9, improv: 10, runway: 13, lipsync: 11 },
     shows: ["Drag Race Philippines", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Philippines": [2], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Philippines",
   },
   {
     id: "m1ss_jade_so",
@@ -5674,6 +6291,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 9, dance: 9, design: 9, improv: 8, runway: 9, lipsync: 10 },
     shows: ["Drag Race Philippines", "Drag Race Down Under vs The World"],
     seasonsByShow: { "Drag Race Philippines": [2], "Drag Race Down Under vs The World": [1] },
+    country: "Philippines",
   },
   {
     id: "hana_beshie",
@@ -5683,6 +6301,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 6, design: 9, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "ov_cunt",
@@ -5692,6 +6311,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 8, design: 7, improv: 9, runway: 9, lipsync: 7 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "deedee_marie_holliday",
@@ -5701,6 +6321,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 10, design: 9, improv: 6, runway: 9, lipsync: 8 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "matilduh",
@@ -5710,6 +6331,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 9, improv: 6, runway: 9, lipsync: 9 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "veruschka_levels",
@@ -5719,6 +6341,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 10, improv: 6, runway: 10, lipsync: 7 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "tiny_deluxe",
@@ -5728,6 +6351,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 5, improv: 5, runway: 6, lipsync: 8 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "astrid_mercury",
@@ -5737,6 +6361,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
   {
     id: "nicole_pardaux",
@@ -5746,6 +6371,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [2] },
+    country: "Philippines",
   },
 
   // Philippines 3
@@ -5757,6 +6383,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 12, design: 9, improv: 11, runway: 11, lipsync: 12 },
     shows: ["Drag Race Philippines", "Queen of the Universe"],
     seasonsByShow: { "Drag Race Philippines": [3], "Queen of the Universe": [2] },
+    country: "Philippines",
   },
   {
     id: "khianna",
@@ -5766,6 +6393,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 11, design: 10, improv: 9, runway: 12, lipsync: 13 },
     shows: ["Drag Race Philippines", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Philippines": [3], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Philippines",
   },
   {
     id: "angel",
@@ -5775,6 +6403,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 11, dance: 10, design: 6, improv: 9, runway: 9, lipsync: 11 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "tita_baby",
@@ -5784,6 +6413,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 8, design: 6, improv: 10, runway: 9, lipsync: 12 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "zymba_ding",
@@ -5793,6 +6423,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 10, design: 9, improv: 7, runway: 10, lipsync: 12 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "myx_chanel",
@@ -5802,6 +6433,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 7, design: 10, improv: 7, runway: 10, lipsync: 10 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "popstar_bench",
@@ -5811,6 +6443,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 9, design: 8, improv: 7, runway: 9, lipsync: 11 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "john_fedellaga",
@@ -5820,6 +6453,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 9, dance: 8, design: 8, improv: 10, runway: 11, lipsync: 8 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "j_quinn",
@@ -5829,6 +6463,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 8, improv: 5, runway: 10, lipsync: 8 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "yudipota",
@@ -5838,6 +6473,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 6, design: 10, improv: 6, runway: 8, lipsync: 5 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "versex",
@@ -5847,6 +6483,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 5, design: 5, improv: 5, runway: 7, lipsync: 6 },
     shows: ["Drag Race Philippines"],
     seasonsByShow: { "Drag Race Philippines": [3] },
+    country: "Philippines",
   },
   {
     id: "cristian_peralta",
@@ -5856,6 +6493,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 13, dance: 11, design: 12, improv: 11, runway: 12, lipsync: 11 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
   {
     id: "gala_varo",
@@ -5865,6 +6503,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 5, dance: 10, design: 9, improv: 6, runway: 11, lipsync: 12 },
     shows: ["Drag Race Mexico", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Mexico": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Mexico",
   },
   {
     id: "matraka",
@@ -5874,6 +6513,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 10, design: 10, improv: 9, runway: 12, lipsync: 11 },
     shows: ["Drag Race Mexico", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Mexico": [1], "Drag Race México: Latina Royale": [1] },
+    country: "Mexico",
   },
   {
     id: "regina_voce",
@@ -5883,6 +6523,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 9, design: 9, improv: 8, runway: 8, lipsync: 10 },
     shows: ["Drag Race Mexico", "Queen of the Universe", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Mexico": [1], "Queen of the Universe": [1], "Drag Race México: Latina Royale": [1] },
+    country: "Mexico",
   },
   {
     id: "lady_kero",
@@ -5892,6 +6533,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 7, design: 9, improv: 9, runway: 10, lipsync: 11 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
   {
     id: "margaret_y_ya",
@@ -5901,6 +6543,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 9, design: 9, improv: 6, runway: 9, lipsync: 9 },
     shows: ["Drag Race Mexico", "La Más Draga"],
     seasonsByShow: { "Drag Race Mexico": [1], "La Más Draga": [1] },
+    country: "Mexico",
   },
   {
     id: "argennis",
@@ -5910,6 +6553,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 7, dance: 5, design: 10, improv: 6, runway: 9, lipsync: 12 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
   {
     id: "serena_morena",
@@ -5919,6 +6563,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["Drag Race Mexico", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Mexico": [1], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Mexico",
   },
   {
     id: "pixie_pixie",
@@ -5928,6 +6573,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 8, dance: 6, design: 8, improv: 6, runway: 10, lipsync: 8 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
   {
     id: "vermelha_noir",
@@ -5937,6 +6583,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 5, improv: 4, runway: 7, lipsync: 5 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
   {
     id: "miss_vallarta",
@@ -5946,6 +6593,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [1] },
+    country: "Mexico",
   },
 
   // Mexico 2
@@ -5957,6 +6605,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 12, design: 10, improv: 9, runway: 13, lipsync: 13 },
     shows: ["Drag Race Mexico", "La Más Draga"],
     seasonsByShow: { "Drag Race Mexico": [2], "La Más Draga": [4] },
+    country: "Mexico",
   },
   {
     id: "eva_blunt",
@@ -5966,6 +6615,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 9, design: 10, improv: 9, runway: 12, lipsync: 10 },
     shows: ["Drag Race Mexico", "La Más Draga", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Mexico": [2], "La Más Draga": [1], "Drag Race México: Latina Royale": [1] },
+    country: "Mexico",
   },
   {
     id: "horacio_potasio",
@@ -5975,6 +6625,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 9, dance: 13, design: 9, improv: 6, runway: 12, lipsync: 15 },
     shows: ["Drag Race Mexico", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Mexico": [2], "Drag Race México: Latina Royale": [1] },
+    country: "Mexico",
   },
   {
     id: "jenary_bloom",
@@ -5984,6 +6635,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 10, design: 7, improv: 10, runway: 9, lipsync: 12 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "elektra_vandergeld",
@@ -5993,6 +6645,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 10, design: 12, improv: 8, runway: 14, lipsync: 11 },
     shows: ["Drag Race Mexico", "La Más Draga", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Mexico": [2], "La Más Draga": [4], "Drag Race México: Latina Royale": [1] },
+    country: "Mexico",
   },
   {
     id: "unique",
@@ -6002,6 +6655,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 6, design: 7, improv: 11, runway: 7, lipsync: 12 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "luna_lansman",
@@ -6011,6 +6665,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 11, dance: 7, design: 10, improv: 10, runway: 9, lipsync: 9 },
     shows: ["Drag Race Mexico", "La Más Draga"],
     seasonsByShow: { "Drag Race Mexico": [2], "La Más Draga": [3] },
+    country: "Mexico",
   },
   {
     id: "suculenta",
@@ -6020,6 +6675,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 7, design: 6, improv: 7, runway: 6, lipsync: 7 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "ava_pocket",
@@ -6029,6 +6685,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 10, design: 8, improv: 6, runway: 9, lipsync: 10 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "garconne",
@@ -6038,6 +6695,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 6, design: 10, improv: 7, runway: 11, lipsync: 7 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "maria_bonita",
@@ -6047,6 +6705,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 9, improv: 6, runway: 10, lipsync: 8 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "nina_de_la_fuente",
@@ -6056,6 +6715,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 6, improv: 5, runway: 8, lipsync: 7 },
     shows: ["Drag Race Mexico", "La Más Draga"],
     seasonsByShow: { "Drag Race Mexico": [2], "La Más Draga": [2] },
+    country: "Mexico",
   },
   {
     id: "ignus_ars",
@@ -6065,6 +6725,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Mexico"],
     seasonsByShow: { "Drag Race Mexico": [2] },
+    country: "Mexico",
   },
   {
     id: "drag_couenne",
@@ -6074,6 +6735,7 @@ window.QUEENS = [
     skills: { acting: 12, comedy: 11, dance: 7, design: 9, improv: 8, runway: 13, lipsync: 9 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "athena_likis",
@@ -6083,6 +6745,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 7, design: 6, improv: 8, runway: 13, lipsync: 9 },
     shows: ["Drag Race Belgique", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Belgique": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Belgium",
   },
   {
     id: "susan",
@@ -6092,6 +6755,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 10, dance: 7, design: 10, improv: 9, runway: 9, lipsync: 9 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "mademoiselle_boop",
@@ -6101,6 +6765,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 7, design: 7, improv: 10, runway: 9, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "peach",
@@ -6110,6 +6775,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 6, dance: 6, design: 9, improv: 6, runway: 9, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "valenciaga",
@@ -6119,6 +6785,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 6, design: 8, improv: 6, runway: 10, lipsync: 9 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "mocca_bone",
@@ -6128,6 +6795,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 7, design: 6, improv: 6, runway: 9, lipsync: 10 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "edna_sorgelsen",
@@ -6137,6 +6805,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 7, improv: 6, runway: 9, lipsync: 7 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "amanda_tears",
@@ -6146,6 +6815,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 6, improv: 6, runway: 8, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
   {
     id: "brittany_von_bottoks",
@@ -6155,6 +6825,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 5, design: 5, improv: 5, runway: 5, lipsync: 5 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [1] },
+    country: "Belgium",
   },
 
   {
@@ -6165,6 +6836,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 11, dance: 12, design: 10, improv: 10, runway: 12, lipsync: 10 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "la_veuve",
@@ -6174,6 +6846,7 @@ window.QUEENS = [
     skills: { acting: 12, comedy: 11, dance: 6, design: 7, improv: 9, runway: 9, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "gabanna",
@@ -6183,6 +6856,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "loulou_velvet",
@@ -6192,6 +6866,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 8, design: 10, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "chloe_clarke",
@@ -6201,6 +6876,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 10, dance: 9, design: 7, improv: 10, runway: 12, lipsync: 10 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "star",
@@ -6210,6 +6886,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 7, improv: 6, runway: 7, lipsync: 8 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "morphae",
@@ -6219,6 +6896,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 7, improv: 6, runway: 9, lipsync: 7 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "madame_yoko",
@@ -6228,6 +6906,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 9, improv: 6, runway: 8, lipsync: 7 },
     shows: ["Drag Race Belgique", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Drag Race Belgique": [2], "Drag Race Philippines: Slaysian Royale": [1] },
+    country: "Belgium",
   },
   {
     id: "sarah_logan",
@@ -6237,6 +6916,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Belgique"],
     seasonsByShow: { "Drag Race Belgique": [2] },
+    country: "Belgium",
   },
   {
     id: "admira_thunderpussy",
@@ -6246,6 +6926,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 10, design: 9, improv: 10, runway: 11, lipsync: 9 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "fontana",
@@ -6255,6 +6936,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 8, design: 6, improv: 8, runway: 9, lipsync: 11 },
     shows: ["Drag Race Sverige", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Sverige": [1], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Sweden",
   },
   {
     id: "vanity_vain",
@@ -6264,6 +6946,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 7, dance: 9, design: 12, improv: 6, runway: 12, lipsync: 10 },
     shows: ["Drag Race Sverige", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Sverige": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Sweden",
   },
   {
     id: "elecktra",
@@ -6273,6 +6956,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 6, design: 7, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "antonina_nutshell",
@@ -6282,6 +6966,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 6, improv: 5, runway: 5, lipsync: 6 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "santana_sexmachine",
@@ -6291,6 +6976,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 7, design: 9, improv: 8, runway: 10, lipsync: 9 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "imaa_queen",
@@ -6300,6 +6986,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 11, improv: 5, runway: 14, lipsync: 7 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "endigo",
@@ -6309,6 +6996,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 5, dance: 6, design: 6, improv: 5, runway: 9, lipsync: 8 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "almighty_aphroditey",
@@ -6318,6 +7006,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 7, lipsync: 5 },
     shows: ["Drag Race Sverige"],
     seasonsByShow: { "Drag Race Sverige": [1] },
+    country: "Sweden",
   },
   {
     id: "pandora_nox",
@@ -6327,6 +7016,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 9, dance: 9, design: 11, improv: 9, runway: 14, lipsync: 12 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "metamorkid",
@@ -6336,6 +7026,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 10, design: 9, improv: 9, runway: 10, lipsync: 9 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "yvonne_nightstand",
@@ -6345,6 +7036,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 7, design: 7, improv: 9, runway: 11, lipsync: 9 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "kelly_heelton",
@@ -6354,6 +7046,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 10, dance: 9, design: 9, improv: 10, runway: 12, lipsync: 9 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "loreley_rivers",
@@ -6363,6 +7056,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 8, design: 9, improv: 9, runway: 11, lipsync: 12 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "victoria_shakespears",
@@ -6372,6 +7066,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 9, design: 5, improv: 8, runway: 9, lipsync: 12 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "nikita_vegaz",
@@ -6381,6 +7076,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 9, dance: 8, design: 8, improv: 7, runway: 7, lipsync: 7 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "tessa_testicle",
@@ -6390,6 +7086,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 6, design: 9, improv: 6, runway: 8, lipsync: 12 },
     shows: ["Drag Race Germany", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Germany": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Germany",
   },
   {
     id: "lele_cocoon",
@@ -6399,6 +7096,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 8, improv: 6, runway: 10, lipsync: 7 },
     shows: ["Drag Race Germany"],
     seasonsByShow: { "Drag Race Germany": [1] },
+    country: "Germany",
   },
   {
     id: "the_only_naomy",
@@ -6408,6 +7106,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 5, design: 8, improv: 8, runway: 9, lipsync: 9 },
     shows: ["Drag Race Germany", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "Drag Race Germany": [1], "RuPaul's Drag Race: UK vs The World": [3] },
+    country: "Germany",
   },
   {
     id: "barbie_q",
@@ -6417,6 +7116,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 9, lipsync: 4 },
     shows: ["Drag Race Germany", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Germany": [1], "Drag Race México: Latina Royale": [1] },
+    country: "Germany",
   },
   {
     id: "organzza",
@@ -6426,6 +7126,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 9, dance: 11, design: 8, improv: 9, runway: 12, lipsync: 10 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "betina_polaroid",
@@ -6435,6 +7136,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 6, design: 9, improv: 7, runway: 10, lipsync: 7 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "hellena_malditta",
@@ -6444,6 +7146,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 9, design: 10, improv: 10, runway: 10, lipsync: 9 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "miranda_lebrao",
@@ -6453,6 +7156,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 10, dance: 7, design: 10, improv: 9, runway: 9, lipsync: 8 },
     shows: ["Drag Race Brasil", "RuPaul's Drag Race Global All Stars"],
     seasonsByShow: { "Drag Race Brasil": [1], "RuPaul's Drag Race Global All Stars": [1] },
+    country: "Brazil",
   },
   {
     id: "shannon_skarllet",
@@ -6462,6 +7166,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 8, dance: 10, design: 7, improv: 7, runway: 10, lipsync: 11 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "naza",
@@ -6471,6 +7176,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 8, design: 9, improv: 6, runway: 9, lipsync: 10 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "dallas_de_vil",
@@ -6480,6 +7186,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 8, dance: 9, design: 5, improv: 9, runway: 8, lipsync: 10 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "rubi_ocean",
@@ -6489,6 +7196,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 9, design: 9, improv: 6, runway: 9, lipsync: 9 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "aquarela",
@@ -6498,6 +7206,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 5, improv: 7, runway: 8, lipsync: 9 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "melusine_sparkle",
@@ -6507,6 +7216,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 8, design: 6, improv: 6, runway: 9, lipsync: 8 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "tristan_soledade",
@@ -6516,6 +7226,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 8, design: 6, improv: 6, runway: 6, lipsync: 6 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
   {
     id: "diva_more",
@@ -6525,6 +7236,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 4, improv: 4, runway: 4, lipsync: 4 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [1] },
+    country: "Brazil",
   },
 
   // Brasil 2
@@ -6536,6 +7248,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 8, dance: 9, design: 9, improv: 9, runway: 11, lipsync: 10 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "mellody_queen",
@@ -6545,6 +7258,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 12, design: 5, improv: 5, runway: 9, lipsync: 12 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "melina_blley",
@@ -6554,6 +7268,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 11, design: 8, improv: 8, runway: 9, lipsync: 11 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "poseidon_drag",
@@ -6563,6 +7278,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 8, design: 6, improv: 8, runway: 10, lipsync: 10 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "bhelchi",
@@ -6572,6 +7288,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 10, dance: 7, design: 9, improv: 10, runway: 8, lipsync: 8 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "adora_black",
@@ -6581,6 +7298,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 5, dance: 8, design: 13, improv: 4, runway: 11, lipsync: 9 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "desiree_beck",
@@ -6590,6 +7308,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 4, dance: 6, design: 9, improv: 10, runway: 9, lipsync: 6 },
     shows: ["Drag Race Brasil", "Drag Race México: Latina Royale"],
     seasonsByShow: { "Drag Race Brasil": [2], "Drag Race México: Latina Royale": [1] },
+    country: "Brazil",
   },
   {
     id: "mercedez_vulcao",
@@ -6599,6 +7318,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 9, design: 8, improv: 4, runway: 8, lipsync: 7 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "paola_hoffmann_van_cartier",
@@ -6608,6 +7328,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 4, design: 8, improv: 6, runway: 10, lipsync: 4 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "chanel",
@@ -6617,6 +7338,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 5, dance: 4, design: 8, improv: 5, runway: 9, lipsync: 6 },
     shows: ["Drag Race Brasil"],
     seasonsByShow: { "Drag Race Brasil": [2] },
+    country: "Brazil",
   },
   {
     id: "vander_von_odd",
@@ -6626,6 +7348,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 5, dance: 6, design: 14, improv: 7, runway: 15, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
   {
     id: "frankie_doom",
@@ -6635,6 +7358,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 5, design: 8, improv: 6, runway: 9, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "melissa_befierce",
@@ -6644,6 +7368,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 10, design: 9, improv: 6, runway: 9, lipsync: 11 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "meatball",
@@ -6653,6 +7378,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 13, dance: 8, design: 5, improv: 14, runway: 6, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
   {
     id: "loris",
@@ -6662,6 +7388,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 5, design: 7, improv: 5, runway: 8, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "xochi_mochi",
@@ -6671,6 +7398,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 5, design: 6, improv: 4, runway: 7, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
   {
     id: "foxie_adjuia",
@@ -6680,6 +7408,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 5, design: 5, improv: 3, runway: 6, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
   {
     id: "ursula_major",
@@ -6689,6 +7418,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 3, dance: 4, design: 5, improv: 3, runway: 5, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
   {
     id: "pinche_queen",
@@ -6698,6 +7428,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 3, dance: 3, design: 4, improv: 3, runway: 4, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [1] },
+    country: "USA",
   },
 
   // Dragula 2 (+ Titans)
@@ -6709,6 +7440,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 13, dance: 7, design: 8, improv: 12, runway: 10, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2] },
+    country: "USA",
   },
   {
     id: "victoria_elizabeth_black",
@@ -6718,6 +7450,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 3, dance: 3, design: 15, improv: 6, runway: 15, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "abhora",
@@ -6727,6 +7460,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 5, design: 12, improv: 7, runway: 13, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2], "The Boulet Brothers' Dragula: Titans": [1, 2] },
+    country: "USA",
   },
   {
     id: "disasterina",
@@ -6736,6 +7470,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 12, dance: 4, design: 6, improv: 12, runway: 8, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "erika_klash",
@@ -6745,6 +7480,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 6, dance: 7, design: 8, improv: 6, runway: 8, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "dahli",
@@ -6754,6 +7490,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 4, dance: 5, design: 11, improv: 6, runway: 13, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2, 4] },
+    country: "USA",
   },
   {
     id: "kendra_onixxx",
@@ -6763,6 +7500,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 9, design: 7, improv: 4, runway: 7, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "monikkie_shame",
@@ -6772,6 +7510,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 6, dance: 4, design: 6, improv: 5, runway: 7, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2] },
+    country: "USA",
   },
   {
     id: "felony_dodger",
@@ -6781,6 +7520,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 6, design: 6, improv: 4, runway: 6, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2, 7] },
+    country: "USA",
   },
   {
     id: "majesty",
@@ -6790,6 +7530,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 4, design: 10, improv: 6, runway: 11, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [2, 6] },
+    country: "USA",
   },
   {
     id: "landon_cider",
@@ -6799,6 +7540,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 7, dance: 7, design: 10, improv: 7, runway: 12, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "dollya_black",
@@ -6808,6 +7550,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 3, dance: 5, design: 13, improv: 4, runway: 13, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "priscilla_chambers",
@@ -6817,6 +7560,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 8, dance: 5, design: 7, improv: 8, runway: 8, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "louisianna_purchase",
@@ -6826,6 +7570,7 @@ window.QUEENS = [
     skills: { acting: 10, comedy: 5, dance: 4, design: 8, improv: 6, runway: 10, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "evah_destruction",
@@ -6835,6 +7580,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 11, design: 7, improv: 7, runway: 9, lipsync: 12 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3], "The Boulet Brothers' Dragula: Titans": [1, 2] },
+    country: "USA",
   },
   {
     id: "maddelynn_hatter",
@@ -6844,6 +7590,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 5, design: 7, improv: 4, runway: 8, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "hollow_eve",
@@ -6853,6 +7600,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 2, dance: 3, design: 11, improv: 4, runway: 12, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "maxi_glamour",
@@ -6862,6 +7610,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 7, design: 6, improv: 4, runway: 6, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "yovska",
@@ -6871,6 +7620,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 3, dance: 2, design: 13, improv: 3, runway: 14, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "Canada",
   },
   {
     id: "saint",
@@ -6880,6 +7630,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 2, dance: 3, design: 10, improv: 4, runway: 13, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3, 4] },
+    country: "USA",
   },
   {
     id: "violencia",
@@ -6889,6 +7640,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 3, dance: 3, design: 4, improv: 3, runway: 5, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [3] },
+    country: "USA",
   },
   {
     id: "hoso_terra_toma",
@@ -6898,6 +7650,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 5, design: 13, improv: 5, runway: 15, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "South Korea",
   },
   {
     id: "sigourney_beaver",
@@ -6907,6 +7660,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 7, design: 10, improv: 4, runway: 14, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "la_zavaleta",
@@ -6916,6 +7670,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 9, dance: 7, design: 8, improv: 8, runway: 10, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "Mexico",
   },
   {
     id: "bitter_betty",
@@ -6925,6 +7680,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 3, dance: 3, design: 8, improv: 4, runway: 9, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4] },
+    country: "USA",
   },
   {
     id: "merrie_cherry",
@@ -6934,6 +7690,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 3, design: 6, improv: 7, runway: 7, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4] },
+    country: "USA",
   },
   {
     id: "koco_caine",
@@ -6943,6 +7700,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 10, dance: 7, design: 6, improv: 10, runway: 8, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "astrud_aurelia",
@@ -6952,6 +7710,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 2, dance: 6, design: 7, improv: 3, runway: 10, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4], "The Boulet Brothers' Dragula: Titans": [1] },
+    country: "USA",
   },
   {
     id: "formelda_hyde",
@@ -6961,6 +7720,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 2, dance: 2, design: 9, improv: 3, runway: 10, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [4] },
+    country: "USA",
   },
   {
     id: "niohuru_x",
@@ -6970,6 +7730,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 5, dance: 3, design: 15, improv: 4, runway: 15, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "China",
   },
   {
     id: "blackberri",
@@ -6979,6 +7740,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 10, dance: 6, design: 7, improv: 10, runway: 10, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "orkgotik",
@@ -6988,6 +7750,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 7, dance: 4, design: 14, improv: 3, runway: 15, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "Argentina",
   },
   {
     id: "throb_zombie",
@@ -6997,6 +7760,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 7, design: 8, improv: 6, runway: 9, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "USA",
   },
   {
     id: "fantasia_royale_gaga",
@@ -7006,6 +7770,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 8, design: 5, improv: 6, runway: 9, lipsync: 11 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "USA",
   },
   {
     id: "cynthia_doll",
@@ -7015,6 +7780,7 @@ window.QUEENS = [
     skills: { acting: 5, comedy: 10, dance: 4, design: 9, improv: 9, runway: 10, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "jay_kay",
@@ -7024,6 +7790,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 8, dance: 8, design: 5, improv: 9, runway: 7, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "anna_phylactic",
@@ -7033,6 +7800,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 4, dance: 4, design: 7, improv: 4, runway: 8, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "UK",
   },
   {
     id: "jarvis_hammer",
@@ -7042,6 +7810,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 4, dance: 3, design: 8, improv: 4, runway: 9, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "USA",
   },
   {
     id: "satanna",
@@ -7051,6 +7820,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 6, dance: 6, design: 6, improv: 6, runway: 8, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5, 7] },
+    country: "USA",
   },
   {
     id: "onyx_ondyx",
@@ -7060,6 +7830,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 2, dance: 3, design: 10, improv: 3, runway: 12, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [5] },
+    country: "USA",
   },
   {
     id: "asia_consent",
@@ -7069,6 +7840,7 @@ window.QUEENS = [
     skills: { acting: 9, comedy: 6, dance: 7, design: 12, improv: 7, runway: 12, lipsync: 10 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "auntie_heroine",
@@ -7078,6 +7850,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 6, dance: 7, design: 8, improv: 6, runway: 10, lipsync: 9 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "grey_matter",
@@ -7087,6 +7860,7 @@ window.QUEENS = [
     skills: { acting: 7, comedy: 5, dance: 5, design: 10, improv: 6, runway: 10, lipsync: 6 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "pi",
@@ -7096,6 +7870,7 @@ window.QUEENS = [
     skills: { acting: 8, comedy: 7, dance: 5, design: 7, improv: 7, runway: 9, lipsync: 7 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "jaharia",
@@ -7105,6 +7880,7 @@ window.QUEENS = [
     skills: { acting: 6, comedy: 8, dance: 10, design: 5, improv: 7, runway: 8, lipsync: 12 },
     shows: ["The Boulet Brothers' Dragula", "The Boulet Brothers' Dragula: Titans"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6], "The Boulet Brothers' Dragula: Titans": [2] },
+    country: "USA",
   },
   {
     id: "aurora_gozmic",
@@ -7114,6 +7890,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 4, design: 8, improv: 3, runway: 9, lipsync: 5 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "vivvi_the_force",
@@ -7123,6 +7900,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 6, design: 5, improv: 3, runway: 7, lipsync: 8 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "desiree_dik",
@@ -7132,6 +7910,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 2, dance: 3, design: 4, improv: 2, runway: 4, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "scylla",
@@ -7141,6 +7920,7 @@ window.QUEENS = [
     skills: { acting: 3, comedy: 2, dance: 3, design: 6, improv: 2, runway: 6, lipsync: 3 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
   {
     id: "severity_stone",
@@ -7150,6 +7930,7 @@ window.QUEENS = [
     skills: { acting: 4, comedy: 3, dance: 4, design: 6, improv: 3, runway: 7, lipsync: 4 },
     shows: ["The Boulet Brothers' Dragula"],
     seasonsByShow: { "The Boulet Brothers' Dragula": [6] },
+    country: "USA",
   },
 {
   id: "king_molasses",
@@ -7158,7 +7939,8 @@ window.QUEENS = [
   image: "images/king_molasses.webp",
   skills: { acting: 11, comedy: 9, dance: 9, design: 8, improv: 10, runway: 11, lipsync: 10 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "dick_von_dyke",
@@ -7167,7 +7949,8 @@ window.QUEENS = [
   image: "images/dick_von_dyke.webp",
   skills: { acting: 10, comedy: 11, dance: 8, design: 11, improv: 9, runway: 10, lipsync: 11 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "henlo_bullfrog",
@@ -7176,7 +7959,8 @@ window.QUEENS = [
   image: "images/henlo_bullfrog.webp",
   skills: { acting: 8, comedy: 7, dance: 7, design: 12, improv: 8, runway: 12, lipsync: 9 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "big_d",
@@ -7185,7 +7969,8 @@ window.QUEENS = [
   image: "images/big_d.webp",
   skills: { acting: 9, comedy: 10, dance: 5, design: 6, improv: 8, runway: 7, lipsync: 6 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "king_perka_sexxx",
@@ -7194,7 +7979,8 @@ window.QUEENS = [
   image: "images/king_perka_sexxx.webp",
   skills: { acting: 9, comedy: 11, dance: 6, design: 8, improv: 10, runway: 8, lipsync: 7 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "charles_galin_king",
@@ -7203,7 +7989,8 @@ window.QUEENS = [
   image: "images/charles_galin_king.webp",
   skills: { acting: 9, comedy: 8, dance: 6, design: 7, improv: 8, runway: 8, lipsync: 7 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "alexander_the_great",
@@ -7212,7 +7999,8 @@ window.QUEENS = [
   image: "images/alexander_the_great.webp",
   skills: { acting: 7, comedy: 6, dance: 11, design: 6, improv: 6, runway: 7, lipsync: 8 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "pressure_k",
@@ -7221,7 +8009,8 @@ window.QUEENS = [
   image: "images/pressure_k.webp",
   skills: { acting: 6, comedy: 6, dance: 7, design: 5, improv: 6, runway: 7, lipsync: 6 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "buck_wylde",
@@ -7230,7 +8019,8 @@ window.QUEENS = [
   image: "images/buck_wylde.webp",
   skills: { acting: 6, comedy: 5, dance: 7, design: 6, improv: 8, runway: 8, lipsync: 6 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "tuna_melt",
@@ -7239,7 +8029,8 @@ window.QUEENS = [
   image: "images/tuna_melt.webp",
   skills: { acting: 5, comedy: 5, dance: 6, design: 5, improv: 5, runway: 6, lipsync: 6 },
   shows: ["King of Drag"],
-  seasonsByShow: { "King of Drag": [1] }
+  seasonsByShow: { "King of Drag": [1] },
+  country: "USA",
 },
 {
   id: "pangina_heals",
@@ -7248,7 +8039,8 @@ window.QUEENS = [
   image: "images/pangina_heals.webp",
   skills: { acting: 9, comedy: 7, dance: 14, design: 11, improv: 8, runway: 13, lipsync: 13 },
   shows: ["RuPaul's Drag Race: UK vs The World", "Host"],
-  seasonsByShow: { "RuPaul's Drag Race: UK vs The World": [1] }
+  seasonsByShow: { "RuPaul's Drag Race: UK vs The World": [1] },
+  country: "Thailand",
 },
 {
   id: "grag_queen",
@@ -7257,7 +8049,8 @@ window.QUEENS = [
   image: "images/grag_queen.webp",
   skills: { acting: 9, comedy: 9, dance: 12, design: 9, improv: 8, runway: 12, lipsync: 14 },
   shows: ["Queen of the Universe", "Host"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "Brazil",
 },
 {
   id: "ada_vox",
@@ -7266,7 +8059,8 @@ window.QUEENS = [
   image: "images/ada_vox.webp",
   skills: { acting: 7, comedy: 6, dance: 5, design: 6, improv: 6, runway: 9, lipsync: 15 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "USA",
 },
 {
   id: "matante_alex",
@@ -7275,7 +8069,8 @@ window.QUEENS = [
   image: "images/matante_alex.webp",
   skills: { acting: 7, comedy: 8, dance: 5, design: 7, improv: 8, runway: 8, lipsync: 11 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "Canada",
 },
 {
   id: "aria_b_cassadine",
@@ -7284,7 +8079,8 @@ window.QUEENS = [
   image: "images/aria_b_cassadine.webp",
   skills: { acting: 8, comedy: 6, dance: 7, design: 6, improv: 6, runway: 9, lipsync: 13 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "USA",
 },
 {
   id: "novaczar",
@@ -7293,7 +8089,8 @@ window.QUEENS = [
   image: "images/novaczar.webp",
   skills: { acting: 6, comedy: 6, dance: 7, design: 8, improv: 6, runway: 10, lipsync: 8 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "USA",
 },
 {
   id: "betty_bitschlap",
@@ -7302,7 +8099,8 @@ window.QUEENS = [
   image: "images/betty_bitschlap.webp",
   skills: { acting: 7, comedy: 8, dance: 7, design: 7, improv: 8, runway: 9, lipsync: 8 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "Denmark",
 },
 {
   id: "rani_ko_he_nur",
@@ -7311,7 +8109,8 @@ window.QUEENS = [
   image: "images/rani_kohenur.webp",
   skills: { acting: 9, comedy: 8, dance: 8, design: 8, improv: 8, runway: 11, lipsync: 13 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "India",
 },
 {
   id: "chyenne_valentino",
@@ -7320,7 +8119,8 @@ window.QUEENS = [
   image: "images/chyenne_valentino.webp",
   skills: { acting: 7, comedy: 6, dance: 8, design: 7, improv: 6, runway: 12, lipsync: 11 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "USA",
 },
 {
   id: "gingzilla",
@@ -7329,7 +8129,8 @@ window.QUEENS = [
   image: "images/gingzilla.webp",
   skills: { acting: 10, comedy: 9, dance: 6, design: 8, improv: 8, runway: 11, lipsync: 13 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "Australia",
 },
 {
   id: "woowu",
@@ -7338,7 +8139,8 @@ window.QUEENS = [
   image: "images/woowu.webp",
   skills: { acting: 6, comedy: 5, dance: 7, design: 7, improv: 5, runway: 10, lipsync: 9 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [1] }
+  seasonsByShow: { "Queen of the Universe": [1] },
+  country: "China",
 },
 {
   id: "militia_scunt",
@@ -7347,7 +8149,8 @@ window.QUEENS = [
   image: "images/militia_scunt.webp",
   skills: { acting: 8, comedy: 8, dance: 9, design: 8, improv: 8, runway: 10, lipsync: 10 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "USA",
 },
 {
   id: "chloe_v",
@@ -7356,7 +8159,8 @@ window.QUEENS = [
   image: "images/chloe_v.webp",
   skills: { acting: 7, comedy: 6, dance: 8, design: 8, improv: 6, runway: 11, lipsync: 11 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "Brazil",
 },
 {
   id: "miss_sistrata",
@@ -7365,7 +8169,8 @@ window.QUEENS = [
   image: "images/miss_sistrata.webp",
   skills: { acting: 8, comedy: 5, dance: 6, design: 7, improv: 5, runway: 10, lipsync: 11 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "Israel",
 },
 {
   id: "jazell_royale",
@@ -7374,7 +8179,8 @@ window.QUEENS = [
   image: "images/jazell_royale.webp",
   skills: { acting: 8, comedy: 6, dance: 9, design: 8, improv: 6, runway: 14, lipsync: 12 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "USA",
 },
 {
   id: "taiga_brava",
@@ -7383,7 +8189,8 @@ window.QUEENS = [
   image: "images/taiga_brava.webp",
   skills: { acting: 9, comedy: 8, dance: 10, design: 8, improv: 8, runway: 11, lipsync: 15 },
   shows: ["Queen of the Universe", "Host"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "Mexico",
 },
 {
   id: "trevor_ashley",
@@ -7392,7 +8199,8 @@ window.QUEENS = [
   image: "images/trevor_ashley.webp",
   skills: { acting: 13, comedy: 12, dance: 7, design: 8, improv: 11, runway: 9, lipsync: 13 },
   shows: ["Queen of the Universe"],
-  seasonsByShow: { "Queen of the Universe": [2] }
+  seasonsByShow: { "Queen of the Universe": [2] },
+  country: "Australia",
 },
 {
   id: "art_arya",
@@ -7490,6 +8298,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 6, design: 8, improv: 6, runway: 8, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [1] },
+  country: "Mexico",
 },
 {
   id: "cordelia_durango",
@@ -7499,6 +8308,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 6, design: 8, improv: 7, runway: 9, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [1] },
+  country: "Mexico",
 },
 {
   id: "deborah_la_grande",
@@ -7508,6 +8318,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 6, dance: 7, design: 6, improv: 6, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [1] },
+  country: "Mexico",
 },
 {
   id: "debra_men",
@@ -7517,6 +8328,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 5, dance: 6, design: 5, improv: 5, runway: 6, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [1] },
+  country: "Mexico",
 },
 {
   id: "lana",
@@ -7526,6 +8338,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 5, dance: 6, design: 6, improv: 5, runway: 7, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [1] },
+  country: "Mexico",
 },
 
 {
@@ -7536,6 +8349,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 8, dance: 7, design: 6, improv: 8, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "amelia_waldorf",
@@ -7545,6 +8359,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 6, design: 8, improv: 7, runway: 9, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "gvajardo",
@@ -7554,6 +8369,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 6, improv: 7, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "job_star",
@@ -7563,6 +8379,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 6, dance: 7, design: 5, improv: 6, runway: 6, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "leandra_rose",
@@ -7572,6 +8389,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 6, design: 7, improv: 6, runway: 8, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "red_rabbit_duo",
@@ -7581,6 +8399,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 6, dance: 7, design: 6, improv: 6, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "sophia_jimenez",
@@ -7590,6 +8409,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 6, design: 7, improv: 7, runway: 8, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2] },
+  country: "Mexico",
 },
 {
   id: "soro_nasty",
@@ -7599,6 +8419,7 @@ window.QUEENS = [
   skills: { acting: 6, comedy: 7, dance: 6, design: 6, improv: 7, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [2], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "aviesc_who",
@@ -7608,6 +8429,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 8, design: 11, improv: 8, runway: 12, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "madison_basrey",
@@ -7617,6 +8439,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 7, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "raga_diamante",
@@ -7626,6 +8449,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 7, improv: 7, runway: 10, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "rudy_reyes",
@@ -7635,6 +8459,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 11, design: 6, improv: 7, runway: 8, lipsync: 11 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "memo_reyri",
@@ -7644,6 +8469,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 6, design: 7, improv: 9, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "mista_boo",
@@ -7653,6 +8479,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 6, design: 9, improv: 7, runway: 10, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "regina_bronx",
@@ -7662,6 +8489,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 7, design: 7, improv: 9, runway: 8, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "iviza_lioza",
@@ -7671,6 +8499,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "luna_lansman",
@@ -7680,6 +8509,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "wynter",
@@ -7689,6 +8519,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 7, design: 9, improv: 6, runway: 10, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "huntyy_b",
@@ -7698,6 +8529,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "stupidrag",
@@ -7707,6 +8539,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 8, dance: 6, design: 7, improv: 8, runway: 7, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "yayoi_bowery",
@@ -7716,6 +8549,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 10, improv: 7, runway: 11, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [3] },
+  country: "Mexico",
 },
 {
   id: "aurora_wonders",
@@ -7725,6 +8559,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 9, improv: 7, runway: 10, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "cpher",
@@ -7734,6 +8569,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 10, improv: 7, runway: 11, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4], "Solo Las Más": [1] },
+  country: "Chile",
 },
 {
   id: "georgiana",
@@ -7743,6 +8579,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 7, improv: 8, runway: 8, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "iris_xc",
@@ -7752,6 +8589,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 7, design: 10, improv: 6, runway: 11, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "la_carrera",
@@ -7761,6 +8599,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 8, design: 7, improv: 6, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "la_morra_lisa",
@@ -7770,6 +8609,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 8, improv: 7, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "lupita_kush",
@@ -7779,6 +8619,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "paper_cut",
@@ -7788,6 +8629,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 10, improv: 7, runway: 11, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4,5] },
+  country: "Mexico",
 },
 {
   id: "rebel_mork",
@@ -7797,6 +8639,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "sirena",
@@ -7806,6 +8649,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 8, improv: 8, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4], "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "tiresias",
@@ -7815,6 +8659,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 8, dance: 7, design: 8, improv: 9, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "vera_cruz",
@@ -7824,6 +8669,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 7, design: 9, improv: 6, runway: 10, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [4] },
+  country: "Mexico",
 },
 {
   id: "velvetine",
@@ -7833,6 +8679,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "Solo Las Más": [1] },
+  country: "Mexico",
 },
 {
   id: "aisha_dollkills",
@@ -7842,6 +8689,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 8, design: 9, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Costa Rica",
 },
 {
   id: "deseos_fab",
@@ -7851,6 +8699,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "fifi_estah",
@@ -7860,6 +8709,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 8, improv: 8, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "gretha_white",
@@ -7869,6 +8719,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 10, improv: 7, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Colombia",
 },
 {
   id: "hidden_mistake",
@@ -7878,6 +8729,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 7, design: 10, improv: 6, runway: 11, lipsync: 7 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Chile",
 },
 {
   id: "huma_kyle",
@@ -7887,6 +8739,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 7, design: 8, improv: 9, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "isabella_y_catalina",
@@ -7896,6 +8749,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "USA",
 },
 {
   id: "light_king",
@@ -7905,6 +8759,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 9, design: 7, improv: 6, runway: 8, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Colombia",
 },
 {
   id: "liza_zan_zuzzi",
@@ -7914,6 +8769,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 9, improv: 8, runway: 10, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "peke_balderas",
@@ -7923,6 +8779,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "santa_lucia",
@@ -7932,6 +8789,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 9, improv: 7, runway: 10, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [5] },
+  country: "Mexico",
 },
 {
   id: "alexis_mvgler",
@@ -7941,6 +8799,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "ank_cosart",
@@ -7950,6 +8809,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 8, design: 10, improv: 6, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Argentina",
 },
 {
   id: "ariel",
@@ -7959,6 +8819,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "aries",
@@ -7968,6 +8829,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 7, improv: 7, runway: 9, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "braulio_8000",
@@ -7977,6 +8839,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 8, improv: 8, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "cattriona",
@@ -7986,6 +8849,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 8, design: 9, improv: 6, runway: 10, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "dimittra",
@@ -7995,6 +8859,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Venezuela",
 },
 {
   id: "electra_walpurgis",
@@ -8004,6 +8869,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "juana_guadalupe",
@@ -8013,6 +8879,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 7, design: 7, improv: 9, runway: 8, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "kelly",
@@ -8022,6 +8889,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 7, improv: 7, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "la_kyliezz",
@@ -8031,6 +8899,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 9, design: 7, improv: 6, runway: 9, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "mizz_peaches",
@@ -8040,6 +8909,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 7, design: 8, improv: 8, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "purga",
@@ -8049,6 +8919,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 8, design: 10, improv: 6, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "shantelle",
@@ -8058,6 +8929,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 8, design: 8, improv: 7, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [6] },
+  country: "Mexico",
 },
 {
   id: "axelle_de_vil",
@@ -8067,6 +8939,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 9, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "brighty_stun",
@@ -8076,6 +8949,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 9, design: 8, improv: 7, runway: 9, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "calypso",
@@ -8085,6 +8959,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 8, design: 8, improv: 8, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Chile",
 },
 {
   id: "candela_yeye",
@@ -8094,6 +8969,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 8, dance: 8, design: 7, improv: 8, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "caos_lascivia",
@@ -8103,6 +8979,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 8, design: 10, improv: 7, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Venezuela",
 },
 {
   id: "deetox_alanis",
@@ -8112,6 +8989,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 7, design: 8, improv: 9, runway: 9, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "greta_grimm",
@@ -8121,6 +8999,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 7, design: 10, improv: 7, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "konny_kortez",
@@ -8130,6 +9009,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 8, dance: 8, design: 8, improv: 8, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "moon_lmd",
@@ -8139,6 +9019,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 6, dance: 8, design: 10, improv: 6, runway: 11, lipsync: 8 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Colombia",
 },
 {
   id: "nayla_downs",
@@ -8148,6 +9029,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "oslo",
@@ -8157,6 +9039,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 8, design: 9, improv: 7, runway: 10, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "paty_pinata",
@@ -8166,6 +9049,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 8, dance: 8, design: 7, improv: 8, runway: 8, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "ricura_santana",
@@ -8175,6 +9059,7 @@ window.QUEENS = [
   skills: { acting: 9, comedy: 9, dance: 8, design: 8, improv: 9, runway: 9, lipsync: 9 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "tulsa",
@@ -8184,6 +9069,7 @@ window.QUEENS = [
   skills: { acting: 8, comedy: 7, dance: 9, design: 8, improv: 7, runway: 10, lipsync: 10 },
   shows: ["La Más Draga"],
   seasonsByShow: { "La Más Draga": [7] },
+  country: "Mexico",
 },
 {
   id: "andy_crocker",
@@ -8193,6 +9079,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "bhorj_gum",
@@ -8202,6 +9089,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "bombalicious_eklaver",
@@ -8211,6 +9099,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "dixxxy_decoy",
@@ -8220,6 +9109,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "ghulli_ghush",
@@ -8229,6 +9119,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "gumamela_bloom",
@@ -8238,6 +9129,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "katana",
@@ -8247,6 +9139,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "lady_p_galore",
@@ -8256,6 +9149,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "manza",
@@ -8265,6 +9159,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "maureen_biology",
@@ -8274,6 +9169,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "merckz",
@@ -8283,6 +9179,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "misua",
@@ -8292,6 +9189,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "taylor_sheesh",
@@ -8301,6 +9199,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "valeria",
@@ -8310,6 +9209,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race Philippines"],
   seasonsByShow: { "Drag Race Philippines": [4] },
+  country: "Philippines",
 },
 {
   id: "azemylia",
@@ -8319,6 +9219,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "creatine_price",
@@ -8328,6 +9229,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "daisy_superbitch",
@@ -8337,6 +9239,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "fluffy_bidule",
@@ -8346,6 +9249,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "holly_white",
@@ -8355,6 +9259,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "la_harpie",
@@ -8364,6 +9269,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "lana_cotta",
@@ -8373,6 +9279,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "malawitte",
@@ -8382,6 +9289,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "margarette",
@@ -8391,6 +9299,7 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
 },
 {
   id: "sublyme",
@@ -8400,6 +9309,258 @@ window.QUEENS = [
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Drag Race France"],
   seasonsByShow: { "Drag Race France": [4] },
+  country: "France",
+},
+{
+  id: "aggy_dune",
+  fullName: "Aggy Dune",
+  nickname: "Aggy Dune",
+  image: "images/aggy_dune.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "apple_aday",
+  fullName: "Apple Aday",
+  nickname: "Apple Aday",
+  image: "images/apple_aday.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "bea_effay",
+  fullName: "Bea Effay",
+  nickname: "Bea Effay",
+  image: "images/bea_effay.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "eda_mame",
+  fullName: "Eda Mame",
+  nickname: "Eda Mame",
+  image: "images/eda_mame.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "fabi",
+  fullName: "Fabi",
+  nickname: "Fabi",
+  image: "images/fabi.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "julie_j",
+  fullName: "Julie J",
+  nickname: "Julie J",
+  image: "images/julie_j.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "lisa_jalopy",
+  fullName: "Lisa Jalopy",
+  nickname: "Lisa Jalopy",
+  image: "images/lisa_jalopy.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "onya_queen",
+  fullName: "Onya Queen",
+  nickname: "Onya Queen",
+  image: "images/onya_queen.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "orusha_san_miguel",
+  fullName: "Orusha San Miguel",
+  nickname: "Orusha San Miguel",
+  image: "images/orusha_san_miguel.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "safari_kelli",
+  fullName: "Safari Kelli",
+  nickname: "Safari Kelli",
+  image: "images/safari_kelli.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "tammy_faye",
+  fullName: "Tammy Faye",
+  nickname: "Tammy Faye",
+  image: "images/tammy_faye.png",
+  skills: { acting: 5, comedy: 5, dance: 5, design: 5, improv: 5, runway: 5, lipsync: 5 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "the_girl_named_jack",
+  fullName: "The Girl Named Jack",
+  nickname: "The Girl Named Jack",
+  image: "images/the_girl_named_jack.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "trudy_tective",
+  fullName: "Trudy Tective",
+  nickname: "Trudy Tective",
+  image: "images/trudy_tective.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+{
+  id: "vanity_unfair",
+  fullName: "Vanity Unfair",
+  nickname: "Vanity Unfair",
+  image: "images/vanity_unfair.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["RuPaul's Drag Race"],
+  seasonsByShow: { "RuPaul's Drag Race": [19] },
+  country: "USA",
+},
+
+{
+  id: "batty_banks",
+  fullName: "Batty Banks",
+  nickname: "Batty Banks",
+  image: "images/batty_banks.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "bliss",
+  fullName: "Bliss",
+  nickname: "Bliss",
+  image: "images/bliss.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "carlotta_carlisle",
+  fullName: "Carlotta Carlisle",
+  nickname: "Carlotta Carlisle",
+  image: "images/carlotta_carlisle.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "chiquita_mere",
+  fullName: "Chiquita Mere",
+  nickname: "Chiquita Mere",
+  image: "images/chiquita_mere.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "gravy",
+  fullName: "Gravy",
+  nickname: "Gravy",
+  image: "images/gravy.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "guy_anabella",
+  fullName: "Guy Anabella",
+  nickname: "Guy Anabella",
+  image: "images/guy_anabella.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "kara_juku",
+  fullName: "Kara Juku",
+  nickname: "kara_juku",
+  image: "images/Kara Juku.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "madee_lovegood",
+  fullName: "Madee Lovegood",
+  nickname: "Madee Lovegood",
+  image: "images/madee_lovegood.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "moh_dafok",
+  fullName: "Moh Dafok",
+  nickname: "Moh Dafok",
+  image: "images/moh_dafok.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "paris_matik",
+  fullName: "Paris Matik",
+  nickname: "Paris Matik",
+  image: "images/paris_matik.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
+},
+{
+  id: "pheromone_killz",
+  fullName: "Pheromone Killz",
+  nickname: "Pheromone Killz",
+  image: "images/pheromone_killz.png",
+  skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
+  shows: ["Canada's Drag Race"],
+  seasonsByShow: { "Canada's Drag Race": [7] },
+  country: "Canada",
 }
 
 
