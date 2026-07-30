@@ -11758,9 +11758,9 @@ dialog::backdrop {
 
 #placementsGrid .placement-group .mini-contestant-card {
   flex: 0 0 112px !important;
-  width: 112px !important;
-  min-width: 112px !important;
-  max-width: 112px !important;
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
   margin: 0 !important;
 }
 
@@ -17062,7 +17062,7 @@ details.advanced-settings[open] > .advanced-settings-grid {
 
 #customContestantModal .custom-source-btn {
   min-width: 0;
-  min-height: 32px;
+  min-height: 0;
   padding: 6px 8px;
   border: 0;
   border-radius: 7px;
@@ -18732,4 +18732,1181 @@ details.advanced-settings[open] > .advanced-settings-grid {
   .rupaul-team-builder-row select {
     grid-column: 1 / -1;
   }
+}
+
+/* ===== Track record palette + wiki-style image export (v59) ===== */
+.track-table.track-format-regular,
+.track-legend-format-regular {
+  --tr-winner-bg: #ffff00; --tr-winner-fg: #111;
+  --tr-ru-bg: #c0c0c0; --tr-ru-fg: #111;
+  --tr-finale-elim-bg: #a0522d; --tr-finale-elim-fg: #fff;
+  --tr-run-bg: #d2ffb5; --tr-run-fg: #111;
+  --tr-top3-bg: #90ee90; --tr-top3-fg: #111;
+  --tr-top4-bg: #00ff7f; --tr-top4-fg: #111;
+  --tr-guest-bg: #d3d3d3; --tr-guest-fg: #111;
+  --tr-win-bg: #4169e1; --tr-win-fg: #fff;
+  --tr-top2-bg: #00bfff; --tr-top2-fg: #111;
+  --tr-high-bg: #add8e6; --tr-high-fg: #111;
+  --tr-high-team-bg: #7fffd4; --tr-high-team-fg: #111;
+  --tr-safe-bg: #f9f9ff; --tr-safe-fg: #111;
+  --tr-immune-bg: #fe4eda; --tr-immune-fg: #111;
+  --tr-low-bg: #ffb6c1; --tr-low-fg: #111;
+  --tr-btm-bg: #ff6347; --tr-btm-fg: #111;
+  --tr-btm-none-bg: #ff69b4; --tr-btm-none-fg: #111;
+  --tr-btm-twist-bg: #ffed00; --tr-btm-twist-fg: #111;
+  --tr-elim-bg: #ff0000; --tr-elim-fg: #fff;
+  --tr-double-elim-bg: #8b0000; --tr-double-elim-fg: #fff;
+  --tr-quit-bg: #db7093; --tr-quit-fg: #111;
+  --tr-dept-bg: #dda0dd; --tr-dept-fg: #111;
+  --tr-rtrn-bg: #ffa500; --tr-rtrn-fg: #111;
+  --tr-out-bg: #800080; --tr-out-fg: #fff;
+  --tr-disq-bg: #000000; --tr-disq-fg: #fff;
+}
+
+.track-table.track-format-team,
+.track-legend-format-team {
+  --tr-winner-bg: #ffff00; --tr-winner-fg: #111;
+  --tr-ru-bg: #c0c0c0; --tr-ru-fg: #111;
+  --tr-finale-elim-bg: #a0522d; --tr-finale-elim-fg: #fff;
+  --tr-run-bg: #d2ffb5; --tr-run-fg: #111;
+  --tr-top3-bg: #90ee90; --tr-top3-fg: #111;
+  --tr-top4-bg: #00ff7f; --tr-top4-fg: #111;
+  --tr-guest-bg: #d3d3d3; --tr-guest-fg: #111;
+  --tr-win-bg: #4169e1; --tr-win-fg: #fff;
+  --tr-top2-bg: #00bfff; --tr-top2-fg: #111;
+  --tr-high-bg: #add8e6; --tr-high-fg: #111;
+  --tr-high-team-bg: #7fffd4; --tr-high-team-fg: #111;
+  --tr-safe-bg: #f9f9ff; --tr-safe-fg: #111;
+  --tr-immune-bg: #fe4eda; --tr-immune-fg: #111;
+  --tr-low-bg: #ffb6c1; --tr-low-fg: #111;
+  --tr-btm-bg: #ff6347; --tr-btm-fg: #111;
+  --tr-btm-none-bg: #ff69b4; --tr-btm-none-fg: #111;
+  --tr-btm-twist-bg: #ffed00; --tr-btm-twist-fg: #111;
+  --tr-elim-bg: #ff0000; --tr-elim-fg: #fff;
+  --tr-double-elim-bg: #8b0000; --tr-double-elim-fg: #fff;
+  --tr-quit-bg: #db7093; --tr-quit-fg: #111;
+  --tr-dept-bg: #dda0dd; --tr-dept-fg: #111;
+  --tr-rtrn-bg: #ffa500; --tr-rtrn-fg: #111;
+  --tr-out-bg: #800080; --tr-out-fg: #fff;
+  --tr-disq-bg: #000000; --tr-disq-fg: #fff;
+}
+
+.track-table.track-format-legacy,
+.track-legend-format-legacy {
+  --tr-winner-bg: #ffff00; --tr-winner-fg: #111;
+  --tr-ru-bg: #c0c0c0; --tr-ru-fg: #111;
+  --tr-finale-elim-bg: #a0522d; --tr-finale-elim-fg: #fff;
+  --tr-run-bg: #d2ffb5; --tr-run-fg: #111;
+  --tr-top3-bg: #90ee90; --tr-top3-fg: #111;
+  --tr-top4-bg: #00ff7f; --tr-top4-fg: #111;
+  --tr-guest-bg: #d3d3d3; --tr-guest-fg: #111;
+  --tr-win-bg: #4169e1; --tr-win-fg: #fff;
+  --tr-top2-bg: #00bfff; --tr-top2-fg: #111;
+  --tr-high-bg: #add8e6; --tr-high-fg: #111;
+  --tr-high-team-bg: #7fffd4; --tr-high-team-fg: #111;
+  --tr-safe-bg: #f9f9ff; --tr-safe-fg: #111;
+  --tr-immune-bg: #fe4eda; --tr-immune-fg: #111;
+  --tr-low-bg: #ffb6c1; --tr-low-fg: #111;
+  --tr-btm-bg: #ff6347; --tr-btm-fg: #111;
+  --tr-btm-none-bg: #ff69b4; --tr-btm-none-fg: #111;
+  --tr-btm-twist-bg: #ffed00; --tr-btm-twist-fg: #111;
+  --tr-elim-bg: #ff0000; --tr-elim-fg: #fff;
+  --tr-double-elim-bg: #8b0000; --tr-double-elim-fg: #fff;
+  --tr-quit-bg: #db7093; --tr-quit-fg: #111;
+  --tr-dept-bg: #dda0dd; --tr-dept-fg: #111;
+  --tr-rtrn-bg: #ffa500; --tr-rtrn-fg: #111;
+  --tr-out-bg: #800080; --tr-out-fg: #fff;
+  --tr-disq-bg: #000000; --tr-disq-fg: #fff;
+}
+
+.track-table.track-format-assassin,
+.track-legend-format-assassin {
+  --tr-winner-bg: #ffff00; --tr-winner-fg: #111;
+  --tr-ru-bg: #c0c0c0; --tr-ru-fg: #111;
+  --tr-finale-elim-bg: #a0522d; --tr-finale-elim-fg: #fff;
+  --tr-run-bg: #d2ffb5; --tr-run-fg: #111;
+  --tr-top3-bg: #90ee90; --tr-top3-fg: #111;
+  --tr-top4-bg: #00ff7f; --tr-top4-fg: #111;
+  --tr-guest-bg: #d3d3d3; --tr-guest-fg: #111;
+  --tr-win-bg: #4169e1; --tr-win-fg: #fff;
+  --tr-top2-bg: #00bfff; --tr-top2-fg: #111;
+  --tr-high-bg: #add8e6; --tr-high-fg: #111;
+  --tr-high-team-bg: #7fffd4; --tr-high-team-fg: #111;
+  --tr-safe-bg: #f9f9ff; --tr-safe-fg: #111;
+  --tr-immune-bg: #fe4eda; --tr-immune-fg: #111;
+  --tr-low-bg: #ffb6c1; --tr-low-fg: #111;
+  --tr-btm-bg: #ff6347; --tr-btm-fg: #111;
+  --tr-btm-none-bg: #ff69b4; --tr-btm-none-fg: #111;
+  --tr-btm-twist-bg: #ffed00; --tr-btm-twist-fg: #111;
+  --tr-elim-bg: #ff0000; --tr-elim-fg: #fff;
+  --tr-double-elim-bg: #8b0000; --tr-double-elim-fg: #fff;
+  --tr-quit-bg: #db7093; --tr-quit-fg: #111;
+  --tr-dept-bg: #dda0dd; --tr-dept-fg: #111;
+  --tr-rtrn-bg: #ffa500; --tr-rtrn-fg: #111;
+  --tr-out-bg: #800080; --tr-out-fg: #fff;
+  --tr-disq-bg: #000000; --tr-disq-fg: #fff;
+}
+
+.track-table.track-palette-configured .token-winner,
+.track-legend-palette-configured .token-winner { background: var(--tr-winner-bg) !important; color: var(--tr-winner-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-ru,
+.track-legend-palette-configured .token-ru { background: var(--tr-ru-bg) !important; color: var(--tr-ru-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-run,
+.track-legend-palette-configured .token-run { background: var(--tr-run-bg) !important; color: var(--tr-run-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-top3,
+.track-legend-palette-configured .token-top3 { background: var(--tr-top3-bg) !important; color: var(--tr-top3-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-top4,
+.track-legend-palette-configured .token-top4 { background: var(--tr-top4-bg) !important; color: var(--tr-top4-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-guest,
+.track-legend-palette-configured .token-guest { background: var(--tr-guest-bg) !important; color: var(--tr-guest-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-win,
+.track-legend-palette-configured .token-win { background: var(--tr-win-bg) !important; color: var(--tr-win-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-top2,
+.track-legend-palette-configured .token-top2 { background: var(--tr-top2-bg) !important; color: var(--tr-top2-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-high,
+.track-legend-palette-configured .token-high { background: var(--tr-high-bg) !important; color: var(--tr-high-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-high.winning-team-high,
+.track-legend-palette-configured .token-high.winning-team-high { background: var(--tr-high-team-bg) !important; color: var(--tr-high-team-fg) !important; }
+.track-table.track-palette-configured .token-safe,
+.track-legend-palette-configured .token-safe { background: var(--tr-safe-bg) !important; color: var(--tr-safe-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-safe.immunity-protected,
+.track-legend-palette-configured .token-safe.immunity-protected,
+.track-table.track-palette-configured .token-imm,
+.track-legend-palette-configured .token-imm { background: var(--tr-immune-bg) !important; color: var(--tr-immune-fg) !important; }
+.track-table.track-palette-configured .token-low,
+.track-legend-palette-configured .token-low { background: var(--tr-low-bg) !important; color: var(--tr-low-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12),
+.track-legend-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12) { background: var(--tr-btm-bg) !important; color: var(--tr-btm-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12).double-shantay,
+.track-legend-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12).double-shantay { background: var(--tr-btm-none-bg) !important; color: var(--tr-btm-none-fg) !important; }
+.track-table.track-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12):is(.lucky-cow-save,.badonka-save),
+.track-legend-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12):is(.lucky-cow-save,.badonka-save),
+.track-table.track-palette-configured .token-choc,
+.track-legend-palette-configured .token-choc { background: var(--tr-btm-twist-bg) !important; color: var(--tr-btm-twist-fg) !important; }
+.track-table.track-palette-configured .token-elim,
+.track-legend-palette-configured .token-elim { background: var(--tr-elim-bg) !important; color: var(--tr-elim-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-elim.double-elim,
+.track-legend-palette-configured .token-elim.double-elim { background: var(--tr-double-elim-bg) !important; color: var(--tr-double-elim-fg) !important; }
+.track-table.track-palette-configured .token-elim.finale-elim,
+.track-legend-palette-configured .token-elim.finale-elim { background: var(--tr-finale-elim-bg) !important; color: var(--tr-finale-elim-fg) !important; }
+.track-table.track-palette-configured :is(.token-quit,.token-btm2-quit,.token-win-quit),
+.track-legend-palette-configured :is(.token-quit,.token-btm2-quit,.token-win-quit) { background: var(--tr-quit-bg) !important; color: var(--tr-quit-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-dept,
+.track-legend-palette-configured .token-dept { background: var(--tr-dept-bg) !important; color: var(--tr-dept-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-rtrn,
+.track-legend-palette-configured .token-rtrn { background: var(--tr-rtrn-bg) !important; color: var(--tr-rtrn-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-out,
+.track-legend-palette-configured .token-out { background: var(--tr-out-bg) !important; color: var(--tr-out-fg) !important; background-image: none !important; }
+.track-table.track-palette-configured .token-disq,
+.track-legend-palette-configured .token-disq { background: var(--tr-disq-bg) !important; color: var(--tr-disq-fg) !important; background-image: none !important; }
+
+.track-table.track-format-regular .token-win.multi-win,
+.track-legend-format-regular .token-win.multi-win,
+.track-table.track-format-legacy .token-win.multi-win,
+.track-legend-format-legacy .token-win.multi-win,
+.track-table.track-format-assassin .token-win.multi-win,
+.track-legend-format-assassin .token-win.multi-win { background: #00008b !important; color: #fff !important; }
+.track-table.track-format-legacy .token-win.legacy-loser-win,
+.track-legend-format-legacy .token-win.legacy-loser-win { background: #00bfff !important; color: #111 !important; }
+.track-table.track-format-assassin .token-win.assassin-loser-win,
+.track-legend-format-assassin .token-win.assassin-loser-win { background: #00bfff !important; color: #111 !important; }
+.track-table.track-format-legacy .token-high-blk,
+.track-legend-format-legacy .token-high-blk { background: #d66d73 !important; color: #111 !important; }
+.track-table.track-format-legacy .token-blk,
+.track-legend-format-legacy .token-blk { background: #ff0000 !important; color: #fff !important; }
+.track-table.track-format-legacy :is(.token-lala-r1,.token-lala-r2,.token-lala-r3,.token-lala-r4,.token-lala-r5),
+.track-legend-format-legacy :is(.token-lala-r1,.token-lala-r2,.token-lala-r3,.token-lala-r4,.token-lala-r5) { background: #98fb98 !important; color: #111 !important; }
+.track-table.track-format-team .team-partner-btm,
+.track-legend-format-team .team-partner-btm { background: #fa8072 !important; color: #111 !important; }
+.track-table.track-format-team .team-partner-elim,
+.track-legend-format-team .team-partner-elim { background: #fc4545 !important; color: #fff !important; }
+
+.track-table .track-cell.lsftc-lost-round-1,
+.track-legend-card.lsftc-lost-round-1,
+.track-export-legend-swatch.lsftc-lost-round-1 { background: #ff7c00 !important; color: #111 !important; }
+.track-table .track-cell.lsftc-lost-round-2,
+.track-legend-card.lsftc-lost-round-2,
+.track-export-legend-swatch.lsftc-lost-round-2 { background: #ffae00 !important; color: #111 !important; }
+.track-table .track-cell.lsftc-lost-round-3,
+.track-legend-card.lsftc-lost-round-3,
+.track-export-legend-swatch.lsftc-lost-round-3 { background: #ffd100 !important; color: #111 !important; }
+
+.track-table .token-mx-con,
+.track-legend-card.token-mx-con,
+.track-export-legend-swatch.token-mx-con { background: #00ffff !important; color: #111 !important; }
+.track-table .token-gb,
+.track-legend-card.token-gb,
+.track-export-legend-swatch.token-gb { background: #daa520 !important; color: #111 !important; }
+.track-table .track-cell.award-mix,
+.track-legend-card.award-mix,
+.track-export-legend-swatch.award-mix { background: var(--track-cell-bg) !important; background-image: none !important; color: var(--track-cell-fg) !important; }
+
+.track-export-stage {
+  position: fixed !important;
+  left: -100000px !important;
+  top: 0 !important;
+  z-index: -1000 !important;
+  pointer-events: none !important;
+  opacity: 1 !important;
+}
+
+/*
+ * Download-only track record.
+ * This mirrors the supplied standalone HTML table, but omits the surrounding
+ * page, title, controls, descriptive text and legend. The white breathing room
+ * prevents the card shadow from being clipped in the PNG.
+ */
+.track-export-sheet {
+  display: inline-block !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 24px !important;
+  background: #fff !important;
+  color: #16181d !important;
+  font-family: Arial, sans-serif !important;
+  line-height: 1.18 !important;
+}
+
+.track-export-table-shell {
+  display: block !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid #d6d9df !important;
+  border-radius: 17px !important;
+  background: #fff !important;
+  box-shadow: 0 18px 55px rgba(18, 22, 31, .12) !important;
+}
+
+.track-export-table {
+  width: max-content !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  table-layout: fixed !important;
+  transform: none !important;
+  background: #fff !important;
+  color: #16181d !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 13.12px !important;
+  line-height: 1.18 !important;
+  text-align: center !important;
+}
+
+.track-export-table,
+.track-export-table * {
+  box-sizing: border-box !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.track-export-table th,
+.track-export-table td {
+  position: static !important;
+  min-width: 66px !important;
+  width: 66px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: none !important;
+  padding: 7px 8px !important;
+  border: 0 !important;
+  border-right: 1px solid #c8cdd4 !important;
+  border-bottom: 1px solid #c8cdd4 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+.track-export-table thead th {
+  z-index: auto !important;
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+  font-weight: 800 !important;
+  text-shadow: none !important;
+}
+
+.track-export-table thead .track-episode-row th {
+  height: 43px !important;
+  min-height: 43px !important;
+  font-size: 12.32px !important;
+  line-height: 1.18 !important;
+  letter-spacing: .025em !important;
+}
+
+.track-export-table thead .track-challenge-row th,
+.track-export-table thead th.track-challenge-type-head {
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 7px 8px !important;
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+  font-size: 11.84px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  letter-spacing: .015em !important;
+}
+
+.track-export-table tr > :last-child {
+  border-right: 0 !important;
+}
+
+.track-export-table tbody tr:last-child > * {
+  border-bottom: 0 !important;
+}
+
+.track-export-table col.track-rank-col,
+.track-export-table .track-rank-head,
+.track-export-table .track-rank-cell {
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
+}
+
+.track-export-table col.track-name-col,
+.track-export-table .track-contestant-head,
+.track-export-table .track-name-cell {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+}
+
+.track-export-table col.track-photo-col,
+.track-export-table .track-photo-head,
+.track-export-table .track-photo-cell {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+}
+
+.track-export-table col.track-episode-col,
+.track-export-table .track-cell {
+  width: 66px !important;
+  min-width: 66px !important;
+  max-width: 66px !important;
+}
+
+.track-export-table col.track-finale-col,
+.track-export-table .track-cell.finale-col {
+  width: 74px !important;
+  min-width: 74px !important;
+  max-width: 74px !important;
+}
+
+.track-export-table col.track-ppe-col,
+.track-export-table .ppe-col,
+.track-export-table .ppe-cell {
+  width: 66px !important;
+  min-width: 66px !important;
+  max-width: 66px !important;
+}
+
+.track-export-table tbody .track-rank-cell,
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell,
+.track-export-table tbody .ppe-cell {
+  background: #f9f9ff !important;
+  background-image: none !important;
+  color: #16181d !important;
+  text-shadow: none !important;
+}
+
+.track-export-table tbody .track-rank-cell {
+  font-size: 13.12px !important;
+  font-weight: 800 !important;
+}
+
+.track-export-table tbody .track-name-cell {
+  padding: 7px 8px !important;
+  font-size: 13.12px !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+}
+
+.track-export-table tbody .track-photo-cell {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.track-export-table .track-photo-cell img,
+.track-export-table img.track-contestant-photo {
+  position: static !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: #f9f9ff !important;
+  box-shadow: none !important;
+}
+
+.track-export-table tbody .track-cell {
+  font-size: 13.12px !important;
+  font-weight: 780 !important;
+  line-height: 1.18 !important;
+  letter-spacing: .015em !important;
+  text-shadow: none !important;
+}
+
+.track-export-table tbody .ppe-cell {
+  font-size: 13.12px !important;
+  font-weight: 800 !important;
+}
+
+.track-export-table .track-head-cell,
+.track-export-table .track-head-episode {
+  display: inline !important;
+  color: inherit !important;
+  background: transparent !important;
+  font: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+.track-export-table .no-cell {
+  background: repeating-linear-gradient(135deg, #bbbfc5, #bbbfc5 7px, #b0b4ba 7px, #b0b4ba 14px) !important;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+/* Exact midpoint blends for legacy saved-state finale award classes. */
+.track-table .track-cell.winner-mx-con { background: #80ff80 !important; color: #111 !important; }
+.track-table .track-cell.winner-gb { background: #edd210 !important; color: #111 !important; }
+.track-table .track-cell.ru-mx-con { background: #60e0e0 !important; color: #111 !important; }
+.track-table .track-cell.ru-gb { background: #cdb370 !important; color: #111 !important; }
+.track-table .track-cell.elim-mx-con { background: #50a996 !important; color: #111 !important; }
+.track-table .track-cell.elim-gb { background: #bd7c27 !important; color: #111 !important; }
+
+/* Any quit result uses PaleVioletRed in every format. */
+.track-table :is(.token-quit,.token-btm2-quit,.token-win-quit),
+.track-legend-card:is(.token-quit,.token-btm2-quit,.token-win-quit),
+.track-export-legend-swatch:is(.token-quit,.token-btm2-quit,.token-win-quit) {
+  background: #db7093 !important;
+  background-image: none !important;
+  color: #111 !important;
+}
+
+
+/* Downloaded track-record refinements requested for the HTML-matched export. */
+.track-export-sheet,
+.track-export-sheet *,
+.track-export-table,
+.track-export-table * {
+  font-family: Arial, sans-serif !important;
+}
+
+.track-export-table thead th,
+.track-export-table thead .track-episode-row th,
+.track-export-table thead .track-challenge-row th,
+.track-export-table thead th.track-challenge-type-head {
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+.track-export-table tbody .track-rank-cell,
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell,
+.track-export-table tbody .ppe-cell {
+  background: #f9f9ff !important;
+  background-image: none !important;
+}
+
+.track-export-table col.track-photo-col,
+.track-export-table .track-photo-head,
+.track-export-table .track-photo-cell {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+}
+
+.track-export-table tbody .track-photo-cell {
+  height: 96px !important;
+  min-height: 96px !important;
+  max-height: 96px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.track-export-table .track-photo-cell img,
+.track-export-table img.track-contestant-photo {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.track-export-table .track-export-mini-win {
+  display: inline-block !important;
+  margin-top: 3px !important;
+  font-family: Arial, sans-serif !important;
+  font-size: .72em !important;
+  font-weight: 400 !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0 !important;
+}
+
+.track-export-table .track-export-mini-win i {
+  font-family: Arial, sans-serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+
+/* Export v3 refinements */
+.track-export-sheet,
+.track-export-sheet *,
+.track-export-table,
+.track-export-table *,
+.track-export-table th,
+.track-export-table td,
+.track-export-table .track-rank-value,
+.track-export-table .tournament-name-main,
+.track-export-table .tournament-name-bracket,
+.track-export-table .track-ppe-head-stars {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.track-export-table thead th,
+.track-export-table thead .track-episode-row th,
+.track-export-table thead .track-challenge-row th,
+.track-export-table thead th.track-challenge-type-head,
+.track-export-table .track-rank-head,
+.track-export-table .track-contestant-head,
+.track-export-table .track-photo-head,
+.track-export-table .ppe-col {
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+.track-export-table tbody .track-rank-cell,
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell,
+.track-export-table tbody .ppe-cell,
+.track-export-table tbody .track-name-cell.tournament-name-cell {
+  background: #f9f9ff !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+.track-export-table .track-name-cell,
+.track-export-table .track-contestant-head,
+.track-export-table .track-photo-cell,
+.track-export-table .track-photo-head {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+}
+
+.track-export-table tbody .track-name-cell {
+  height: 96px !important;
+  min-height: 96px !important;
+  padding: 6px 6px !important;
+  line-height: 1.15 !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+}
+
+.track-export-table .tournament-name-main {
+  display: inline-block !important;
+  font-weight: 800 !important;
+}
+
+.track-export-table .tournament-name-bracket {
+  display: inline-block !important;
+  margin-top: 4px !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+
+.track-export-table .lsftc-lost-round-1,
+.track-export-table .lsftc-lost-round-2,
+.track-export-table .lsftc-lost-round-3,
+.track-table .lsftc-lost-round-1,
+.track-table .lsftc-lost-round-2,
+.track-table .lsftc-lost-round-3 {
+  color: #000 !important;
+}
+
+.track-export-table .track-export-mini-win,
+.track-export-table .track-export-mini-win *,
+.track-export-table .track-export-mini-win i {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-style: italic !important;
+  font-weight: 400 !important;
+}
+
+
+/* Export v5 deterministic canvas source */
+.track-export-table {
+  width: max-content !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.track-export-table,
+.track-export-table *,
+.track-export-table th,
+.track-export-table td,
+.track-export-table span,
+.track-export-table small,
+.track-export-table i {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+.track-export-table col.track-name-col,
+.track-export-table col.track-photo-col,
+.track-export-table .track-contestant-head,
+.track-export-table .track-photo-head,
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell {
+  width: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+}
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell {
+  height: 82px !important;
+  min-height: 82px !important;
+  max-height: 82px !important;
+}
+.track-export-table .track-photo-cell img,
+.track-export-table img.track-contestant-photo {
+  width: 82px !important;
+  height: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+  min-height: 82px !important;
+  max-height: 82px !important;
+  border-radius: 0 !important;
+}
+.track-export-table .tournament-name-main {
+  display: inline !important;
+  font-weight: 700 !important;
+}
+.track-export-table .tournament-name-bracket {
+  display: inline-block !important;
+  margin-top: 3px !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+}
+.track-export-table .track-export-mini-win,
+.track-export-table .track-export-mini-win *,
+.track-export-table .track-export-mini-win i {
+  font-weight: 400 !important;
+  font-style: italic !important;
+}
+
+
+/* V7 track record separation fixes */
+
+.track-table:not(.track-export-table) .tournament-name-main,
+.track-table:not(.track-export-table) .tournament-name-bracket,
+.track-table:not(.track-export-table) tbody th,
+.track-table:not(.track-export-table) tbody td,
+.track-table:not(.track-export-table) thead th {
+  font-family: var(--sans) !important;
+}
+.track-table:not(.track-export-table) .tournament-name-bracket {
+  margin-top: 0 !important;
+  line-height: 1 !important;
+}
+.track-export-table col.track-photo-col,
+.track-export-table .track-photo-head,
+.track-export-table .track-photo-cell,
+.track-export-table tbody .track-photo-cell {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+.track-export-table .track-photo-cell img,
+.track-export-table img.track-contestant-photo {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+}
+.track-export-table thead .track-challenge-row th,
+.track-export-table thead th.track-challenge-type-head {
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+/* Track record V8: page typography, tournament spacing, and square image export. */
+#trackWrap .track-table:not(.track-export-table) tbody th.track-name-cell,
+#episodeTrackWrap .track-table:not(.track-export-table) tbody th.track-name-cell,
+#trackWrap .track-table:not(.track-export-table) tbody th.track-name-cell *,
+#episodeTrackWrap .track-table:not(.track-export-table) tbody th.track-name-cell * {
+  font-family: var(--sans) !important;
+}
+
+.track-table:not(.track-export-table) .tournament-name-main,
+.track-table:not(.track-export-table) .tournament-name-bracket {
+  display: block !important;
+  line-height: 1 !important;
+}
+
+.track-table:not(.track-export-table) .tournament-name-bracket {
+  margin-top: -1px !important;
+}
+
+/* The export row and photo column now share the same 72px dimension. */
+.track-export-table tbody tr,
+.track-export-table tbody .track-name-cell,
+.track-export-table tbody .track-photo-cell {
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+}
+
+.track-export-table col.track-photo-col,
+.track-export-table .track-photo-head,
+.track-export-table .track-photo-cell,
+.track-export-table tbody .track-photo-cell {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+
+.track-export-table .track-photo-cell img,
+.track-export-table img.track-contestant-photo {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+}
+
+.track-export-table thead .track-challenge-row th,
+.track-export-table thead th.track-challenge-type-head,
+.track-export-table thead .track-challenge-row .track-head-cell,
+.track-export-table thead .track-challenge-row .track-head-episode {
+  color: #000 !important;
+}
+
+.track-export-table tbody .track-name-cell.tournament-name-cell {
+  background: var(--tournament-name-bg) !important;
+  background-color: var(--tournament-name-bg) !important;
+  background-image: none !important;
+  color: var(--tournament-name-fg) !important;
+}
+
+.track-export-table tbody .track-name-cell.tournament-name-cell * {
+  color: inherit !important;
+}
+
+.track-export-table .tournament-name-main,
+.track-export-table .tournament-name-bracket {
+  display: block !important;
+  line-height: 1 !important;
+}
+
+.track-export-table .tournament-name-bracket {
+  margin-top: 0 !important;
+}
+
+.track-export-table tbody .track-cell.token-win,
+.track-export-table tbody .track-cell.token-elim {
+  font-weight: 900 !important;
+}
+
+
+/* Track record V9: canonical export sizing and adaptive export text contrast. */
+.track-export-stage .track-export-table {
+  table-layout: fixed !important;
+  min-width: 0 !important;
+}
+
+.track-export-stage .track-export-table col.track-photo-col,
+.track-export-stage .track-export-table .track-photo-head,
+.track-export-stage .track-export-table tbody td.track-photo-cell {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+
+.track-export-stage .track-export-table tbody tr,
+.track-export-stage .track-export-table tbody th.track-name-cell,
+.track-export-stage .track-export-table tbody td.track-photo-cell {
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+}
+
+.track-export-stage .track-export-table tbody td.track-photo-cell {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.track-export-stage .track-export-table tbody td.track-photo-cell > img.track-contestant-photo {
+  position: static !important;
+  display: block !important;
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+}
+
+.track-export-stage .track-export-table tbody th.track-name-cell {
+  background: var(--track-export-name-bg, #f9f9ff) !important;
+  background-color: var(--track-export-name-bg, #f9f9ff) !important;
+  background-image: none !important;
+  color: var(--track-export-name-fg, #16181d) !important;
+}
+
+.track-export-stage .track-export-table tbody th.track-name-cell * {
+  color: inherit !important;
+}
+
+.track-export-stage .track-export-table thead .track-challenge-row th.track-challenge-type-head {
+  color: var(--track-export-challenge-fg, #16181d) !important;
+}
+
+.track-export-stage .track-export-table thead .track-challenge-row th.track-challenge-type-head * {
+  color: inherit !important;
+}
+
+/* V9 contrast inheritance must outrank the older generic track-table rules. */
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-cell,
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-episode {
+  color: var(--track-export-challenge-fg, #16181d) !important;
+}
+
+.track-export-stage .track-export-table.track-table tbody th.track-name-cell .tournament-name-main,
+.track-export-stage .track-export-table.track-table tbody th.track-name-cell .tournament-name-bracket {
+  color: var(--track-export-name-fg, #16181d) !important;
+}
+
+
+/* V10: downloaded challenge-type row matches the main light header. */
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head {
+  background: #ededf2 !important;
+  background-color: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head *,
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-cell,
+.track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-episode {
+  color: #16181d !important;
+}
+
+/* v66: configurable finale awards and comeback result colors */
+.finale-awards-settings .finale-awards-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.finale-awards-settings .toggle-row span small {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.finale-awards-stack {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.finale-award-card {
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--award-color) 58%, rgba(255,255,255,.22));
+  box-shadow: inset 0 3px 0 var(--award-color), var(--shadow-card);
+}
+
+.finale-award-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.finale-award-heading h3 {
+  margin-bottom: 5px;
+}
+
+.finale-award-heading p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.45;
+}
+
+.finale-award-swatch {
+  width: 16px;
+  height: 42px;
+  flex: 0 0 16px;
+  border-radius: 999px;
+  background: var(--award-color);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--award-color) 58%, transparent);
+}
+
+.finale-award-votes {
+  margin-top: 12px;
+}
+
+.finale-award-votes summary {
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-weight: 850;
+}
+
+.track-table .track-cell.token-win-rtrn,
+.track-legend-card.token-win-rtrn,
+.track-export-table .track-cell.token-win-rtrn,
+.track-table .track-cell.revenge-win-return {
+  background: #299eb9 !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+.track-table .track-cell.revenge-top2-out,
+.track-legend-card.revenge-top2-out,
+.track-export-table .track-cell.revenge-top2-out {
+  background: #a52a2a !important;
+  background-image: none !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 900px) {
+  .finale-awards-settings .finale-awards-grid,
+  .finale-awards-stack {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v68: award probability, compact labels, and forced two-part Rate-A-Queen Talent Shows */
+.finale-single-award-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.finale-standalone-award-card {
+  border-color: color-mix(in srgb, var(--award-color) 58%, rgba(255,255,255,.22));
+  box-shadow: inset 0 3px 0 var(--award-color), var(--shadow-card);
+  text-align: center;
+}
+
+.finale-standalone-award-card p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.finale-award-vote-grid {
+  margin-top: 0;
+}
+
+.track-table .track-cell.award-mix,
+.track-export-table .track-cell.award-mix,
+.track-table .track-cell.token-dragpopstar,
+.track-export-table .track-cell.token-dragpopstar,
+.track-table .track-cell.token-mxmakeup,
+.track-export-table .track-cell.token-mxmakeup,
+.track-table .track-cell.token-mxstarving,
+.track-export-table .track-cell.token-mxstarving,
+.track-table .track-cell.token-mxbitch,
+.track-export-table .track-cell.token-mxbitch,
+.track-table .track-cell.token-lostlook,
+.track-export-table .track-cell.token-lostlook {
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  line-height: 1.08 !important;
+  background-image: none !important;
+}
+
+
+/* v68: compact award labels keep the standard track-cell typography. */
+.track-table .track-cell.award-mix,
+.track-export-table .track-cell.award-mix {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+  hyphens: none !important;
+  line-height: 1.08 !important;
+}
+
+/* v69: optional Country flag column in downloaded track records. */
+.track-download-controls {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.track-flag-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.track-flag-toggle input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--pink);
+}
+
+.track-export-table .track-country-head,
+.track-export-table .track-country-cell {
+  width: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  text-align: center !important;
+}
+
+.track-export-table .track-country-head {
+  background: #ededf2 !important;
+  background-image: none !important;
+  color: #16181d !important;
+}
+
+.track-export-table tbody .track-country-cell {
+  padding: 0 !important;
+  vertical-align: middle !important;
+  background: #f9f9ff !important;
+  background-image: none !important;
+  color: #16181d !important;
+  white-space: nowrap !important;
+}
+
+/* Award labels wrap only at normal spaces; no forced one-word abbreviations. */
+.track-table .track-cell.award-mix,
+.track-export-table .track-cell.award-mix {
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+
+
+
+/* v70: optional image-based Country flag column on screen and in exported track records. */
+.track-table .track-country-head,
+.track-table .track-country-cell {
+  width: 46px !important;
+  min-width: 46px !important;
+  max-width: 46px !important;
+  text-align: center !important;
+}
+
+.track-table .track-country-head {
+  vertical-align: middle !important;
+}
+
+.track-table tbody .track-country-cell {
+  height: var(--episode-track-row-height, 38px) !important;
+  min-height: var(--episode-track-row-height, 38px) !important;
+  max-height: var(--episode-track-row-height, 38px) !important;
+  padding: 2px !important;
+  vertical-align: middle !important;
+  background-image: none !important;
+}
+
+.track-country-flag {
+  display: block;
+  width: 32px;
+  height: 21px;
+  margin: 0 auto;
+  object-fit: contain;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(20, 22, 28, .22);
+}
+
+.track-export-table .track-country-flag {
+  width: 34px;
+  height: 22px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(20, 22, 28, .28);
+}
+
+.track-country-missing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 21px;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+
+/* v72: compact live Country column and single-line runner-up label. */
+#trackWrap .track-table col.track-country-col,
+#trackWrap .track-table th.track-country-head,
+#trackWrap .track-table td.track-country-cell {
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+}
+
+#trackWrap .track-table th.track-country-head {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  font-size: 9px !important;
+  letter-spacing: 0 !important;
+  white-space: nowrap !important;
+}
+
+#trackWrap .track-table td.track-country-cell {
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+
+#trackWrap .track-table td.track-country-cell .track-country-flag {
+  width: 30px !important;
+  height: 20px !important;
+}
+
+.track-table .track-cell.token-ru,
+.track-export-table .track-cell.token-ru,
+.track-table .track-cell.token-runner-up,
+.track-export-table .track-cell.token-runner-up {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
 }
