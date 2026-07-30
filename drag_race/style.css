@@ -19793,9 +19793,9 @@ details.advanced-settings[open] > .advanced-settings-grid {
 
 .track-export-table .track-country-head,
 .track-export-table .track-country-cell {
-  width: 46px !important;
-  min-width: 46px !important;
-  max-width: 46px !important;
+  width: 66px !important;
+  min-width: 66px !important;
+  max-width: 66px !important;
   text-align: center !important;
 }
 
@@ -19858,8 +19858,8 @@ details.advanced-settings[open] > .advanced-settings-grid {
 }
 
 .track-export-table .track-country-flag {
-  width: 34px;
-  height: 22px;
+  width: 48px;
+  height: 32px;
   border-radius: 2px;
   box-shadow: 0 0 0 1px rgba(20, 22, 28, .28);
 }
@@ -19909,4 +19909,41 @@ details.advanced-settings[open] > .advanced-settings-grid {
   white-space: nowrap !important;
   word-break: keep-all !important;
   overflow-wrap: normal !important;
+}
+
+
+/* v74: team chooser note sits directly below the Teams / Pairs heading. */
+.team-selection-summary {
+  display: block;
+  width: min(100%, 760px);
+  min-height: 0;
+  margin: 0 auto 18px;
+  padding: 11px 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 16px;
+  background: rgba(255,255,255,.055);
+  text-align: center;
+}
+
+.team-selection-summary:empty {
+  display: none;
+}
+
+.team-selection-summary .team-selection-intro {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.team-selection-summary .team-selection-intro p {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #92929b;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: center;
 }
