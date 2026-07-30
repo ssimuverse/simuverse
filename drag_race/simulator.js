@@ -28,6 +28,7 @@
     ];
     const NON_ELIM_LALAPARUZA_MIN = 6;
     const NON_ELIM_LALAPARUZA_MAX = 12;
+    const MINI_CHALLENGE_CHANCE = 0.65;
     function validNonElimLalaparuzaCount(count) {
         const value = Number(count || 0);
         return value >= NON_ELIM_LALAPARUZA_MIN && value <= NON_ELIM_LALAPARUZA_MAX;
@@ -593,6 +594,7 @@
         guestJudgeStack: document.getElementById("guestJudgeStack"),
         miniChallengeStack: document.getElementById("miniChallengeStack"),
         comebackStack: document.getElementById("comebackStack"),
+        teamSelectionSummary: document.getElementById("teamSelectionSummary"),
         teamPickingStack: document.getElementById("teamPickingStack"),
         fameGamesFinaleStack: document.getElementById("fameGamesFinaleStack"),
         rumocracyStack: document.getElementById("rumocracyStack"),
@@ -3057,8 +3059,8 @@
             reading_is_fundamental: { id: "comeback_reading_is_fundamental", name: "Reading Is Fundamental", type: "roast", teamMode: "solo", description: "The eliminated contestants open the library and read each other for one last chance to return.", requiredSkills: { comedy: 0.45, improv: 0.30, acting: 0.15, runway: 0.10 } },
             conjoined_twins: { id: "conjoined_comeback", name: "Conjoined Twins", type: "makeover", teamMode: "pairs", description: "Each remaining queen is paired with an eliminated queen and must transform them into a twisted drag twin.", requiredSkills: { design: 0.38, runway: 0.32, acting: 0.15, comedy: 0.15 } },
             reinas_de_la_comedia: { id: "espana_comeback", name: "Reinas de la Comedia", type: "roast", teamMode: "pairs", description: "Remaining and eliminated queens pair up for a comedy comeback showcase.", requiredSkills: { comedy: 0.45, improv: 0.26, acting: 0.18, runway: 0.11 } },
-            attention_girl_groups: { id: "france2_comeback", name: "Attention Girl Groups", type: "girlgroups", teamMode: "groups", description: "The eliminated queens return to compete against the remaining queens for one lip sync shot back into the race.", requiredSkills: { dance: 0.30, lipsync: 0.25, comedy: 0.18, acting: 0.15, runway: 0.12 } },
-            kitty_girl_groups: { id: "comeback_kitty_girl_groups", name: "Kitty Girl Groups", type: "girlgroups", teamMode: "groups", description: "The remaining queens and eliminated queens perform in rival girl groups, and the winning side controls the comeback.", requiredSkills: { dance: 0.30, lipsync: 0.25, comedy: 0.20, acting: 0.15, runway: 0.10 } },
+            attention_girl_groups: { id: "france2_comeback", name: "Attention Girl Groups", type: "girlgroups", teamMode: "groups", teamCount: 2, description: "The eliminated queens return to compete against the remaining queens for one lip sync shot back into the race.", requiredSkills: { dance: 0.30, lipsync: 0.25, comedy: 0.18, acting: 0.15, runway: 0.12 } },
+            kitty_girl_groups: { id: "comeback_kitty_girl_groups", name: "Kitty Girl Groups", type: "girlgroups", teamMode: "groups", teamCount: 2, description: "The remaining queens and eliminated queens perform in rival girl groups, and the winning side controls the comeback.", requiredSkills: { dance: 0.30, lipsync: 0.25, comedy: 0.20, acting: 0.15, runway: 0.10 } },
             revenge_of_the_queens: { id: "maxi_comeback_revenge_of_the_queens", name: "Revenge of The Queens", type: "girlgroups", teamMode: "pairs", description: "The eliminated queens pair with the remaining queens for a revenge performance. The top two eliminated queens lip sync for the chance to return.", requiredSkills: { dance: 0.25, lipsync: 0.25, comedy: 0.20, acting: 0.15, runway: 0.15 } },
             lalaparuza_comeback: { id: "comeback_lalaparuza", name: "LaLaPaRuZa Comeback", type: "lalaparuza", teamMode: "solo", description: "Eliminated queens lip sync against the remaining queens. Win your battle and you return; lose and you stay out.", requiredSkills: { lipsync: 1 } },
             game_within_a_game: { id: "comeback_game_within_a_game", name: "Game Within a Game", type: "lalaparuza", teamMode: "solo", description: "The eliminated queens battle through a lip sync gauntlet for one final spot back in the race.", requiredSkills: { lipsync: 1 } }
@@ -5392,7 +5394,9 @@ Options: ${names}`, "") || "";
         const challenge = episode.challenge || {};
         if (!ids.length || !["pairs", "groups"].includes(challenge.teamMode))
             return Promise.resolve({ mode: "solo", groups: [] });
-        let temporary = randomRupaulChallengeTeams(ids, challenge);
+        const miniWinnerTeams = buildMiniWinnerChosenTeams(season, episode, ids, challenge);
+        let temporary = miniWinnerTeams || randomRupaulChallengeTeams(ids, challenge);
+        let selectionByMiniWinners = !!miniWinnerTeams;
         const assignmentLabel = challenge.teamMode === "pairs" ? "Pairs" : "Teams";
         const rebuildFromAssignments = (assignments) => {
             const groups = temporary.groups.map((group) => ({ name: group.name, ids: [] }));
@@ -5419,9 +5423,12 @@ Options: ${names}`, "") || "";
                   </select>
                 </label>`;
             }).join("");
-            const help = challenge.teamMode === "pairs"
+            const captainCopy = selectionByMiniWinners && (episode.miniWinnerIds || []).length
+                ? `${sentenceList(episode.miniWinnerIds, season, false)} won the mini challenge and chose the initial ${challenge.teamMode === "pairs" ? "pairs" : "teams"}. `
+                : "";
+            const help = captainCopy + (challenge.teamMode === "pairs"
                 ? "Each pair must contain exactly two contestants."
-                : "Every contestant must be assigned, and team sizes must stay balanced.";
+                : "Every contestant must be assigned, and team sizes must stay balanced.");
             return `<div class="rupaul-team-builder">
               <p class="rupaul-team-builder-help">${escapeHtml(help)}</p>
               <div class="rupaul-team-builder-preview rupaul-teams-preview">${preview}</div>
@@ -5444,6 +5451,7 @@ Options: ${names}`, "") || "";
             });
             root.querySelector(".rupaul-randomize-teams")?.addEventListener("click", () => {
                 temporary = randomRupaulChallengeTeams(ids, challenge);
+                selectionByMiniWinners = false;
                 render();
             });
             root.querySelector(".rupaul-confirm")?.addEventListener("click", () => {
@@ -5451,7 +5459,10 @@ Options: ${names}`, "") || "";
                     return;
                 close({
                     mode: temporary.mode,
-                    groups: temporary.groups.map((group) => ({ name: group.name, ids: group.ids.slice() }))
+                    groups: temporary.groups.map((group) => ({ name: group.name, ids: group.ids.slice() })),
+                    selectionByMiniWinners,
+                    chooserIds: selectionByMiniWinners ? (episode.miniWinnerIds || []).slice() : [],
+                    captainIds: selectionByMiniWinners ? (temporary.captainIds || temporary.groups.map((group) => group.ids[0]).filter(Boolean)) : []
                 });
             });
         });
@@ -5483,7 +5494,12 @@ Options: ${names}`, "") || "";
             const chosenTeams = await chooseRupaulChallengeTeams(season, episode);
             if (!chosenTeams)
                 return false;
-            episode.teams = chosenTeams;
+            episode.teams = { mode: chosenTeams.mode, groups: chosenTeams.groups };
+            episode.teamSelectionByMiniWinners = !!chosenTeams.selectionByMiniWinners;
+            episode.teamChooserIds = (chosenTeams.chooserIds || []).slice();
+            episode.teamCaptainIds = (chosenTeams.captainIds || []).slice();
+            if (episode.teamSelectionByMiniWinners)
+                episode.teamSelectionText = `${sentenceList(episode.teamChooserIds, season, false)} won the mini challenge and chose the ${chosenTeams.mode === "pairs" ? "pairs" : "teams"}.`;
             episode.rupaulChallengeTeamsConfirmed = true;
         }
         else {
@@ -6877,6 +6893,8 @@ Options: ${names}`, "") || "";
     }
     async function prepareRupaulStandardFinale(season) {
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         finale.rupaulPending = true;
         finale.rupaulFinalePending = true;
         finale.challenge = null;
@@ -7140,6 +7158,8 @@ Options: ${names}`, "") || "";
         const finalists = ensureRupaulAllWinnersFinalists(season);
         const regularFinale = season.config.finaleType === "regular_finale";
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         finale.allWinnersFinale = true;
         finale.allWinnersRegularFinale = regularFinale;
         finale.lsftcFinale = !regularFinale;
@@ -7349,6 +7369,7 @@ Options: ${names}`, "") || "";
         episode.rupaulSpecialFlow = true;
         episode.rupaulSpecialMode = options.mode || type;
         episode.rupaulSpecialIds = (options.ids || season.activeIds).slice();
+        episode.queuedLalaparuza = !!options.queuedLalaparuza;
         episode.allWinnersNonElimLalaparuza = !!options.allWinnersSpecial;
         episode.allWinnersEpisode = !!options.allWinnersSpecial;
         episode.noImmunityAward = type === "special_non_elim_lalaparuza";
@@ -7364,7 +7385,7 @@ Options: ${names}`, "") || "";
         episode.challenge = {
             id: `${type}_${episode.number}`,
             name: options.name || defaultName,
-            type: "lip_sync",
+            type: type === "special_lalaparuza" ? "lalaparuza" : "lip_sync",
             teamMode: "solo"
         };
         episode.rupaulChallengeConfirmed = true;
@@ -7749,6 +7770,8 @@ Options: ${names}`, "") || "";
                 season.specialLalaparuzaUsed = true;
                 episode.resultText = (episode.eliminatedIds || []).length ? `${sentenceList(episode.eliminatedIds, season, false)}, sashay away.` : "Nobody is eliminated from the smackdown.";
             }
+            if (episode.queuedLalaparuza)
+                season.lalaparuzaQueued = null;
             episode.rupaulSpecialCompleted = true;
             return finishRupaulEpisode(season, episode);
         }
@@ -7872,6 +7895,8 @@ Options: ${names}`, "") || "";
     }
     async function prepareRupaulTournamentFinale(season) {
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         finale.rupaulPending = true;
         finale.rupaulTournamentFinalePending = true;
         finale.lsftcFinale = true;
@@ -8849,8 +8874,16 @@ Options: ${names}`, "") || "";
         const target = effectiveFinalistSize(season);
         const expandedFinaleReady = !!season.expandedFinaleReady && season.activeIds.length <= target;
         if (!expandedFinaleReady && (season.activeIds.length > target || shouldRunSpecialComeback(season) || shouldRunDirectComeback(season))) {
-            if (season.lalaparuzaQueued)
-                return prepareRupaulSpecialSmackdown(season, "special_lalaparuza", { mode: "special_lalaparuza" });
+            if (season.lalaparuzaQueued) {
+                const queued = season.lalaparuzaQueued;
+                return prepareRupaulSpecialSmackdown(season, "special_lalaparuza", {
+                    mode: "special_lalaparuza",
+                    ids: queued.competitorIds,
+                    activeStartIds: season.activeIds.slice(),
+                    runOnlyIds: [queued.safeId].filter(Boolean),
+                    queuedLalaparuza: true
+                });
+            }
             if (shouldRunSpecialLalaparuza(season))
                 return prepareRupaulSpecialSmackdown(season, "special_lalaparuza");
             if (shouldRunNonElimLalaparuza(season))
@@ -9324,8 +9357,14 @@ Options: ${names}`, "") || "";
     }
     async function simulateSeasonFromCurrentState(season) {
         while (!season.seasonComplete && !season.expandedFinaleReady && (season.activeIds.length > effectiveFinalistSize(season) || shouldRunSpecialComeback(season))) {
-            if (season.lalaparuzaQueued)
-                simulateLalaparuzaEpisode(season);
+            if (season.lalaparuzaQueued) {
+                const queued = season.lalaparuzaQueued;
+                simulateSpecialLalaparuzaSmackdown(season, {
+                    ids: queued.competitorIds,
+                    runOnlyIds: [queued.safeId].filter(Boolean),
+                    queued: true
+                });
+            }
             else if (shouldRunSpecialLalaparuza(season))
                 simulateSpecialLalaparuzaSmackdown(season);
             else if (shouldRunNonElimLalaparuza(season))
@@ -9823,6 +9862,8 @@ Options: ${names}`, "") || "";
         season.allWinnersFinalistIds = finalists.slice();
         season.activeIds = finalists.slice();
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         finale.allWinnersFinale = true;
         finale.allWinnersRegularFinale = regularFinale;
         finale.lsftcFinale = !regularFinale;
@@ -10212,6 +10253,8 @@ Options: ${names}`, "") || "";
     }
     function simulateTournamentFinale(season) {
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         const finalists = season.activeIds.slice();
         finale.activeStartIds = finalists.slice();
         finale.challenge = null;
@@ -11096,18 +11139,40 @@ Options: ${names}`, "") || "";
         });
         return clone(randomItem(matches.length ? matches : judges));
     }
+    function miniChallengeWinnerCount(episode, activeCount, miniChallenge) {
+        const count = Math.max(0, Number(activeCount || 0));
+        if (!count)
+            return 0;
+        const teamMode = episode?.challenge?.teamMode || "solo";
+        if (teamMode === "pairs")
+            return 1;
+        if (teamMode === "groups") {
+            const plan = rupaulChallengeTeamPlan(episode.challenge, count);
+            return Math.max(1, Math.min(count, Number(plan.groupCount || 1)));
+        }
+        const declared = Number(miniChallenge?.winners || 0);
+        return Math.max(1, Math.min(count, Number.isFinite(declared) && declared > 0 ? declared : 1));
+    }
     function runMiniChallenge(season, episode) {
+        episode.miniChallenge = null;
+        episode.miniWinnerIds = [];
+        if (episode?.type === "finale")
+            return false;
+        if (Math.random() >= MINI_CHALLENGE_CHANCE)
+            return false;
         const active = season.activeIds.slice();
-        const challenge = clone(randomItem(getMiniChallengeData()));
-        const teamish = ["groups", "pairs"].includes(episode.challenge?.teamMode);
-        const declared = Math.max(0, Math.min(active.length, Number(challenge.winners || 0)));
-        const fallbackCount = teamish && Math.random() < 0.45 ? Math.min(active.length, randInt(2, Math.min(4, active.length))) : 1;
-        const winnerCount = declared || fallbackCount;
+        const miniPool = getMiniChallengeData();
+        const pickedChallenge = miniPool.length ? randomItem(miniPool) : null;
+        if (!pickedChallenge || !active.length)
+            return false;
+        const challenge = clone(pickedChallenge);
+        const winnerCount = miniChallengeWinnerCount(episode, active.length, challenge);
         episode.miniChallenge = challenge;
-        episode.miniWinnerIds = winnerCount > 0 ? shuffle(active).slice(0, winnerCount) : [];
+        episode.miniWinnerIds = shuffle(active).slice(0, winnerCount);
         episode.miniWinnerIds.forEach((id) => {
             season.stats[id].miniWins += 1;
         });
+        return true;
     }
     function runReadingComebackMiniChallenge(season, episode) {
         const comeback = episode.readingComeback || {};
@@ -11136,17 +11201,102 @@ Options: ${names}`, "") || "";
                 episode.returnedIds.push(returnedId);
         }
     }
+    function teamDraftPreferenceScore(season, episode, chooserId, candidateId) {
+        const relationship = Number(season.relationships?.[pairKey(chooserId, candidateId)] || 0);
+        const requiredSkills = episode.challenge?.requiredSkills || {};
+        const skillFit = Object.entries(requiredSkills).reduce((sum, [skill, weight]) => sum + Number(season.contestants[candidateId]?.skills?.[skill] || 0) * Number(weight || 0), 0);
+        const track = Number(trackRecordPower(season, candidateId) || 0);
+        const popularity = Number(season.stats?.[candidateId]?.popularity || 50);
+        return relationship * 7.5 + skillFit * 3.2 + track * 0.10 + popularity * 0.04 + randInt(-4, 4);
+    }
+    function bestTeamDraftPick(season, episode, chooserId, candidates) {
+        return (candidates || []).map((id) => ({
+            id,
+            score: teamDraftPreferenceScore(season, episode, chooserId, id)
+        })).sort((a, b) => b.score - a.score)[0]?.id || null;
+    }
+    function buildMiniWinnerChosenTeams(season, episode, ids, challenge) {
+        const cleanIds = [...new Set((ids || []).filter((id) => id && season.contestants[id]))];
+        const chooserIds = [...new Set((episode.miniWinnerIds || []).filter((id) => cleanIds.includes(id)))];
+        if (!cleanIds.length || !chooserIds.length || episode.miniChallenge?.suppressGroupingUse || !["pairs", "groups"].includes(challenge?.teamMode))
+            return null;
+        const plan = rupaulChallengeTeamPlan(challenge, cleanIds.length);
+        const groups = Array.from({ length: plan.groupCount }, (_, index) => ({
+            name: `${plan.label} ${index + 1}`,
+            ids: []
+        }));
+        const available = cleanIds.filter((id) => !chooserIds.includes(id));
+        const seededChoosers = chooserIds.slice(0, groups.length);
+        seededChoosers.forEach((id, index) => groups[index].ids.push(id));
+        for (let index = seededChoosers.length; index < groups.length && available.length; index += 1) {
+            const chooserId = chooserIds[index % chooserIds.length];
+            const picked = bestTeamDraftPick(season, episode, chooserId, available);
+            if (!picked)
+                break;
+            groups[index].ids.push(picked);
+            available.splice(available.indexOf(picked), 1);
+        }
+        const captainIds = groups.map((group) => group.ids[0]).filter(Boolean);
+        if (plan.mode === "pairs") {
+            groups.forEach((group, index) => {
+                if (group.ids.length >= 2 || !available.length)
+                    return;
+                const chooserId = seededChoosers.includes(group.ids[0]) ? group.ids[0] : chooserIds[index % chooserIds.length];
+                const picked = bestTeamDraftPick(season, episode, chooserId, available);
+                if (!picked)
+                    return;
+                group.ids.push(picked);
+                available.splice(available.indexOf(picked), 1);
+            });
+            while (available.length) {
+                const smallest = groups.slice().sort((a, b) => a.ids.length - b.ids.length)[0];
+                smallest.ids.push(available.shift());
+            }
+        }
+        else {
+            let round = 0;
+            while (available.length) {
+                const order = round % 2 === 0 ? groups : groups.slice().reverse();
+                for (const group of order) {
+                    if (!available.length)
+                        break;
+                    const chooserId = group.ids[0] || chooserIds[round % chooserIds.length];
+                    const picked = bestTeamDraftPick(season, episode, chooserId, available);
+                    if (!picked)
+                        break;
+                    group.ids.push(picked);
+                    available.splice(available.indexOf(picked), 1);
+                }
+                round += 1;
+            }
+        }
+        const teams = { mode: plan.mode, groups, chooserIds: chooserIds.slice(), captainIds };
+        return validRupaulChallengeTeams(teams, challenge, cleanIds) ? teams : null;
+    }
     function maybeCreateTeams(season, episode) {
         const challenge = episode.challenge;
         if (isTeamsFormat(season) && season.activeIds.length > 3) {
             episode.teams = { mode: "teams", groups: activeTeamPairs(season).map((pair) => ({ name: pair.name, ids: pair.ids.slice(), pairId: pair.id })) };
             return;
         }
-        const ids = shuffle(season.activeIds);
+        const activeIds = season.activeIds.slice();
         if (!challenge || challenge.teamMode === "solo") {
             episode.teams = { mode: "solo", groups: [] };
             return;
         }
+        const winnerChosen = buildMiniWinnerChosenTeams(season, episode, activeIds, challenge);
+        if (winnerChosen) {
+            episode.teams = { mode: winnerChosen.mode, groups: winnerChosen.groups };
+            episode.teamSelectionByMiniWinners = true;
+            episode.teamChooserIds = winnerChosen.chooserIds.slice();
+            episode.teamCaptainIds = winnerChosen.captainIds.slice();
+            episode.teamSelectionText = `${sentenceList(winnerChosen.chooserIds, season, false)} won the mini challenge and chose the ${winnerChosen.mode === "pairs" ? "pairs" : "teams"}.`;
+            return;
+        }
+        const ids = shuffle(activeIds);
+        episode.teamSelectionByMiniWinners = false;
+        episode.teamChooserIds = [];
+        episode.teamCaptainIds = [];
         if (challenge.teamMode === "pairs") {
             episode.teams = { mode: "pairs", groups: chunk(ids, 2).map((members, i) => ({ name: `Pair ${i + 1}`, ids: members })) };
             return;
@@ -12404,7 +12554,7 @@ Options: ${names}`, "") || "";
                 season.legacyEveryoneSlayedUsed = true;
                 return "everyone_top";
             }
-            if (!season.legacyMassLipSyncUsed && count >= 10 && weakCount >= 5 && weakCount < 7 && legacyChance(31)) {
+            if (!season.legacyMassLipSyncUsed && count >= 10 && weakCount >= 5 && weakCount < 7 && legacyChance(20)) {
                 season.legacyMassLipSyncUsed = true;
                 return "mass_lipsync";
             }
@@ -12429,7 +12579,8 @@ Options: ${names}`, "") || "";
     }
     function assignLegacyMassLipSync(season, episode) {
         const ranked = legacyPerformanceOrder(episode);
-        const weakCount = Math.min(6, ranked.length);
+        const actualWeakCount = (episode.maxiGroups?.bad || []).length + (episode.maxiGroups?.flopped || []).length;
+        const weakCount = Math.min(6, Math.max(5, actualWeakCount), ranked.length);
         const topPool = ranked.slice(0, Math.min(3, Math.max(1, ranked.length - weakCount)));
         const orderedTop = legacyTopOrder(episode, topPool);
         const firstScore = orderedTop[0] ? legacyScoreForId(episode, orderedTop[0], "legacyTopScore") : null;
@@ -12489,6 +12640,7 @@ Options: ${names}`, "") || "";
         episode.bottomIds = ranked.filter((id) => id !== chosenWinner && !isProtectedByImmunity(season, episode, id));
         episode.safeIds = ranked.filter((id) => id !== chosenWinner && isProtectedByImmunity(season, episode, id));
         episode.skipLipSyncThisEpisode = true;
+        episode.hideResults = true;
         episode.lalaparuzaWarningText = "I'm sorry my dears, but you're up for elimination. None of you have impressed us this week. Next week we'll be having a LaLaPaRuZa smackdown, where one of you will be going home.";
         season.lalaparuzaTwistUsed = true;
         season.lalaparuzaQueued = { safeId: episode.winnerIds[0], competitorIds: episode.bottomIds.slice() };
@@ -13591,6 +13743,8 @@ Options: ${names}`, "") || "";
                 return "PLOSS";
         }
         if (episode.type === "special_lalaparuza") {
+            if ((episode.runOnlyIds || []).includes(id))
+                return "RUN";
             if ((episode.eliminatedIds || []).includes(id))
                 return "ELIM";
             const round = Number(episode.lalaparuzaRoundWinners?.[id] || 0);
@@ -16057,22 +16211,28 @@ Options: ${names}`, "") || "";
         season.fameGamesEpisodeUsed = true;
         finalizeEpisode(season, episode);
     }
-    function simulateSpecialLalaparuzaSmackdown(season) {
+    function simulateSpecialLalaparuzaSmackdown(season, options = {}) {
+        const participantIds = [...new Set((options.ids || season.activeIds).filter((id) => season.activeIds.includes(id)))];
+        const runOnlyIds = [...new Set((options.runOnlyIds || []).filter((id) => season.activeIds.includes(id) && !participantIds.includes(id)))];
         const episode = createEpisodeShell(season, { type: "special_lalaparuza", title: `Episode ${season.episodeCounter}`, label: `Episode ${season.episodeCounter}` });
         episode.challenge = {
             id: "special_lalaparuza_smackdown",
             name: "LaLaPaRuZa Smackdown",
             type: "lalaparuza",
             teamMode: "solo",
-            description: "The Top 8 must lip sync for survival. Winners of each round are declared safe, while each losing queen must lip sync again until the final duel sends one contestant home.",
+            description: `${participantIds.length} contestants must lip sync for survival. Winners of each round are declared safe, while each losing queen must lip sync again until the final duel sends one contestant home.`,
             requiredSkills: { lipsync: 1 }
         };
         episode.runway = null;
         episode.guestJudge = null;
         episode.miniChallenge = null;
+        episode.activeStartIds = season.activeIds.slice();
+        episode.runOnlyIds = runOnlyIds;
+        episode.rupaulSpecialIds = participantIds.slice();
+        episode.queuedLalaparuza = !!options.queued;
         episode.lalaparuzaSpecial = true;
         episode.lalaparuzaRoundWinners = {};
-        const ids = shuffle(season.activeIds.slice());
+        const ids = shuffle(participantIds.slice());
         let remaining = ids.slice();
         const firstTwoRounds = [];
         for (let round = 1; round <= 2 && remaining.length > 1; round += 1) {
@@ -16116,67 +16276,24 @@ Options: ${names}`, "") || "";
             episode.lalaparuzaRoundWinners[finalIds[0]] = 3;
             episode.resultText = `${displayName(season.contestants[finalIds[0]])} survives the LaLaPaRuZa.`;
         }
-        episode.safeIds = season.activeIds.filter((id) => !(episode.eliminatedIds || []).includes(id));
+        episode.safeIds = participantIds.filter((id) => !(episode.eliminatedIds || []).includes(id));
         episode.highIds = [];
         episode.lowIds = [];
         episode.bottomIds = [];
         episode.winnerIds = [];
         episode.notes.push("Special Challenge: no guest judge, mini challenge, runway, judging, or placements are used for this episode.");
         season.specialLalaparuzaUsed = true;
+        if (episode.queuedLalaparuza)
+            season.lalaparuzaQueued = null;
         finalizeEpisode(season, episode);
     }
     function simulateLalaparuzaEpisode(season) {
-        const safeId = season.lalaparuzaQueued.safeId;
-        const episode = createEpisodeShell(season, { type: "lalaparuza", title: `Episode ${season.episodeCounter}`, label: `Episode ${season.episodeCounter}` });
-        episode.challenge = null;
-        episode.runway = null;
-        const competitors = (season.lalaparuzaQueued.competitorIds || season.activeIds.filter((id) => id !== safeId)).filter((id) => season.activeIds.includes(id) && id !== safeId);
-        const allLipSyncs = [];
-        const safeRoundWinners = [safeId].filter(Boolean);
-        let remainingLosers = competitors.slice();
-        let round = 1;
-        while (remainingLosers.length > 1) {
-            const roundLosers = [];
-            makeLalaparuzaGroups(remainingLosers).forEach((group) => {
-                if (group.length <= 1) {
-                    roundLosers.push(...group);
-                    return;
-                }
-                const lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, group, `Lalaparuza Round ${round}`));
-                const winnerId = lipSync.winnerId;
-                const losers = group.filter((id) => id !== winnerId);
-                lipSync.resultType = "lalaparuza_round";
-                lipSync.roundResultText = `${displayName(season.contestants[winnerId])}, shantay you stay. ${formatList(losers, season)} must lip sync again.`;
-                allLipSyncs.push(lipSync);
-                safeRoundWinners.push(winnerId);
-                roundLosers.push(...losers);
-                group.forEach((id) => updateLipSyncStats(season, id, id === winnerId));
-            });
-            remainingLosers = roundLosers;
-            round += 1;
-            if (round > 8)
-                break;
-        }
-        const eliminatedId = remainingLosers[0];
-        if (allLipSyncs.length) {
-            const last = allLipSyncs.at(-1);
-            if (last && eliminatedId && last.ids.includes(eliminatedId)) {
-                last.resultType = "elimination";
-                last.loserId = eliminatedId;
-                last.roundResultText = `${formatList(last.ids.filter((id) => id !== eliminatedId), season)}, shantay you stay. ${displayName(season.contestants[eliminatedId])}, sashay away.`;
-            }
-        }
-        episode.safeIds = [...new Set(safeRoundWinners.filter((id) => id && id !== eliminatedId))];
-        episode.bottomIds = [];
-        episode.lowIds = [];
-        episode.highIds = [];
-        episode.winnerIds = [];
-        episode.extraLipSyncs = allLipSyncs;
-        episode.eliminatedIds = eliminatedId ? [eliminatedId] : [];
-        episode.resultText = eliminatedId ? `${displayName(season.contestants[eliminatedId])} loses the final lalaparuza round and sashays away.` : "The lalaparuza ends with no elimination.";
-        runUntucked(season, episode);
-        season.lalaparuzaQueued = null;
-        finalizeEpisode(season, episode);
+        const queued = season.lalaparuzaQueued || {};
+        return simulateSpecialLalaparuzaSmackdown(season, {
+            ids: queued.competitorIds || season.activeIds.filter((id) => id !== queued.safeId),
+            runOnlyIds: [queued.safeId].filter(Boolean),
+            queued: true
+        });
     }
     function pickCuntTestChallenge(season, pickedIds, predicate) {
         const all = getChallengeData();
@@ -16674,6 +16791,8 @@ Options: ${names}`, "") || "";
     }
     function simulateFinale(season) {
         const finale = createEpisodeShell(season, { type: "finale", title: "Grand Finale", label: "Finale" });
+        finale.miniChallenge = null;
+        finale.miniWinnerIds = [];
         finale.challenge = null;
         finale.runway = null;
         finale.safeIds = [];
@@ -17455,20 +17574,7 @@ Options: ${names}`, "") || "";
       </article>
     ` : "";
         if (ep.type === "finale") {
-            const ids = ep.missCongenialityIds || [];
-            const voteRows = (ep.missCongenialityVoteDetails || []).map((vote) => `
-        <article class="mx-vote-card">
-          ${contestantCard(vote.voterId)}
-          <span class="vote-arrow">voted for</span>
-          ${contestantCard(vote.votedForId)}
-        </article>
-      `).join("");
-            els.miniChallengeStack.innerHTML = `
-        <article class="challenge-card mini-challenge-card"><p>The contestants vote for the queen who brought the most warmth, kindness, and sisterhood to the season.</p></article>
-        <div class="mx-vote-grid">${voteRows}</div>
-        <p class="announcement-line">And the ${ids.length > 1 ? "winners are" : "winner is"}...</p>
-        <div class="contestant-strip small-strip award-strip">${ids.map((id) => contestantCard(id)).join("") || `<span class="empty-state">No Mx. Congeniality was awarded.</span>`}</div>
-      `;
+            els.miniChallengeStack.innerHTML = "";
             return;
         }
         if (ep.allWinnersStarGiveawaysAtStart?.length) {
@@ -17527,6 +17633,8 @@ Options: ${names}`, "") || "";
     function renderTeamsPanel(ep) {
         if (!els.teamPickingStack)
             return;
+        if (els.teamSelectionSummary)
+            els.teamSelectionSummary.innerHTML = "";
         if (ep.type === "finale") {
             const boot = ep.goldenBoot;
             els.teamPickingStack.innerHTML = boot?.id ? `
@@ -17555,6 +17663,8 @@ Options: ${names}`, "") || "";
             els.teamPickingStack.innerHTML = `<div class="${rowClass}">${ep.teams.groups.map((team) => groupBlock(team.name, team.ids, state.season, { className: cardClass })).join("")}</div>`;
             return;
         }
+        if (els.teamSelectionSummary && ep.teamSelectionByMiniWinners && ep.teamSelectionText)
+            els.teamSelectionSummary.innerHTML = `<div class="episode-theme-copy team-selection-intro"><p>${escapeHtml(ep.teamSelectionText)}</p></div>`;
         els.teamPickingStack.innerHTML = ep.teams.groups.map((team) => groupBlock("", team.ids, state.season, { subtitle: team.name })).join("");
     }
     function performanceSentence(ids, label, subject = "challenge") {
@@ -17764,7 +17874,8 @@ Options: ${names}`, "") || "";
         }
         if (ep.type === "special_lalaparuza") {
             if (els.challengeSummary) {
-                els.challengeSummary.innerHTML = episodeThemeCopy("LaLaPaRuZa Smackdown", "The Top 8 lip sync in random 1v1 battles. Win Round 1 and you are safe. Lose Round 1 and you lip sync in Round 2. Lose Round 2 and you enter the final lip sync for your life.", "", "lalaparuza-smackdown-intro-copy");
+                const participantCount = (ep.rupaulSpecialIds || ep.activeStartIds || []).filter((id) => !(ep.runOnlyIds || []).includes(id)).length;
+                els.challengeSummary.innerHTML = episodeThemeCopy("LaLaPaRuZa Smackdown", `${participantCount} contestants lip sync in random battles. Win a round and you are safe; lose and you must lip sync again until the final duel sends one contestant home.`, "", "lalaparuza-smackdown-intro-copy");
             }
             if (els.challengeGrid) {
                 els.challengeGrid.innerHTML = `<div class="lalaparuza-round-list">${(ep.extraLipSyncs || []).map((ls) => renderLipSyncCardWithOutcome(ls, ep, true, { forceOutcome: true, className: "lalaparuza-opening-round" })).join("")}</div>`;
@@ -19953,7 +20064,7 @@ Options: ${names}`, "") || "";
             status: true,
             comeback: false,
             guest: false,
-            mini: !!(ep.missCongenialityIds || []).length,
+            mini: false,
             teams: !!ep.goldenBoot,
             famegames: false,
             maxi: false,
@@ -20005,7 +20116,7 @@ Options: ${names}`, "") || "";
             status: true,
             comeback: !!ep?.comeback,
             guest: false,
-            mini: !!(ep.missCongenialityIds || []).length,
+            mini: false,
             teams: !!ep.goldenBoot,
             famegames: !!state.season?.fameGames?.winnerId,
             maxi: true,
@@ -20148,6 +20259,8 @@ Options: ${names}`, "") || "";
         visible.goldenbaguette = !!ep?.goldenBaguetteDecision?.active;
         visible.goldendam = !!(isGoldenDamFormat(state.season) && ep?.goldenDam?.active && (ep?.goldenDam?.bottomThreeIds || []).length);
         visible.baguettepassing = !!(ep?.baguettePassingEvents || []).length;
+        if (ep?.hideResults)
+            visible.results = false;
         applyDynamicEpisodeStepOrder(ep);
         $all(".section-toggle").forEach((btn) => { btn.hidden = true; });
         $all(".episode-panel").forEach((panel) => { panel.hidden = true; });
@@ -20317,6 +20430,8 @@ Options: ${names}`, "") || "";
         visible.goldenbaguette = !!ep?.goldenBaguetteDecision?.active;
         visible.goldendam = !!(isGoldenDamFormat(state.season) && ep?.goldenDam?.active && (ep?.goldenDam?.bottomThreeIds || []).length);
         visible.baguettepassing = !!(ep?.baguettePassingEvents || []).length;
+        if (ep?.hideResults)
+            visible.results = false;
         if (ep?.type === "finale") {
             Object.entries(FINALE_AWARD_DEFS).forEach(([key, definition]) => {
                 visible[definition.step] = (finaleAwardResult(ep, key)?.winnerIds || []).length > 0;
@@ -21492,7 +21607,7 @@ Options: ${names}`, "") || "";
             rank: 88,
             name: 82,
             photo: 72,
-            country: 46,
+            country: 66,
             episode: 66,
             finale: 74,
             ppe: 66
