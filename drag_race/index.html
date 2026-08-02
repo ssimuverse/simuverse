@@ -60,14 +60,14 @@
                 <input type="text" id="seasonName" value="Fantasy Drag Race">
               </label>
 
-              <label class="field franchise-field">
+              <label class="field">
                 <span>Franchise</span>
                 <select id="seasonFranchiseSelect">
                   <option value="">Independent Season</option>
                 </select>
               </label>
 
-              <label class="field season-type-field">
+              <label class="field">
                 <span>Season Type</span>
                 <select id="seasonTypeSelect">
                   <option value="regular">Regular Season</option>
@@ -254,7 +254,7 @@
                   <p class="eyebrow">Control</p>
                   <h3>Production Controls</h3>
                 </div>
-                <div class="check-grid production-grid">
+                <div class="check-grid">
                   <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Challenge Riggory</span></label>
                   <label class="toggle-row"><input type="checkbox" id="disableLipSyncRiggory"><span>Disable Lip Sync Riggory</span></label>
                   <label class="toggle-row"><input type="checkbox" id="disableDoubleShantaysSashays"><span>Disable Double Shantays/Sashays</span></label>
@@ -480,43 +480,43 @@
             </div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardmxcon">
+          <section class="episode-panel" data-panel="awardmxcon">
             <div class="section-title">Mx. Congeniality</div>
             <div class="event-stack finale-single-award-stack" id="mxCongenialityAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardgoldenboot">
+          <section class="episode-panel" data-panel="awardgoldenboot">
             <div class="section-title">Golden Boot</div>
             <div class="event-stack finale-single-award-stack" id="goldenBootAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardlostlook">
+          <section class="episode-panel" data-panel="awardlostlook">
             <div class="section-title">Mx. Lost Look</div>
             <div class="event-stack finale-single-award-stack" id="lostLookAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awarddragpopstar">
+          <section class="episode-panel" data-panel="awarddragpopstar">
             <div class="section-title">Drag Pop Star</div>
             <div class="event-stack finale-single-award-stack" id="dragPopStarAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardmxmakeup">
+          <section class="episode-panel" data-panel="awardmxmakeup">
             <div class="section-title">Mx. Make-Up</div>
             <div class="event-stack finale-single-award-stack" id="mxMakeupAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardmxstarving">
+          <section class="episode-panel" data-panel="awardmxstarving">
             <div class="section-title">Mx. Starving</div>
             <div class="event-stack finale-single-award-stack" id="mxStarvingAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
           </section>
 
-          <section class="episode-panel finale-award-panel" data-panel="awardmxbitch">
+          <section class="episode-panel" data-panel="awardmxbitch">
             <div class="section-title">Mx. Bitch</div>
             <div class="event-stack finale-single-award-stack" id="mxBitchAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
@@ -935,25 +935,7 @@
       </section>
     </main>
   </div>
-
-  <dialog class="skill-modal" id="skillModal">
-    <form method="dialog" class="skill-form" id="skillForm">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Contestant Skills</p>
-          <h3 id="modalContestantName">Skills</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeSkillModal">×</button>
-      </div>
-      <div class="modal-profile" id="modalProfile"></div>
-      <div class="skills-stack" id="skillsStack"></div>
-      <div class="modal-actions">
-        <button type="submit" class="primary-btn">Close</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog class="preset-modal" id="presetCastModal">
+  <dialog id="presetCastModal">
     <form method="dialog" class="preset-form" id="presetCastForm">
       <div class="modal-head">
         <div>
@@ -1186,7 +1168,7 @@
     <div class="season-viewer-shell">
       <header class="modal-head">
         <div>
-          <h3 id="seasonViewerTitle">Season</h3>
+          <h3>Season</h3>
         </div>
         <button type="button" class="icon-close" id="closeSeasonViewerModal">×</button>
       </header>
@@ -1222,17 +1204,5 @@
   </dialog>
 
   <input type="file" id="universeImportFile" accept="application/json,.json,.druniverse" hidden>
-
-  <template id="rosterCardTemplate">
-    <button class="roster-card" type="button">
-      <div class="roster-image-wrap">
-        <img class="avatar sqr" alt="">
-      </div>
-      <div class="roster-copy">
-        <strong class="roster-name"></strong>
-        <span class="roster-meta"></span>
-      </div>
-    </button>
-  </template>
 </body>
 </html>
