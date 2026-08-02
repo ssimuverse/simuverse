@@ -9516,7 +9516,7 @@ window.QUEENS = [
   id: "kara_juku",
   fullName: "Kara Juku",
   nickname: "kara_juku",
-  image: "images/Kara Juku.png",
+  image: "images/kara_juku.png",
   skills: { acting: 7, comedy: 7, dance: 7, design: 7, improv: 7, runway: 7, lipsync: 7 },
   shows: ["Canada's Drag Race"],
   seasonsByShow: { "Canada's Drag Race": [7] },
