@@ -18642,8 +18642,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   width: 100%;
 }
 
-
-/* RuPaul Mode challenge team builder */
 .rupaul-team-builder {
   display: grid;
   gap: 14px;
@@ -18710,7 +18708,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   margin-bottom: 14px;
 }
 
-/* TOP3 is visually identical to TOP2. */
 .track-table .token-top3,
 .legend-key.token-top3,
 .legend-key.token-top-3,
@@ -18734,7 +18731,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   }
 }
 
-/* ===== Track record palette + wiki-style image export (v59) ===== */
 .track-table.track-format-regular,
 .track-legend-format-regular {
   --tr-winner-bg: #ffff00; --tr-winner-fg: #111;
@@ -18950,12 +18946,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   opacity: 1 !important;
 }
 
-/*
- * Download-only track record.
- * This mirrors the supplied standalone HTML table, but omits the surrounding
- * page, title, controls, descriptive text and legend. The white breathing room
- * prevents the card shadow from being clipped in the PNG.
- */
 .track-export-sheet {
   display: inline-block !important;
   width: max-content !important;
@@ -19189,7 +19179,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   text-shadow: none !important;
 }
 
-/* Exact midpoint blends for legacy saved-state finale award classes. */
 .track-table .track-cell.winner-mx-con { background: #80ff80 !important; color: #111 !important; }
 .track-table .track-cell.winner-gb { background: #edd210 !important; color: #111 !important; }
 .track-table .track-cell.ru-mx-con { background: #60e0e0 !important; color: #111 !important; }
@@ -19197,7 +19186,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
 .track-table .track-cell.elim-mx-con { background: #50a996 !important; color: #111 !important; }
 .track-table .track-cell.elim-gb { background: #bd7c27 !important; color: #111 !important; }
 
-/* Any quit result uses PaleVioletRed in every format. */
 .track-table :is(.token-quit,.token-btm2-quit,.token-win-quit),
 .track-legend-card:is(.token-quit,.token-btm2-quit,.token-win-quit),
 .track-export-legend-swatch:is(.token-quit,.token-btm2-quit,.token-win-quit) {
@@ -19206,8 +19194,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: #111 !important;
 }
 
-
-/* Downloaded track-record refinements requested for the HTML-matched export. */
 .track-export-sheet,
 .track-export-sheet *,
 .track-export-table,
@@ -19277,8 +19263,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-weight: 400 !important;
 }
 
-
-/* Export v3 refinements */
 .track-export-sheet,
 .track-export-sheet *,
 .track-export-table,
@@ -19362,8 +19346,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-weight: 400 !important;
 }
 
-
-/* Export v5 deterministic canvas source */
 .track-export-table {
   width: max-content !important;
   min-width: 0 !important;
@@ -19422,9 +19404,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-style: italic !important;
 }
 
-
-/* V7 track record separation fixes */
-
 .track-table:not(.track-export-table) .tournament-name-main,
 .track-table:not(.track-export-table) .tournament-name-bracket,
 .track-table:not(.track-export-table) tbody th,
@@ -19460,7 +19439,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: #16181d !important;
 }
 
-/* Track record V8: page typography, tournament spacing, and square image export. */
 #trackWrap .track-table:not(.track-export-table) tbody th.track-name-cell,
 #episodeTrackWrap .track-table:not(.track-export-table) tbody th.track-name-cell,
 #trackWrap .track-table:not(.track-export-table) tbody th.track-name-cell *,
@@ -19478,7 +19456,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   margin-top: -1px !important;
 }
 
-/* The export row and photo column now share the same 72px dimension. */
 .track-export-table tbody tr,
 .track-export-table tbody .track-name-cell,
 .track-export-table tbody .track-photo-cell {
@@ -19539,8 +19516,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-weight: 900 !important;
 }
 
-
-/* Track record V9: canonical export sizing and adaptive export text contrast. */
 .track-export-stage .track-export-table {
   table-layout: fixed !important;
   min-width: 0 !important;
@@ -19600,7 +19575,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: inherit !important;
 }
 
-/* V9 contrast inheritance must outrank the older generic track-table rules. */
 .track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-cell,
 .track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head .track-head-episode {
   color: var(--track-export-challenge-fg, #16181d) !important;
@@ -19611,8 +19585,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: var(--track-export-name-fg, #16181d) !important;
 }
 
-
-/* V10: downloaded challenge-type row matches the main light header. */
 .track-export-stage .track-export-table.track-table thead tr.track-challenge-row th.track-challenge-type-head {
   background: #ededf2 !important;
   background-color: #ededf2 !important;
@@ -19626,7 +19598,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   color: #16181d !important;
 }
 
-/* v66: configurable finale awards and comeback result colors */
 .finale-awards-settings .finale-awards-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -19713,8 +19684,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   }
 }
 
-
-/* v68: award probability, compact labels, and forced two-part Rate-A-Queen Talent Shows */
 .finale-single-award-stack {
   display: grid;
   gap: 14px;
@@ -19754,8 +19723,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   background-image: none !important;
 }
 
-
-/* v68: compact award labels keep the standard track-cell typography. */
 .track-table .track-cell.award-mix,
 .track-export-table .track-cell.award-mix {
   overflow-wrap: normal !important;
@@ -19764,7 +19731,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   line-height: 1.08 !important;
 }
 
-/* v69: optional Country flag column in downloaded track records. */
 .track-download-controls {
   display: grid;
   justify-items: center;
@@ -19814,7 +19780,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   white-space: nowrap !important;
 }
 
-/* Award labels wrap only at normal spaces; no forced one-word abbreviations. */
 .track-table .track-cell.award-mix,
 .track-export-table .track-cell.award-mix {
   white-space: normal !important;
@@ -19823,9 +19788,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   hyphens: none !important;
 }
 
-
-
-/* v70: optional image-based Country flag column on screen and in exported track records. */
 .track-table .track-country-head,
 .track-table .track-country-cell {
   width: 46px !important;
@@ -19874,8 +19836,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-weight: 800;
 }
 
-
-/* v72: compact live Country column and single-line runner-up label. */
 #trackWrap .track-table col.track-country-col,
 #trackWrap .track-table th.track-country-head,
 #trackWrap .track-table td.track-country-cell {
@@ -19911,8 +19871,6 @@ details.advanced-settings[open] > .advanced-settings-grid {
   overflow-wrap: normal !important;
 }
 
-
-/* v74: team chooser note sits directly below the Teams / Pairs heading. */
 .team-selection-summary {
   display: block;
   width: min(100%, 760px);
@@ -19946,4 +19904,258 @@ details.advanced-settings[open] > .advanced-settings-grid {
   font-size: 13px;
   line-height: 1.45;
   text-align: center;
+}
+
+.point-ceremony-vote-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 270px)) !important;
+  gap: 10px !important;
+}
+
+.point-ceremony-vote {
+  width: 100% !important;
+  max-width: 270px !important;
+  padding: 9px !important;
+  gap: 8px !important;
+}
+
+.point-ceremony-vote .point-vote-copy {
+  display: grid;
+  gap: 4px;
+  align-content: center;
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.point-ceremony-vote .vote-arrow {
+  line-height: 1.1 !important;
+}
+
+.point-vote-reason {
+  display: block;
+  max-width: 150px;
+  color: rgba(255,255,255,.72);
+  font-size: 10.5px;
+  line-height: 1.25;
+  font-style: italic;
+  text-wrap: balance;
+}
+
+.point-total-grid {
+  grid-template-columns: repeat(auto-fit, minmax(118px, 136px)) !important;
+  align-items: start !important;
+  gap: 9px !important;
+}
+
+.point-total-card {
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 8px 7px !important;
+  grid-template-rows: auto auto auto !important;
+  align-content: start !important;
+  gap: 5px !important;
+}
+
+.point-total-card > strong {
+  display: flex !important;
+  min-height: 22px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  line-height: 1 !important;
+  font-variant-numeric: tabular-nums;
+  text-align: center !important;
+}
+
+.point-total-card .placement-tag {
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-table.track-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12):is(.lucky-cow-save,.badonka-save),
+.track-legend-palette-configured :is(.token-btm,.token-btm1,.token-btm2,.token-btm3,.token-btm4,.token-btm5,.token-btm6,.token-btm7,.token-btm8,.token-btm9,.token-btm10,.token-btm11,.token-btm12):is(.lucky-cow-save,.badonka-save) {
+  background: var(--tr-btm-bg) !important;
+  color: var(--tr-btm-fg) !important;
+  background-image: none !important;
+}
+
+.track-table .track-cell.lucky-cow-save,
+.track-table .track-cell.token-lc-border,
+.track-legend-palette-configured .lucky-cow-save,
+.track-legend-palette-configured .token-lc-border {
+  box-shadow: inset 0 0 0 4px #ffeb3b !important;
+}
+
+.track-table .track-cell.badonka-save,
+.track-table .track-cell.token-dunk-border,
+.track-legend-palette-configured .badonka-save,
+.track-legend-palette-configured .token-dunk-border {
+  box-shadow: inset 0 0 0 4px #ffd166 !important;
+}
+
+.track-table .track-cell.token-elim.tournament-top2-elim {
+  background: #c64fff !important;
+  background-image: none !important;
+  color: #fff !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-elim-1,
+.lip-sync-stats-table td.ls-elim-1 {
+  background: #add8e6 !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-elim-2,
+.lip-sync-stats-table td.ls-elim-2 {
+  background: #90ee90 !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-elim-3,
+.lip-sync-stats-table td.ls-elim-3 {
+  background: #ffb6c1 !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-elim-4,
+.lip-sync-stats-table td.ls-elim-4 {
+  background: #ff6347 !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-elim-5,
+.lip-sync-stats-table td.ls-elim-5 {
+  background: #980000 !important;
+  color: #fff !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-win-top,
+.lip-sync-stats-table td.ls-win-top {
+  background: #f1c232 !important;
+  border-color: rgba(241,194,50,.72) !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-season-winner,
+.lip-sync-stats-table td.ls-season-winner {
+  background: #d4af37 !important;
+  border-color: rgba(212,175,55,.72) !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r1,
+.lip-sync-stats-table td.ls-lalaparuza-r1 {
+  background: #dda0dd !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r2,
+.lip-sync-stats-table td.ls-lalaparuza-r2 {
+  background: #ee82ee !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r3,
+.lip-sync-stats-table td.ls-lalaparuza-r3,
+.lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r4,
+.lip-sync-stats-table td.ls-lalaparuza-r4,
+.lip-sync-stats-table .lip-sync-result.ls-lalaparuza-r5,
+.lip-sync-stats-table td.ls-lalaparuza-r5 {
+  background: #da70d6 !important;
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-smackdown-winner,
+.lip-sync-stats-table td.ls-smackdown-winner {
+  background: #00008b !important;
+  border-color: rgba(0,0,139,.8) !important;
+  color: #fff !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-season-winner .stat-contestant,
+.lip-sync-stats-table .lip-sync-result.ls-season-winner .stat-contestant span,
+.lip-sync-stats-table .lip-sync-result.ls-win-top .stat-contestant,
+.lip-sync-stats-table .lip-sync-result.ls-win-top .stat-contestant span,
+.lip-sync-stats-table .lip-sync-result:is(.ls-lalaparuza-r1,.ls-lalaparuza-r2,.ls-lalaparuza-r3,.ls-lalaparuza-r4,.ls-lalaparuza-r5) .stat-contestant,
+.lip-sync-stats-table .lip-sync-result:is(.ls-lalaparuza-r1,.ls-lalaparuza-r2,.ls-lalaparuza-r3,.ls-lalaparuza-r4,.ls-lalaparuza-r5) .stat-contestant span {
+  color: #111 !important;
+}
+
+.lip-sync-stats-table .lip-sync-result.ls-smackdown-winner .stat-contestant,
+.lip-sync-stats-table .lip-sync-result.ls-smackdown-winner .stat-contestant span {
+  color: #fff !important;
+}
+
+.lip-sync-contestants .stat-separator {
+  white-space: normal;
+  line-height: 1.25;
+}
+
+@media (max-width: 720px) {
+  .point-ceremony-vote-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr)) !important;
+  }
+  .point-ceremony-vote {
+    max-width: 240px !important;
+  }
+  .point-total-grid {
+    grid-template-columns: repeat(auto-fit, minmax(108px, 126px)) !important;
+  }
+}
+
+.point-ceremony-vote-grid {
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+  gap: 10px !important;
+}
+
+.point-ceremony-vote {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.point-vote-reason {
+  max-width: min(520px, 52vw) !important;
+}
+
+.rupaul-option-name-line {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 7px !important;
+  min-width: 0;
+  width: auto !important;
+}
+
+.rupaul-option-name-line > strong {
+  min-width: 0;
+}
+
+.rupaul-option-name-line .rupaul-custom-badge {
+  flex: 0 0 auto;
+  margin-top: 0 !important;
+}
+
+.track-export-table .track-cell.lucky-cow-save,
+.track-export-table .track-cell.token-lc-border {
+  box-shadow: inset 0 0 0 4px #ffeb3b !important;
+}
+
+.track-export-table .track-cell.badonka-save,
+.track-export-table .track-cell.token-dunk-border {
+  box-shadow: inset 0 0 0 4px #ffd166 !important;
+}
+
+@media (max-width: 720px) {
+  .point-ceremony-vote-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .point-ceremony-vote {
+    max-width: none !important;
+  }
+  .point-vote-reason {
+    max-width: min(360px, 70vw) !important;
+  }
 }
