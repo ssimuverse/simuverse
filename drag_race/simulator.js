@@ -4,6 +4,8 @@
     const CUSTOM_CONTESTANTS_KEY = "drag_race_custom_contestants_v1";
     const CUSTOM_RUNWAYS_KEY = "drag_race_custom_runways_v1";
     const CUSTOM_LIPSYNC_SONGS_KEY = "drag_race_custom_lipsync_songs_v1";
+    const UNIVERSE_DB_NAME = "drag_race_universe_db";
+    const UNIVERSE_DB_VERSION = 1;
     const PLACEHOLDER = "data:image/svg+xml;utf8," + encodeURIComponent(`
     <svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -458,6 +460,8 @@
     const state = {
         defaults: {
             seasonName: "Fantasy Drag Race",
+            franchiseId: "",
+            seasonType: "regular",
             mode: "viewer",
             eliminationFormat: "regular",
             castSize: 14,
@@ -513,6 +517,8 @@
     state.config = { ...state.defaults };
     const els = {
         seasonName: document.getElementById("seasonName"),
+        seasonFranchiseSelect: document.getElementById("seasonFranchiseSelect"),
+        seasonTypeSelect: document.getElementById("seasonTypeSelect"),
         modeSelect: document.getElementById("modeSelect"),
         eliminationFormatSelect: document.getElementById("eliminationFormatSelect"),
         premiereTypeSelect: document.getElementById("premiereTypeSelect"),
@@ -1253,6 +1259,8 @@
             dragFamilyIds: Array.isArray(raw.dragFamilyIds) ? raw.dragFamilyIds.map(String) : [],
             preSeasonRelationships: Array.isArray(raw.preSeasonRelationships) ? clone(raw.preSeasonRelationships) : [],
             isCustom: !!raw.isCustom,
+            universeImageAssetId: String(raw.universeImageAssetId || ""),
+            isUniverseArchive: !!raw.isUniverseArchive,
             skills: normalizeSkills(raw.skills || raw.baseSkills || {})
         };
     }
@@ -1319,6 +1327,13 @@
             console.warn("Failed to load simulator state", err);
         }
     }
+    function simulatorStateStorageReplacer(key, value) {
+        if (this?.isCustom && (key === "image" || key === "exportImage") && isEmbeddedCustomImage(value))
+            return "";
+        if (this?.universeImageAssetId && (key === "image" || key === "exportImage") && /^blob:/i.test(String(value || "")))
+            return "";
+        return value;
+    }
     function saveState() {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
@@ -1327,14 +1342,19 @@
                 season: state.season,
                 currentEpisodeIndex: state.currentEpisodeIndex,
                 currentStep: state.currentStep
-            }));
+            }, simulatorStateStorageReplacer));
+            queueUniverseActiveRunSave();
+            return true;
         }
         catch (err) {
             console.warn("Failed to save simulator state", err);
+            queueUniverseActiveRunSave();
+            return false;
         }
     }
     function clearSavedState() {
         localStorage.removeItem(STORAGE_KEY);
+        deleteUniverseActiveRun();
     }
     function normalizeCustomImageUrl(value) {
         const src = String(value || "").trim();
@@ -1443,8 +1463,8 @@
         const imageUrl = rawSourceUrl && !isEmbeddedCustomImage(rawSourceUrl) && rawSourceUrl !== PLACEHOLDER
             ? rawSourceUrl
             : (!isEmbeddedCustomImage(storedImage) && storedImage !== PLACEHOLDER ? storedImage : "");
-        const exportImage = normalizeCustomImageUrl(raw.exportImage || storedImage);
-        const image = isEmbeddedCustomImage(exportImage) ? exportImage : storedImage;
+        const preferredImage = normalizeCustomImageUrl(raw.exportImage || storedImage);
+        const image = isEmbeddedCustomImage(preferredImage) ? preferredImage : storedImage;
         return {
             id: String(raw.id || `custom_${Date.now()}_${index}`),
             name: fullName,
@@ -1452,7 +1472,6 @@
             nickname,
             image,
             imageUrl,
-            exportImage,
             primaryShow: "Custom",
             shows: ["Custom"],
             seasons: ["Custom"],
@@ -1473,11 +1492,34 @@
             skills: normalizeSkills(raw.skills || {})
         };
     }
+    function customContestantStorageRecord(raw = {}, index = 0) {
+        const contestant = makeCustomContestant(raw, index);
+        const record = { ...contestant };
+        delete record.exportImage;
+        return record;
+    }
+    function customContestantStorageJson() {
+        return JSON.stringify((state.customContestants || []).map(customContestantStorageRecord));
+    }
+    function isStorageQuotaError(error) {
+        return error?.name === "QuotaExceededError"
+            || error?.name === "NS_ERROR_DOM_QUOTA_REACHED"
+            || Number(error?.code) === 22
+            || Number(error?.code) === 1014;
+    }
     function loadCustomContestants() {
         try {
             const raw = localStorage.getItem(CUSTOM_CONTESTANTS_KEY);
             const parsed = raw ? JSON.parse(raw) : [];
             state.customContestants = Array.isArray(parsed) ? parsed.map(makeCustomContestant) : [];
+            if (state.customContestants.length) {
+                try {
+                    localStorage.setItem(CUSTOM_CONTESTANTS_KEY, customContestantStorageJson());
+                }
+                catch (migrationError) {
+                    console.warn("Failed to compact custom contestant storage", migrationError);
+                }
+            }
         }
         catch (err) {
             console.warn("Failed to load custom contestants", err);
@@ -1485,13 +1527,26 @@
         }
     }
     function saveCustomContestants() {
+        const serialized = customContestantStorageJson();
         try {
-            localStorage.setItem(CUSTOM_CONTESTANTS_KEY, JSON.stringify(state.customContestants.map(makeCustomContestant)));
+            localStorage.setItem(CUSTOM_CONTESTANTS_KEY, serialized);
             return true;
         }
         catch (err) {
+            if (isStorageQuotaError(err)) {
+                saveState();
+                try {
+                    localStorage.setItem(CUSTOM_CONTESTANTS_KEY, serialized);
+                    return true;
+                }
+                catch (retryError) {
+                    console.warn("Failed to save custom contestants", retryError);
+                    alert("Could not save the custom contestant because browser storage is full. Remove an unused custom contestant or clear an old saved season and try again.");
+                    return false;
+                }
+            }
             console.warn("Failed to save custom contestants", err);
-            alert("Could not save the custom contestant. Browser storage may be full; try a smaller image or remove an unused custom contestant.");
+            alert("Could not save the custom contestant because browser storage is unavailable.");
             return false;
         }
     }
@@ -1499,7 +1554,15 @@
         const src = pickCastSource();
         const baseRoster = Array.isArray(src) ? src.map(toProfile) : [];
         const customRoster = (state.customContestants || []).map(makeCustomContestant).map(toProfile);
-        state.roster = [...baseRoster, ...customRoster].sort((a, b) => fullDisplayName(a).localeCompare(fullDisplayName(b)));
+        const universeRoster = universeContestantLibraryProfiles();
+        const rosterById = new Map();
+        baseRoster.forEach((item) => rosterById.set(item.id, item));
+        universeRoster.forEach((item) => {
+            if (!rosterById.has(item.id))
+                rosterById.set(item.id, item);
+        });
+        customRoster.forEach((item) => rosterById.set(item.id, item));
+        state.roster = [...rosterById.values()].sort((a, b) => fullDisplayName(a).localeCompare(fullDisplayName(b)));
         if (!state.roster.length)
             state.roster = createDemoQueens();
         reconcileSelectedWithRoster();
@@ -1660,6 +1723,8 @@
         state.config = {
             ...state.config,
             seasonName: els.seasonName?.value?.trim() || state.defaults.seasonName,
+            franchiseId: String(els.seasonFranchiseSelect?.value || ""),
+            seasonType: String(els.seasonTypeSelect?.value || "regular"),
             mode: selectedMode,
             eliminationFormat: selectedEliminationFormat,
             premiereType: els.premiereTypeSelect?.value || "regular",
@@ -1910,6 +1975,10 @@
         const c = state.config;
         if (els.seasonName)
             els.seasonName.value = c.seasonName;
+        if (els.seasonFranchiseSelect)
+            els.seasonFranchiseSelect.value = c.franchiseId || "";
+        if (els.seasonTypeSelect)
+            els.seasonTypeSelect.value = c.seasonType || "regular";
         if (els.modeSelect)
             els.modeSelect.value = c.mode || "viewer";
         if (els.eliminationFormatSelect)
@@ -21056,9 +21125,72 @@ Options: ${names}`, "") || "";
         setMetric("--episode-track-head-height", referenceEpisodeHead);
         setMetric("--episode-track-subhead-height", referenceChallengeHead);
     }
+    function syncArchivedStatisticsMode() {
+        const record = universeSeason(universeArchivedStatsRecordId);
+        const archived = !!record;
+        const eyebrow = document.getElementById("statsScreenEyebrow");
+        const title = document.getElementById("statsScreenTitle");
+        const archiveButton = document.getElementById("archiveSeasonBtn");
+        const backEpisodeButton = document.getElementById("backToEpisodeBtn");
+        const backCastButton = document.getElementById("backToCastBtnStats");
+        const resetButton = document.getElementById("resetSeasonBtnStats");
+        const backUniverseButton = document.getElementById("archivedStatsBackBtn");
+        if (eyebrow)
+            eyebrow.textContent = archived ? "Saved Season" : "Statistics";
+        if (title)
+            title.textContent = archived ? record.name : "Season Statistics";
+        if (archiveButton)
+            archiveButton.hidden = archived;
+        if (backEpisodeButton)
+            backEpisodeButton.hidden = archived;
+        if (backCastButton)
+            backCastButton.hidden = archived;
+        if (resetButton)
+            resetButton.hidden = archived;
+        if (backUniverseButton)
+            backUniverseButton.hidden = !archived;
+    }
+    function restoreArchivedStatisticsState() {
+        const record = universeSeason(universeArchivedStatsRecordId);
+        const franchiseId = record?.franchiseId || "";
+        if (universeArchivedStatsReturn) {
+            state.config = universeArchivedStatsReturn.config;
+            state.season = universeArchivedStatsReturn.season;
+            state.currentEpisodeIndex = universeArchivedStatsReturn.currentEpisodeIndex;
+            state.currentStep = universeArchivedStatsReturn.currentStep;
+        }
+        const returnScreen = universeArchivedStatsReturnScreen || "setup-screen";
+        const returnStatsTab = universeArchivedStatsReturn?.statsTab || "track";
+        universeArchivedStatsRecordId = "";
+        universeArchivedStatsReturn = null;
+        universeArchivedStatsReturnScreen = "setup-screen";
+        syncArchivedStatisticsMode();
+        writeConfigToInputs();
+        if (returnScreen === "stats-screen" && state.season) {
+            $all(".stats-tab").forEach((tab) => tab.classList.toggle("is-active", tab.dataset.tab === returnStatsTab));
+            $all(".stats-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.tabPanel === returnStatsTab));
+            showScreen(returnScreen);
+            renderStats();
+        }
+        else
+            showScreen(returnScreen);
+        return { franchiseId, returnScreen };
+    }
+    async function closeArchivedStatistics() {
+        if (!universeArchivedStatsRecordId)
+            return;
+        const { franchiseId } = restoreArchivedStatisticsState();
+        await openUniverseModal("seasons", franchiseId);
+    }
     function openStatsScreen() {
         if (!state.season)
             return;
+        const archiveButton = document.getElementById("archiveSeasonBtn");
+        if (archiveButton) {
+            archiveButton.textContent = state.season.universeArchiveId ? "Update Saved Season" : "Save Season";
+            archiveButton.disabled = !universeDb;
+        }
+        syncArchivedStatisticsMode();
         syncStatisticsTrackRecordMetrics();
         showScreen("stats-screen");
         renderStats();
@@ -24946,6 +25078,1259 @@ Options: ${names}`, "") || "";
             saveTwists.forEach((el) => { if (el !== preferred) el.checked = false; });
         }
     }
+    let universeDb = null;
+    let universeAutosaveTimer = 0;
+    let universeCurrentTab = "franchises";
+    let universeSelectedFranchiseId = "";
+    let universeHistorySelection = new Set();
+    let universeLogoDraftUrl = "";
+    let seasonLogoDraftUrl = "";
+    let universeArchivedStatsRecordId = "";
+    let universeArchivedStatsReturn = null;
+    let universeArchivedStatsReturnScreen = "setup-screen";
+    let universeCache = {
+        franchises: [],
+        casts: [],
+        seasons: [],
+        appearances: [],
+        assets: [],
+        activeRuns: []
+    };
+    const universeAssetUrls = new Map();
+    function universeUuid(prefix) {
+        const value = typeof window.crypto?.randomUUID === "function"
+            ? window.crypto.randomUUID()
+            : `${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
+        return `${prefix}_${value}`;
+    }
+    function ensureUniverseStore(db, transaction, name, indexes = []) {
+        const store = db.objectStoreNames.contains(name)
+            ? transaction.objectStore(name)
+            : db.createObjectStore(name, { keyPath: "id" });
+        indexes.forEach(([indexName, keyPath]) => {
+            if (!store.indexNames.contains(indexName))
+                store.createIndex(indexName, keyPath, { unique: false });
+        });
+        return store;
+    }
+    function openUniverseDatabase() {
+        return new Promise((resolve, reject) => {
+            if (!window.indexedDB) {
+                reject(new Error("IndexedDB is not available in this browser."));
+                return;
+            }
+            const request = indexedDB.open(UNIVERSE_DB_NAME, UNIVERSE_DB_VERSION);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                const transaction = event.target.transaction;
+                ensureUniverseStore(db, transaction, "franchises", [["name", "name"], ["updatedAt", "updatedAt"]]);
+                ensureUniverseStore(db, transaction, "casts", [["franchiseId", "franchiseId"], ["updatedAt", "updatedAt"]]);
+                ensureUniverseStore(db, transaction, "seasons", [["franchiseId", "franchiseId"], ["status", "status"], ["updatedAt", "updatedAt"]]);
+                ensureUniverseStore(db, transaction, "appearances", [["seasonId", "seasonId"], ["contestantId", "contestantId"], ["franchiseId", "franchiseId"]]);
+                ensureUniverseStore(db, transaction, "assets", [["ownerId", "ownerId"], ["kind", "kind"]]);
+                ensureUniverseStore(db, transaction, "activeRuns", [["updatedAt", "updatedAt"]]);
+            };
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error || new Error("The local universe database could not be opened."));
+            request.onblocked = () => reject(new Error("The local universe database is blocked by another open tab."));
+        });
+    }
+    function universeGet(storeName, id) {
+        if (!universeDb)
+            return Promise.resolve(null);
+        return new Promise((resolve, reject) => {
+            const transaction = universeDb.transaction(storeName, "readonly");
+            const request = transaction.objectStore(storeName).get(id);
+            request.onsuccess = () => resolve(request.result || null);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    function universeGetAll(storeName) {
+        if (!universeDb)
+            return Promise.resolve([]);
+        return new Promise((resolve, reject) => {
+            const transaction = universeDb.transaction(storeName, "readonly");
+            const request = transaction.objectStore(storeName).getAll();
+            request.onsuccess = () => resolve(Array.isArray(request.result) ? request.result : []);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    function universePut(storeName, value) {
+        if (!universeDb)
+            return Promise.reject(new Error("The local universe database is unavailable."));
+        return new Promise((resolve, reject) => {
+            const transaction = universeDb.transaction(storeName, "readwrite");
+            const request = transaction.objectStore(storeName).put(value);
+            request.onsuccess = () => resolve(value);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    function universeDelete(storeName, id) {
+        if (!universeDb)
+            return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            const transaction = universeDb.transaction(storeName, "readwrite");
+            const request = transaction.objectStore(storeName).delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+    function universeClear(storeName) {
+        if (!universeDb)
+            return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            const transaction = universeDb.transaction(storeName, "readwrite");
+            const request = transaction.objectStore(storeName).clear();
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+    async function initUniverseDatabase() {
+        try {
+            universeDb = await openUniverseDatabase();
+            universeDb.onversionchange = () => {
+                universeDb?.close?.();
+                universeDb = null;
+            };
+            await refreshUniverseCache();
+            return true;
+        }
+        catch (error) {
+            console.warn("Failed to initialize My Universe", error);
+            universeDb = null;
+            return false;
+        }
+    }
+    function rebuildUniverseAssetUrls() {
+        universeAssetUrls.forEach((url) => {
+            if (/^blob:/i.test(String(url || "")))
+                URL.revokeObjectURL(url);
+        });
+        universeAssetUrls.clear();
+        (universeCache.assets || []).forEach((asset) => {
+            if (asset?.blob instanceof Blob)
+                universeAssetUrls.set(asset.id, URL.createObjectURL(asset.blob));
+            else if (asset?.dataUrl)
+                universeAssetUrls.set(asset.id, asset.dataUrl);
+        });
+    }
+    function universeAssetSrc(id) {
+        return universeAssetUrls.get(String(id || "")) || "";
+    }
+    async function refreshUniverseCache() {
+        if (!universeDb)
+            return universeCache;
+        const [franchises, casts, seasons, appearances, assets, activeRuns] = await Promise.all([
+            universeGetAll("franchises"),
+            universeGetAll("casts"),
+            universeGetAll("seasons"),
+            universeGetAll("appearances"),
+            universeGetAll("assets"),
+            universeGetAll("activeRuns")
+        ]);
+        universeCache = {
+            franchises: franchises.sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""))),
+            casts: casts.sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)),
+            seasons: seasons.sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0)),
+            appearances,
+            assets,
+            activeRuns
+        };
+        rebuildUniverseAssetUrls();
+        updateUniverseSetupSelects();
+        return universeCache;
+    }
+    function universeFranchise(id) {
+        return (universeCache.franchises || []).find((item) => item.id === id) || null;
+    }
+    function universeSeason(id) {
+        return (universeCache.seasons || []).find((item) => item.id === id) || null;
+    }
+    function universeCast(id) {
+        return (universeCache.casts || []).find((item) => item.id === id) || null;
+    }
+    function universeSeasonTypeLabel(value) {
+        return ({
+            regular: "Regular Season",
+            all_stars: "All Stars",
+            vs_the_world: "Vs The World",
+            custom: "Custom"
+        })[String(value || "regular")] || "Season";
+    }
+    function fillUniverseFranchiseSelect(element, firstLabel, selectedValue = null) {
+        if (!element)
+            return;
+        const current = String(selectedValue === null ? (element.value || "") : (selectedValue || ""));
+        element.innerHTML = `<option value="">${escapeHtml(firstLabel)}</option>${(universeCache.franchises || []).map((franchise) => `<option value="${escapeHtml(franchise.id)}">${escapeHtml(franchise.name)}</option>`).join("")}`;
+        element.value = (universeCache.franchises || []).some((franchise) => franchise.id === current) ? current : "";
+    }
+    function updateUniverseSetupSelects() {
+        fillUniverseFranchiseSelect(els.seasonFranchiseSelect, "Independent Season", state.config.franchiseId || "");
+        fillUniverseFranchiseSelect(document.getElementById("savedCastFranchiseSelect"), "No Franchise");
+        fillUniverseFranchiseSelect(document.getElementById("archiveSeasonFranchiseSelect"), "Independent Season");
+        const historySelect = document.getElementById("historyFranchiseFilter");
+        const historyValue = historySelect?.value || state.config.franchiseId || "";
+        fillUniverseFranchiseSelect(historySelect, "All Franchises", historyValue);
+    }
+    function dataUrlToBlob(dataUrl) {
+        const [header, body] = String(dataUrl || "").split(",", 2);
+        const mime = header?.match(/^data:([^;]+)/i)?.[1] || "application/octet-stream";
+        const binary = atob(body || "");
+        const bytes = new Uint8Array(binary.length);
+        for (let index = 0; index < binary.length; index += 1)
+            bytes[index] = binary.charCodeAt(index);
+        return new Blob([bytes], { type: mime });
+    }
+    function blobToDataUrl(blob) {
+        return new Promise((resolve, reject) => {
+            if (!(blob instanceof Blob)) {
+                resolve("");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ""));
+            reader.onerror = () => reject(reader.error || new Error("The image could not be read."));
+            reader.readAsDataURL(blob);
+        });
+    }
+    async function saveUniverseAssetBlob(blob, kind, ownerId, existingId = "") {
+        if (!(blob instanceof Blob) || !blob.size)
+            return existingId || "";
+        const id = existingId || universeUuid("asset");
+        await universePut("assets", {
+            id,
+            kind: String(kind || "image"),
+            ownerId: String(ownerId || ""),
+            mime: String(blob.type || "application/octet-stream"),
+            blob,
+            updatedAt: Date.now()
+        });
+        return id;
+    }
+    async function saveUniverseLogoFile(file, kind, ownerId, existingId = "") {
+        if (!(file instanceof Blob) || !file.size)
+            return existingId || "";
+        const dataUrl = await compressCustomImageBlob(file);
+        return saveUniverseAssetBlob(dataUrlToBlob(dataUrl), kind, ownerId, existingId);
+    }
+    async function ensureUniverseContestantAsset(item) {
+        const contestantId = String(item?.id || "");
+        if (!contestantId)
+            return "";
+        const existing = (universeCache.assets || []).find((asset) => asset.kind === "contestant_image" && asset.ownerId === contestantId);
+        const existingId = String(item?.universeImageAssetId || existing?.id || "");
+        const source = String(item?.exportImage || item?.image || "").trim();
+        if (isEmbeddedCustomImage(source))
+            return saveUniverseAssetBlob(dataUrlToBlob(source), "contestant_image", contestantId, existingId);
+        return existingId;
+    }
+    async function universeContestantSnapshot(item) {
+        const snapshot = clone(item || {});
+        const assetId = await ensureUniverseContestantAsset(item || {});
+        if (assetId)
+            snapshot.universeImageAssetId = assetId;
+        if (assetId && (isEmbeddedCustomImage(snapshot.image) || /^blob:/i.test(String(snapshot.image || ""))))
+            snapshot.image = "";
+        if (assetId && (isEmbeddedCustomImage(snapshot.exportImage) || /^blob:/i.test(String(snapshot.exportImage || ""))))
+            snapshot.exportImage = "";
+        snapshot.isUniverseArchive = true;
+        return snapshot;
+    }
+    function universeProfileFromSnapshot(snapshot) {
+        const raw = clone(snapshot || {});
+        const assetSrc = universeAssetSrc(raw.universeImageAssetId);
+        if (assetSrc) {
+            raw.image = assetSrc;
+            raw.exportImage = assetSrc;
+        }
+        raw.isUniverseArchive = true;
+        return toProfile(raw, 0);
+    }
+    function universeHydratedSeasonSnapshot(record) {
+        const season = clone(record?.snapshot || {});
+        season.contestants = season.contestants || {};
+        Object.values(season.contestants).forEach((contestant) => {
+            const assetSrc = universeAssetSrc(contestant?.universeImageAssetId);
+            if (assetSrc) {
+                contestant.image = assetSrc;
+                contestant.exportImage = assetSrc;
+            }
+        });
+        season.config = {
+            ...(season.config || {}),
+            seasonName: record?.name || season.config?.seasonName || "Saved Season",
+            franchiseId: record?.franchiseId || season.config?.franchiseId || "",
+            seasonType: record?.seasonType || season.config?.seasonType || "regular"
+        };
+        season.universeArchiveId = record?.id || season.universeArchiveId || "";
+        return season;
+    }
+    function universeContestantLibraryProfiles() {
+        const snapshots = new Map();
+        (universeCache.casts || []).forEach((cast) => {
+            (cast.contestants || []).forEach((contestant) => {
+                if (contestant?.id)
+                    snapshots.set(contestant.id, contestant);
+            });
+        });
+        (universeCache.appearances || []).forEach((appearance) => {
+            const contestant = appearance.profileSnapshot;
+            if (contestant?.id)
+                snapshots.set(contestant.id, contestant);
+        });
+        (universeCache.seasons || []).forEach((record) => {
+            const contestants = record.snapshot?.contestants || {};
+            Object.values(contestants).forEach((contestant) => {
+                if (contestant?.id)
+                    snapshots.set(contestant.id, contestant);
+            });
+        });
+        return [...snapshots.values()].map(universeProfileFromSnapshot);
+    }
+    function universeStatePayload() {
+        return JSON.parse(JSON.stringify({
+            config: state.config,
+            selected: state.selected,
+            season: state.season,
+            currentEpisodeIndex: state.currentEpisodeIndex,
+            currentStep: state.currentStep
+        }, simulatorStateStorageReplacer));
+    }
+    function queueUniverseActiveRunSave() {
+        if (!universeDb)
+            return;
+        window.clearTimeout(universeAutosaveTimer);
+        universeAutosaveTimer = window.setTimeout(async () => {
+            try {
+                if (!state.season && !(state.selected || []).length) {
+                    await universeDelete("activeRuns", "current");
+                    return;
+                }
+                await universePut("activeRuns", {
+                    id: "current",
+                    payload: universeStatePayload(),
+                    updatedAt: Date.now()
+                });
+            }
+            catch (error) {
+                console.warn("Failed to save the local universe recovery copy", error);
+            }
+        }, 700);
+    }
+    function deleteUniverseActiveRun() {
+        window.clearTimeout(universeAutosaveTimer);
+        if (universeDb)
+            universeDelete("activeRuns", "current").catch(() => {});
+    }
+    async function restoreUniverseActiveRun() {
+        if (!universeDb || state.season || (state.selected || []).length)
+            return false;
+        try {
+            const record = await universeGet("activeRuns", "current");
+            const payload = record?.payload;
+            if (!payload)
+                return false;
+            if (payload.config)
+                state.config = { ...state.defaults, ...payload.config };
+            if (Array.isArray(payload.selected))
+                state.selected = payload.selected;
+            if (payload.season) {
+                state.season = payload.season;
+                state.season.config = { ...state.defaults, ...(state.season.config || {}) };
+                ensureSeasonTwistState(state.season);
+                normalizeTournamentBracketSafePlacements(state.season);
+            }
+            if (Number.isInteger(payload.currentEpisodeIndex))
+                state.currentEpisodeIndex = payload.currentEpisodeIndex;
+            if (payload.currentStep)
+                state.currentStep = payload.currentStep;
+            return true;
+        }
+        catch (error) {
+            console.warn("Failed to restore the local universe recovery copy", error);
+            return false;
+        }
+    }
+    function universeImageMarkup(src, alt, className = "") {
+        return src
+            ? `<img class="${escapeHtml(className)}" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}">`
+            : `<div class="${escapeHtml(className)} universe-image-placeholder">${escapeHtml(String(alt || "?").slice(0, 2).toUpperCase())}</div>`;
+    }
+    function universeWinnerNames(record) {
+        const season = record?.snapshot;
+        if (!season)
+            return "";
+        const ids = season.winnerIds?.length ? season.winnerIds : [season.winnerId].filter(Boolean);
+        return ids.map((id) => fullDisplayName(season.contestants?.[id] || { id })).join(" & ");
+    }
+    function renderUniverseFranchises() {
+        const franchises = universeCache.franchises || [];
+        const cards = franchises.map((franchise) => {
+            const seasons = (universeCache.seasons || []).filter((season) => season.franchiseId === franchise.id);
+            const casts = (universeCache.casts || []).filter((cast) => cast.franchiseId === franchise.id);
+            const logo = universeAssetSrc(franchise.logoAssetId);
+            const seasonText = `${seasons.length} season${seasons.length === 1 ? "" : "s"}`;
+            const castText = `${casts.length} cast${casts.length === 1 ? "" : "s"}`;
+            return `<article class="universe-card universe-franchise-card">
+              <div class="universe-card-logo">${universeImageMarkup(logo, franchise.shortName || franchise.name, "universe-card-logo-img")}</div>
+              <div class="universe-card-copy">
+                <div class="universe-card-title-line"><span class="universe-card-code">${escapeHtml(franchise.shortName || "DR")}</span><h4>${escapeHtml(franchise.name)}</h4></div>
+                ${franchise.description ? `<p>${escapeHtml(franchise.description)}</p>` : ""}
+                <div class="universe-card-meta">${seasonText} · ${castText}</div>
+              </div>
+              <div class="universe-card-actions">
+                <button class="primary-btn" type="button" data-universe-view-franchise="${escapeHtml(franchise.id)}">Open</button>
+                <details class="universe-more"><summary aria-label="More options">•••</summary><div class="universe-more-menu"><button type="button" data-universe-edit-franchise="${escapeHtml(franchise.id)}">Edit</button><button class="is-danger" type="button" data-universe-delete-franchise="${escapeHtml(franchise.id)}">Delete</button></div></details>
+              </div>
+            </article>`;
+        }).join("");
+        return `<div class="universe-section-head"><h3>Franchises</h3><button class="primary-btn" type="button" data-universe-create-franchise>New Franchise</button></div>${cards ? `<div class="universe-card-grid">${cards}</div>` : `<div class="universe-empty"><h4>No franchises yet</h4><p>Create one to start building your own Drag Race history.</p><button class="primary-btn" type="button" data-universe-create-franchise>New Franchise</button></div>`}`;
+    }
+    function renderUniverseCasts() {
+        const casts = (universeCache.casts || []).filter((cast) => !universeSelectedFranchiseId || cast.franchiseId === universeSelectedFranchiseId);
+        const cards = casts.map((cast) => {
+            const franchise = universeFranchise(cast.franchiseId);
+            const names = (cast.contestants || []).slice(0, 5).map((item) => nickDisplayName(item)).join(", ");
+            const count = Number(cast.contestantIds?.length || cast.contestants?.length || 0);
+            return `<article class="universe-card universe-cast-card">
+              <div class="universe-card-copy">
+                <div class="universe-card-title-line"><h4>${escapeHtml(cast.name)}</h4>${franchise ? `<span class="universe-card-code">${escapeHtml(franchise.shortName || franchise.name)}</span>` : ""}</div>
+                <p>${escapeHtml(cast.description || names || "")}</p>
+                <div class="universe-card-meta">${count} contestant${count === 1 ? "" : "s"}</div>
+              </div>
+              <div class="universe-card-actions">
+                <button class="primary-btn" type="button" data-universe-load-cast="${escapeHtml(cast.id)}">Load</button>
+                <details class="universe-more"><summary aria-label="More options">•••</summary><div class="universe-more-menu"><button type="button" data-universe-edit-cast="${escapeHtml(cast.id)}">Edit</button><button class="is-danger" type="button" data-universe-delete-cast="${escapeHtml(cast.id)}">Delete</button></div></details>
+              </div>
+            </article>`;
+        }).join("");
+        return `<div class="universe-section-head"><h3>Saved Casts</h3>${state.selected.length ? '<button class="primary-btn" type="button" data-universe-save-current-cast>Save Current Cast</button>' : ""}</div>${cards ? `<div class="universe-card-grid">${cards}</div>` : `<div class="universe-empty"><h4>No saved casts</h4><p>Save a lineup from the cast screen to reuse it later.</p></div>`}`;
+    }
+    function renderUniverseSeasons() {
+        const selectedFranchise = universeFranchise(universeSelectedFranchiseId);
+        const seasons = (universeCache.seasons || []).filter((season) => !universeSelectedFranchiseId || season.franchiseId === universeSelectedFranchiseId);
+        const franchiseHero = selectedFranchise ? `<div class="universe-franchise-hero">
+          <div class="universe-franchise-hero-logo">${universeImageMarkup(universeAssetSrc(selectedFranchise.logoAssetId), selectedFranchise.shortName || selectedFranchise.name, "universe-franchise-hero-img")}</div>
+          <div class="universe-franchise-hero-copy"><div class="universe-card-title-line"><span class="universe-card-code">${escapeHtml(selectedFranchise.shortName || "DR")}</span><h3>${escapeHtml(selectedFranchise.name)}</h3></div>${selectedFranchise.description ? `<p>${escapeHtml(selectedFranchise.description)}</p>` : ""}</div>
+          <div class="universe-franchise-hero-actions"><button class="secondary-btn universe-back-btn" type="button" data-universe-all-franchises>← Franchises</button><button class="primary-btn" type="button" data-universe-new-season="regular" data-franchise-id="${escapeHtml(selectedFranchise.id)}">New Season</button><details class="universe-more"><summary aria-label="More options">•••</summary><div class="universe-more-menu"><button type="button" data-universe-new-season="all_stars" data-franchise-id="${escapeHtml(selectedFranchise.id)}">New All Stars</button></div></details></div>
+        </div>` : "";
+        const cards = seasons.map((record) => {
+            const franchise = universeFranchise(record.franchiseId);
+            const logo = universeAssetSrc(record.logoAssetId) || universeAssetSrc(franchise?.logoAssetId);
+            const winner = universeWinnerNames(record);
+            const count = Number(record.snapshot?.castOrder?.length || 0);
+            const status = record.status === "completed" ? "Completed" : "In Progress";
+            const meta = [winner ? `Winner: ${winner}` : "", `${count} contestants`].filter(Boolean).join(" · ");
+            return `<article class="universe-card universe-season-card">
+              <div class="universe-card-logo">${universeImageMarkup(logo, record.name, "universe-card-logo-img")}</div>
+              <div class="universe-card-copy">
+                <div class="universe-card-title-line"><h4>${escapeHtml(record.name)}</h4><span class="universe-card-code">${escapeHtml(universeSeasonTypeLabel(record.seasonType))}</span></div>
+                <p class="universe-card-subtitle">${escapeHtml(status)}${record.description ? ` · ${escapeHtml(record.description)}` : ""}</p>
+                <div class="universe-card-meta">${escapeHtml(meta)}</div>
+              </div>
+              <div class="universe-card-actions">
+                <button class="primary-btn" type="button" data-universe-view-season="${escapeHtml(record.id)}">View</button>
+                <details class="universe-more"><summary aria-label="More options">•••</summary><div class="universe-more-menu"><button type="button" data-universe-edit-season="${escapeHtml(record.id)}">Edit</button><button class="is-danger" type="button" data-universe-delete-season="${escapeHtml(record.id)}">Delete</button></div></details>
+              </div>
+            </article>`;
+        }).join("");
+        return `${franchiseHero}<div class="universe-section-head"><h3>${selectedFranchise ? "Seasons" : "All Seasons"}</h3>${state.season && !universeArchivedStatsRecordId ? '<button class="primary-btn" type="button" data-universe-save-season>Save Current Season</button>' : ""}</div>${cards ? `<div class="universe-card-grid">${cards}</div>` : `<div class="universe-empty"><h4>No saved seasons</h4><p>Save a simulation here when you want it kept in your universe.</p></div>`}`;
+    }
+    function formatUniverseBytes(value) {
+        const bytes = Number(value || 0);
+        if (!bytes)
+            return "0 B";
+        const units = ["B", "KB", "MB", "GB", "TB"];
+        const index = Math.min(units.length - 1, Math.floor(Math.log(bytes) / Math.log(1024)));
+        return `${(bytes / (1024 ** index)).toFixed(index > 1 ? 1 : 0)} ${units[index]}`;
+    }
+    function renderUniverseStorage() {
+        return `<div class="universe-section-head"><h3>Storage</h3></div>
+          <div class="universe-storage-grid">
+            <article class="universe-storage-card"><span>Persistence</span><strong id="universePersistenceValue">Checking...</strong><p>Protect local data from automatic browser cleanup.</p><button class="secondary-btn universe-compact-btn" type="button" data-universe-persist>Enable</button></article>
+            <article class="universe-storage-card"><span>Storage</span><strong id="universeStorageValue">Checking...</strong><p id="universeStorageDetail">Calculating browser usage.</p></article>
+            <article class="universe-storage-card"><span>Library</span><strong>${universeCache.franchises.length} franchise${universeCache.franchises.length === 1 ? "" : "s"}</strong><p>${universeCache.seasons.length} seasons · ${universeCache.casts.length} casts</p></article>
+          </div>
+          <div class="universe-backup-panel"><div><h4>Backup</h4><p>Export a copy before clearing browser data or changing devices.</p></div><div class="universe-backup-actions"><button class="primary-btn" type="button" data-universe-export>Export</button><button class="secondary-btn" type="button" data-universe-import>Import</button></div></div>`;
+    }
+    async function refreshUniverseStorageStatus() {
+        const persistenceEl = document.getElementById("universePersistenceValue");
+        const storageEl = document.getElementById("universeStorageValue");
+        const detailEl = document.getElementById("universeStorageDetail");
+        try {
+            const persisted = typeof navigator.storage?.persisted === "function" ? await navigator.storage.persisted() : false;
+            if (persistenceEl)
+                persistenceEl.textContent = persisted ? "Enabled" : "Not enabled";
+        }
+        catch (error) {
+            if (persistenceEl)
+                persistenceEl.textContent = "Unavailable";
+        }
+        try {
+            const estimate = typeof navigator.storage?.estimate === "function" ? await navigator.storage.estimate() : null;
+            if (estimate && storageEl) {
+                storageEl.textContent = `${formatUniverseBytes(estimate.usage)} used`;
+                if (detailEl)
+                    detailEl.textContent = estimate.quota ? `${formatUniverseBytes(estimate.quota)} estimated quota on this browser.` : "Storage quota is managed by your browser.";
+            }
+            else if (storageEl) {
+                storageEl.textContent = "Browser managed";
+            }
+        }
+        catch (error) {
+            if (storageEl)
+                storageEl.textContent = "Unavailable";
+        }
+    }
+    function renderUniverseModal() {
+        const content = document.getElementById("universeContent");
+        if (!content)
+            return;
+        document.querySelectorAll(".universe-tab").forEach((tab) => tab.classList.toggle("is-active", tab.dataset.universeTab === universeCurrentTab));
+        if (!universeDb) {
+            content.innerHTML = `<div class="universe-empty"><h4>Local database unavailable</h4><p>This browser did not allow IndexedDB storage for this page.</p></div>`;
+            return;
+        }
+        if (universeCurrentTab === "casts")
+            content.innerHTML = renderUniverseCasts();
+        else if (universeCurrentTab === "seasons")
+            content.innerHTML = renderUniverseSeasons();
+        else if (universeCurrentTab === "storage") {
+            content.innerHTML = renderUniverseStorage();
+            refreshUniverseStorageStatus();
+        }
+        else
+            content.innerHTML = renderUniverseFranchises();
+    }
+    async function openUniverseModal(tab = universeCurrentTab, franchiseId = universeSelectedFranchiseId) {
+        await refreshUniverseCache();
+        universeCurrentTab = tab || "franchises";
+        universeSelectedFranchiseId = franchiseId || "";
+        renderUniverseModal();
+        document.getElementById("universeModal")?.showModal?.();
+    }
+    function setUniverseLogoPreview(element, src, label) {
+        if (!element)
+            return;
+        element.innerHTML = src ? `<img src="${escapeHtml(src)}" alt="${escapeHtml(label)}">` : `<span>${escapeHtml(label)}</span>`;
+    }
+    function previewUniverseFile(file, element, label, type) {
+        if (!(file instanceof Blob) || !file.size)
+            return;
+        const url = URL.createObjectURL(file);
+        if (type === "franchise") {
+            if (universeLogoDraftUrl)
+                URL.revokeObjectURL(universeLogoDraftUrl);
+            universeLogoDraftUrl = url;
+        }
+        else {
+            if (seasonLogoDraftUrl)
+                URL.revokeObjectURL(seasonLogoDraftUrl);
+            seasonLogoDraftUrl = url;
+        }
+        setUniverseLogoPreview(element, url, label);
+    }
+    function openFranchiseEditor(id = "") {
+        const record = universeFranchise(id);
+        const dialog = document.getElementById("franchiseEditorModal");
+        const fileInput = document.getElementById("franchiseLogoFile");
+        if (fileInput)
+            fileInput.value = "";
+        document.getElementById("franchiseEditorId").value = record?.id || "";
+        document.getElementById("franchiseEditorTitle").textContent = record ? "Edit Franchise" : "Create Franchise";
+        document.getElementById("franchiseNameInput").value = record?.name || "Drag Race";
+        document.getElementById("franchiseShortNameInput").value = record?.shortName || "DR";
+        document.getElementById("franchiseDescriptionInput").value = record?.description || "";
+        setUniverseLogoPreview(document.getElementById("franchiseLogoPreview"), universeAssetSrc(record?.logoAssetId), record?.shortName || "DR");
+        dialog?.showModal?.();
+    }
+    async function saveFranchiseFromEditor(event) {
+        event.preventDefault();
+        if (!universeDb)
+            return;
+        const idInput = document.getElementById("franchiseEditorId");
+        const id = idInput?.value || universeUuid("franchise");
+        const existing = universeFranchise(id);
+        const name = String(document.getElementById("franchiseNameInput")?.value || "").trim();
+        if (!name)
+            return;
+        let logoAssetId = existing?.logoAssetId || "";
+        const logoFile = document.getElementById("franchiseLogoFile")?.files?.[0];
+        try {
+            if (logoFile)
+                logoAssetId = await saveUniverseLogoFile(logoFile, "franchise_logo", id, logoAssetId);
+            await universePut("franchises", {
+                id,
+                name,
+                shortName: String(document.getElementById("franchiseShortNameInput")?.value || "").trim(),
+                description: String(document.getElementById("franchiseDescriptionInput")?.value || "").trim(),
+                logoAssetId,
+                createdAt: Number(existing?.createdAt || Date.now()),
+                updatedAt: Date.now()
+            });
+            await refreshUniverseCache();
+            renderUniverseModal();
+            document.getElementById("franchiseEditorModal")?.close?.();
+        }
+        catch (error) {
+            console.warn("Failed to save franchise", error);
+            alert(error?.message || "The franchise could not be saved.");
+        }
+    }
+    async function deleteUniverseFranchise(id) {
+        const record = universeFranchise(id);
+        if (!record || !confirm(`Delete ${record.name}? Its saved seasons and casts will be kept as independent items.`))
+            return;
+        const seasons = (universeCache.seasons || []).filter((season) => season.franchiseId === id);
+        const casts = (universeCache.casts || []).filter((cast) => cast.franchiseId === id);
+        await Promise.all(seasons.map((season) => universePut("seasons", { ...season, franchiseId: "", updatedAt: Date.now() })));
+        await Promise.all(casts.map((cast) => universePut("casts", { ...cast, franchiseId: "", updatedAt: Date.now() })));
+        const appearances = (universeCache.appearances || []).filter((appearance) => appearance.franchiseId === id);
+        await Promise.all(appearances.map((appearance) => universePut("appearances", { ...appearance, franchiseId: "" })));
+        await universeDelete("franchises", id);
+        if (state.config.franchiseId === id) {
+            state.config.franchiseId = "";
+            saveState();
+        }
+        universeSelectedFranchiseId = "";
+        await refreshUniverseCache();
+        renderUniverseModal();
+    }
+    function currentCastSummaryHtml(items) {
+        return `<div class="universe-mini-cast">${(items || []).map((item) => {
+            const image = item.universeImageAssetId ? universeAssetSrc(item.universeImageAssetId) : item.image;
+            return `<div class="universe-mini-contestant">${universeImageMarkup(image, nickDisplayName(item), "universe-mini-avatar")}<span>${escapeHtml(nickDisplayName(item))}</span></div>`;
+        }).join("")}</div>`;
+    }
+    function openSavedCastEditor(id = "") {
+        const record = universeCast(id);
+        if (!record && !state.selected.length) {
+            alert("Select contestants before saving a cast.");
+            return;
+        }
+        document.getElementById("savedCastEditorId").value = record?.id || "";
+        document.getElementById("savedCastEditorTitle").textContent = record ? "Edit Saved Cast" : "Save Current Cast";
+        document.getElementById("savedCastNameInput").value = record?.name || `${state.config.seasonName || "Season"} Cast`;
+        fillUniverseFranchiseSelect(document.getElementById("savedCastFranchiseSelect"), "No Franchise", record?.franchiseId || state.config.franchiseId || "");
+        document.getElementById("savedCastDescriptionInput").value = record?.description || "";
+        const contestants = record?.contestants || state.selected;
+        document.getElementById("savedCastSummary").innerHTML = currentCastSummaryHtml(contestants);
+        document.getElementById("savedCastEditorModal")?.showModal?.();
+    }
+    async function saveCastFromEditor(event) {
+        event.preventDefault();
+        const existingId = document.getElementById("savedCastEditorId")?.value || "";
+        const existing = universeCast(existingId);
+        const source = existing?.contestants || state.selected;
+        if (!source.length)
+            return;
+        const id = existingId || universeUuid("cast");
+        const name = String(document.getElementById("savedCastNameInput")?.value || "").trim();
+        if (!name)
+            return;
+        try {
+            const contestants = existing ? existing.contestants : await Promise.all(source.map(universeContestantSnapshot));
+            await universePut("casts", {
+                id,
+                name,
+                description: String(document.getElementById("savedCastDescriptionInput")?.value || "").trim(),
+                franchiseId: String(document.getElementById("savedCastFranchiseSelect")?.value || ""),
+                contestantIds: contestants.map((item) => item.id),
+                contestants,
+                createdAt: Number(existing?.createdAt || Date.now()),
+                updatedAt: Date.now()
+            });
+            await refreshUniverseCache();
+            hydrateRoster();
+            renderUniverseModal();
+            document.getElementById("savedCastEditorModal")?.close?.();
+        }
+        catch (error) {
+            console.warn("Failed to save cast", error);
+            alert(error?.message || "The cast could not be saved.");
+        }
+    }
+    async function loadUniverseCast(id) {
+        const record = universeCast(id);
+        if (!record)
+            return;
+        const profiles = (record.contestants || []).map((snapshot) => {
+            const live = state.roster.find((item) => item.id === snapshot.id);
+            const archived = universeProfileFromSnapshot(snapshot);
+            return live ? { ...clone(live), ...archived, image: archived.image !== PLACEHOLDER ? archived.image : live.image, exportImage: archived.exportImage !== PLACEHOLDER ? archived.exportImage : live.exportImage, skills: { ...archived.skills } } : archived;
+        }).filter(Boolean).slice(0, 24);
+        if (!profiles.length)
+            return;
+        state.season = null;
+        state.selected = profiles;
+        state.config.castSize = clamp(profiles.length, 6, 24);
+        if (record.franchiseId)
+            state.config.franchiseId = record.franchiseId;
+        state.currentEpisodeIndex = 0;
+        state.currentStep = "status";
+        writeConfigToInputs();
+        saveState();
+        hydrateRoster();
+        document.getElementById("savedCastEditorModal")?.close?.();
+        document.getElementById("universeModal")?.close?.();
+        showScreen("cast-screen");
+        window.scrollTo({ top: 0, behavior: "auto" });
+    }
+    async function deleteUniverseCast(id) {
+        const record = universeCast(id);
+        if (!record || !confirm(`Delete the saved cast “${record.name}”?`))
+            return;
+        await universeDelete("casts", id);
+        await refreshUniverseCache();
+        renderUniverseModal();
+    }
+    function universeSeasonOrder(season) {
+        const cast = (season?.castOrder || []).filter((id) => season.contestants?.[id]);
+        const winners = (season?.winnerIds?.length ? season.winnerIds : [season?.winnerId].filter(Boolean)).filter((id) => cast.includes(id));
+        const runners = (season?.runnerUpIds || []).filter((id) => cast.includes(id) && !winners.includes(id));
+        const used = new Set([...winners, ...runners]);
+        const exitIndex = (id) => {
+            const track = season?.stats?.[id]?.track || [];
+            let best = -1;
+            track.forEach((entry, index) => {
+                const token = String(entry?.token || "").toUpperCase();
+                if (/(ELIM|QUIT|DEPT|DISQ|PCHOP)/.test(token))
+                    best = Math.max(best, index);
+            });
+            return best;
+        };
+        const rest = cast.filter((id) => !used.has(id)).sort((a, b) => exitIndex(b) - exitIndex(a) || cast.indexOf(a) - cast.indexOf(b));
+        return [...winners, ...runners, ...rest];
+    }
+    async function universeSeasonSnapshot(season) {
+        const snapshot = clone(season || {});
+        const ids = Object.keys(season?.contestants || {});
+        const contestantPairs = await Promise.all(ids.map(async (id) => [id, await universeContestantSnapshot(season.contestants[id])]));
+        snapshot.contestants = Object.fromEntries(contestantPairs);
+        return snapshot;
+    }
+    async function rebuildUniverseAppearances(record) {
+        const old = (universeCache.appearances || []).filter((appearance) => appearance.seasonId === record.id);
+        await Promise.all(old.map((appearance) => universeDelete("appearances", appearance.id)));
+        const season = record.snapshot;
+        const order = universeSeasonOrder(season);
+        const winners = new Set(season?.winnerIds?.length ? season.winnerIds : [season?.winnerId].filter(Boolean));
+        const runners = new Set(season?.runnerUpIds || []);
+        const finale = (season?.episodes || []).find((episode) => episode.type === "finale");
+        const finalists = new Set(finale?.activeStartIds || []);
+        for (let index = 0; index < order.length; index += 1) {
+            const contestantId = order[index];
+            const profile = season.contestants?.[contestantId];
+            const stats = season.stats?.[contestantId] || {};
+            const placementNumber = index + 1;
+            const placementText = winners.has(contestantId) ? "Winner" : runners.has(contestantId) ? "Runner-Up" : ordinalPlacement(placementNumber);
+            await universePut("appearances", {
+                id: `${record.id}::${contestantId}`,
+                seasonId: record.id,
+                franchiseId: record.franchiseId || "",
+                contestantId,
+                contestantName: fullDisplayName(profile || { id: contestantId }),
+                seasonName: record.name,
+                seasonType: record.seasonType,
+                placementNumber,
+                placementText,
+                winner: winners.has(contestantId),
+                runnerUp: runners.has(contestantId),
+                finalist: finalists.has(contestantId),
+                challengeWins: Number(stats.wins || 0),
+                bottoms: Number(stats.bottoms || 0),
+                lipSyncWins: Number(stats.lipSyncWins || 0),
+                profileSnapshot: profile,
+                savedAt: record.updatedAt
+            });
+        }
+    }
+    function openArchiveSeasonEditor(id = "", refreshSnapshot = false) {
+        const record = universeSeason(id);
+        if (!record && !state.season) {
+            alert("There is no season to save.");
+            return;
+        }
+        const dialog = document.getElementById("archiveSeasonModal");
+        dialog.dataset.refreshSnapshot = refreshSnapshot ? "1" : "0";
+        document.getElementById("archiveSeasonId").value = record?.id || "";
+        document.getElementById("archiveSeasonTitle").textContent = record ? "Edit Saved Season" : "Save Season";
+        document.getElementById("archiveSeasonNameInput").value = record?.name || state.season?.config?.seasonName || state.config.seasonName || "Fantasy Drag Race";
+        fillUniverseFranchiseSelect(document.getElementById("archiveSeasonFranchiseSelect"), "Independent Season", record?.franchiseId || state.season?.config?.franchiseId || state.config.franchiseId || "");
+        document.getElementById("archiveSeasonTypeSelect").value = record?.seasonType || state.season?.config?.seasonType || state.config.seasonType || "regular";
+        document.getElementById("archiveSeasonDescriptionInput").value = record?.description || "";
+        const logoFile = document.getElementById("seasonLogoFile");
+        if (logoFile)
+            logoFile.value = "";
+        setUniverseLogoPreview(document.getElementById("seasonLogoPreview"), universeAssetSrc(record?.logoAssetId), "SEASON LOGO");
+        dialog?.showModal?.();
+    }
+    async function saveSeasonFromEditor(event) {
+        event.preventDefault();
+        const dialog = document.getElementById("archiveSeasonModal");
+        const existingId = document.getElementById("archiveSeasonId")?.value || "";
+        const existing = universeSeason(existingId);
+        const refreshSnapshot = dialog?.dataset.refreshSnapshot === "1";
+        const sourceSeason = refreshSnapshot || !existing ? state.season : null;
+        if (!existing && !sourceSeason)
+            return;
+        const id = existingId || universeUuid("season");
+        const name = String(document.getElementById("archiveSeasonNameInput")?.value || "").trim();
+        if (!name)
+            return;
+        try {
+            let logoAssetId = existing?.logoAssetId || "";
+            const logoFile = document.getElementById("seasonLogoFile")?.files?.[0];
+            if (logoFile)
+                logoAssetId = await saveUniverseLogoFile(logoFile, "season_logo", id, logoAssetId);
+            const snapshot = sourceSeason ? await universeSeasonSnapshot(sourceSeason) : existing.snapshot;
+            const record = {
+                id,
+                name,
+                description: String(document.getElementById("archiveSeasonDescriptionInput")?.value || "").trim(),
+                franchiseId: String(document.getElementById("archiveSeasonFranchiseSelect")?.value || ""),
+                seasonType: String(document.getElementById("archiveSeasonTypeSelect")?.value || "regular"),
+                logoAssetId,
+                status: snapshot?.seasonComplete ? "completed" : "in_progress",
+                snapshot,
+                simulatorVersion: 474,
+                createdAt: Number(existing?.createdAt || Date.now()),
+                completedAt: snapshot?.seasonComplete ? Number(existing?.completedAt || Date.now()) : null,
+                updatedAt: Date.now()
+            };
+            await universePut("seasons", record);
+            await rebuildUniverseAppearances(record);
+            if (sourceSeason === state.season && state.season) {
+                state.season.universeArchiveId = id;
+                state.season.config.franchiseId = record.franchiseId;
+                state.season.config.seasonType = record.seasonType;
+                state.config.franchiseId = record.franchiseId;
+                state.config.seasonType = record.seasonType;
+                saveState();
+            }
+            await refreshUniverseCache();
+            hydrateRoster();
+            renderUniverseModal();
+            dialog?.close?.();
+        }
+        catch (error) {
+            console.warn("Failed to save season", error);
+            alert(error?.message || "The season could not be saved.");
+        }
+    }
+    async function deleteUniverseSeason(id) {
+        const record = universeSeason(id);
+        if (!record || !confirm(`Delete the archived season “${record.name}”?`))
+            return;
+        const appearances = (universeCache.appearances || []).filter((appearance) => appearance.seasonId === id);
+        await Promise.all(appearances.map((appearance) => universeDelete("appearances", appearance.id)));
+        await universeDelete("seasons", id);
+        if (state.season?.universeArchiveId === id) {
+            delete state.season.universeArchiveId;
+            saveState();
+        }
+        await refreshUniverseCache();
+        renderUniverseModal();
+        document.getElementById("seasonViewerModal")?.close?.();
+    }
+    function universeSeasonViewerHtml(record) {
+        const season = record.snapshot || {};
+        const franchise = universeFranchise(record.franchiseId);
+        const logo = universeAssetSrc(record.logoAssetId) || universeAssetSrc(franchise?.logoAssetId);
+        const appearances = (universeCache.appearances || []).filter((appearance) => appearance.seasonId === record.id).sort((a, b) => Number(a.placementNumber || 999) - Number(b.placementNumber || 999));
+        const winners = appearances.filter((appearance) => appearance.winner);
+        const castRows = appearances.map((appearance) => {
+            const profile = appearance.profileSnapshot || season.contestants?.[appearance.contestantId] || {};
+            const image = universeAssetSrc(profile.universeImageAssetId) || profile.image || PLACEHOLDER;
+            const track = season.stats?.[appearance.contestantId]?.track || [];
+            const tokens = track.map((entry) => `<span class="universe-track-chip">${escapeHtml(entry?.token || "—")}</span>`).join("");
+            return `<article class="universe-appearance-row">
+              <div class="universe-appearance-person">${universeImageMarkup(image, appearance.contestantName, "universe-appearance-avatar")}<div><strong>${escapeHtml(appearance.contestantName)}</strong><span>${escapeHtml(appearance.placementText || "")}</span></div></div>
+              <div class="universe-appearance-stats"><span>${Number(appearance.challengeWins || 0)} win${Number(appearance.challengeWins || 0) === 1 ? "" : "s"}</span><span>${Number(appearance.bottoms || 0)} bottom${Number(appearance.bottoms || 0) === 1 ? "" : "s"}</span></div>
+              <div class="universe-appearance-track">${tokens}</div>
+            </article>`;
+        }).join("");
+        const winnerCards = winners.map((appearance) => {
+            const profile = appearance.profileSnapshot || {};
+            const image = universeAssetSrc(profile.universeImageAssetId) || profile.image || PLACEHOLDER;
+            return `<div class="universe-winner-card">${universeImageMarkup(image, appearance.contestantName, "universe-winner-avatar")}<span>Winner</span><strong>${escapeHtml(appearance.contestantName)}</strong></div>`;
+        }).join("");
+        const status = record.status === "completed" ? "Completed" : "In Progress";
+        const franchiseLabel = franchise?.shortName || franchise?.name || "Independent";
+        return `<div class="universe-season-hero">
+          <div class="universe-season-hero-logo">${universeImageMarkup(logo, record.name, "universe-season-logo-img")}</div>
+          <div><div class="universe-card-title-line"><span class="universe-card-code">${escapeHtml(franchiseLabel)}</span><h2>${escapeHtml(record.name)}</h2></div>${record.description ? `<p>${escapeHtml(record.description)}</p>` : ""}<div class="universe-card-meta">${escapeHtml(universeSeasonTypeLabel(record.seasonType))} · ${escapeHtml(status)}</div></div>
+        </div>
+        ${winnerCards ? `<div class="universe-winner-grid">${winnerCards}</div>` : ""}
+        <div class="universe-season-view-actions"><button class="primary-btn" type="button" data-viewer-use-cast="${escapeHtml(record.id)}">Use Cast</button><details class="universe-more"><summary aria-label="More options">•••</summary><div class="universe-more-menu"><button type="button" data-viewer-edit-season="${escapeHtml(record.id)}">Edit</button><button class="is-danger" type="button" data-viewer-delete-season="${escapeHtml(record.id)}">Delete</button></div></details></div>
+        <div class="universe-appearance-list">${castRows || '<div class="universe-empty"><p>No appearance data is available for this season.</p></div>'}</div>`;
+    }
+    function openSeasonViewer(id) {
+        const record = universeSeason(id);
+        if (!record?.snapshot)
+            return;
+        if (!universeArchivedStatsReturn) {
+            universeArchivedStatsReturn = {
+                config: state.config,
+                season: state.season,
+                currentEpisodeIndex: state.currentEpisodeIndex,
+                currentStep: state.currentStep,
+                statsTab: document.querySelector(".stats-tab.is-active")?.dataset.tab || "track"
+            };
+            universeArchivedStatsReturnScreen = document.querySelector(".screen.is-active")?.id || "setup-screen";
+        }
+        universeArchivedStatsRecordId = record.id;
+        state.season = universeHydratedSeasonSnapshot(record);
+        state.config = {
+            ...clone(state.season.config || {}),
+            seasonName: record.name,
+            franchiseId: record.franchiseId || "",
+            seasonType: record.seasonType || "regular"
+        };
+        state.currentEpisodeIndex = Math.max(0, Number(state.season.episodes?.length || 1) - 1);
+        state.currentStep = "trackrecord";
+        $all(".stats-tab").forEach((tab) => tab.classList.toggle("is-active", tab.dataset.tab === "track"));
+        $all(".stats-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.tabPanel === "track"));
+        document.getElementById("universeModal")?.close?.();
+        document.getElementById("seasonViewerModal")?.close?.();
+        openStatsScreen();
+    }
+    function historyContestantEntries() {
+        const franchiseFilter = String(document.getElementById("historyFranchiseFilter")?.value || "");
+        const query = String(document.getElementById("historyContestantSearch")?.value || "").trim().toLowerCase();
+        const groups = new Map();
+        (universeCache.appearances || []).forEach((appearance) => {
+            if (franchiseFilter && appearance.franchiseId !== franchiseFilter)
+                return;
+            if (!groups.has(appearance.contestantId))
+                groups.set(appearance.contestantId, { id: appearance.contestantId, name: appearance.contestantName, profileSnapshot: appearance.profileSnapshot, appearances: [] });
+            const group = groups.get(appearance.contestantId);
+            group.appearances.push(appearance);
+            if (appearance.profileSnapshot)
+                group.profileSnapshot = appearance.profileSnapshot;
+        });
+        return [...groups.values()].filter((entry) => !query || String(entry.name || "").toLowerCase().includes(query)).sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+    }
+    function renderHistoryCastGrid() {
+        const grid = document.getElementById("historyCastGrid");
+        const meta = document.getElementById("historyCastMeta");
+        if (!grid)
+            return;
+        const entries = historyContestantEntries();
+        const already = new Set((state.selected || []).map((item) => item.id));
+        grid.innerHTML = entries.map((entry) => {
+            const profile = entry.profileSnapshot || {};
+            const image = universeAssetSrc(profile.universeImageAssetId) || profile.image || PLACEHOLDER;
+            const seasons = entry.appearances.slice().sort((a, b) => Number(a.savedAt || 0) - Number(b.savedAt || 0)).map((appearance) => `${appearance.seasonName} · ${appearance.placementText}`).join(" • ");
+            const selected = universeHistorySelection.has(entry.id);
+            return `<button class="history-contestant-card ${selected ? "is-selected" : ""} ${already.has(entry.id) ? "is-already-cast" : ""}" type="button" data-history-contestant-id="${escapeHtml(entry.id)}" ${already.has(entry.id) ? "disabled" : ""}>
+              ${universeImageMarkup(image, entry.name, "history-contestant-avatar")}
+              <strong>${escapeHtml(entry.name)}</strong>
+              <span>${escapeHtml(seasons)}</span>
+            </button>`;
+        }).join("") || `<div class="universe-empty"><p>No contestants match this franchise history.</p></div>`;
+        if (meta)
+            meta.textContent = `${universeHistorySelection.size} selected · ${Math.max(0, Number(state.config.castSize || 0) - state.selected.length)} open cast slots`;
+    }
+    async function openHistoryCastModal() {
+        await refreshUniverseCache();
+        universeHistorySelection = new Set();
+        fillUniverseFranchiseSelect(document.getElementById("historyFranchiseFilter"), "All Franchises", state.config.franchiseId || "");
+        const search = document.getElementById("historyContestantSearch");
+        if (search)
+            search.value = "";
+        renderHistoryCastGrid();
+        document.getElementById("historyCastModal")?.showModal?.();
+    }
+    function addHistoryContestantsToCast() {
+        const entries = new Map(historyContestantEntries().map((entry) => [entry.id, entry]));
+        const existingIds = new Set((state.selected || []).map((item) => item.id));
+        const slots = Math.max(0, Number(state.config.castSize || 0) - state.selected.length);
+        const chosen = [...universeHistorySelection].filter((id) => !existingIds.has(id)).slice(0, slots);
+        if (!chosen.length) {
+            alert(slots ? "Choose at least one returning contestant." : "The cast is already full.");
+            return;
+        }
+        chosen.forEach((id) => {
+            const entry = entries.get(id);
+            if (!entry?.profileSnapshot)
+                return;
+            const live = state.roster.find((item) => item.id === id);
+            const archived = universeProfileFromSnapshot(entry.profileSnapshot);
+            state.selected.push(live ? { ...clone(live), ...archived, skills: { ...archived.skills } } : archived);
+        });
+        state.season = null;
+        saveState();
+        hydrateRoster();
+        document.getElementById("historyCastModal")?.close?.();
+    }
+    function startUniverseSeason(franchiseId, seasonType = "regular") {
+        const franchise = universeFranchise(franchiseId);
+        if (!franchise)
+            return;
+        const existing = (universeCache.seasons || []).filter((season) => season.franchiseId === franchiseId && season.seasonType === seasonType).length;
+        const number = existing + 1;
+        let name = `${franchise.name} Season ${number}`;
+        if (seasonType === "all_stars")
+            name = `${franchise.shortName || franchise.name} All Stars ${number}`;
+        else if (seasonType === "vs_the_world")
+            name = `${franchise.name} Vs The World ${number}`;
+        else if (seasonType === "custom")
+            name = `${franchise.name} Special ${number}`;
+        state.config = { ...state.defaults, franchiseId, seasonType, seasonName: name };
+        state.selected = [];
+        state.season = null;
+        state.currentEpisodeIndex = 0;
+        state.currentStep = "status";
+        writeConfigToInputs();
+        saveState();
+        applyGlobalFilters();
+        document.getElementById("universeModal")?.close?.();
+        showScreen("setup-screen");
+        window.scrollTo({ top: 0, behavior: "auto" });
+    }
+    async function requestUniversePersistence() {
+        if (typeof navigator.storage?.persist !== "function") {
+            alert("This browser does not expose persistent storage controls.");
+            return;
+        }
+        try {
+            const granted = await navigator.storage.persist();
+            await refreshUniverseStorageStatus();
+            alert(granted ? "Persistent storage is enabled for this site." : "The browser did not grant persistent storage. Your universe will still save locally, so keep backups.");
+        }
+        catch (error) {
+            alert("Persistent storage could not be requested in this browser.");
+        }
+    }
+    function downloadUniverseFile(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = filename;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    async function exportUniverseBackup() {
+        if (!universeDb)
+            return;
+        const assets = await Promise.all((universeCache.assets || []).map(async (asset) => ({
+            id: asset.id,
+            kind: asset.kind,
+            ownerId: asset.ownerId,
+            mime: asset.mime,
+            dataUrl: asset.blob instanceof Blob ? await blobToDataUrl(asset.blob) : String(asset.dataUrl || ""),
+            updatedAt: asset.updatedAt
+        })));
+        const readLocalCollection = (key) => {
+            try {
+                return JSON.parse(localStorage.getItem(key) || "[]");
+            }
+            catch (error) {
+                return [];
+            }
+        };
+        const payload = {
+            format: "simuverse-drag-race-universe",
+            version: 1,
+            exportedAt: new Date().toISOString(),
+            franchises: universeCache.franchises,
+            casts: universeCache.casts,
+            seasons: universeCache.seasons,
+            appearances: universeCache.appearances,
+            assets,
+            activeRuns: universeCache.activeRuns,
+            customContent: {
+                contestants: readLocalCollection(CUSTOM_CONTESTANTS_KEY),
+                runways: readLocalCollection(CUSTOM_RUNWAYS_KEY),
+                lipSyncSongs: readLocalCollection(CUSTOM_LIPSYNC_SONGS_KEY)
+            }
+        };
+        const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+        downloadUniverseFile(blob, `simuverse-universe-${new Date().toISOString().slice(0, 10)}.druniverse`);
+    }
+    async function importUniverseBackup(file) {
+        if (!(file instanceof Blob) || !file.size || !universeDb)
+            return;
+        try {
+            const payload = JSON.parse(await file.text());
+            if (payload?.format !== "simuverse-drag-race-universe" || Number(payload?.version || 0) !== 1)
+                throw new Error("This is not a compatible Simuverse universe backup.");
+            if (!confirm("Import this backup and replace the current My Universe database on this browser?"))
+                return;
+            for (const store of ["franchises", "casts", "seasons", "appearances", "assets", "activeRuns"])
+                await universeClear(store);
+            for (const record of Array.isArray(payload.franchises) ? payload.franchises : [])
+                await universePut("franchises", record);
+            for (const record of Array.isArray(payload.casts) ? payload.casts : [])
+                await universePut("casts", record);
+            for (const record of Array.isArray(payload.seasons) ? payload.seasons : [])
+                await universePut("seasons", record);
+            for (const record of Array.isArray(payload.appearances) ? payload.appearances : [])
+                await universePut("appearances", record);
+            for (const asset of Array.isArray(payload.assets) ? payload.assets : []) {
+                const blob = asset.dataUrl ? dataUrlToBlob(asset.dataUrl) : null;
+                if (blob)
+                    await universePut("assets", { id: asset.id, kind: asset.kind, ownerId: asset.ownerId, mime: asset.mime || blob.type, blob, updatedAt: asset.updatedAt || Date.now() });
+            }
+            for (const record of Array.isArray(payload.activeRuns) ? payload.activeRuns : [])
+                await universePut("activeRuns", record);
+            if (payload.customContent) {
+                localStorage.setItem(CUSTOM_CONTESTANTS_KEY, JSON.stringify(Array.isArray(payload.customContent.contestants) ? payload.customContent.contestants : []));
+                localStorage.setItem(CUSTOM_RUNWAYS_KEY, JSON.stringify(Array.isArray(payload.customContent.runways) ? payload.customContent.runways : []));
+                localStorage.setItem(CUSTOM_LIPSYNC_SONGS_KEY, JSON.stringify(Array.isArray(payload.customContent.lipSyncSongs) ? payload.customContent.lipSyncSongs : []));
+                loadCustomContestants();
+            }
+            await refreshUniverseCache();
+            hydrateRoster();
+            writeConfigToInputs();
+            renderUniverseModal();
+            alert("Your universe backup has been imported.");
+        }
+        catch (error) {
+            console.warn("Failed to import universe backup", error);
+            alert(error?.message || "The universe backup could not be imported.");
+        }
+    }
+    function bindUniverseEvents() {
+        document.getElementById("openUniverseBtn")?.addEventListener("click", async () => {
+            if (universeArchivedStatsRecordId)
+                restoreArchivedStatisticsState();
+            await openUniverseModal("franchises", "");
+        });
+        document.getElementById("archivedStatsBackBtn")?.addEventListener("click", closeArchivedStatistics);
+        document.getElementById("closeUniverseModal")?.addEventListener("click", () => document.getElementById("universeModal")?.close?.());
+        document.querySelectorAll(".universe-tab").forEach((tab) => tab.addEventListener("click", () => {
+            universeCurrentTab = tab.dataset.universeTab || "franchises";
+            if (universeCurrentTab !== "seasons" && universeCurrentTab !== "casts")
+                universeSelectedFranchiseId = "";
+            renderUniverseModal();
+        }));
+        document.getElementById("universeContent")?.addEventListener("click", async (event) => {
+            const target = event.target.closest("button");
+            if (!target)
+                return;
+            if (target.matches("[data-universe-create-franchise]"))
+                openFranchiseEditor();
+            else if (target.dataset.universeViewFranchise) {
+                universeSelectedFranchiseId = target.dataset.universeViewFranchise;
+                universeCurrentTab = "seasons";
+                renderUniverseModal();
+            }
+            else if (target.dataset.universeEditFranchise)
+                openFranchiseEditor(target.dataset.universeEditFranchise);
+            else if (target.dataset.universeDeleteFranchise)
+                await deleteUniverseFranchise(target.dataset.universeDeleteFranchise);
+            else if (target.dataset.universeLoadCast)
+                await loadUniverseCast(target.dataset.universeLoadCast);
+            else if (target.dataset.universeEditCast)
+                openSavedCastEditor(target.dataset.universeEditCast);
+            else if (target.dataset.universeDeleteCast)
+                await deleteUniverseCast(target.dataset.universeDeleteCast);
+            else if (target.matches("[data-universe-save-current-cast]"))
+                openSavedCastEditor();
+            else if (target.dataset.universeViewSeason)
+                openSeasonViewer(target.dataset.universeViewSeason);
+            else if (target.dataset.universeEditSeason)
+                openArchiveSeasonEditor(target.dataset.universeEditSeason, false);
+            else if (target.dataset.universeDeleteSeason)
+                await deleteUniverseSeason(target.dataset.universeDeleteSeason);
+            else if (target.matches("[data-universe-save-season]"))
+                openArchiveSeasonEditor(state.season?.universeArchiveId || "", true);
+            else if (target.matches("[data-universe-all-franchises]")) {
+                universeSelectedFranchiseId = "";
+                universeCurrentTab = "franchises";
+                renderUniverseModal();
+            }
+            else if (target.dataset.universeNewSeason)
+                startUniverseSeason(target.dataset.franchiseId, target.dataset.universeNewSeason);
+            else if (target.matches("[data-universe-persist]"))
+                await requestUniversePersistence();
+            else if (target.matches("[data-universe-export]"))
+                await exportUniverseBackup();
+            else if (target.matches("[data-universe-import]"))
+                document.getElementById("universeImportFile")?.click?.();
+        });
+        document.getElementById("franchiseEditorForm")?.addEventListener("submit", saveFranchiseFromEditor);
+        document.getElementById("closeFranchiseEditor")?.addEventListener("click", () => document.getElementById("franchiseEditorModal")?.close?.());
+        document.getElementById("cancelFranchiseEditor")?.addEventListener("click", () => document.getElementById("franchiseEditorModal")?.close?.());
+        document.getElementById("chooseFranchiseLogoBtn")?.addEventListener("click", () => document.getElementById("franchiseLogoFile")?.click?.());
+        document.getElementById("franchiseLogoFile")?.addEventListener("change", (event) => previewUniverseFile(event.target.files?.[0], document.getElementById("franchiseLogoPreview"), "LOGO", "franchise"));
+        document.getElementById("savedCastEditorForm")?.addEventListener("submit", saveCastFromEditor);
+        document.getElementById("closeSavedCastEditor")?.addEventListener("click", () => document.getElementById("savedCastEditorModal")?.close?.());
+        document.getElementById("cancelSavedCastEditor")?.addEventListener("click", () => document.getElementById("savedCastEditorModal")?.close?.());
+        document.getElementById("archiveSeasonForm")?.addEventListener("submit", saveSeasonFromEditor);
+        document.getElementById("closeArchiveSeasonModal")?.addEventListener("click", () => document.getElementById("archiveSeasonModal")?.close?.());
+        document.getElementById("cancelArchiveSeasonModal")?.addEventListener("click", () => document.getElementById("archiveSeasonModal")?.close?.());
+        document.getElementById("chooseSeasonLogoBtn")?.addEventListener("click", () => document.getElementById("seasonLogoFile")?.click?.());
+        document.getElementById("seasonLogoFile")?.addEventListener("change", (event) => previewUniverseFile(event.target.files?.[0], document.getElementById("seasonLogoPreview"), "SEASON LOGO", "season"));
+        document.getElementById("closeSeasonViewerModal")?.addEventListener("click", () => document.getElementById("seasonViewerModal")?.close?.());
+        document.getElementById("seasonViewerContent")?.addEventListener("click", async (event) => {
+            const target = event.target.closest("button");
+            if (!target)
+                return;
+            if (target.dataset.viewerUseCast) {
+                const record = universeSeason(target.dataset.viewerUseCast);
+                if (record?.snapshot) {
+                    const tempCast = {
+                        id: `season_cast_${record.id}`,
+                        franchiseId: record.franchiseId,
+                        contestants: (record.snapshot.castOrder || []).map((id) => record.snapshot.contestants?.[id]).filter(Boolean)
+                    };
+                    universeCache.casts.unshift(tempCast);
+                    await loadUniverseCast(tempCast.id);
+                    universeCache.casts.shift();
+                    document.getElementById("seasonViewerModal")?.close?.();
+                }
+            }
+            else if (target.dataset.viewerEditSeason) {
+                document.getElementById("seasonViewerModal")?.close?.();
+                openArchiveSeasonEditor(target.dataset.viewerEditSeason, false);
+            }
+            else if (target.dataset.viewerDeleteSeason)
+                await deleteUniverseSeason(target.dataset.viewerDeleteSeason);
+        });
+        document.getElementById("saveCastBtn")?.addEventListener("click", () => openSavedCastEditor());
+        document.getElementById("loadSavedCastBtn")?.addEventListener("click", () => openUniverseModal("casts", state.config.franchiseId || ""));
+        document.getElementById("historyCastBtn")?.addEventListener("click", openHistoryCastModal);
+        document.getElementById("closeHistoryCastModal")?.addEventListener("click", () => document.getElementById("historyCastModal")?.close?.());
+        document.getElementById("cancelHistoryCastBtn")?.addEventListener("click", () => document.getElementById("historyCastModal")?.close?.());
+        document.getElementById("historyFranchiseFilter")?.addEventListener("change", () => {
+            universeHistorySelection = new Set();
+            renderHistoryCastGrid();
+        });
+        document.getElementById("historyContestantSearch")?.addEventListener("input", renderHistoryCastGrid);
+        document.getElementById("historyCastGrid")?.addEventListener("click", (event) => {
+            const card = event.target.closest("[data-history-contestant-id]");
+            if (!card || card.disabled)
+                return;
+            const id = card.dataset.historyContestantId;
+            if (universeHistorySelection.has(id))
+                universeHistorySelection.delete(id);
+            else
+                universeHistorySelection.add(id);
+            renderHistoryCastGrid();
+        });
+        document.getElementById("addHistoryCastBtn")?.addEventListener("click", addHistoryContestantsToCast);
+        document.getElementById("archiveSeasonBtn")?.addEventListener("click", () => openArchiveSeasonEditor(state.season?.universeArchiveId || "", true));
+        document.getElementById("universeImportFile")?.addEventListener("change", async (event) => {
+            const file = event.target.files?.[0];
+            if (file)
+                await importUniverseBackup(file);
+            event.target.value = "";
+        });
+        els.seasonFranchiseSelect?.addEventListener("change", () => {
+            state.config.franchiseId = String(els.seasonFranchiseSelect.value || "");
+            saveState();
+        });
+        els.seasonTypeSelect?.addEventListener("change", () => {
+            state.config.seasonType = String(els.seasonTypeSelect.value || "regular");
+            saveState();
+        });
+    }
+
     function resetSeasonOnly() {
         state.config = { ...state.defaults };
         state.season = null;
@@ -25135,14 +26520,19 @@ Options: ${names}`, "") || "";
             $all(".stats-tab").forEach((btn) => btn.classList.toggle("is-active", btn === tab));
             $all(".stats-panel").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.tabPanel === tab.dataset.tab));
         }));
+        bindUniverseEvents();
     }
-    function init() {
+    async function init() {
         lockAdvancedSettingsOpen();
         installSourceDeterrents();
         loadState();
         loadCustomContestants();
+        await initUniverseDatabase();
+        await restoreUniverseActiveRun();
         writeConfigToInputs();
         hydrateRoster();
+        if (state.customContestants.length)
+            saveState();
         bindEvents();
         if (state.season?.episodes?.length) {
             renderEpisodeSelect();
