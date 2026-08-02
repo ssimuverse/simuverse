@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=76" />
+  <link rel="stylesheet" href="style.css?v=80" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=76" defer></script>
+  <script src="simulator.js?v=80" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -26,7 +26,10 @@
         <span class="logo-main">Drag Race Simulator</span>
         <span class="logo-kicker">SIMUVERSE</span>
       </div>
-      <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
+      <div class="hero-actions">
+        <button class="secondary-btn universe-header-btn" id="openUniverseBtn" type="button">MY UNIVERSE</button>
+        <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
+      </div>
     </header>
 
     <main class="page-shell">
@@ -55,6 +58,23 @@
               <label class="field season-name-field">
                 <span>Season Name</span>
                 <input type="text" id="seasonName" value="Fantasy Drag Race">
+              </label>
+
+              <label class="field franchise-field">
+                <span>Franchise</span>
+                <select id="seasonFranchiseSelect">
+                  <option value="">Independent Season</option>
+                </select>
+              </label>
+
+              <label class="field season-type-field">
+                <span>Season Type</span>
+                <select id="seasonTypeSelect">
+                  <option value="regular">Regular Season</option>
+                  <option value="all_stars">All Stars</option>
+                  <option value="vs_the_world">Vs The World</option>
+                  <option value="custom">Custom</option>
+                </select>
               </label>
 
               <label class="field game-mode-field">
@@ -295,6 +315,14 @@
               <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
               <button class="secondary-btn" id="randomContestantBtn" type="button">Add Random Contestant</button>
               <button class="secondary-btn" id="presetCastBtn" type="button">Use Pre-Set Cast</button>
+              <details class="cast-universe-tools">
+                <summary class="secondary-btn">Universe</summary>
+                <div class="cast-universe-menu">
+                  <button class="secondary-btn" id="saveCastBtn" type="button">Save Cast</button>
+                  <button class="secondary-btn" id="loadSavedCastBtn" type="button">Saved Casts</button>
+                  <button class="secondary-btn" id="historyCastBtn" type="button">Cast From History</button>
+                </div>
+              </details>
               <button class="secondary-btn" id="customContestantBtn" type="button">Create Contestant</button>
               <button class="secondary-btn" id="resetCastBtn" type="button">Clear Cast</button>
             </div>
@@ -766,10 +794,12 @@
       <section class="screen" id="stats-screen">
         <div class="screen-head tight">
           <div>
-            <p class="eyebrow">Statistics</p>
-            <h2>Season Statistics</h2>
+            <p class="eyebrow" id="statsScreenEyebrow">Statistics</p>
+            <h2 id="statsScreenTitle">Season Statistics</h2>
           </div>
           <div class="screen-action-row">
+            <button class="secondary-btn" id="archivedStatsBackBtn" type="button" hidden>Back to Universe</button>
+            <button class="primary-btn" id="archiveSeasonBtn" type="button">Save Season</button>
             <button class="secondary-btn" id="backToEpisodeBtn" type="button">Episodes</button>
             <button class="secondary-btn" id="backToCastBtnStats" type="button">Cast</button>
             <button class="secondary-btn" id="resetSeasonBtnStats" type="button">Reset</button>
@@ -1018,6 +1048,180 @@
       </footer>
     </form>
   </dialog>
+
+
+  <dialog class="universe-modal" id="universeModal">
+    <div class="universe-shell">
+      <header class="modal-head universe-modal-head">
+        <div>
+          <h3>My Universe</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeUniverseModal" aria-label="Close My Universe">×</button>
+      </header>
+      <nav class="universe-tabs" aria-label="My Universe sections">
+        <button type="button" class="universe-tab is-active" data-universe-tab="franchises">Franchises</button>
+        <button type="button" class="universe-tab" data-universe-tab="casts">Casts</button>
+        <button type="button" class="universe-tab" data-universe-tab="seasons">Seasons</button>
+        <button type="button" class="universe-tab" data-universe-tab="storage">Storage</button>
+      </nav>
+      <div class="universe-content" id="universeContent"></div>
+    </div>
+  </dialog>
+
+  <dialog class="universe-editor-modal" id="franchiseEditorModal">
+    <form method="dialog" class="universe-editor-form" id="franchiseEditorForm">
+      <header class="modal-head">
+        <div>
+          <h3 id="franchiseEditorTitle">Create Franchise</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeFranchiseEditor">×</button>
+      </header>
+      <input type="hidden" id="franchiseEditorId">
+      <div class="universe-editor-grid">
+        <div class="universe-image-editor">
+          <div class="universe-logo-preview" id="franchiseLogoPreview"><span>LOGO</span></div>
+          <input type="file" id="franchiseLogoFile" accept="image/png,image/jpeg,image/webp" hidden>
+          <button type="button" class="secondary-btn" id="chooseFranchiseLogoBtn">Choose Logo</button>
+        </div>
+        <div class="universe-editor-fields">
+          <label class="field">
+            <span>Franchise Name</span>
+            <input type="text" id="franchiseNameInput" maxlength="120" required placeholder="Drag Race">
+          </label>
+          <label class="field">
+            <span>Short Name</span>
+            <input type="text" id="franchiseShortNameInput" maxlength="30" placeholder="DR">
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="franchiseDescriptionInput" maxlength="1000" rows="6" placeholder="Describe this franchise..."></textarea>
+          </label>
+        </div>
+      </div>
+      <footer class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelFranchiseEditor">Cancel</button>
+        <button type="submit" class="primary-btn">Save Franchise</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="universe-editor-modal" id="savedCastEditorModal">
+    <form method="dialog" class="universe-editor-form compact-universe-form" id="savedCastEditorForm">
+      <header class="modal-head">
+        <div>
+          <h3 id="savedCastEditorTitle">Save Current Cast</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeSavedCastEditor">×</button>
+      </header>
+      <input type="hidden" id="savedCastEditorId">
+      <div class="field-grid">
+        <label class="field">
+          <span>Cast Name</span>
+          <input type="text" id="savedCastNameInput" maxlength="120" required placeholder="Season 1 Cast">
+        </label>
+        <label class="field">
+          <span>Franchise</span>
+          <select id="savedCastFranchiseSelect"><option value="">No Franchise</option></select>
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <textarea id="savedCastDescriptionInput" maxlength="600" rows="4" placeholder="Optional notes about this cast..."></textarea>
+        </label>
+      </div>
+      <div class="universe-cast-summary" id="savedCastSummary"></div>
+      <footer class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelSavedCastEditor">Cancel</button>
+        <button type="submit" class="primary-btn">Save Cast</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="universe-editor-modal" id="archiveSeasonModal">
+    <form method="dialog" class="universe-editor-form" id="archiveSeasonForm">
+      <header class="modal-head">
+        <div>
+          <h3 id="archiveSeasonTitle">Save Season</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeArchiveSeasonModal">×</button>
+      </header>
+      <input type="hidden" id="archiveSeasonId">
+      <div class="universe-editor-grid">
+        <div class="universe-image-editor">
+          <div class="universe-logo-preview season-logo-preview" id="seasonLogoPreview"><span>SEASON LOGO</span></div>
+          <input type="file" id="seasonLogoFile" accept="image/png,image/jpeg,image/webp" hidden>
+          <button type="button" class="secondary-btn" id="chooseSeasonLogoBtn">Choose Logo</button>
+        </div>
+        <div class="universe-editor-fields">
+          <label class="field">
+            <span>Season Name</span>
+            <input type="text" id="archiveSeasonNameInput" maxlength="140" required>
+          </label>
+          <label class="field">
+            <span>Franchise</span>
+            <select id="archiveSeasonFranchiseSelect"><option value="">Independent Season</option></select>
+          </label>
+          <label class="field">
+            <span>Season Type</span>
+            <select id="archiveSeasonTypeSelect">
+              <option value="regular">Regular Season</option>
+              <option value="all_stars">All Stars</option>
+              <option value="vs_the_world">Vs The World</option>
+              <option value="custom">Custom</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <textarea id="archiveSeasonDescriptionInput" maxlength="1200" rows="5" placeholder="Write a description for this season..."></textarea>
+          </label>
+        </div>
+      </div>
+      <footer class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelArchiveSeasonModal">Cancel</button>
+        <button type="submit" class="primary-btn">Save Season</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="season-viewer-modal" id="seasonViewerModal">
+    <div class="season-viewer-shell">
+      <header class="modal-head">
+        <div>
+          <h3 id="seasonViewerTitle">Season</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeSeasonViewerModal">×</button>
+      </header>
+      <div id="seasonViewerContent"></div>
+    </div>
+  </dialog>
+
+  <dialog class="history-cast-modal" id="historyCastModal">
+    <div class="history-cast-shell">
+      <header class="modal-head">
+        <div>
+          <h3>Cast From History</h3>
+        </div>
+        <button type="button" class="icon-close" id="closeHistoryCastModal">×</button>
+      </header>
+      <div class="history-cast-controls">
+        <label class="field">
+          <span>Franchise</span>
+          <select id="historyFranchiseFilter"><option value="">All Franchises</option></select>
+        </label>
+        <label class="field">
+          <span>Search</span>
+          <input type="search" id="historyContestantSearch" placeholder="Search contestants...">
+        </label>
+      </div>
+      <div class="history-cast-meta" id="historyCastMeta"></div>
+      <div class="history-cast-grid" id="historyCastGrid"></div>
+      <footer class="modal-actions">
+        <button type="button" class="secondary-btn" id="cancelHistoryCastBtn">Cancel</button>
+        <button type="button" class="primary-btn" id="addHistoryCastBtn">Add Selected</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <input type="file" id="universeImportFile" accept="application/json,.json,.druniverse" hidden>
 
   <template id="rosterCardTemplate">
     <button class="roster-card" type="button">
