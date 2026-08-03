@@ -4585,7 +4585,7 @@ window.QUEENS = [
     skills: { acting: 11, comedy: 12, dance: 11, design: 8, improv: 11, runway: 10, lipsync: 10 },
     shows: ["RuPaul's Drag Race Down Under", "RuPaul's Drag Race: UK vs The World"],
     seasonsByShow: { "RuPaul's Drag Race Down Under": [2], "RuPaul's Drag Race: UK vs The World": [2] },
-    country: "Australiad",
+    country: "Australia",
   },
   {
     id: "kween_kong",
