@@ -9345,7 +9345,7 @@ dialog::backdrop {
 
 .lip-sync-stats-table .lip-sync-result[class*="ls-elim-"] .stat-contestant,
 .lip-sync-stats-table .lip-sync-result[class*="ls-elim-"] .stat-contestant span {
-  color: #fff !important;
+  color: inherit !important;
 }
 
 .runway-stats-table tbody th,
@@ -18720,3 +18720,83 @@ details.advanced-settings[open] > .advanced-settings-grid {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
+
+
+/* Drag Race Thailand S1–S2 */
+.track-format-thailand .track-cell.thailand-track,
+.track-legend-format-thailand .legend-key.thailand-track {
+  background-image: none !important;
+  text-shadow: none !important;
+}
+.track-format-thailand .thailand-winner,
+.track-legend-format-thailand .thailand-winner { background: #ffff00 !important; color: #111 !important; }
+.track-format-thailand .thailand-runner-up,
+.track-legend-format-thailand .thailand-runner-up { background: #c0c0c0 !important; color: #111 !important; }
+.track-format-thailand .thailand-run,
+.track-legend-format-thailand .thailand-run { background: #d2ffb5 !important; color: #111 !important; }
+.track-format-thailand .thailand-miss-con,
+.track-legend-format-thailand .thailand-miss-con { background: #00ffff !important; color: #111 !important; }
+.track-format-thailand .thailand-guest,
+.track-legend-format-thailand .thailand-guest { background: #d3d3d3 !important; color: #111 !important; }
+.track-format-thailand .thailand-main-co-win,
+.track-legend-format-thailand .thailand-main-co-win { background: #00008b !important; color: #fff !important; }
+.track-format-thailand .thailand-double-win,
+.track-legend-format-thailand .thailand-double-win { background: #0000cd !important; color: #fff !important; }
+.track-format-thailand .thailand-main-win,
+.track-legend-format-thailand .thailand-main-win { background: #4169e1 !important; color: #fff !important; }
+.track-format-thailand .thailand-runway-co-win,
+.track-legend-format-thailand .thailand-runway-co-win { background: #1e90ff !important; color: #111 !important; }
+.track-format-thailand .thailand-runway-win,
+.track-legend-format-thailand .thailand-runway-win { background: #00bfff !important; color: #111 !important; }
+.track-format-thailand .thailand-high,
+.track-legend-format-thailand .thailand-high { background: #add8e6 !important; color: #111 !important; }
+.track-format-thailand .thailand-safe,
+.track-legend-format-thailand .thailand-safe { background: #f9f9ff !important; color: #111 !important; }
+.track-format-thailand .thailand-low,
+.track-legend-format-thailand .thailand-low { background: #ffb6c1 !important; color: #111 !important; }
+.track-format-thailand .thailand-btm2-save,
+.track-legend-format-thailand .thailand-btm2-save { background: #ff69b4 !important; color: #111 !important; }
+.track-format-thailand .thailand-btm2,
+.track-legend-format-thailand .thailand-btm2 { background: #ff6347 !important; color: #111 !important; }
+.track-format-thailand .thailand-elim,
+.track-legend-format-thailand .thailand-elim { background: #ff0000 !important; color: #fff !important; }
+.track-format-thailand .thailand-double-elim,
+.track-legend-format-thailand .thailand-double-elim { background: #8b0000 !important; color: #fff !important; }
+.track-format-thailand .thailand-win-high,
+.track-legend-format-thailand .thailand-win-high { background: #6495ed !important; color: #111 !important; }
+.track-format-thailand .thailand-win-low,
+.track-legend-format-thailand .thailand-win-low { background: #ee82ee !important; color: #111 !important; }
+.track-format-thailand .thailand-win-btm2,
+.track-legend-format-thailand .thailand-win-btm2 { background: #ba55d3 !important; color: #fff !important; }
+.track-format-thailand .thailand-win-elim,
+.track-legend-format-thailand .thailand-win-elim { background: #9400d3 !important; color: #fff !important; }
+.track-format-thailand .thailand-return,
+.track-legend-format-thailand .thailand-return { background: #ffa500 !important; color: #111 !important; }
+.track-format-thailand .thailand-makeover-guest,
+.track-legend-format-thailand .thailand-makeover-guest { background: #40e0d0 !important; color: #111 !important; }
+.track-format-thailand .thailand-disq,
+.track-legend-format-thailand .thailand-disq { background: #000 !important; color: #fff !important; }
+
+.thailand-maxi-winner-card {
+  border-color: rgba(65,105,225,.72) !important;
+}
+.thailand-runway-winner-card {
+  border-color: rgba(0,191,255,.72) !important;
+}
+.thailand-reunion-running {
+  border-color: rgba(210,255,181,.6) !important;
+}
+.thailand-reunion-guests {
+  border-color: rgba(211,211,211,.45) !important;
+}
+/* Drag Race Thailand maxi-result reveal */
+.challenge-grid > .thailand-maxi-reveal-actions,
+.challenge-grid > .thailand-maxi-winner-card {
+  grid-column: 1 / -1;
+  width: min(980px, 100%);
+  justify-self: center;
+}
+
+.thailand-maxi-reveal-actions {
+  padding-top: 4px;
+}
