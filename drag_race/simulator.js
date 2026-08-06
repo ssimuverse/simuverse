@@ -39,6 +39,10 @@
         viewer: "Viewer mode simulates the season automatically and reveals the story section by section.",
         rupaul: "You play as RuPaul, where you make all of the decisions, from challenges to eliminations. <strong>BETA:</strong> This mode is in beta testing and is still being fixed."
     };
+    const judgingFormatDescriptions = {
+        standard: "Standard Drag Race judging: the maxi challenge drives the weekly result and the runway modifies the judges' decision.",
+        thailand: "Drag Race Thailand S1–S2: the maxi challenge and runway challenge have separate winners. The runway determines the official HIGH / SAFE / LOW / bottom placements, so a maxi winner can still lip sync or be eliminated."
+    };
     const eliminationFormatDescriptions = {
         regular: "Regular Drag Race eliminations with a bottom lip sync.",
         legacy: "Lip Sync For Your Legacy: the top contestants lip sync, each picks a lipstick, and the lip-sync winner eliminates one bottom contestant. In RuPaul Mode, choose either a Top 2 or Top 3 when eligible.",
@@ -68,7 +72,8 @@
         lsftc: "Four finalists compete in a Lip Sync for the Crown tournament.",
         jury_finale: "A jury of eligible eliminated contestants ranks a Top 2 with 2-point and 1-point ballots. Works with 3 to 5 finalists.",
         lsftf: "At top four, a penultimate lalaparuza eliminates one queen before the finale.",
-        cunt_test: "At the Top 5, three maxi challenges each send one contestant to the finale. The remaining two lip sync for the final Top 4 spot, then the finale plays as a Top 2 Finale."
+        cunt_test: "At the Top 5, three maxi challenges each send one contestant to the finale. The remaining two lip sync for the final Top 4 spot, then the finale plays as a Top 2 Finale.",
+        thailand_finale: "Drag Race Thailand S1–S2 finale: a Top 3 presents individual finale showcases and a final runway, then the judges choose the winner from the full-season record and finale presentations."
     };
     const comebackDescriptions = {
         none: "No eliminated contestants return.",
@@ -463,6 +468,7 @@
             franchiseId: "",
             seasonType: "regular",
             mode: "viewer",
+            judgingFormat: "standard",
             eliminationFormat: "regular",
             castSize: 14,
             finalistSize: 4,
@@ -491,6 +497,7 @@
             specialReunionLalaparuza: false,
             specialMidSeasonRateAQueen: false,
             specialFameGames: false,
+            thailandReunion: false,
             awardMxCongeniality: true,
             awardGoldenBoot: false,
             awardLostLook: false,
@@ -520,6 +527,7 @@
         seasonFranchiseSelect: document.getElementById("seasonFranchiseSelect"),
         seasonTypeSelect: document.getElementById("seasonTypeSelect"),
         modeSelect: document.getElementById("modeSelect"),
+        judgingFormatSelect: document.getElementById("judgingFormatSelect"),
         eliminationFormatSelect: document.getElementById("eliminationFormatSelect"),
         premiereTypeSelect: document.getElementById("premiereTypeSelect"),
         finaleTypeSelect: document.getElementById("finaleTypeSelect"),
@@ -540,6 +548,7 @@
         tournamentBracketEpisodesValue: document.getElementById("tournamentBracketEpisodesValue"),
         tournamentMergeEpisodesValue: document.getElementById("tournamentMergeEpisodesValue"),
         modeHelp: document.getElementById("modeHelp"),
+        judgingFormatHelp: document.getElementById("judgingFormatHelp"),
         eliminationFormatHelp: document.getElementById("eliminationFormatHelp"),
         premiereHelp: document.getElementById("premiereHelp"),
         finaleHelp: document.getElementById("finaleHelp"),
@@ -575,6 +584,7 @@
         specialReunionLalaparuza: document.getElementById("specialReunionLalaparuza"),
         specialMidSeasonRateAQueen: document.getElementById("specialMidSeasonRateAQueen"),
         specialFameGames: document.getElementById("specialFameGames"),
+        thailandReunion: document.getElementById("thailandReunion"),
         awardMxCongeniality: document.getElementById("awardMxCongeniality"),
         awardGoldenBoot: document.getElementById("awardGoldenBoot"),
         awardLostLook: document.getElementById("awardLostLook"),
@@ -1383,20 +1393,34 @@
         if (blob.size > 12 * 1024 * 1024)
             throw new Error("The image is too large. Choose a file under 12 MB.");
         if (blob.type && !/^image\//i.test(blob.type))
-            throw new Error("Choose a JPG, PNG, or WebP image.");
+            throw new Error("Choose an image file such as JPG, PNG, or WebP.");
         let source = null;
         try {
             if (typeof createImageBitmap === "function") {
-                const bitmap = await createImageBitmap(blob);
-                source = {
-                    drawable: bitmap,
-                    width: bitmap.width,
-                    height: bitmap.height,
-                    cleanup: () => bitmap.close?.()
-                };
+                try {
+                    const bitmap = await createImageBitmap(blob);
+                    source = {
+                        drawable: bitmap,
+                        width: bitmap.width,
+                        height: bitmap.height,
+                        cleanup: () => bitmap.close?.()
+                    };
+                }
+                catch (bitmapError) {
+                    // Some browsers expose createImageBitmap but fail on otherwise readable
+                    // images. Fall back to the regular HTMLImageElement decoder.
+                    console.warn("createImageBitmap could not decode the image; using fallback decoder.", bitmapError);
+                }
             }
-            else {
-                source = await loadBlobImage(blob);
+            if (!source) {
+                try {
+                    source = await loadBlobImage(blob);
+                }
+                catch (imageError) {
+                    const wrapped = new Error("The image could not be decoded. Try saving it as a JPG, PNG, or WebP file and upload it again.");
+                    wrapped.cause = imageError;
+                    throw wrapped;
+                }
             }
             if (!source.width || !source.height)
                 throw new Error("The image has invalid dimensions.");
@@ -1713,6 +1737,7 @@
             franchiseId: String(els.seasonFranchiseSelect?.value || ""),
             seasonType: String(els.seasonTypeSelect?.value || "regular"),
             mode: selectedMode,
+            judgingFormat: els.judgingFormatSelect?.value || "standard",
             eliminationFormat: selectedEliminationFormat,
             premiereType: els.premiereTypeSelect?.value || "regular",
             finaleType: els.finaleTypeSelect?.value || "regular_finale",
@@ -1741,6 +1766,7 @@
             specialReunionLalaparuza: !!els.specialReunionLalaparuza?.checked,
             specialMidSeasonRateAQueen: !!els.specialMidSeasonRateAQueen?.checked,
             specialFameGames: !!els.specialFameGames?.checked,
+            thailandReunion: !!els.thailandReunion?.checked,
             awardMxCongeniality: !!els.awardMxCongeniality?.checked,
             awardGoldenBoot: !!els.awardGoldenBoot?.checked,
             awardLostLook: !!els.awardLostLook?.checked,
@@ -1770,6 +1796,48 @@
             state.config.specialNonElimLalaparuza = false;
             if (els.specialNonElimLalaparuza)
                 els.specialNonElimLalaparuza.checked = false;
+        }
+        if (state.config.judgingFormat === "thailand") {
+            state.config.mode = "viewer";
+            state.config.eliminationFormat = "regular";
+            state.config.premiereType = "regular";
+            state.config.finaleType = "thailand_finale";
+            state.config.finalistSize = 3;
+            state.config.twistImmunity = false;
+            state.config.twistChocolateRandom = false;
+            state.config.twistChocolateChoosable = false;
+            state.config.twistLuckyCow = false;
+            state.config.twistBadonkaDunkTank = false;
+            state.config.twistRosconReinas = false;
+            state.config.twistHeartSuccessor = false;
+            state.config.twistGoldenBaguette = false;
+            state.config.specialLalaparuzaSmackdown = false;
+            state.config.specialNonElimLalaparuza = false;
+            state.config.specialSlayOffs = false;
+            state.config.specialReunionLalaparuza = false;
+            state.config.specialMidSeasonRateAQueen = false;
+            state.config.specialFameGames = false;
+            state.config.awardMxCongeniality = true;
+            state.config.awardGoldenBoot = false;
+            state.config.awardLostLook = false;
+            state.config.awardDragPopStar = false;
+            state.config.awardMxMakeup = false;
+            state.config.awardMxStarving = false;
+            state.config.awardMxBitch = false;
+            if (els.modeSelect) els.modeSelect.value = "viewer";
+            if (els.eliminationFormatSelect) els.eliminationFormatSelect.value = "regular";
+            if (els.premiereTypeSelect) els.premiereTypeSelect.value = "regular";
+            if (els.finaleTypeSelect) els.finaleTypeSelect.value = "thailand_finale";
+            if (els.finalistSize) els.finalistSize.value = 3;
+            [
+                els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow,
+                els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.twistGoldenBaguette,
+                els.specialLalaparuzaSmackdown, els.specialNonElimLalaparuza, els.specialSlayOffs,
+                els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames,
+                els.awardGoldenBoot, els.awardLostLook, els.awardDragPopStar, els.awardMxMakeup,
+                els.awardMxStarving, els.awardMxBitch
+            ].forEach((element) => { if (element) element.checked = false; });
+            if (els.awardMxCongeniality) els.awardMxCongeniality.checked = true;
         }
         if (state.config.finaleType === "cunt_test") {
             state.config.finalistSize = 4;
@@ -1968,6 +2036,8 @@
             els.seasonTypeSelect.value = c.seasonType || "regular";
         if (els.modeSelect)
             els.modeSelect.value = c.mode || "viewer";
+        if (els.judgingFormatSelect)
+            els.judgingFormatSelect.value = c.judgingFormat || "standard";
         if (els.eliminationFormatSelect)
             els.eliminationFormatSelect.value = c.eliminationFormat || "regular";
         if (els.premiereTypeSelect)
@@ -2024,6 +2094,8 @@
             els.specialMidSeasonRateAQueen.checked = !!c.specialMidSeasonRateAQueen;
         if (els.specialFameGames)
             els.specialFameGames.checked = !!c.specialFameGames;
+        if (els.thailandReunion)
+            els.thailandReunion.checked = !!c.thailandReunion;
         if (els.awardMxCongeniality)
             els.awardMxCongeniality.checked = c.awardMxCongeniality !== false;
         if (els.awardGoldenBoot)
@@ -2060,10 +2132,28 @@
         const allWinners = (state.config.eliminationFormat || "regular") === "all_winners";
         const tournament = (state.config.eliminationFormat || "regular") === "tournament";
         const teams = (state.config.eliminationFormat || "regular") === "teams";
+        const thailand = (state.config.judgingFormat || "standard") === "thailand";
+        if (thailand) {
+            state.config.mode = "viewer";
+            state.config.eliminationFormat = "regular";
+            state.config.premiereType = "regular";
+            state.config.finaleType = "thailand_finale";
+            state.config.finalistSize = 3;
+            if (els.modeSelect) els.modeSelect.value = "viewer";
+            if (els.eliminationFormatSelect) els.eliminationFormatSelect.value = "regular";
+            if (els.premiereTypeSelect) els.premiereTypeSelect.value = "regular";
+            if (els.finaleTypeSelect) els.finaleTypeSelect.value = "thailand_finale";
+            if (els.finalistSize) els.finalistSize.value = 3;
+            if (els.finalistSizeValue) els.finalistSizeValue.textContent = 3;
+        }
         if (els.modeSelect)
-            els.modeSelect.disabled = false;
+            els.modeSelect.disabled = thailand;
+        if (els.eliminationFormatSelect)
+            els.eliminationFormatSelect.disabled = thailand;
         if (els.modeHelp)
-            els.modeHelp.innerHTML = modeDescriptions[state.config.mode || "viewer"] || "";
+            els.modeHelp.innerHTML = thailand ? "Drag Race Thailand S1–S2 is simulated in Viewer Mode so its separate maxi/runway judging can resolve automatically." : (modeDescriptions[state.config.mode || "viewer"] || "");
+        if (els.judgingFormatHelp)
+            els.judgingFormatHelp.textContent = judgingFormatDescriptions[state.config.judgingFormat || "standard"] || "";
         if (els.finalistSize)
             els.finalistSize.min = state.config.finaleType === "jury_finale" ? "3" : "2";
         if (state.config.finaleType === "cunt_test") {
@@ -2084,16 +2174,26 @@
             if (el)
                 el.disabled = allWinners || tournament || teams;
         });
+        if (els.premiereTypeSelect)
+            els.premiereTypeSelect.disabled = els.premiereTypeSelect.disabled || thailand;
+        [els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.twistGoldenBaguette, els.specialLalaparuzaSmackdown, els.specialNonElimLalaparuza, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames].forEach((el) => {
+            if (el && thailand)
+                el.disabled = true;
+        });
+        if (els.thailandReunion)
+            els.thailandReunion.disabled = !thailand;
         if (els.finaleTypeSelect) {
-            els.finaleTypeSelect.disabled = tournament || teams;
+            els.finaleTypeSelect.disabled = tournament || teams || thailand;
             Array.from(els.finaleTypeSelect.options || []).forEach((option) => {
-                option.disabled = allWinners
-                    ? !["regular_finale", "lsftc"].includes(option.value)
-                    : tournament
-                        ? option.value !== "lsftc"
-                        : teams
-                            ? option.value !== "top2_finale"
-                            : false;
+                option.disabled = thailand
+                    ? option.value !== "thailand_finale"
+                    : allWinners
+                        ? !["regular_finale", "lsftc"].includes(option.value)
+                        : tournament
+                            ? option.value !== "lsftc"
+                            : teams
+                                ? option.value !== "top2_finale"
+                                : option.value === "thailand_finale";
             });
         }
         if (allWinners) {
@@ -2121,7 +2221,7 @@
                 els.comebackFormatSelect.value = "none";
         }
         if (els.finalistSize)
-            els.finalistSize.disabled = allWinners;
+            els.finalistSize.disabled = allWinners || thailand;
         if (teams) {
             state.config.premiereType = "regular";
             state.config.finaleType = "top2_finale";
@@ -2217,9 +2317,9 @@
         if (els.tournamentMergeEpisodesValue)
             els.tournamentMergeEpisodesValue.textContent = state.config.tournamentMergeEpisodes || 2;
         if (els.eliminationFormatHelp)
-            els.eliminationFormatHelp.textContent = eliminationFormatDescriptions[state.config.eliminationFormat || "regular"] || "";
+            els.eliminationFormatHelp.textContent = thailand ? "Thailand S1–S2 uses a regular Lip Sync for Your Life after runway-based placements." : (eliminationFormatDescriptions[state.config.eliminationFormat || "regular"] || "");
         if (els.premiereHelp)
-            els.premiereHelp.textContent = teams ? "Teams always uses a regular premiere." : tournament ? "Premiere twists are disabled for Tournament." : allWinners ? "Premiere twists are disabled for All Winners." : (premiereDescriptions[state.config.premiereType] || "");
+            els.premiereHelp.textContent = thailand ? "Thailand S1–S2 uses a regular premiere with separate maxi and runway judging." : teams ? "Teams always uses a regular premiere." : tournament ? "Premiere twists are disabled for Tournament." : allWinners ? "Premiere twists are disabled for All Winners." : (premiereDescriptions[state.config.premiereType] || "");
         if (els.finaleHelp)
             els.finaleHelp.textContent = teams
                 ? "Teams uses an individual Top 2 finale after pairs dissolve."
@@ -2230,6 +2330,8 @@
                             ? "All Winners ends with a Top 3 and one final lip sync. Every non-finalist is eliminated before the crown."
                             : "All Winners ends with the QoSDADHH smackdown and a Lip Sync for The Crown bracket.")
                         : (finaleDescriptions[state.config.finaleType] || "");
+        if (thailand && els.finaleHelp)
+            els.finaleHelp.textContent = finaleDescriptions.thailand_finale;
         if (els.comebackHelp)
             els.comebackHelp.textContent = (allWinners || tournament || teams) ? "Comeback challenges are disabled for All Winners, Tournament, and Teams." : (comebackDescriptions[state.config.comebackFormat || "none"] || "");
         const standardSpecialAllowed = !allWinners && !tournament && !teams;
@@ -2332,6 +2434,12 @@
         return "";
     }
     function validateSetupConfig(config) {
+        if (config.judgingFormat === "thailand") {
+            if (config.mode !== "viewer")
+                return "Drag Race Thailand S1–S2 judging runs in Viewer Mode.";
+            if (config.eliminationFormat !== "regular" || config.premiereType !== "regular" || config.finaleType !== "thailand_finale" || Number(config.finalistSize) !== 3)
+                return "Drag Race Thailand S1–S2 requires Regular eliminations, a Regular premiere, a Thailand Top 3 finale, and 3 finalists.";
+        }
         if (config.eliminationFormat === "teams") {
             if (Number(config.castSize || 0) % 2 !== 0)
                 return "Teams format requires an even number of contestants.";
@@ -3241,6 +3349,7 @@
             nonElimLalaparuzaTargetCount: randInt(NON_ELIM_LALAPARUZA_MIN, Math.min(NON_ELIM_LALAPARUZA_MAX, castOrder.length)),
             specialSlayOffsUsed: false,
             specialReunionLalaparuzaUsed: false,
+            thailandReunionUsed: false,
             specialMidSeasonRateAQueenUsed: false,
             fameGamesEpisodeUsed: false,
             fameGames: null,
@@ -3320,6 +3429,7 @@
                 lipSyncWins: 0,
                 lipSyncLosses: 0,
                 miniWins: 0,
+                maxiWins: 0,
                 runwayWins: 0,
                 favoritism: 0,
                 unfavoritism: 0,
@@ -9525,10 +9635,13 @@
             simulateFameGamesEpisode(season);
         if (!season.seasonComplete && season.config.specialReunionLalaparuza)
             simulateReunionLalaparuzaEpisode(season);
+        if (!season.seasonComplete && isThailandJudging(season) && season.config.thailandReunion)
+            simulateThailandReunionEpisode(season);
         if (!season.seasonComplete) {
             const hasAlternativeTopFourEpisode = season.config.finaleType === "cunt_test"
                 || !!season.config.specialFameGames
-                || !!season.config.specialReunionLalaparuza;
+                || !!season.config.specialReunionLalaparuza
+                || (isThailandJudging(season) && !!season.config.thailandReunion);
             if (season.config.finaleType !== "lsftf" && !hasAlternativeTopFourEpisode)
                 addTopFourRumixTrackColumn(season);
             simulateFinale(season);
@@ -11033,6 +11146,12 @@
             return activeCount >= 4;
         return true;
     }
+    function judgingFormat(season = state.season) {
+        return season?.config?.judgingFormat || season?.judgingFormat || state.config.judgingFormat || "standard";
+    }
+    function isThailandJudging(season = state.season) {
+        return judgingFormat(season) === "thailand";
+    }
     function eliminationFormat(season = state.season) {
         return season?.config?.eliminationFormat || state.config.eliminationFormat || "regular";
     }
@@ -11634,7 +11753,7 @@
                 });
             });
             const runwayWinner = runwayScores.slice().sort((a, b) => runwayStatValue(b) - runwayStatValue(a))[0];
-            if (runwayWinner)
+            if (runwayWinner && !isThailandJudging(season))
                 season.stats[runwayWinner.id].runwayWins += 1;
         }
     }
@@ -11747,7 +11866,7 @@
             return false;
         if ((episode.type || "").startsWith("comeback_") || episode.comeback)
             return false;
-        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(episode.type))
+        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "thailand_reunion", "fame_games"].includes(episode.type))
             return false;
         return true;
     }
@@ -11940,6 +12059,177 @@
         });
         return groups;
     }
+
+    function thailandScoreForId(episode, id, field, runway = false) {
+        const source = runway ? (episode.runwayScores || []) : (episode.scores || []);
+        const value = source.find((score) => score.id === id)?.[field];
+        return Number.isFinite(Number(value)) ? Number(value) : 999;
+    }
+    function thailandMaxiOrder(episode) {
+        return (episode.scores || []).slice().sort((a, b) => {
+            const diff = Number(a.legacyPerformanceScore ?? 999) - Number(b.legacyPerformanceScore ?? 999);
+            return diff || Number(b.challengeScore || 0) - Number(a.challengeScore || 0);
+        }).map((score) => score.id);
+    }
+    function thailandRunwayOrder(episode) {
+        return (episode.runwayScores || []).filter((score) => !score.runwayOnly).slice().sort((a, b) => {
+            const diff = Number(a.legacyRunwayRaw ?? 999) - Number(b.legacyRunwayRaw ?? 999);
+            return diff || Number(b.runwayScore || 0) - Number(a.runwayScore || 0);
+        }).map((score) => score.id);
+    }
+    function thailandSoloWinnerIds(episode, order, field, runway = false) {
+        if (!order.length)
+            return [];
+        const winners = [order[0]];
+        if (order.length > 1) {
+            const first = thailandScoreForId(episode, order[0], field, runway);
+            const second = thailandScoreForId(episode, order[1], field, runway);
+            const exactTie = Math.abs(first - second) < 0.000001;
+            const nearTie = Math.abs(first - second) <= 0.75 && Math.random() < 0.12;
+            if (exactTie || nearTie)
+                winners.push(order[1]);
+        }
+        return winners;
+    }
+    function thailandMainChallengeWinners(season, episode, maxiOrder) {
+        let grouped = false;
+        if (episode.teams?.mode === "groups")
+            grouped = shouldJudgeInTeams(season, episode);
+        else if (episode.teams?.mode === "pairs")
+            grouped = shouldJudgeInPairs(season, episode);
+        if (!grouped)
+            return thailandSoloWinnerIds(episode, maxiOrder, "legacyPerformanceScore", false);
+        const groups = (episode.teams?.groups || []).map((group) => ({
+            ...group,
+            score: average((group.ids || []).map((id) => thailandScoreForId(episode, id, "legacyPerformanceScore", false)))
+        })).filter((group) => (group.ids || []).length).sort((a, b) => a.score - b.score);
+        const winning = groups[0];
+        if (!winning)
+            return thailandSoloWinnerIds(episode, maxiOrder, "legacyPerformanceScore", false);
+        episode.thailandMainJudgedInTeams = true;
+        episode.winningTeamIds = winning.ids.slice();
+        episode.judgedInTeams = true;
+        if (episode.teams.mode === "groups")
+            season.teamJudgedEpisodes += 1;
+        else
+            season.pairJudgedEpisodes += 1;
+        return winning.ids.slice();
+    }
+    function thailandRunwayPools(episode, order) {
+        const count = order.length;
+        let top = [];
+        let bottom = [];
+        if (count > 13) {
+            top = order.slice(0, 4);
+            bottom = order.slice(-4);
+            if (thailandScoreForId(episode, order[3], "legacyRunwayRaw", true) > 17)
+                top = top.filter((id) => id !== order[3]);
+            else if (order[4] && thailandScoreForId(episode, order[4], "legacyRunwayRaw", true) < 10)
+                top.push(order[4]);
+            if (thailandScoreForId(episode, order[count - 4], "legacyRunwayRaw", true) < 16)
+                bottom = bottom.filter((id) => id !== order[count - 4]);
+        }
+        else if (count > 6) {
+            top = order.slice(0, 3);
+            bottom = order.slice(-3);
+            if (thailandScoreForId(episode, order[2], "legacyRunwayRaw", true) > 17)
+                top = top.filter((id) => id !== order[2]);
+            else if (order[3] && thailandScoreForId(episode, order[3], "legacyRunwayRaw", true) < 10)
+                top.push(order[3]);
+            if (thailandScoreForId(episode, order[count - 3], "legacyRunwayRaw", true) < 16)
+                bottom = bottom.filter((id) => id !== order[count - 3]);
+        }
+        else if (count === 6) {
+            top = order.slice(0, 3);
+            bottom = order.slice(-3);
+            const middle = order[3];
+            const middleScore = thailandScoreForId(episode, middle, "legacyRunwayRaw", true);
+            if (middleScore < 10) {
+                top.push(middle);
+                bottom = bottom.filter((id) => id !== middle);
+            }
+            else if (middleScore < 16) {
+                bottom = bottom.filter((id) => id !== middle);
+            }
+        }
+        else if (count === 5) {
+            top = order.slice(0, 2);
+            bottom = order.slice(3);
+            const middle = order[2];
+            if (thailandScoreForId(episode, middle, "legacyRunwayRaw", true) < 16)
+                top.push(middle);
+            else
+                bottom.unshift(middle);
+        }
+        else if (count === 4) {
+            top = order.slice(0, 2);
+            bottom = order.slice(2);
+        }
+        else if (count === 3) {
+            top = order.slice(0, 1);
+            bottom = order.slice(1);
+        }
+        return { top: [...new Set(top)], bottom: [...new Set(bottom)] };
+    }
+    function assignThailandPlacements(season, episode) {
+        episode.thailandJudging = true;
+        episode.top2Ids = [];
+        episode.highIds = [];
+        episode.lowIds = [];
+        episode.bottomIds = [];
+        episode.safeIds = [];
+        episode.legacyThreeWayLipSync = false;
+        const maxiOrder = thailandMaxiOrder(episode);
+        const runwayOrder = thailandRunwayOrder(episode);
+        episode.maxiOrder = maxiOrder.slice();
+        episode.runwayOrder = runwayOrder.slice();
+        episode.maxiWinnerIds = thailandMainChallengeWinners(season, episode, maxiOrder);
+        episode.runwayWinnerIds = episode.runwayUsesChallengeScore && episode.maxiWinnerIds.length > 1
+            ? episode.maxiWinnerIds.slice()
+            : thailandSoloWinnerIds(episode, runwayOrder, "legacyRunwayRaw", true);
+        episode.winnerIds = episode.runwayWinnerIds.slice();
+        const pools = thailandRunwayPools(episode, runwayOrder);
+        const top = pools.top.slice();
+        episode.runwayWinnerIds.forEach((id) => { if (!top.includes(id)) top.unshift(id); });
+        episode.highIds = top.filter((id) => !episode.runwayWinnerIds.includes(id));
+        let bottom = pools.bottom.filter((id) => !episode.runwayWinnerIds.includes(id));
+        const desiredBottomCount = bottom.length;
+        bottom = filterImmunityProtected(season, episode, bottom);
+        if (bottom.length < desiredBottomCount) {
+            runwayOrder.slice().reverse().forEach((id) => {
+                if (bottom.length >= desiredBottomCount)
+                    return;
+                if (episode.runwayWinnerIds.includes(id) || bottom.includes(id) || isProtectedByImmunity(season, episode, id))
+                    return;
+                bottom.push(id);
+            });
+        }
+        if (bottom.length >= 5) {
+            episode.lowIds = bottom.slice(0, bottom.length - 2);
+            episode.bottomIds = bottom.slice(-2);
+        }
+        else if (bottom.length === 4) {
+            episode.lowIds = bottom.slice(0, 2);
+            episode.bottomIds = bottom.slice(2);
+        }
+        else if (bottom.length === 3) {
+            const bestBottomScore = thailandScoreForId(episode, bottom[0], "legacyRunwayRaw", true);
+            if (bestBottomScore >= 30 && season.activeIds.length > 5) {
+                episode.bottomIds = bottom.slice();
+                episode.legacyThreeWayLipSync = true;
+            }
+            else {
+                episode.lowIds = bottom.slice(0, 1);
+                episode.bottomIds = bottom.slice(1);
+            }
+        }
+        else {
+            episode.bottomIds = bottom.slice();
+        }
+        setSafeIds(season, episode);
+        episode.notes.push("Drag Race Thailand S1–S2 judging: the maxi challenge and runway challenge are judged separately. The runway determines the official placements and lip-sync danger.");
+    }
+
     function assignPlacements(season, episode) {
         const special = episode.specialPremiere;
         if (special === "slayers")
@@ -11960,6 +12250,8 @@
             return assignMidSeasonRateAQueenPlacements(season, episode);
         if (special === "rate_a_queen_merge")
             return assignRateAQueenMergePlacements(season, episode);
+        if (isThailandJudging(season) && episode.type === "competitive" && seasonEliminationFormatApplies(season, episode))
+            return assignThailandPlacements(season, episode);
         if (isBottomThreeSaveFormat(season) && seasonEliminationFormatApplies(season, episode))
             return assignGoldenBeaverPlacements(season, episode);
         if (shouldUseAllStarsFormat(season, episode))
@@ -13886,6 +14178,12 @@
             if (!markerShouldYieldToPlacement)
                 return comebackToken;
         }
+        if (episode.type === "thailand_reunion") {
+            if ((episode.activeStartIds || []).includes(id))
+                return "RUN";
+            if ((episode.comebackParticipantIds || []).includes(id))
+                return "GUEST";
+        }
         if (episode.type === "porkchop_premiere") {
             const pork = episode.porkchopPremiere || {};
             if (pork.choppedId === id)
@@ -14547,6 +14845,110 @@
         if (token === "ELIM")
             stats.unfavoritism += 5;
     }
+
+    const THAILAND_TRACK_COLORS = Object.freeze({
+        winner: "#ffff00",
+        runnerUp: "#c0c0c0",
+        run: "#d2ffb5",
+        missCon: "#00ffff",
+        guest: "#d3d3d3",
+        mainCoWin: "#00008b",
+        doubleWin: "#0000cd",
+        mainWin: "#4169e1",
+        runwayCoWin: "#1e90ff",
+        runwayWin: "#00bfff",
+        high: "#add8e6",
+        safe: "#f9f9ff",
+        low: "#ffb6c1",
+        bottomSave: "#ff69b4",
+        bottom: "#ff6347",
+        elim: "#ff0000",
+        doubleElim: "#8b0000",
+        winHigh: "#6495ed",
+        winLow: "#ee82ee",
+        winBottom: "#ba55d3",
+        winElim: "#9400d3",
+        returned: "#ffa500",
+        makeoverGuest: "#40e0d0",
+        disq: "#000000"
+    });
+    function thailandTrackDecoration(season, episode, id, token, extraClasses = []) {
+        if (!isThailandJudging(season))
+            return null;
+        const maxiWinner = (episode.maxiWinnerIds || []).includes(id);
+        const runwayWinner = (episode.runwayWinnerIds || []).includes(id);
+        const maxiShared = (episode.maxiWinnerIds || []).length > 1;
+        const runwayShared = (episode.runwayWinnerIds || []).length > 1;
+        const bottom = /^BTM\d*$/.test(String(token || "")) || token === "BTM";
+        const doubleElim = token === "ELIM" && ((episode.eliminatedIds || []).length > 1 || extraClasses.includes("double-elim"));
+        const nobodyEliminated = bottom && !(episode.eliminatedIds || []).some((elimId) => (episode.bottomIds || []).includes(elimId));
+        let variant = "";
+        let display = String(token || "");
+        let color = "";
+        if (token === "DISQ") {
+            variant = "thailand-disq"; color = THAILAND_TRACK_COLORS.disq; display = "DISQ";
+        }
+        else if ((episode.thailandMakeoverGuestIds || []).includes(id)) {
+            variant = "thailand-makeover-guest"; color = THAILAND_TRACK_COLORS.makeoverGuest; display = "GUEST";
+        }
+        else if (token === "GUEST") {
+            variant = "thailand-guest"; color = THAILAND_TRACK_COLORS.guest; display = "GUEST";
+        }
+        else if (token === "RTRN" || token === "IN") {
+            variant = "thailand-return"; color = THAILAND_TRACK_COLORS.returned; display = "RTRN";
+        }
+        else if (token === "RUN") {
+            variant = "thailand-run"; color = THAILAND_TRACK_COLORS.run; display = "RUN";
+        }
+        else if (maxiWinner && token === "ELIM") {
+            variant = "thailand-win-elim"; color = THAILAND_TRACK_COLORS.winElim; display = "WIN+<br/>ELIM";
+        }
+        else if (maxiWinner && bottom) {
+            variant = "thailand-win-btm2"; color = THAILAND_TRACK_COLORS.winBottom; display = "WIN+<br/>BTM2";
+        }
+        else if (maxiWinner && token === "LOW") {
+            variant = "thailand-win-low"; color = THAILAND_TRACK_COLORS.winLow; display = "WIN+<br/>LOW";
+        }
+        else if (maxiWinner && token === "HIGH") {
+            variant = "thailand-win-high"; color = THAILAND_TRACK_COLORS.winHigh; display = "WIN+<br/>HIGH";
+        }
+        else if (maxiWinner && runwayWinner) {
+            variant = "thailand-double-win"; color = THAILAND_TRACK_COLORS.doubleWin; display = "WIN";
+        }
+        else if (maxiWinner) {
+            variant = maxiShared ? "thailand-main-co-win" : "thailand-main-win";
+            color = maxiShared ? THAILAND_TRACK_COLORS.mainCoWin : THAILAND_TRACK_COLORS.mainWin;
+            display = "WIN";
+        }
+        else if (runwayWinner) {
+            variant = runwayShared ? "thailand-runway-co-win" : "thailand-runway-win";
+            color = runwayShared ? THAILAND_TRACK_COLORS.runwayCoWin : THAILAND_TRACK_COLORS.runwayWin;
+            display = "WIN";
+        }
+        else if (token === "HIGH") {
+            variant = "thailand-high"; color = THAILAND_TRACK_COLORS.high; display = "HIGH";
+        }
+        else if (token === "SAFE") {
+            variant = "thailand-safe"; color = THAILAND_TRACK_COLORS.safe; display = "SAFE";
+        }
+        else if (token === "LOW") {
+            variant = "thailand-low"; color = THAILAND_TRACK_COLORS.low; display = "LOW";
+        }
+        else if (bottom) {
+            variant = nobodyEliminated ? "thailand-btm2-save" : "thailand-btm2";
+            color = nobodyEliminated ? THAILAND_TRACK_COLORS.bottomSave : THAILAND_TRACK_COLORS.bottom;
+            display = "BTM2";
+        }
+        else if (token === "ELIM") {
+            variant = doubleElim ? "thailand-double-elim" : "thailand-elim";
+            color = doubleElim ? THAILAND_TRACK_COLORS.doubleElim : THAILAND_TRACK_COLORS.elim;
+            display = "ELIM";
+        }
+        if (!variant || !color)
+            return null;
+        return { variant, display, color, textColor: readableTextColorForBackground(color) };
+    }
+
     function updateEpisodeStats(season, episode) {
         const popularityQueue = [];
         season.castOrder.forEach((id) => {
@@ -14618,23 +15020,37 @@
                 extraClasses.push("revenge-active-win");
             if (!suppressReturnPrefix && returneeCompetedForRegularPlacement(episode, id) && !["RTRN", "IN", "OUT", "RUN"].includes(token))
                 display = `RTRN+<br/>${display}`;
-            const specialTrackColor = token === "WIN_RTRN"
+            const thailandTrack = thailandTrackDecoration(season, episode, id, token, extraClasses);
+            if (thailandTrack) {
+                display = thailandTrack.display;
+                extraClasses.push("thailand-track", thailandTrack.variant);
+            }
+            const specialTrackColor = thailandTrack?.color || (token === "WIN_RTRN"
                 ? TRACK_RECORD_COLORS.revengeWinReturn
                 : extraClasses.includes("revenge-top2-out")
                     ? TRACK_RECORD_COLORS.revengeTop2Out
-                    : "";
+                    : "");
             stats.track.push({
                 label: episode.label,
                 token,
                 display,
                 extraClasses,
+                thailandVariant: thailandTrack?.variant || "",
                 trackColor: specialTrackColor,
-                trackTextColor: specialTrackColor ? readableTextColorForBackground(specialTrackColor) : "",
+                trackTextColor: thailandTrack?.textColor || (specialTrackColor ? readableTextColorForBackground(specialTrackColor) : ""),
                 eliminated: isUnplannedExitToken(token) || token === "LOW_ROSCON_ELIM"
             });
-            if (token === "WIN_QUIT")
+            if (isThailandJudging(season) && episode.type === "competitive") {
+                if ((episode.maxiWinnerIds || []).includes(id)) {
+                    stats.wins += 1;
+                    stats.maxiWins = Number(stats.maxiWins || 0) + 1;
+                }
+                if ((episode.runwayWinnerIds || []).includes(id))
+                    stats.runwayWins = Number(stats.runwayWins || 0) + 1;
+            }
+            if (token === "WIN_QUIT" && !isThailandJudging(season))
                 stats.wins += 1;
-            else if (token === "WIN" || token === "DWIN" || token === "WIN_RTRN")
+            else if ((token === "WIN" || token === "DWIN" || token === "WIN_RTRN") && !isThailandJudging(season))
                 stats.wins += 1;
             else if (token === "IN" || token === "RTRN")
                 stats.safes += 1;
@@ -15301,16 +15717,28 @@
             const winningPair = pairRanks[0];
             const returneeId = winningPair.elimId;
             const partnerId = winningPair.activeId;
-            reviveContestant(season, returneeId);
-            episode.returnedIds = [returneeId].filter(Boolean);
-            episode.comeback.returnedId = returneeId;
-            episode.comeback.winPair = [partnerId, returneeId].filter(Boolean);
-            eliminated.forEach((id) => { episode.comebackPlacements[id] = id === returneeId ? "WIN" : "OUT"; });
-            if (partnerId)
-                episode.comebackPlacements[partnerId] = "WIN";
+            if (isThailandJudging(season)) {
+                episode.returnedIds = [];
+                episode.comeback.returnedId = null;
+                episode.comeback.winPair = [partnerId, returneeId].filter(Boolean);
+                episode.thailandMakeoverGuestIds = [returneeId].filter(Boolean);
+                eliminated.forEach((id) => { episode.comebackPlacements[id] = "GUEST"; });
+                if (partnerId)
+                    episode.comebackPlacements[partnerId] = "WIN";
+                episode.comeback.text = "The eliminated contestants return as makeover guests only. The winning active contestant earns the challenge win; the makeover guest remains out of the competition.";
+            }
+            else {
+                reviveContestant(season, returneeId);
+                episode.returnedIds = [returneeId].filter(Boolean);
+                episode.comeback.returnedId = returneeId;
+                episode.comeback.winPair = [partnerId, returneeId].filter(Boolean);
+                eliminated.forEach((id) => { episode.comebackPlacements[id] = id === returneeId ? "WIN" : "OUT"; });
+                if (partnerId)
+                    episode.comebackPlacements[partnerId] = "WIN";
+            }
             const aliveAt = (index) => pairRanks[index]?.activeId || null;
             const pairCount = pairRanks.length;
-            const winnerIds = [partnerId, returneeId].filter(Boolean);
+            const winnerIds = isThailandJudging(season) ? [partnerId].filter(Boolean) : [partnerId, returneeId].filter(Boolean);
             let highIds = [];
             let lowIds = [];
             let bottomIds = [];
@@ -15358,7 +15786,9 @@
                 const sashayIds = [...new Set([...episode.eliminatedIds, ...pairedOutIds])];
                 lipSync.roundResultText = `${ampersandList(episode.savedIds, season, false)}, shantay you stay. ${ampersandList(sashayIds, season, false)}, sashay away...`;
             }
-            episode.resultText = `${displayName(season.contestants[returneeId])} has won their way back into the competition!`;
+            episode.resultText = isThailandJudging(season)
+                ? `${displayName(season.contestants[partnerId])} wins the makeover challenge. ${displayName(season.contestants[returneeId])} appeared as their makeover guest and remains out of the competition.`
+                : `${displayName(season.contestants[returneeId])} has won their way back into the competition!`;
             markComebackUsed(season);
             finalizeEpisode(season, episode);
             return;
@@ -16172,6 +16602,30 @@
         season.specialSlayOffsUsed = true;
         finalizeEpisode(season, episode);
     }
+
+    function simulateThailandReunionEpisode(season) {
+        if (season.thailandReunionUsed)
+            return;
+        const episode = createEpisodeShell(season, { type: "thailand_reunion", title: "Reunion", label: "Reunion", noMiniChallenge: true, noGuestJudge: true });
+        episode.challenge = null;
+        episode.runway = null;
+        episode.miniChallenge = null;
+        episode.miniWinnerIds = [];
+        episode.noImmunityAward = true;
+        episode.comebackParticipantIds = (season.eliminatedIds || []).slice();
+        episode.comebackPlacements = Object.fromEntries((season.eliminatedIds || []).map((id) => [id, "GUEST"]));
+        episode.safeIds = season.activeIds.slice();
+        episode.winnerIds = [];
+        episode.highIds = [];
+        episode.lowIds = [];
+        episode.bottomIds = [];
+        episode.eliminatedIds = [];
+        episode.savedIds = [];
+        episode.resultText = "The cast reunites before the Grand Finale. The finalists remain in the running while the eliminated contestants return as guests.";
+        season.thailandReunionUsed = true;
+        finalizeEpisode(season, episode);
+    }
+
     function simulateReunionLalaparuzaEpisode(season) {
         const eliminated = season.eliminatedIds.slice().filter((id) => season.contestants[id] && !season.activeIds.includes(id) && !isIneligibleUnplannedExit(season, id));
         if (season.specialReunionLalaparuzaUsed || eliminated.length < 2)
@@ -16873,7 +17327,9 @@
         if (season.config.specialFameGames)
             resolveFameGamesWinner(season, finale);
         finale.untuckedEvents = [];
-        if (season.config.finaleType === "lsftc" && season.activeIds.length >= 2)
+        if (season.config.finaleType === "thailand_finale")
+            simulateThailandFinale(season, finale);
+        else if (season.config.finaleType === "lsftc" && season.activeIds.length >= 2)
             simulateLSFTC(season, finale);
         else if (season.config.finaleType === "jury_finale")
             simulateJuryFinale(season, finale);
@@ -16915,6 +17371,35 @@
     function chooseCrownWinner(season, ids, lipSync) {
         return ids.map((id) => ({ id, score: crownDecisionScore(season, id, lipSync) })).sort((a, b) => b.score - a.score)[0]?.id || ids[0];
     }
+
+    function simulateThailandFinale(season, finale) {
+        const finalists = season.activeIds.slice();
+        finale.thailandFinale = true;
+        finale.top2Ids = [];
+        finale.eliminatedIds = [];
+        finale.lipSync = null;
+        finale.extraLipSyncs = [];
+        finale.thailandFinalePerformances = finalists.map((id) => {
+            const queen = season.contestants[id] || {};
+            const showcaseSkill = Number(queen.skills?.dance || 0) * 0.24
+                + Number(queen.skills?.acting || 0) * 0.20
+                + Number(queen.skills?.comedy || 0) * 0.16
+                + Number(queen.skills?.improv || 0) * 0.12
+                + Number(queen.skills?.lipsync || 0) * 0.28;
+            const showcaseScore = 48 + showcaseSkill * 4.1 + randInt(-5, 5);
+            const finalRunwayScore = 50 + Number(queen.skills?.runway || 0) * 4.2 + Number(queen.skills?.design || 0) * 0.8 + randInt(-4, 4);
+            const total = trackRecordPower(season, id) * 0.54
+                + showcaseScore * 0.24
+                + finalRunwayScore * 0.16
+                + Number(season.stats[id]?.popularity || 50) * 0.06;
+            return { id, style: randomItem(FINALE_PERFORMANCE_STYLES), showcaseScore, finalRunwayScore, total };
+        }).sort((a, b) => b.total - a.total);
+        finale.finalePerformances = finale.thailandFinalePerformances.map((entry) => ({ id: entry.id, style: entry.style }));
+        finale.winnerIds = [finale.thailandFinalePerformances[0]?.id || finalists[0]].filter(Boolean);
+        finale.runnerUpIds = finalists.filter((id) => !finale.winnerIds.includes(id));
+        finale.resultText = `${sentenceList(finalists, season, false)} present their individual finale showcases and final runway. After considering the finale and the full competition, ${sentenceList(finale.winnerIds, season, false)} wins Drag Race Thailand!`;
+    }
+
     function simulateRegularFinale(season, finale) {
         const ranked = season.activeIds.map((id) => ({ id, score: finaleScore(season, id) })).sort((a, b) => b.score - a.score);
         const doubleCrowning = ranked.length >= 2 && Math.abs(ranked[0].score - ranked[1].score) <= 2.5 && Math.random() < 0.03;
@@ -17891,6 +18376,17 @@
             }
             return;
         }
+        if (ep.type === "thailand_reunion") {
+            if (els.challengeSummary)
+                els.challengeSummary.innerHTML = episodeThemeCopy("Reunion", "The full cast reunites. The Top 3 is still in the running; eliminated contestants return as guests.", "", "thailand-reunion-copy");
+            if (els.challengeGrid) {
+                els.challengeGrid.innerHTML = `
+                    ${groupBlock("Still in the Running", ep.activeStartIds || [], state.season, { className: "placement-group thailand-reunion-running" })}
+                    ${groupBlock("Returning Guests", ep.comebackParticipantIds || [], state.season, { className: "placement-group thailand-reunion-guests" })}
+                `;
+            }
+            return;
+        }
         if (ep.type === "reunion_lalaparuza") {
             if (els.challengeSummary)
                 els.challengeSummary.innerHTML = episodeThemeCopy("Reunion LaLaPaRuZa", "The eliminated contestants return for a reunion lip sync smackdown to crown the Queen of She Done Already Done Had Herses.", "", "reunion-lalaparuza-intro-copy");
@@ -17931,6 +18427,18 @@
             return;
         }
         if (ep.type === "finale") {
+            if (ep.thailandFinale) {
+                if (els.challengeSummary)
+                    els.challengeSummary.innerHTML = episodeThemeCopy("Drag Race Thailand Grand Finale", "The Top 3 each presents an individual finale showcase, followed by a final runway. There is no Lip Sync for the Crown bracket.", "", "thailand-finale-copy");
+                if (els.challengeGrid) {
+                    const rows = ep.thailandFinalePerformances || [];
+                    els.challengeGrid.innerHTML = rows.map((perf) => groupBlock("", [perf.id], state.season, {
+                        className: "performance-band finale-performance-card thailand-finale-performance",
+                        subtitle: `${fullDisplayName(state.season.contestants[perf.id])} presents a finale showcase ${perf.style}, then walks the final runway.`
+                    })).join("");
+                }
+                return;
+            }
             if (isAllWinnersRegularFinale(ep)) {
                 if (els.challengeSummary)
                     els.challengeSummary.innerHTML = episodeThemeCopy("Top 3 Finale", "The three finalists advance directly to one final lip sync for the crown. There are no finale performances or lip sync brackets.", "", "no-finale-performance-copy");
@@ -17975,7 +18483,13 @@
                 performanceBandBlock(ep.maxiGroups?.great || [], "great", "challenge"),
                 performanceBandBlock(ep.maxiGroups?.good || [], "good", "challenge"),
                 performanceBandBlock(ep.maxiGroups?.bad || [], "bad", "challenge"),
-                performanceBandBlock(ep.maxiGroups?.flopped || [], "flopped", "challenge")
+                performanceBandBlock(ep.maxiGroups?.flopped || [], "flopped", "challenge"),
+                isThailandJudging(state.season) && (ep.maxiWinnerIds || []).length
+                    ? groupBlock("Maxi Challenge Winner", ep.maxiWinnerIds, state.season, {
+                        className: "placement-group token-win thailand-maxi-winner-card",
+                        subtitle: `${sentenceList(ep.maxiWinnerIds, state.season, false)} ${ep.maxiWinnerIds.length === 1 ? "wins" : "win"} the main challenge.`
+                    })
+                    : ""
             ].join("") : "";
         }
     }
@@ -17994,7 +18508,13 @@
                 performanceBandBlock(ep.runwayGroups?.great || [], "great", "runway"),
                 performanceBandBlock(ep.runwayGroups?.good || [], "good", "runway"),
                 performanceBandBlock(ep.runwayGroups?.bad || [], "bad", "runway"),
-                performanceBandBlock(ep.runwayGroups?.flopped || [], "flopped", "runway")
+                performanceBandBlock(ep.runwayGroups?.flopped || [], "flopped", "runway"),
+                isThailandJudging(state.season) && (ep.runwayWinnerIds || []).length
+                    ? groupBlock("Runway Challenge Winner", ep.runwayWinnerIds, state.season, {
+                        className: "placement-group token-win thailand-runway-winner-card",
+                        subtitle: `${sentenceList(ep.runwayWinnerIds, state.season, false)} ${ep.runwayWinnerIds.length === 1 ? "wins" : "win"} the runway challenge.`
+                    })
+                    : ""
             ].join("") : "";
         }
     }
@@ -18747,6 +19267,26 @@
             els.placementsGrid.innerHTML = renderComebackPlacements(ep);
             if (els.bottomTwoBox)
                 els.bottomTwoBox.innerHTML = "";
+            return;
+        }
+        if (isThailandJudging(state.season) && ep.type === "competitive" && ep.thailandJudging) {
+            const cards = [
+                groupBlock("Maxi Challenge Winner", ep.maxiWinnerIds || [], state.season, {
+                    className: "placement-group token-win thailand-maxi-winner-card",
+                    subtitle: `${sentenceList(ep.maxiWinnerIds || [], state.season, false)} ${ep.maxiWinnerIds?.length === 1 ? "wins" : "win"} the main challenge.`
+                }),
+                groupBlock("Runway Challenge Winner", ep.runwayWinnerIds || [], state.season, {
+                    className: "placement-group token-win thailand-runway-winner-card",
+                    subtitle: `${sentenceList(ep.runwayWinnerIds || [], state.season, false)} ${ep.runwayWinnerIds?.length === 1 ? "wins" : "win"} the runway challenge.`
+                }),
+                placementGroup("High", ep.highIds || [], "high"),
+                placementGroup("Safe", ep.safeIds || [], "safe"),
+                placementGroup("Low", ep.lowIds || [], "low"),
+                placementGroup("Bottom", ep.bottomIds || [], "bottom")
+            ];
+            els.placementsGrid.innerHTML = cards.filter(Boolean).join("") || `<span class="empty-state">No placements to display.</span>`;
+            if (els.bottomTwoBox)
+                els.bottomTwoBox.innerHTML = (ep.bottomIds || []).length ? `<p>${escapeHtml(`${sentenceList(ep.bottomIds || [], state.season, false)}, you must lip sync for your lives.`)}</p>` : "";
             return;
         }
         if (ep.specialPremiere === "late_entry") {
@@ -20110,7 +20650,7 @@
                 wildcard: false, status: true, comeback: false, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: false, luckycow: false, rumocracy: false, lipsync: false, qosdadhh: false, lsftc: false, winner: false, results: false, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
             });
         }
-        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
+        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "thailand_reunion", "fame_games"].includes(ep?.type)) {
             const displaysPlacements = ep?.type === "fame_games";
             Object.assign(visible, {
                 wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: displaysPlacements, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza" || !!ep.rupaulSpecialFlow, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
@@ -20292,7 +20832,7 @@
         visible.roscon = !!ep?.rosconDraw || !!(ep?.rosconPrizeAwards || []).length;
         visible.heartinheritance = !!(ep?.heartInheritanceEvents || []).length;
         visible.heartsuccessor = !!(ep?.heartSuccessorUses || []).length;
-        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "fame_games"].includes(ep?.type)) {
+        if (["special_lalaparuza", "special_non_elim_lalaparuza", "special_slayoffs", "reunion_lalaparuza", "thailand_reunion", "fame_games"].includes(ep?.type)) {
             const displaysPlacements = ep?.type === "fame_games";
             Object.assign(visible, {
                 wildcard: false, status: true, comeback: !!ep?.comeback, guest: false, mini: false, teams: false, famegames: false, maxi: true, runway: false, judging: false, ratequeen: false, goldenbeaver: false, placements: displaysPlacements, luckycow: false, rumocracy: false, lipsync: !!ep.lipSync || ep.type === "reunion_lalaparuza" || !!ep.rupaulSpecialFlow, qosdadhh: false, lsftc: false, winner: false, results: true, badonkadunktank: false, s17lsfyl: false, s17lsfylresults: false, untucked: false, pointceremony: false, trackrecord: true
@@ -20978,6 +21518,8 @@
         fameGames: "#c7ddb5"
     });
     function trackRecordFormatKey(season = state.season) {
+        if (isThailandJudging(season))
+            return "thailand";
         const format = String(season?.config?.eliminationFormat || "regular");
         if (format === "teams")
             return "team";
@@ -20993,7 +21535,7 @@
     }
     function trackRecordFormatClasses(season = state.season, legend = false) {
         const key = trackRecordFormatKey(season);
-        const configured = ["regular", "team", "legacy", "assassin"].includes(key);
+        const configured = ["regular", "team", "legacy", "assassin", "thailand"].includes(key);
         return `${legend ? "track-legend-format" : "track-format"}-${key}${configured ? ` ${legend ? "track-legend-palette-configured" : "track-palette-configured"}` : ""}`;
     }
     function normalizeHexColor(value) {
@@ -21072,7 +21614,33 @@
     function awardBackground(colors) {
         return mixTrackRecordColors(colors);
     }
+
+    function buildThailandFinaleTrackEntry(season, finale, id, finalists = [], runnerUpIds = []) {
+        const isWinner = (finale.winnerIds || []).includes(id);
+        const isRunnerUp = (runnerUpIds || []).includes(id);
+        const missCongeniality = (finale.missCongenialityIds || []).includes(id)
+            || (finale.awards?.mxCongeniality?.winnerIds || []).includes(id);
+        const token = isWinner ? "WINNER" : isRunnerUp ? "RU" : missCongeniality ? "MISS_CON" : "GUEST";
+        const display = isWinner ? "WINNER" : isRunnerUp ? "RUNNER<br/>UP" : missCongeniality ? "MISS<br/>CON" : "GUEST";
+        const variant = isWinner ? "thailand-winner" : isRunnerUp ? "thailand-runner-up" : missCongeniality ? "thailand-miss-con" : "thailand-guest";
+        const color = isWinner ? THAILAND_TRACK_COLORS.winner : isRunnerUp ? THAILAND_TRACK_COLORS.runnerUp : missCongeniality ? THAILAND_TRACK_COLORS.missCon : THAILAND_TRACK_COLORS.guest;
+        return {
+            label: "Finale",
+            token,
+            display,
+            extraClasses: ["thailand-track", variant],
+            thailandVariant: variant,
+            awardLabels: missCongeniality ? ["MISS CON"] : [],
+            awardKeys: missCongeniality ? ["mxCongeniality"] : [],
+            trackColor: color,
+            trackBackground: color,
+            trackTextColor: readableTextColorForBackground(color)
+        };
+    }
+
     function buildFinaleTrackEntry(season, finale, id, finalists = [], runnerUpIds = []) {
+        if (isThailandJudging(season))
+            return buildThailandFinaleTrackEntry(season, finale, id, finalists, runnerUpIds);
         const finalistSet = new Set(finalists || []);
         const isFinalist = finalistSet.has(id);
         const isWinner = (finale.winnerIds || []).includes(id);
@@ -21158,6 +21726,37 @@
         const format = trackRecordFormatKey(season);
         const token = String(entry?.token || "");
         const extra = new Set(entry?.extraClasses || []);
+        if (format === "thailand") {
+            const variant = String(entry?.thailandVariant || [...extra].find((name) => String(name).startsWith("thailand-")) || "");
+            const descriptions = {
+                "thailand-winner": "The contestant won Drag Race Thailand.",
+                "thailand-runner-up": "The contestant was a runner up.",
+                "thailand-run": "The contestant appeared on the Reunion episode and was still in the running.",
+                "thailand-miss-con": "The contestant was voted Miss Congeniality.",
+                "thailand-guest": "The contestant returned as a guest but was out of the running.",
+                "thailand-main-co-win": "The contestant was one of the main challenge winners.",
+                "thailand-double-win": "The contestant won the main challenge and the runway challenge.",
+                "thailand-main-win": "The contestant won the main challenge.",
+                "thailand-runway-co-win": "The contestant was one of the runway challenge winners.",
+                "thailand-runway-win": "The contestant won the runway challenge.",
+                "thailand-high": "The contestant was one of the best but did not win the main challenge.",
+                "thailand-safe": "The contestant was safe.",
+                "thailand-low": "The contestant was one of the worst but did not place in the bottom two.",
+                "thailand-btm2-save": "The contestant placed in the bottom two but neither one was eliminated.",
+                "thailand-btm2": "The contestant placed in the bottom two and won the lip-sync for your life.",
+                "thailand-elim": "The contestant placed in the bottom two, lost the lip-sync for your life and was eliminated.",
+                "thailand-double-elim": "The contestant placed in the bottom two and both were eliminated.",
+                "thailand-win-high": "The contestant won the main challenge, was one of the best in the runway challenge but was declared safe.",
+                "thailand-win-low": "The contestant won the main challenge, was one of the worst in the runway challenge but did not place in the bottom two.",
+                "thailand-win-btm2": "The contestant won the main challenge, but placed in the bottom and was not eliminated.",
+                "thailand-win-elim": "The contestant won the main challenge, but placed in the bottom and was eliminated.",
+                "thailand-return": "The contestant returned and continued in the competition.",
+                "thailand-makeover-guest": "The contestant was previously eliminated and their makeover partner won the challenge, and did not return to the competition.",
+                "thailand-disq": "This contestant was disqualified."
+            };
+            if (descriptions[variant])
+                return descriptions[variant];
+        }
         if (token === "WINNER")
             return "The contestant won the season.";
         if (token === "RU")
@@ -21283,7 +21882,13 @@
             "double-shantay", "lucky-cow-save", "badonka-save", "golden-beaver-save", "twist-gold-save",
             "double-elim", "team-partner-btm", "team-partner-elim", "finale-elim",
             "lsftc-lost-round-1", "lsftc-lost-round-2", "lsftc-lost-round-3", "award-mix", "award-mx-con", "award-gb",
-            "revenge-win-return", "revenge-top2-out"
+            "revenge-win-return", "revenge-top2-out",
+            "thailand-track", "thailand-winner", "thailand-runner-up", "thailand-run", "thailand-miss-con",
+            "thailand-guest", "thailand-main-co-win", "thailand-double-win", "thailand-main-win",
+            "thailand-runway-co-win", "thailand-runway-win", "thailand-high", "thailand-safe", "thailand-low",
+            "thailand-btm2-save", "thailand-btm2", "thailand-elim", "thailand-double-elim",
+            "thailand-win-high", "thailand-win-low", "thailand-win-btm2", "thailand-win-elim",
+            "thailand-return", "thailand-makeover-guest", "thailand-disq"
         ]);
         const seen = new Set();
         const items = [];
@@ -24772,13 +25377,37 @@
         fillUniverseFranchiseSelect(historySelect, "All Franchises", historyValue);
     }
     function dataUrlToBlob(dataUrl) {
-        const [header, body] = String(dataUrl || "").split(",", 2);
-        const mime = header?.match(/^data:([^;]+)/i)?.[1] || "application/octet-stream";
-        const binary = atob(body || "");
-        const bytes = new Uint8Array(binary.length);
-        for (let index = 0; index < binary.length; index += 1)
-            bytes[index] = binary.charCodeAt(index);
-        return new Blob([bytes], { type: mime });
+        const value = String(dataUrl || "").trim();
+        const commaIndex = value.indexOf(",");
+        if (!/^data:/i.test(value) || commaIndex < 0)
+            throw new Error("The embedded image data is invalid.");
+        const header = value.slice(0, commaIndex);
+        const body = value.slice(commaIndex + 1);
+        const mime = header.match(/^data:([^;,]+)/i)?.[1] || "application/octet-stream";
+        if (/;base64(?:;|$)/i.test(header)) {
+            const compactBody = body.replace(/\s+/g, "");
+            let binary;
+            try {
+                binary = atob(compactBody);
+            }
+            catch (error) {
+                const wrapped = new Error("The embedded Base64 image data is invalid.");
+                wrapped.cause = error;
+                throw wrapped;
+            }
+            const bytes = new Uint8Array(binary.length);
+            for (let index = 0; index < binary.length; index += 1)
+                bytes[index] = binary.charCodeAt(index);
+            return new Blob([bytes], { type: mime });
+        }
+        let decodedBody = body;
+        try {
+            decodedBody = decodeURIComponent(body);
+        }
+        catch (error) {
+            console.warn("Embedded image data was not percent-encoded cleanly; preserving it as text.", error);
+        }
+        return new Blob([decodedBody], { type: mime });
     }
     function blobToDataUrl(blob) {
         return new Promise((resolve, reject) => {
@@ -24819,8 +25448,21 @@
         const existing = (universeCache.assets || []).find((asset) => asset.kind === "contestant_image" && asset.ownerId === contestantId);
         const existingId = String(item?.universeImageAssetId || existing?.id || "");
         const source = String(item?.exportImage || item?.image || "").trim();
-        if (isEmbeddedCustomImage(source))
-            return saveUniverseAssetBlob(dataUrlToBlob(source), "contestant_image", contestantId, existingId);
+        // PLACEHOLDER is a percent-encoded SVG data URL, not a contestant image
+        // that needs its own archived asset.
+        if (!source || source === PLACEHOLDER)
+            return existingId;
+        if (isEmbeddedCustomImage(source)) {
+            try {
+                return await saveUniverseAssetBlob(dataUrlToBlob(source), "contestant_image", contestantId, existingId);
+            }
+            catch (error) {
+                // A single malformed embedded image should never prevent the entire
+                // season from being saved. Keep any previously archived asset instead.
+                console.warn(`Could not archive image for contestant ${contestantId}; continuing without replacing it.`, error);
+                return existingId;
+            }
+        }
         return existingId;
     }
     async function universeContestantSnapshot(item) {
@@ -25288,15 +25930,41 @@
         const winners = (season?.winnerIds?.length ? season.winnerIds : [season?.winnerId].filter(Boolean)).filter((id) => cast.includes(id));
         const runners = (season?.runnerUpIds || []).filter((id) => cast.includes(id) && !winners.includes(id));
         const used = new Set([...winners, ...runners]);
+        const episodes = Array.isArray(season?.episodes) ? season.episodes : [];
+        const episodeIndexByLabel = new Map();
+        episodes.forEach((episode, index) => {
+            [episode?.label, episode?.title].filter(Boolean).forEach((label) => {
+                episodeIndexByLabel.set(String(label), index);
+            });
+        });
         const exitIndex = (id) => {
-            const track = season?.stats?.[id]?.track || [];
             let best = -1;
-            track.forEach((entry, index) => {
-                const token = String(entry?.token || "").toUpperCase();
-                if (/(ELIM|QUIT|DEPT|DISQ|PCHOP)/.test(token))
+            // Use the real season timeline, not the contestant's compressed track-array
+            // position. A returning contestant can have gaps while eliminated, so a later
+            // second elimination must outrank their earlier one.
+            episodes.forEach((episode, index) => {
+                const wasEliminated = (episode?.eliminatedIds || []).includes(id);
+                const wasUnplannedExit = episode?.unplannedExit?.id === id && /^(?:QUIT|BTM2_QUIT|WIN_QUIT|DEPT|DISQ)$/i.test(String(episode.unplannedExit.token || ""));
+                const wasPorkchopped = episode?.porkchopPremiere?.choppedId === id;
+                if (wasEliminated || wasUnplannedExit || wasPorkchopped)
                     best = Math.max(best, index);
             });
-            return best;
+            // Track tokens are a fallback for older/special snapshots where an exit may
+            // not be mirrored in episode.eliminatedIds. Resolve their label against the
+            // global episode timeline instead of using the track entry's local index.
+            let fallbackTrackIndex = -1;
+            const track = season?.stats?.[id]?.track || [];
+            track.forEach((entry, index) => {
+                const token = String(entry?.token || "").toUpperCase();
+                if (!/(ELIM|QUIT|DEPT|DISQ|PCHOP)/.test(token))
+                    return;
+                const timelineIndex = episodeIndexByLabel.get(String(entry?.label || ""));
+                if (Number.isInteger(timelineIndex))
+                    best = Math.max(best, timelineIndex);
+                else
+                    fallbackTrackIndex = Math.max(fallbackTrackIndex, index);
+            });
+            return best >= 0 ? best : fallbackTrackIndex;
         };
         const rest = cast.filter((id) => !used.has(id)).sort((a, b) => exitIndex(b) - exitIndex(a) || cast.indexOf(a) - cast.indexOf(b));
         return [...winners, ...runners, ...rest];
@@ -25840,7 +26508,7 @@
         });
     }
     function bindEvents() {
-        [els.seasonName, els.modeSelect, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.twistGoldenBaguette, els.specialLalaparuzaSmackdown, els.specialNonElimLalaparuza, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.awardMxCongeniality, els.awardGoldenBoot, els.awardLostLook, els.awardDragPopStar, els.awardMxMakeup, els.awardMxStarving, els.awardMxBitch, els.forceSlayersEpisode, els.forceFlopsEpisode, els.forceDoubleShantay, els.forceDoubleSashay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
+        [els.seasonName, els.modeSelect, els.judgingFormatSelect, els.eliminationFormatSelect, els.premiereTypeSelect, els.finaleTypeSelect, els.comebackFormatSelect, els.castSize, els.finalistSize, els.tournamentBracketCount, els.tournamentAdvancers, els.tournamentBracketEpisodes, els.tournamentMergeEpisodes, els.tournamentPreMergeWildcard, els.tournamentPreFinaleWildcard, els.twistImmunity, els.twistChocolateRandom, els.twistChocolateChoosable, els.twistLuckyCow, els.twistBadonkaDunkTank, els.twistRosconReinas, els.twistHeartSuccessor, els.twistGoldenBaguette, els.specialLalaparuzaSmackdown, els.specialNonElimLalaparuza, els.specialSlayOffs, els.specialReunionLalaparuza, els.specialMidSeasonRateAQueen, els.specialFameGames, els.thailandReunion, els.awardMxCongeniality, els.awardGoldenBoot, els.awardLostLook, els.awardDragPopStar, els.awardMxMakeup, els.awardMxStarving, els.awardMxBitch, els.forceSlayersEpisode, els.forceFlopsEpisode, els.forceDoubleShantay, els.forceDoubleSashay, els.disableChallengeRiggory, els.disableLipSyncRiggory, els.disableDoubleShantaysSashays, els.disableNonElimination].forEach((el) => el?.addEventListener("input", (event) => { enforceExclusiveSetupControls(event.target); readConfigFromInputs(); renderSelected(); }));
         els.searchFilter?.addEventListener("input", applyGlobalFilters);
         document.getElementById("resetSetupBtn")?.addEventListener("click", resetSetupConfigToDefaults);
         document.getElementById("toCastBtn")?.addEventListener("click", () => {
