@@ -3358,7 +3358,19 @@ dialog::backdrop { background: rgba(42, 48, 40, .52); backdrop-filter: blur(4px)
 .challenge-automatic-loser-card .challenge-participant img { filter: grayscale(1) brightness(.78); }
 .challenge-automatic-loser-card h3 { margin: 0; font-family: var(--font-display); font-size: 29px; font-weight: 400; }
 .challenge-automatic-loser-card span { color: #8c3c35; font-size: 13px; font-weight: 900; }
-.challenge-team-board.has-showdown-results { align-items: stretch; gap: 13px; flex-wrap: wrap; }
+/* When a challenge produces two result cards (for example, a winner plus a
+   challenge elimination), stack them vertically so neither card is squeezed. */
+.challenge-team-board.has-showdown-results {
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+}
+.challenge-team-board.has-showdown-results .challenge-individual-winner-card,
+.challenge-team-board.has-showdown-results .challenge-automatic-loser-card {
+  width: min(520px, 100%);
+  margin-inline: auto;
+}
 
 @media (max-width: 720px) {
   .finale-introduction-card { grid-template-columns: 1fr; text-align: center; }
@@ -6067,4 +6079,67 @@ img {
   user-drag: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+
+/* Mobile safeguard: when Challenge Result has two special result cards
+   (for example an immunity winner plus a challenge elimination), force the
+   cards to stack vertically so they never get cut off side-by-side. */
+.challenge-team-board.has-dual-result-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 18px;
+  flex-wrap: nowrap;
+}
+.challenge-team-board.has-dual-result-cards .challenge-individual-winner-card,
+.challenge-team-board.has-dual-result-cards .challenge-automatic-loser-card {
+  width: min(520px, 100%);
+  margin-inline: auto;
+}
+
+@media (max-width: 560px) {
+  .challenge-team-board.has-dual-result-cards .challenge-individual-winner-card,
+  .challenge-team-board.has-dual-result-cards .challenge-automatic-loser-card {
+    width: 100%;
+  }
+}
+
+
+/* If the Challenge Result area contains a winner card plus a second result box
+   (for example a challenge elimination card), stack them vertically without
+   stretching the normal winner card. */
+.challenge-team-board.has-stacked-results {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 18px !important;
+  flex-wrap: nowrap !important;
+}
+
+.challenge-team-board.has-stacked-results .challenge-team-card.is-winner {
+  width: min(460px, 100%) !important;
+  margin-inline: auto;
+}
+
+.challenge-team-board.has-stacked-results .challenge-individual-winner-card {
+  width: min(520px, 100%) !important;
+  margin-inline: auto;
+}
+
+.challenge-team-board.has-stacked-results .challenge-automatic-loser-card {
+  width: min(460px, 100%) !important;
+  margin-inline: auto;
+}
+
+.challenge-team-board.has-stacked-results .special-outcome-stack {
+  width: min(460px, 100%);
+  margin: 0 auto;
+}
+
+.challenge-team-board.has-stacked-results .special-outcome-card {
+  width: 100%;
+  max-width: 100%;
 }
