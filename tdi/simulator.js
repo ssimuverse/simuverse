@@ -14150,13 +14150,13 @@
     if (!columns.length || !rowIds.length) throw new Error('There is no voting history to render.');
 
     const metrics = {
-      contestantWidth: 142,
+      contestantWidth: 188,
       voteWidth: 82,
       phaseHeight: 32,
       episodeHeight: 31,
-      outcomeHeight: 68,
+      outcomeHeight: 78,
       stageHeight: 48,
-      rowHeight: 72
+      rowHeight: 56
     };
     const headerHeight = metrics.phaseHeight + metrics.episodeHeight + metrics.outcomeHeight + metrics.stageHeight;
     const width = metrics.contestantWidth + columns.length * metrics.voteWidth;
@@ -14234,17 +14234,34 @@
         ? outcomeIds.map(contestantDisplayName)
         : [column.outcomeLabel || '—'];
       if (includePhotos && outcomeIds.some(id => portraits.has(id))) {
-        const imageSize = outcomeIds.length > 1 ? 29 : 36;
-        const portraitGap = 3;
-        const portraitWidth = outcomeIds.length * imageSize + Math.max(0, outcomeIds.length - 1) * portraitGap;
-        const groupWidth = Math.min(cellWidth - 10, portraitWidth + 7 + 96);
-        const groupX = x + Math.max(5, (cellWidth - groupWidth) / 2);
+        // Export header: each eliminated contestant is a compact vertical card
+        // with their portrait first and their name directly underneath.
+        const cardCount = Math.max(1, outcomeIds.length);
+        const cardWidth = cellWidth / cardCount;
+        const imageSize = cardCount > 1 ? 30 : 36;
+        const imageY = outcomeY + 7;
+        const nameY = imageY + imageSize + 3;
+        const nameHeight = Math.max(18, metrics.outcomeHeight - (nameY - outcomeY) - 4);
+
         outcomeIds.forEach((id, portraitIndex) => {
+          const cardX = x + portraitIndex * cardWidth;
           const image = portraits.get(id);
-          if (image) drawCanvasPortrait(context, image, groupX + portraitIndex * (imageSize + portraitGap), outcomeY + (metrics.outcomeHeight - imageSize) / 2, imageSize, 8);
-        });
-        drawCanvasText(context, outcomeNames.join('\n'), groupX + portraitWidth + 4, outcomeY + 7, groupWidth - portraitWidth - 4, metrics.outcomeHeight - 14, {
-          fontSize: 9, weight: 900, color: '#17292f', align: 'left', paddingLeft: 3, maxLines: 2
+          if (image) {
+            drawCanvasPortrait(
+              context,
+              image,
+              cardX + (cardWidth - imageSize) / 2,
+              imageY,
+              imageSize,
+              8
+            );
+          }
+          drawCanvasText(context, outcomeNames[portraitIndex] || '—', cardX + 2, nameY, cardWidth - 4, nameHeight, {
+            fontSize: cardCount > 1 ? 8 : 9,
+            weight: 900,
+            color: '#17292f',
+            maxLines: 2
+          });
         });
       } else {
         drawCanvasText(context, outcomeNames.join('\n'), x, outcomeY, cellWidth, metrics.outcomeHeight, {
@@ -14267,35 +14284,39 @@
       const y = headerHeight + rowIndex * metrics.rowHeight;
       drawExportCell(context, 0, y, metrics.contestantWidth, metrics.rowHeight, '#fffaf0');
 
+      // Export voter column: portrait -> team history markers -> name, all in one row.
       const hasPortrait = includePhotos && portraits.has(id);
       const portraitSize = 34;
+      const contentY = y + metrics.rowHeight / 2;
+      let contentX = 8;
+
       if (hasPortrait) {
         drawCanvasPortrait(
           context,
           portraits.get(id),
-          (metrics.contestantWidth - portraitSize) / 2,
-          y + 5,
+          contentX,
+          y + (metrics.rowHeight - portraitSize) / 2,
           portraitSize,
           8
         );
+        contentX += portraitSize + 8;
       }
-
-      const nameY = hasPortrait ? y + 40 : y + 17;
-      drawCanvasText(context, contestantDisplayName(id), 4, nameY, metrics.contestantWidth - 8, 20, {
-        fontSize: 10, weight: 900, color: '#17292f', wrap: false
-      });
 
       const histories = contestantTeamHistory(id).slice(0, 4);
       if (histories.length) {
         const markerStep = 9;
         const markerWidth = (histories.length - 1) * markerStep + 7;
-        let markerX = (metrics.contestantWidth - markerWidth) / 2;
-        const markerY = y + metrics.rowHeight - 7;
+        let markerX = contentX;
         histories.forEach(teamName => {
-          drawVotingTeamMarker(context, markerX, markerY, teamOption(teamName)?.color || '#94522f');
+          drawVotingTeamMarker(context, markerX, contentY, teamOption(teamName)?.color || '#94522f');
           markerX += markerStep;
         });
+        contentX += markerWidth + 8;
       }
+
+      drawCanvasText(context, contestantDisplayName(id), contentX, y, metrics.contestantWidth - contentX - 6, metrics.rowHeight, {
+        fontSize: 10, weight: 900, color: '#17292f', align: 'left', paddingLeft: 0, wrap: false
+      });
 
       let columnIndex = 0;
       while (columnIndex < columns.length) {
