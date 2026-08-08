@@ -282,10 +282,10 @@ h1 {
 
 .shows-grid {
   width: 100%;
-  max-width: 620px;
+  max-width: 900px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(2, minmax(240px, 280px));
+  grid-template-columns: repeat(3, minmax(240px, 280px));
   gap: 16px;
   justify-content: center;
   align-items: stretch;
