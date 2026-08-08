@@ -10640,7 +10640,7 @@ window.CAST = [
     nickname: "Alejandro",
     fullName: "Alejandro",
     gender: "male",
-    image: "cast/alejandro_tdi.png",
+    image: "cast/alejandro_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10654,7 +10654,7 @@ window.CAST = [
     nickname: "Amy",
     fullName: "Amy",
     gender: "female",
-    image: "cast/amy_tdi.png",
+    image: "cast/amy_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10668,7 +10668,7 @@ window.CAST = [
     nickname: "Anne Maria",
     fullName: "Anne Maria",
     gender: "female",
-    image: "cast/anne_maria_tdi.png",
+    image: "cast/anne_maria_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10682,7 +10682,7 @@ window.CAST = [
     nickname: "Axel",
     fullName: "Axel",
     gender: "female",
-    image: "cast/axel_tdi.png",
+    image: "cast/axel_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10696,7 +10696,7 @@ window.CAST = [
     nickname: "B",
     fullName: "B",
     gender: "male",
-    image: "cast/b_tdi.png",
+    image: "cast/b_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10710,7 +10710,7 @@ window.CAST = [
     nickname: "Beardo",
     fullName: "Beardo",
     gender: "male",
-    image: "cast/beardo_tdi.png",
+    image: "cast/beardo_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10724,7 +10724,7 @@ window.CAST = [
     nickname: "Beth",
     fullName: "Beth",
     gender: "female",
-    image: "cast/beth_tdi.png",
+    image: "cast/beth_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10738,7 +10738,7 @@ window.CAST = [
     nickname: "Blaineley",
     fullName: "Blaineley",
     gender: "female",
-    image: "cast/blaineley_tdi.png",
+    image: "cast/blaineley_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10752,7 +10752,7 @@ window.CAST = [
     nickname: "Bowie",
     fullName: "Bowie",
     gender: "male",
-    image: "cast/bowie_tdi.png",
+    image: "cast/bowie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10766,7 +10766,7 @@ window.CAST = [
     nickname: "Brick",
     fullName: "Brick",
     gender: "male",
-    image: "cast/brick_tdi.png",
+    image: "cast/brick_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10780,7 +10780,7 @@ window.CAST = [
     nickname: "Bridgette",
     fullName: "Bridgette",
     gender: "female",
-    image: "cast/bridgette_tdi.png",
+    image: "cast/bridgette_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10794,7 +10794,7 @@ window.CAST = [
     nickname: "Brody",
     fullName: "Brody",
     gender: "male",
-    image: "cast/brody_tdi.png",
+    image: "cast/brody_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10808,7 +10808,7 @@ window.CAST = [
     nickname: "Caleb",
     fullName: "Caleb",
     gender: "male",
-    image: "cast/caleb_tdi.png",
+    image: "cast/caleb_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10822,7 +10822,7 @@ window.CAST = [
     nickname: "Cameron",
     fullName: "Cameron",
     gender: "male",
-    image: "cast/cameron_tdi.png",
+    image: "cast/cameron_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10836,7 +10836,7 @@ window.CAST = [
     nickname: "Carrie",
     fullName: "Carrie",
     gender: "female",
-    image: "cast/carrie_tdi.png",
+    image: "cast/carrie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10850,7 +10850,7 @@ window.CAST = [
     nickname: "Chase",
     fullName: "Chase",
     gender: "male",
-    image: "cast/chase_tdi.png",
+    image: "cast/chase_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10864,7 +10864,7 @@ window.CAST = [
     nickname: "Chet",
     fullName: "Chet",
     gender: "male",
-    image: "cast/chet_tdi.png",
+    image: "cast/chet_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10878,7 +10878,7 @@ window.CAST = [
     nickname: "Cody",
     fullName: "Cody",
     gender: "male",
-    image: "cast/cody_tdi.png",
+    image: "cast/cody_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10892,7 +10892,7 @@ window.CAST = [
     nickname: "Courtney",
     fullName: "Courtney",
     gender: "female",
-    image: "cast/courtney_tdi.png",
+    image: "cast/courtney_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10906,7 +10906,7 @@ window.CAST = [
     nickname: "Crimson",
     fullName: "Crimson",
     gender: "female",
-    image: "cast/crimson_tdi.png",
+    image: "cast/crimson_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10920,7 +10920,7 @@ window.CAST = [
     nickname: "Dakota",
     fullName: "Dakota",
     gender: "female",
-    image: "cast/dakota_tdi.png",
+    image: "cast/dakota_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10934,7 +10934,7 @@ window.CAST = [
     nickname: "Damien",
     fullName: "Damien",
     gender: "male",
-    image: "cast/damien_tdi.png",
+    image: "cast/damien_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10948,7 +10948,7 @@ window.CAST = [
     nickname: "Dave",
     fullName: "Dave",
     gender: "male",
-    image: "cast/dave_tdi.png",
+    image: "cast/dave_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10962,7 +10962,7 @@ window.CAST = [
     nickname: "Dawn",
     fullName: "Dawn",
     gender: "female",
-    image: "cast/dawn_tdi.png",
+    image: "cast/dawn_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10976,7 +10976,7 @@ window.CAST = [
     nickname: "Devin",
     fullName: "Devin",
     gender: "male",
-    image: "cast/devin_tdi.png",
+    image: "cast/devin_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -10990,7 +10990,7 @@ window.CAST = [
     nickname: "DJ",
     fullName: "DJ",
     gender: "male",
-    image: "cast/dj_tdi.png",
+    image: "cast/dj_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11004,7 +11004,7 @@ window.CAST = [
     nickname: "Duncan",
     fullName: "Duncan",
     gender: "male",
-    image: "cast/duncan_tdi.png",
+    image: "cast/duncan_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11018,7 +11018,7 @@ window.CAST = [
     nickname: "Dwayne",
     fullName: "Dwayne",
     gender: "male",
-    image: "cast/dwayne_tdi.png",
+    image: "cast/dwayne_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11032,7 +11032,7 @@ window.CAST = [
     nickname: "Ella",
     fullName: "Ella",
     gender: "female",
-    image: "cast/ella_tdi.png",
+    image: "cast/ella_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11046,7 +11046,7 @@ window.CAST = [
     nickname: "Ellody",
     fullName: "Ellody",
     gender: "female",
-    image: "cast/ellody_tdi.png",
+    image: "cast/ellody_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11060,7 +11060,7 @@ window.CAST = [
     nickname: "Emma",
     fullName: "Emma",
     gender: "female",
-    image: "cast/emma_rr_tdi.png",
+    image: "cast/emma_rr_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11074,7 +11074,7 @@ window.CAST = [
     nickname: "Emma",
     fullName: "Emma",
     gender: "female",
-    image: "cast/emma_tdi.png",
+    image: "cast/emma_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11088,7 +11088,7 @@ window.CAST = [
     nickname: "Ennui",
     fullName: "Ennui",
     gender: "male",
-    image: "cast/ennui_tdi.png",
+    image: "cast/ennui_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11102,7 +11102,7 @@ window.CAST = [
     nickname: "Eva",
     fullName: "Eva",
     gender: "female",
-    image: "cast/eva_tdi.png",
+    image: "cast/eva_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11116,7 +11116,7 @@ window.CAST = [
     nickname: "Ezekiel",
     fullName: "Ezekiel",
     gender: "male",
-    image: "cast/ezekiel_tdi.png",
+    image: "cast/ezekiel_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11130,7 +11130,7 @@ window.CAST = [
     nickname: "Geoff",
     fullName: "Geoff",
     gender: "male",
-    image: "cast/geoff_tdi.png",
+    image: "cast/geoff_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11144,7 +11144,7 @@ window.CAST = [
     nickname: "Gerry",
     fullName: "Gerry",
     gender: "male",
-    image: "cast/gerry_tdi.png",
+    image: "cast/gerry_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11158,7 +11158,7 @@ window.CAST = [
     nickname: "Gwen",
     fullName: "Gwen",
     gender: "female",
-    image: "cast/gwen_tdi.png",
+    image: "cast/gwen_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11172,7 +11172,7 @@ window.CAST = [
     nickname: "Harold",
     fullName: "Harold",
     gender: "male",
-    image: "cast/harold_tdi.png",
+    image: "cast/harold_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11186,7 +11186,7 @@ window.CAST = [
     nickname: "Heather",
     fullName: "Heather",
     gender: "female",
-    image: "cast/heather_tdi.png",
+    image: "cast/heather_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11200,7 +11200,7 @@ window.CAST = [
     nickname: "Izzy",
     fullName: "Izzy",
     gender: "female",
-    image: "cast/izzy_tdi.png",
+    image: "cast/izzy_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11214,7 +11214,7 @@ window.CAST = [
     nickname: "Jacques",
     fullName: "Jacques",
     gender: "male",
-    image: "cast/jacques_tdi.png",
+    image: "cast/jacques_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11228,7 +11228,7 @@ window.CAST = [
     nickname: "Jasmine",
     fullName: "Jasmine",
     gender: "female",
-    image: "cast/jasmine_tdi.png",
+    image: "cast/jasmine_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11242,7 +11242,7 @@ window.CAST = [
     nickname: "Jay",
     fullName: "Jay",
     gender: "male",
-    image: "cast/jay_tdi.png",
+    image: "cast/jay_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11256,7 +11256,7 @@ window.CAST = [
     nickname: "Jen",
     fullName: "Jen",
     gender: "female",
-    image: "cast/jen_tdi.png",
+    image: "cast/jen_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11270,7 +11270,7 @@ window.CAST = [
     nickname: "Jo",
     fullName: "Jo",
     gender: "female",
-    image: "cast/jo_tdi.png",
+    image: "cast/jo_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11284,7 +11284,7 @@ window.CAST = [
     nickname: "Josee",
     fullName: "Josee",
     gender: "female",
-    image: "cast/josee_tdi.png",
+    image: "cast/josee_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11298,7 +11298,7 @@ window.CAST = [
     nickname: "Julia",
     fullName: "Julia",
     gender: "female",
-    image: "cast/julia_tdi.png",
+    image: "cast/julia_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11312,7 +11312,7 @@ window.CAST = [
     nickname: "Junior",
     fullName: "Junior",
     gender: "male",
-    image: "cast/junior_tdi.png",
+    image: "cast/junior_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11326,7 +11326,7 @@ window.CAST = [
     nickname: "Justin",
     fullName: "Justin",
     gender: "male",
-    image: "cast/justin_tdi.png",
+    image: "cast/justin_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11340,7 +11340,7 @@ window.CAST = [
     nickname: "Katie",
     fullName: "Katie",
     gender: "female",
-    image: "cast/katie_tdi.png",
+    image: "cast/katie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11354,7 +11354,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly",
     gender: "female",
-    image: "cast/kelly_tdi.png",
+    image: "cast/kelly_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11368,7 +11368,7 @@ window.CAST = [
     nickname: "Kitty",
     fullName: "Kitty",
     gender: "female",
-    image: "cast/kitty_tdi.png",
+    image: "cast/kitty_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11382,7 +11382,7 @@ window.CAST = [
     nickname: "Laurie",
     fullName: "Laurie",
     gender: "female",
-    image: "cast/laurie_tdi.png",
+    image: "cast/laurie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11396,7 +11396,7 @@ window.CAST = [
     nickname: "Scary Girl",
     fullName: "Scary Girl",
     gender: "female",
-    image: "cast/scary_girl_tdi.png",
+    image: "cast/scary_girl_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11410,7 +11410,7 @@ window.CAST = [
     nickname: "Leonard",
     fullName: "Leonard",
     gender: "male",
-    image: "cast/leonard_tdi.png",
+    image: "cast/leonard_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11424,7 +11424,7 @@ window.CAST = [
     nickname: "Leshawna",
     fullName: "Leshawna",
     gender: "female",
-    image: "cast/leshawna_tdi.png",
+    image: "cast/leshawna_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11438,7 +11438,7 @@ window.CAST = [
     nickname: "Lightning",
     fullName: "Lightning",
     gender: "male",
-    image: "cast/lightning_tdi.png",
+    image: "cast/lightning_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11452,7 +11452,7 @@ window.CAST = [
     nickname: "Lindsay",
     fullName: "Lindsay",
     gender: "female",
-    image: "cast/lindsay_tdi.png",
+    image: "cast/lindsay_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11466,7 +11466,7 @@ window.CAST = [
     nickname: "Lorenzo",
     fullName: "Lorenzo",
     gender: "male",
-    image: "cast/lorenzo_tdi.png",
+    image: "cast/lorenzo_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11480,7 +11480,7 @@ window.CAST = [
     nickname: "MacArthur",
     fullName: "MacArthur",
     gender: "female",
-    image: "cast/macarthur_tdi.png",
+    image: "cast/macarthur_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11494,7 +11494,7 @@ window.CAST = [
     nickname: "Mary",
     fullName: "Mary",
     gender: "female",
-    image: "cast/mary_tdi.png",
+    image: "cast/mary_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11508,7 +11508,7 @@ window.CAST = [
     nickname: "Max",
     fullName: "Max",
     gender: "male",
-    image: "cast/max_tdi.png",
+    image: "cast/max_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11522,7 +11522,7 @@ window.CAST = [
     nickname: "Mickey",
     fullName: "Mickey",
     gender: "male",
-    image: "cast/mickey_tdi.png",
+    image: "cast/mickey_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11536,7 +11536,7 @@ window.CAST = [
     nickname: "Miles",
     fullName: "Miles",
     gender: "female",
-    image: "cast/miles_tdi.png",
+    image: "cast/miles_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11550,7 +11550,7 @@ window.CAST = [
     nickname: "Millie",
     fullName: "Millie",
     gender: "female",
-    image: "cast/millie_tdi.png",
+    image: "cast/millie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11564,7 +11564,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike",
     gender: "male",
-    image: "cast/mike_tdi.png",
+    image: "cast/mike_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11578,7 +11578,7 @@ window.CAST = [
     nickname: "MK",
     fullName: "MK",
     gender: "female",
-    image: "cast/mk_tdi.png",
+    image: "cast/mk_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11592,7 +11592,7 @@ window.CAST = [
     nickname: "Nichelle",
     fullName: "Nichelle",
     gender: "female",
-    image: "cast/nichelle_tdi.png",
+    image: "cast/nichelle_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11606,7 +11606,7 @@ window.CAST = [
     nickname: "Noah",
     fullName: "Noah",
     gender: "male",
-    image: "cast/noah_tdi.png",
+    image: "cast/noah_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11620,7 +11620,7 @@ window.CAST = [
     nickname: "Owen",
     fullName: "Owen",
     gender: "male",
-    image: "cast/owen_tdi.png",
+    image: "cast/owen_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11634,7 +11634,7 @@ window.CAST = [
     nickname: "Pete",
     fullName: "Pete",
     gender: "male",
-    image: "cast/pete_tdi.png",
+    image: "cast/pete_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11648,7 +11648,7 @@ window.CAST = [
     nickname: "Priya",
     fullName: "Priya",
     gender: "female",
-    image: "cast/priya_tdi.png",
+    image: "cast/priya_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11662,7 +11662,7 @@ window.CAST = [
     nickname: "Raj",
     fullName: "Raj",
     gender: "male",
-    image: "cast/raj_tdi.png",
+    image: "cast/raj_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11676,7 +11676,7 @@ window.CAST = [
     nickname: "Ripper",
     fullName: "Ripper",
     gender: "male",
-    image: "cast/ripper_tdi.png",
+    image: "cast/ripper_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11690,7 +11690,7 @@ window.CAST = [
     nickname: "Rock",
     fullName: "Rock",
     gender: "male",
-    image: "cast/rock_tdi.png",
+    image: "cast/rock_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11704,7 +11704,7 @@ window.CAST = [
     nickname: "Rodney",
     fullName: "Rodney",
     gender: "male",
-    image: "cast/rodney_tdi.png",
+    image: "cast/rodney_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11718,7 +11718,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan",
     gender: "male",
-    image: "cast/ryan_tdi.png",
+    image: "cast/ryan_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11732,7 +11732,7 @@ window.CAST = [
     nickname: "Sadie",
     fullName: "Sadie",
     gender: "female",
-    image: "cast/sadie_tdi.png",
+    image: "cast/sadie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11746,7 +11746,7 @@ window.CAST = [
     nickname: "Sam",
     fullName: "Sam",
     gender: "male",
-    image: "cast/sam_tdi.png",
+    image: "cast/sam_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11760,7 +11760,7 @@ window.CAST = [
     nickname: "Samey",
     fullName: "Samey",
     gender: "female",
-    image: "cast/samey_tdi.png",
+    image: "cast/samey_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11774,7 +11774,7 @@ window.CAST = [
     nickname: "Sanders",
     fullName: "Sanders",
     gender: "female",
-    image: "cast/sanders_tdi.png",
+    image: "cast/sanders_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11788,7 +11788,7 @@ window.CAST = [
     nickname: "Scarlett",
     fullName: "Scarlett",
     gender: "female",
-    image: "cast/scarlett_tdi.png",
+    image: "cast/scarlett_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11802,7 +11802,7 @@ window.CAST = [
     nickname: "Scott",
     fullName: "Scott",
     gender: "male",
-    image: "cast/scott_tdi.png",
+    image: "cast/scott_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11816,7 +11816,7 @@ window.CAST = [
     nickname: "Shawn",
     fullName: "Shawn",
     gender: "male",
-    image: "cast/shawn_tdi.png",
+    image: "cast/shawn_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11830,7 +11830,7 @@ window.CAST = [
     nickname: "Sierra",
     fullName: "Sierra",
     gender: "female",
-    image: "cast/sierra_tdi.png",
+    image: "cast/sierra_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11844,7 +11844,7 @@ window.CAST = [
     nickname: "Sky",
     fullName: "Sky",
     gender: "female",
-    image: "cast/sky_tdi.png",
+    image: "cast/sky_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11858,7 +11858,7 @@ window.CAST = [
     nickname: "Spud",
     fullName: "Spud",
     gender: "male",
-    image: "cast/spud_tdi.png",
+    image: "cast/spud_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11872,7 +11872,7 @@ window.CAST = [
     nickname: "Staci",
     fullName: "Staci",
     gender: "female",
-    image: "cast/staci_tdi.png",
+    image: "cast/staci_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11886,7 +11886,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie",
     gender: "female",
-    image: "cast/stephanie_tdi.png",
+    image: "cast/stephanie_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11900,7 +11900,7 @@ window.CAST = [
     nickname: "Sugar",
     fullName: "Sugar",
     gender: "female",
-    image: "cast/sugar_tdi.png",
+    image: "cast/sugar_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11914,7 +11914,7 @@ window.CAST = [
     nickname: "Tammy",
     fullName: "Tammy",
     gender: "female",
-    image: "cast/tammy_tdi.png",
+    image: "cast/tammy_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11928,7 +11928,7 @@ window.CAST = [
     nickname: "Taylor",
     fullName: "Taylor",
     gender: "female",
-    image: "cast/taylor_tdi.png",
+    image: "cast/taylor_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11942,7 +11942,7 @@ window.CAST = [
     nickname: "Tom",
     fullName: "Tom",
     gender: "male",
-    image: "cast/tom_tdi.png",
+    image: "cast/tom_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11956,7 +11956,7 @@ window.CAST = [
     nickname: "Topher",
     fullName: "Topher",
     gender: "male",
-    image: "cast/topher_tdi.png",
+    image: "cast/topher_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11970,7 +11970,7 @@ window.CAST = [
     nickname: "Trent",
     fullName: "Trent",
     gender: "male",
-    image: "cast/trent_tdi.png",
+    image: "cast/trent_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11984,7 +11984,7 @@ window.CAST = [
     nickname: "Tyler",
     fullName: "Tyler",
     gender: "male",
-    image: "cast/tyler_tdi.png",
+    image: "cast/tyler_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -11998,7 +11998,7 @@ window.CAST = [
     nickname: "Wayne",
     fullName: "Wayne",
     gender: "male",
-    image: "cast/wayne_tdi.png",
+    image: "cast/wayne_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -12012,7 +12012,7 @@ window.CAST = [
     nickname: "Zee",
     fullName: "Zee",
     gender: "male",
-    image: "cast/zee_tdi.png",
+    image: "cast/zee_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -12026,7 +12026,7 @@ window.CAST = [
     nickname: "Zoey",
     fullName: "Zoey",
     gender: "female",
-    image: "cast/zoey_tdi.png",
+    image: "cast/zoey_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -12040,7 +12040,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Chris",
     gender: "male",
-    image: "cast/chris_tdi.png",
+    image: "cast/chris_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -12054,7 +12054,7 @@ window.CAST = [
     nickname: "Chef",
     fullName: "Chef",
     gender: "male",
-    image: "cast/chef_tdi.png",
+    image: "cast/chef_tdi.webp",
 
     shows: ["Total Drama"],
 
@@ -12068,7 +12068,7 @@ window.CAST = [
     nickname: "Aiden",
     fullName: "Aiden Brooks",
     gender: "male",
-    image: "cast/aiden_brooks.png",
+    image: "cast/aiden_brooks.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12082,7 +12082,7 @@ window.CAST = [
     nickname: "Alec",
     fullName: "Alec Çelik",
     gender: "male",
-    image: "cast/alec_celik.png",
+    image: "cast/alec_celik.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12096,7 +12096,7 @@ window.CAST = [
     nickname: "Alessio",
     fullName: "Alessio Castelli",
     gender: "male",
-    image: "cast/alessio_castelli.png",
+    image: "cast/alessio_castelli.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12110,7 +12110,7 @@ window.CAST = [
     nickname: "Ally",
     fullName: "Allyson Amber",
     gender: "female",
-    image: "cast/allyson_amber.png",
+    image: "cast/allyson_amber.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12124,7 +12124,7 @@ window.CAST = [
     nickname: "Amelie",
     fullName: "Amelie Pierre",
     gender: "female",
-    image: "cast/amelie_pierre.png",
+    image: "cast/amelie_pierre.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12138,7 +12138,7 @@ window.CAST = [
     nickname: "Anastasia",
     fullName: "Anastasia Sizova",
     gender: "female",
-    image: "cast/anastasia_sizova.png",
+    image: "cast/anastasia_sizova.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12152,7 +12152,7 @@ window.CAST = [
     nickname: "Ara",
     fullName: "Ara Kwon",
     gender: "female",
-    image: "cast/ara_kwon.png",
+    image: "cast/ara_kwon.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12166,7 +12166,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Graham",
     gender: "female",
-    image: "cast/ashley_graham.png",
+    image: "cast/ashley_graham.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12180,7 +12180,7 @@ window.CAST = [
     nickname: "Aubrey",
     fullName: "Aubrey Summers",
     gender: "female",
-    image: "cast/aubrey_summers.png",
+    image: "cast/aubrey_summers.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12194,7 +12194,7 @@ window.CAST = [
     nickname: "Benji",
     fullName: "Benjamin Hattori",
     gender: "male",
-    image: "cast/benjamin_hattori.png",
+    image: "cast/benjamin_hattori.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12208,7 +12208,7 @@ window.CAST = [
     nickname: "Bruno",
     fullName: "Bruno Valdivieso",
     gender: "male",
-    image: "cast/bruno_valdivieso.png",
+    image: "cast/bruno_valdivieso.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12222,7 +12222,7 @@ window.CAST = [
     nickname: "Connor",
     fullName: "Connor Blake",
     gender: "male",
-    image: "cast/connor_blake.png",
+    image: "cast/connor_blake.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12236,7 +12236,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Daniel Carter",
     gender: "male",
-    image: "cast/daniel_carter.png",
+    image: "cast/daniel_carter.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12250,7 +12250,7 @@ window.CAST = [
     nickname: "Diego",
     fullName: "Diego Olivo",
     gender: "male",
-    image: "cast/diego_olivo.png",
+    image: "cast/diego_olivo.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12264,7 +12264,7 @@ window.CAST = [
     nickname: "Drew",
     fullName: "Andrew LeClair",
     gender: "male",
-    image: "cast/andrew_leclair.png",
+    image: "cast/andrew_leclair.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12278,7 +12278,7 @@ window.CAST = [
     nickname: "Dunia",
     fullName: "Dunia Makiese",
     gender: "female",
-    image: "cast/dunia_makiese.png",
+    image: "cast/dunia_makiese.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12292,7 +12292,7 @@ window.CAST = [
     nickname: "Ellie",
     fullName: "Ellie Parker",
     gender: "female",
-    image: "cast/ellie_parker.png",
+    image: "cast/ellie_parker.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12306,7 +12306,7 @@ window.CAST = [
     nickname: "Ernesto",
     fullName: "Ernesto Salvatierra",
     gender: "male",
-    image: "cast/ernesto_salvatierra.png",
+    image: "cast/ernesto_salvatierra.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12320,7 +12320,7 @@ window.CAST = [
     nickname: "Evie",
     fullName: "Evangeline Marlowe",
     gender: "female",
-    image: "cast/evangeline_marlowe.png",
+    image: "cast/evangeline_marlowe.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12334,7 +12334,7 @@ window.CAST = [
     nickname: "Finn",
     fullName: "Finnian Alcott",
     gender: "male",
-    image: "cast/finnian_alcott.png",
+    image: "cast/finnian_alcott.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12348,7 +12348,7 @@ window.CAST = [
     nickname: "Fiore",
     fullName: "Fiorella Ricci",
     gender: "female",
-    image: "cast/fiorella_ricci.png",
+    image: "cast/fiorella_ricci.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12362,7 +12362,7 @@ window.CAST = [
     nickname: "Gabby",
     fullName: "Gabrysia Nowak",
     gender: "female",
-    image: "cast/gabrysia_nowak.png",
+    image: "cast/gabrysia_nowak.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12376,7 +12376,7 @@ window.CAST = [
     nickname: "Grett",
     fullName: "Gretchen Clark",
     gender: "female",
-    image: "cast/gretchen_clark.png",
+    image: "cast/gretchen_clark.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12390,7 +12390,7 @@ window.CAST = [
     nickname: "Hannah",
     fullName: "Hannah Roxas",
     gender: "female",
-    image: "cast/hannah_roxas.png",
+    image: "cast/hannah_roxas.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12404,7 +12404,7 @@ window.CAST = [
     nickname: "Hunter",
     fullName: "Hunter Page",
     gender: "male",
-    image: "cast/hunter_page.png",
+    image: "cast/hunter_page.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12418,7 +12418,7 @@ window.CAST = [
     nickname: "Isabel",
     fullName: "Isabel Carboni",
     gender: "female",
-    image: "cast/isabel_carboni.png",
+    image: "cast/isabel_carboni.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12432,7 +12432,7 @@ window.CAST = [
     nickname: "Ivy",
     fullName: "Ivy Berki",
     gender: "female",
-    image: "cast/ivy_berki.png",
+    image: "cast/ivy_berki.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12446,7 +12446,7 @@ window.CAST = [
     nickname: "Jade",
     fullName: "Jade Tanko",
     gender: "female",
-    image: "cast/jade_tanko.png",
+    image: "cast/jade_tanko.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12460,7 +12460,7 @@ window.CAST = [
     nickname: "Jake",
     fullName: "Jacob Reed",
     gender: "male",
-    image: "cast/jacob_reed.png",
+    image: "cast/jacob_reed.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12474,7 +12474,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Costa",
     gender: "male",
-    image: "cast/james_costa.png",
+    image: "cast/james_costa.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12488,7 +12488,7 @@ window.CAST = [
     nickname: "Kai",
     fullName: "Kai Mitchell",
     gender: "male",
-    image: "cast/kai_mitchell.png",
+    image: "cast/kai_mitchell.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12502,7 +12502,7 @@ window.CAST = [
     nickname: "Karol",
     fullName: "Karol Jones",
     gender: "female",
-    image: "cast/karol_jones.png",
+    image: "cast/karol_jones.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12516,7 +12516,7 @@ window.CAST = [
     nickname: "Lake",
     fullName: "Lake Müller",
     gender: "female",
-    image: "cast/lake_muller.png",
+    image: "cast/lake_muller.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12530,7 +12530,7 @@ window.CAST = [
     nickname: "Lill",
     fullName: "Lillian Davis",
     gender: "female",
-    image: "cast/lillian_davis.png",
+    image: "cast/lillian_davis.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12544,7 +12544,7 @@ window.CAST = [
     nickname: "Logan",
     fullName: "Logan Bell",
     gender: "male",
-    image: "cast/logan_bell.png",
+    image: "cast/logan_bell.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12558,7 +12558,7 @@ window.CAST = [
     nickname: "Lynda",
     fullName: "Lynda Anderson",
     gender: "female",
-    image: "cast/lynda_anderson.png",
+    image: "cast/lynda_anderson.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12572,7 +12572,7 @@ window.CAST = [
     nickname: "Maggy",
     fullName: "Margarett Lewis",
     gender: "female",
-    image: "cast/margarett_lewis.png",
+    image: "cast/margarett_lewis.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12586,7 +12586,7 @@ window.CAST = [
     nickname: "Manu",
     fullName: "Manu Tuimavave",
     gender: "male",
-    image: "cast/manu_tuimavave.png",
+    image: "cast/manu_tuimavave.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12600,7 +12600,7 @@ window.CAST = [
     nickname: "Marissa",
     fullName: "Marissa Xulu",
     gender: "female",
-    image: "cast/marissa_xulu.png",
+    image: "cast/marissa_xulu.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12614,7 +12614,7 @@ window.CAST = [
     nickname: "Miriam",
     fullName: "Miriam Foster",
     gender: "female",
-    image: "cast/miriam_foster.png",
+    image: "cast/miriam_foster.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12628,7 +12628,7 @@ window.CAST = [
     nickname: "Natalia",
     fullName: "Natalia Baez",
     gender: "female",
-    image: "cast/natalia_baez.png",
+    image: "cast/natalia_baez.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12642,7 +12642,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nicholas Milton",
     gender: "male",
-    image: "cast/nicholas_milton.png",
+    image: "cast/nicholas_milton.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12656,7 +12656,7 @@ window.CAST = [
     nickname: "Nura",
     fullName: "Nura Sahal",
     gender: "female",
-    image: "cast/nura_sahal.png",
+    image: "cast/nura_sahal.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12670,7 +12670,7 @@ window.CAST = [
     nickname: "Oliver",
     fullName: "Oliver Bennet",
     gender: "male",
-    image: "cast/oliver_bennet.png",
+    image: "cast/oliver_bennet.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12684,7 +12684,7 @@ window.CAST = [
     nickname: "Oliwia",
     fullName: "Oliwia Morawska",
     gender: "female",
-    image: "cast/oliwia_morawska.png",
+    image: "cast/oliwia_morawska.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12698,7 +12698,7 @@ window.CAST = [
     nickname: "Ren",
     fullName: "Ren Moraga",
     gender: "genderfluid",
-    image: "cast/ren_moraga.png",
+    image: "cast/ren_moraga.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12712,7 +12712,7 @@ window.CAST = [
     nickname: "Richard",
     fullName: "Richard Miller",
     gender: "male",
-    image: "cast/richard_miller.png",
+    image: "cast/richard_miller.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12726,7 +12726,7 @@ window.CAST = [
     nickname: "Riya",
     fullName: "Riya Sharma",
     gender: "female",
-    image: "cast/riya_sharma.png",
+    image: "cast/riya_sharma.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12740,7 +12740,7 @@ window.CAST = [
     nickname: "Rosa María",
     fullName: "Rosa María Rivera",
     gender: "female",
-    image: "cast/rosa_maria_rivera.png",
+    image: "cast/rosa_maria_rivera.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12754,7 +12754,7 @@ window.CAST = [
     nickname: "Sam",
     fullName: "Samuel Thitivoranan",
     gender: "male",
-    image: "cast/samuel_thitivoranan.png",
+    image: "cast/samuel_thitivoranan.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12768,7 +12768,7 @@ window.CAST = [
     nickname: "Spencer",
     fullName: "Spencer Lawrence",
     gender: "male",
-    image: "cast/spencer_lawrence.png",
+    image: "cast/spencer_lawrence.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12782,7 +12782,7 @@ window.CAST = [
     nickname: "Ted",
     fullName: "Ted Gordon",
     gender: "male",
-    image: "cast/ted_gordon.png",
+    image: "cast/ted_gordon.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12796,7 +12796,7 @@ window.CAST = [
     nickname: "Tess",
     fullName: "Tess Morgan",
     gender: "female",
-    image: "cast/tess_morgan.png",
+    image: "cast/tess_morgan.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12810,7 +12810,7 @@ window.CAST = [
     nickname: "Tom",
     fullName: "Thomas Reed",
     gender: "male",
-    image: "cast/thomas_reed.png",
+    image: "cast/thomas_reed.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12824,7 +12824,7 @@ window.CAST = [
     nickname: "Tristan",
     fullName: "Tristan Vik",
     gender: "nonbinary",
-    image: "cast/tristan_vik.png",
+    image: "cast/tristan_vik.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12838,7 +12838,7 @@ window.CAST = [
     nickname: "Will",
     fullName: "William Hughes",
     gender: "male",
-    image: "cast/william_hughes.png",
+    image: "cast/william_hughes.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12852,7 +12852,7 @@ window.CAST = [
     nickname: "Yul",
     fullName: "Yul Kim",
     gender: "male",
-    image: "cast/yul_kim.png",
+    image: "cast/yul_kim.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12866,7 +12866,7 @@ window.CAST = [
     nickname: "Zaid",
     fullName: "Zaid Hakim",
     gender: "male",
-    image: "cast/zaid_hakim.png",
+    image: "cast/zaid_hakim.webp",
 
     shows: ["Disventure Camp"],
 
@@ -12880,7 +12880,7 @@ window.CAST = [
     nickname: "Alicia",
     fullName: "Alicia Samaan",
     gender: "female",
-    image: "cast/alicia_samaan.png",
+    image: "cast/alicia_samaan.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12898,7 +12898,7 @@ window.CAST = [
     nickname: "Amber",
     fullName: "Amber Meade",
     gender: "female",
-    image: "cast/amber_meade.png",
+    image: "cast/amber_meade.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12916,7 +12916,7 @@ window.CAST = [
     nickname: "Amy",
     fullName: "Amy Cieslowski",
     gender: "female",
-    image: "cast/amy_cieslowski.png",
+    image: "cast/amy_cieslowski.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12934,7 +12934,7 @@ window.CAST = [
     nickname: "Andrea",
     fullName: "Andrea Bowman",
     gender: "female",
-    image: "cast/andrea_bowman.png",
+    image: "cast/andrea_bowman.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12952,7 +12952,7 @@ window.CAST = [
     nickname: "Camilla",
     fullName: "Camilla Poindexter",
     gender: "female",
-    image: "cast/camilla_poindexter.png",
+    image: "cast/camilla_poindexter.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12970,7 +12970,7 @@ window.CAST = [
     nickname: "Danni",
     fullName: "Danielle Victor",
     gender: "female",
-    image: "cast/danielle_victor.png",
+    image: "cast/danielle_victor.webp",
 
     shows: [
       "Bad Girls Club",
@@ -12988,7 +12988,7 @@ window.CAST = [
     nickname: "Elease",
     fullName: "Elease Donovan",
     gender: "female",
-    image: "cast/elease_donovan.png",
+    image: "cast/elease_donovan.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13006,7 +13006,7 @@ window.CAST = [
     nickname: "Erika",
     fullName: "Erika Jordan",
     gender: "female",
-    image: "cast/erika_jordan.png",
+    image: "cast/erika_jordan.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13024,7 +13024,7 @@ window.CAST = [
     nickname: "Flo",
     fullName: "Florina Kaja",
     gender: "female",
-    image: "cast/florina_kaja.png",
+    image: "cast/florina_kaja.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13042,7 +13042,7 @@ window.CAST = [
     nickname: "Gabi",
     fullName: "Gabrielle Victor",
     gender: "female",
-    image: "cast/gabrielle_victor.png",
+    image: "cast/gabrielle_victor.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13060,7 +13060,7 @@ window.CAST = [
     nickname: "Janelle",
     fullName: "Janelle Shanks",
     gender: "female",
-    image: "cast/janelle_shanks.png",
+    image: "cast/janelle_shanks.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13078,7 +13078,7 @@ window.CAST = [
     nickname: "Jenn",
     fullName: "Jenniffer Hardwick",
     gender: "female",
-    image: "cast/jenniffer_hardwick.png",
+    image: "cast/jenniffer_hardwick.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13096,7 +13096,7 @@ window.CAST = [
     nickname: "Judi",
     fullName: "Judith Jackson",
     gender: "female",
-    image: "cast/judith_jackson.png",
+    image: "cast/judith_jackson.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13114,7 +13114,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie Ofcharsky",
     gender: "female",
-    image: "cast/julie_ofcharsky.png",
+    image: "cast/julie_ofcharsky.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13132,7 +13132,7 @@ window.CAST = [
     nickname: "Mehgan",
     fullName: "Mehgan James",
     gender: "female",
-    image: "cast/mehgan_james.png",
+    image: "cast/mehgan_james.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13150,7 +13150,7 @@ window.CAST = [
     nickname: "Nancy",
     fullName: "Nancy Denise",
     gender: "female",
-    image: "cast/nancy_denise.png",
+    image: "cast/nancy_denise.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13168,7 +13168,7 @@ window.CAST = [
     nickname: "Natalie",
     fullName: "Natalie Nunn",
     gender: "female",
-    image: "cast/natalie_nunn.png",
+    image: "cast/natalie_nunn.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13186,7 +13186,7 @@ window.CAST = [
     nickname: "Paula",
     fullName: "Paula Hellens",
     gender: "female",
-    image: "cast/paula_hellens.png",
+    image: "cast/paula_hellens.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13204,7 +13204,7 @@ window.CAST = [
     nickname: "Rocky",
     fullName: "Raquel Santiago",
     gender: "female",
-    image: "cast/raquel_santiago.png",
+    image: "cast/raquel_santiago.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13222,7 +13222,7 @@ window.CAST = [
     nickname: "Sarah",
     fullName: "Sarah Oliver",
     gender: "female",
-    image: "cast/sarah_oliver.png",
+    image: "cast/sarah_oliver.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13240,7 +13240,7 @@ window.CAST = [
     nickname: "Shannon",
     fullName: "Shannon Sarich",
     gender: "female",
-    image: "cast/shannon_sarich.png",
+    image: "cast/shannon_sarich.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13258,7 +13258,7 @@ window.CAST = [
     nickname: "Shelly",
     fullName: "Shelly Hickman",
     gender: "female",
-    image: "cast/shelly_hickman.png",
+    image: "cast/shelly_hickman.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13276,7 +13276,7 @@ window.CAST = [
     nickname: "Stasi",
     fullName: "Nastasia Townsend",
     gender: "female",
-    image: "cast/nastasia_townsend.png",
+    image: "cast/nastasia_townsend.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13294,7 +13294,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie George",
     gender: "female",
-    image: "cast/stephanie_george.png",
+    image: "cast/stephanie_george.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13312,7 +13312,7 @@ window.CAST = [
     nickname: "Tiana",
     fullName: "Tiana Small",
     gender: "female",
-    image: "cast/tiana_small.png",
+    image: "cast/tiana_small.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13330,7 +13330,7 @@ window.CAST = [
     nickname: "Valentina",
     fullName: "Valentina Anyanwu",
     gender: "female",
-    image: "cast/valentina_anyanwu.png",
+    image: "cast/valentina_anyanwu.webp",
 
     shows: [
       "Bad Girls Club",
@@ -13348,7 +13348,7 @@ window.CAST = [
     nickname: "Makoto",
     fullName: "Makoto Naegi",
     gender: "male",
-    image: "cast/makoto_naegi.png",
+    image: "cast/makoto_naegi.webp",
 
     shows: ["Danganronpa"],
 
@@ -13362,7 +13362,7 @@ window.CAST = [
     nickname: "Kyoko",
     fullName: "Kyoko Kirigiri",
     gender: "female",
-    image: "cast/kyoko_kirigiri.png",
+    image: "cast/kyoko_kirigiri.webp",
 
     shows: ["Danganronpa"],
 
@@ -13376,7 +13376,7 @@ window.CAST = [
     nickname: "Byakuya",
     fullName: "Byakuya Togami",
     gender: "male",
-    image: "cast/byakuya_togami.png",
+    image: "cast/byakuya_togami.webp",
 
     shows: ["Danganronpa"],
 
@@ -13390,7 +13390,7 @@ window.CAST = [
     nickname: "Toko",
     fullName: "Toko Fukawa",
     gender: "female",
-    image: "cast/toko_fukawa.png",
+    image: "cast/toko_fukawa.webp",
 
     shows: ["Danganronpa"],
 
@@ -13404,7 +13404,7 @@ window.CAST = [
     nickname: "Aoi",
     fullName: "Aoi Asahina",
     gender: "female",
-    image: "cast/aoi_asahina.png",
+    image: "cast/aoi_asahina.webp",
 
     shows: ["Danganronpa"],
 
@@ -13418,7 +13418,7 @@ window.CAST = [
     nickname: "Yasuhiro",
     fullName: "Yasuhiro Hagakure",
     gender: "male",
-    image: "cast/yasuhiro_hagakure.png",
+    image: "cast/yasuhiro_hagakure.webp",
 
     shows: ["Danganronpa"],
 
@@ -13432,7 +13432,7 @@ window.CAST = [
     nickname: "Sayaka",
     fullName: "Sayaka Maizono",
     gender: "female",
-    image: "cast/sayaka_maizono.png",
+    image: "cast/sayaka_maizono.webp",
 
     shows: ["Danganronpa"],
 
@@ -13446,7 +13446,7 @@ window.CAST = [
     nickname: "Leon",
     fullName: "Leon Kuwata",
     gender: "male",
-    image: "cast/leon_kuwata.png",
+    image: "cast/leon_kuwata.webp",
 
     shows: ["Danganronpa"],
 
@@ -13460,7 +13460,7 @@ window.CAST = [
     nickname: "Chihiro",
     fullName: "Chihiro Fujisaki",
     gender: "male",
-    image: "cast/chihiro_fujisaki.png",
+    image: "cast/chihiro_fujisaki.webp",
 
     shows: ["Danganronpa"],
 
@@ -13474,7 +13474,7 @@ window.CAST = [
     nickname: "Mondo",
     fullName: "Mondo Owada",
     gender: "male",
-    image: "cast/mondo_owada.png",
+    image: "cast/mondo_owada.webp",
 
     shows: ["Danganronpa"],
 
@@ -13488,7 +13488,7 @@ window.CAST = [
     nickname: "Kiyotaka",
     fullName: "Kiyotaka Ishimaru",
     gender: "male",
-    image: "cast/kiyotaka_ishimaru.png",
+    image: "cast/kiyotaka_ishimaru.webp",
 
     shows: ["Danganronpa"],
 
@@ -13502,7 +13502,7 @@ window.CAST = [
     nickname: "Hifumi",
     fullName: "Hifumi Yamada",
     gender: "male",
-    image: "cast/hifumi_yamada.png",
+    image: "cast/hifumi_yamada.webp",
 
     shows: ["Danganronpa"],
 
@@ -13516,7 +13516,7 @@ window.CAST = [
     nickname: "Celeste",
     fullName: "Celestia Ludenberg",
     gender: "female",
-    image: "cast/celestia_ludenberg.png",
+    image: "cast/celestia_ludenberg.webp",
 
     shows: ["Danganronpa"],
 
@@ -13530,7 +13530,7 @@ window.CAST = [
     nickname: "Sakura",
     fullName: "Sakura Ogami",
     gender: "female",
-    image: "cast/sakura_ogami.png",
+    image: "cast/sakura_ogami.webp",
 
     shows: ["Danganronpa"],
 
@@ -13544,7 +13544,7 @@ window.CAST = [
     nickname: "Junko",
     fullName: "Junko Enoshima",
     gender: "female",
-    image: "cast/junko_enoshima.png",
+    image: "cast/junko_enoshima.webp",
 
     shows: ["Danganronpa"],
 
@@ -13558,7 +13558,7 @@ window.CAST = [
     nickname: "Mukuro",
     fullName: "Mukuro Ikusaba",
     gender: "female",
-    image: "cast/mukuro_ikusaba.png",
+    image: "cast/mukuro_ikusaba.webp",
 
     shows: ["Danganronpa"],
 
@@ -13572,7 +13572,7 @@ window.CAST = [
     nickname: "Genocide Jack",
     fullName: "Genocide Jack",
     gender: "female",
-    image: "cast/genocide_jack.png",
+    image: "cast/genocide_jack.webp",
 
     shows: ["Danganronpa"],
 
@@ -13586,7 +13586,7 @@ window.CAST = [
     nickname: "Monokuma",
     fullName: "Monokuma",
     gender: "male",
-    image: "cast/monokuma.png",
+    image: "cast/monokuma.webp",
 
     shows: ["Danganronpa"],
 
@@ -13600,7 +13600,7 @@ window.CAST = [
     nickname: "Hajime",
     fullName: "Hajime Hinata",
     gender: "male",
-    image: "cast/hajime_hinata.png",
+    image: "cast/hajime_hinata.webp",
 
     shows: ["Danganronpa"],
 
@@ -13614,7 +13614,7 @@ window.CAST = [
     nickname: "Nagito",
     fullName: "Nagito Komaeda",
     gender: "male",
-    image: "cast/nagito_komaeda.png",
+    image: "cast/nagito_komaeda.webp",
 
     shows: ["Danganronpa"],
 
@@ -13628,7 +13628,7 @@ window.CAST = [
     nickname: "Chiaki",
     fullName: "Chiaki Nanami",
     gender: "female",
-    image: "cast/chiaki_nanami.png",
+    image: "cast/chiaki_nanami.webp",
 
     shows: ["Danganronpa"],
 
@@ -13642,7 +13642,7 @@ window.CAST = [
     nickname: "Fuyuhiko",
     fullName: "Fuyuhiko Kuzuryu",
     gender: "male",
-    image: "cast/fuyuhiko_kuzuryu.png",
+    image: "cast/fuyuhiko_kuzuryu.webp",
 
     shows: ["Danganronpa"],
 
@@ -13656,7 +13656,7 @@ window.CAST = [
     nickname: "Akane",
     fullName: "Akane Owari",
     gender: "female",
-    image: "cast/akane_owari.png",
+    image: "cast/akane_owari.webp",
 
     shows: ["Danganronpa"],
 
@@ -13670,7 +13670,7 @@ window.CAST = [
     nickname: "Sonia",
     fullName: "Sonia Nevermind",
     gender: "female",
-    image: "cast/sonia_nevermind.png",
+    image: "cast/sonia_nevermind.webp",
 
     shows: ["Danganronpa"],
 
@@ -13684,7 +13684,7 @@ window.CAST = [
     nickname: "Kazuichi",
     fullName: "Kazuichi Soda",
     gender: "male",
-    image: "cast/kazuichi_soda.png",
+    image: "cast/kazuichi_soda.webp",
 
     shows: ["Danganronpa"],
 
@@ -13698,7 +13698,7 @@ window.CAST = [
     nickname: "Teruteru",
     fullName: "Teruteru Hanamura",
     gender: "male",
-    image: "cast/teruteru_hanamura.png",
+    image: "cast/teruteru_hanamura.webp",
 
     shows: ["Danganronpa"],
 
@@ -13712,7 +13712,7 @@ window.CAST = [
     nickname: "Mahiru",
     fullName: "Mahiru Koizumi",
     gender: "female",
-    image: "cast/mahiru_koizumi.png",
+    image: "cast/mahiru_koizumi.webp",
 
     shows: ["Danganronpa"],
 
@@ -13726,7 +13726,7 @@ window.CAST = [
     nickname: "Peko",
     fullName: "Peko Pekoyama",
     gender: "female",
-    image: "cast/peko_pekoyama.png",
+    image: "cast/peko_pekoyama.webp",
 
     shows: ["Danganronpa"],
 
@@ -13740,7 +13740,7 @@ window.CAST = [
     nickname: "Ibuki",
     fullName: "Ibuki Mioda",
     gender: "female",
-    image: "cast/ibuki_mioda.png",
+    image: "cast/ibuki_mioda.webp",
 
     shows: ["Danganronpa"],
 
@@ -13754,7 +13754,7 @@ window.CAST = [
     nickname: "Hiyoko",
     fullName: "Hiyoko Saionji",
     gender: "female",
-    image: "cast/hiyoko_saionji.png",
+    image: "cast/hiyoko_saionji.webp",
 
     shows: ["Danganronpa"],
 
@@ -13768,7 +13768,7 @@ window.CAST = [
     nickname: "Mikan",
     fullName: "Mikan Tsumiki",
     gender: "female",
-    image: "cast/mikan_tsumiki.png",
+    image: "cast/mikan_tsumiki.webp",
 
     shows: ["Danganronpa"],
 
@@ -13782,7 +13782,7 @@ window.CAST = [
     nickname: "Nekomaru",
     fullName: "Nekomaru Nidai",
     gender: "male",
-    image: "cast/nekomaru_nidai.png",
+    image: "cast/nekomaru_nidai.webp",
 
     shows: ["Danganronpa"],
 
@@ -13796,7 +13796,7 @@ window.CAST = [
     nickname: "Gundham",
     fullName: "Gundham Tanaka",
     gender: "male",
-    image: "cast/gundham_tanaka.png",
+    image: "cast/gundham_tanaka.webp",
 
     shows: ["Danganronpa"],
 
@@ -13810,7 +13810,7 @@ window.CAST = [
     nickname: "Monomi",
     fullName: "Monomi",
     gender: "female",
-    image: "cast/monomi.png",
+    image: "cast/monomi.webp",
 
     shows: ["Danganronpa"],
 
@@ -13824,7 +13824,7 @@ window.CAST = [
     nickname: "Komaru",
     fullName: "Komaru Naegi",
     gender: "female",
-    image: "cast/komaru_naegi.png",
+    image: "cast/komaru_naegi.webp",
 
     shows: ["Danganronpa"],
 
@@ -13838,7 +13838,7 @@ window.CAST = [
     nickname: "Masaru",
     fullName: "Masaru Daimon",
     gender: "male",
-    image: "cast/masaru_daimon.png",
+    image: "cast/masaru_daimon.webp",
 
     shows: ["Danganronpa"],
 
@@ -13852,7 +13852,7 @@ window.CAST = [
     nickname: "Jataro",
     fullName: "Jataro Kemuri",
     gender: "male",
-    image: "cast/jataro_kemuri.png",
+    image: "cast/jataro_kemuri.webp",
 
     shows: ["Danganronpa"],
 
@@ -13866,7 +13866,7 @@ window.CAST = [
     nickname: "Kotoko",
     fullName: "Kotoko Utsugi",
     gender: "female",
-    image: "cast/kotoko_utsugi.png",
+    image: "cast/kotoko_utsugi.webp",
 
     shows: ["Danganronpa"],
 
@@ -13880,7 +13880,7 @@ window.CAST = [
     nickname: "Nagisa",
     fullName: "Nagisa Shingetsu",
     gender: "male",
-    image: "cast/nagisa_shingetsu.png",
+    image: "cast/nagisa_shingetsu.webp",
 
     shows: ["Danganronpa"],
 
@@ -13894,7 +13894,7 @@ window.CAST = [
     nickname: "Monaca",
     fullName: "Monaca Towa",
     gender: "female",
-    image: "cast/monaca_towa.png",
+    image: "cast/monaca_towa.webp",
 
     shows: ["Danganronpa"],
 
@@ -13908,7 +13908,7 @@ window.CAST = [
     nickname: "Haiji",
     fullName: "Haiji Towa",
     gender: "male",
-    image: "cast/haiji_towa.png",
+    image: "cast/haiji_towa.webp",
 
     shows: ["Danganronpa"],
 
@@ -13922,7 +13922,7 @@ window.CAST = [
     nickname: "Hiroko",
     fullName: "Hiroko Hagakure",
     gender: "female",
-    image: "cast/hiroko_hagakure.png",
+    image: "cast/hiroko_hagakure.webp",
 
     shows: ["Danganronpa"],
 
@@ -13936,7 +13936,7 @@ window.CAST = [
     nickname: "Yuta",
     fullName: "Yuta Asahina",
     gender: "male",
-    image: "cast/yuta_asahina.png",
+    image: "cast/yuta_asahina.webp",
 
     shows: ["Danganronpa"],
 
@@ -13950,7 +13950,7 @@ window.CAST = [
     nickname: "Taichi",
     fullName: "Taichi Fujisaki",
     gender: "male",
-    image: "cast/taichi_fujisaki.png",
+    image: "cast/taichi_fujisaki.webp",
 
     shows: ["Danganronpa"],
 
@@ -13964,7 +13964,7 @@ window.CAST = [
     nickname: "Shirokuma",
     fullName: "Shirokuma",
     gender: "male",
-    image: "cast/shirokuma.png",
+    image: "cast/shirokuma.webp",
 
     shows: ["Danganronpa"],
 
@@ -13978,7 +13978,7 @@ window.CAST = [
     nickname: "Kurokuma",
     fullName: "Kurokuma",
     gender: "male",
-    image: "cast/kurokuma.png",
+    image: "cast/kurokuma.webp",
 
     shows: ["Danganronpa"],
 
@@ -13992,7 +13992,7 @@ window.CAST = [
     nickname: "Kaede",
     fullName: "Kaede Akamatsu",
     gender: "female",
-    image: "cast/kaede_akamatsu.png",
+    image: "cast/kaede_akamatsu.webp",
 
     shows: ["Danganronpa"],
 
@@ -14006,7 +14006,7 @@ window.CAST = [
     nickname: "Shuichi",
     fullName: "Shuichi Saihara",
     gender: "male",
-    image: "cast/shuichi_saihara.png",
+    image: "cast/shuichi_saihara.webp",
 
     shows: ["Danganronpa"],
 
@@ -14020,7 +14020,7 @@ window.CAST = [
     nickname: "Kaito",
     fullName: "Kaito Momota",
     gender: "male",
-    image: "cast/kaito_momota.png",
+    image: "cast/kaito_momota.webp",
 
     shows: ["Danganronpa"],
 
@@ -14034,7 +14034,7 @@ window.CAST = [
     nickname: "Maki",
     fullName: "Maki Harukawa",
     gender: "female",
-    image: "cast/maki_harukawa.png",
+    image: "cast/maki_harukawa.webp",
 
     shows: ["Danganronpa"],
 
@@ -14048,7 +14048,7 @@ window.CAST = [
     nickname: "Himiko",
     fullName: "Himiko Yumeno",
     gender: "female",
-    image: "cast/himiko_yumeno.png",
+    image: "cast/himiko_yumeno.webp",
 
     shows: ["Danganronpa"],
 
@@ -14062,7 +14062,7 @@ window.CAST = [
     nickname: "Rantaro",
     fullName: "Rantaro Amami",
     gender: "male",
-    image: "cast/rantaro_amami.png",
+    image: "cast/rantaro_amami.webp",
 
     shows: ["Danganronpa"],
 
@@ -14076,7 +14076,7 @@ window.CAST = [
     nickname: "Ryoma",
     fullName: "Ryoma Hoshi",
     gender: "male",
-    image: "cast/ryoma_hoshi.png",
+    image: "cast/ryoma_hoshi.webp",
 
     shows: ["Danganronpa"],
 
@@ -14090,7 +14090,7 @@ window.CAST = [
     nickname: "Kirumi",
     fullName: "Kirumi Tojo",
     gender: "female",
-    image: "cast/kirumi_tojo.png",
+    image: "cast/kirumi_tojo.webp",
 
     shows: ["Danganronpa"],
 
@@ -14104,7 +14104,7 @@ window.CAST = [
     nickname: "Angie",
     fullName: "Angie Yonaga",
     gender: "female",
-    image: "cast/angie_yonaga.png",
+    image: "cast/angie_yonaga.webp",
 
     shows: ["Danganronpa"],
 
@@ -14118,7 +14118,7 @@ window.CAST = [
     nickname: "Tenko",
     fullName: "Tenko Chabashira",
     gender: "female",
-    image: "cast/tenko_chabashira.png",
+    image: "cast/tenko_chabashira.webp",
 
     shows: ["Danganronpa"],
 
@@ -14132,7 +14132,7 @@ window.CAST = [
     nickname: "Korekiyo",
     fullName: "Korekiyo Shinguji",
     gender: "male",
-    image: "cast/korekiyo_shinguji.png",
+    image: "cast/korekiyo_shinguji.webp",
 
     shows: ["Danganronpa"],
 
@@ -14146,7 +14146,7 @@ window.CAST = [
     nickname: "Miu",
     fullName: "Miu Iruma",
     gender: "female",
-    image: "cast/miu_iruma.png",
+    image: "cast/miu_iruma.webp",
 
     shows: ["Danganronpa"],
 
@@ -14160,7 +14160,7 @@ window.CAST = [
     nickname: "Gonta",
     fullName: "Gonta Gokuhara",
     gender: "male",
-    image: "cast/gonta_gokuhara.png",
+    image: "cast/gonta_gokuhara.webp",
 
     shows: ["Danganronpa"],
 
@@ -14174,7 +14174,7 @@ window.CAST = [
     nickname: "Kokichi",
     fullName: "Kokichi Oma",
     gender: "male",
-    image: "cast/kokichi_oma.png",
+    image: "cast/kokichi_oma.webp",
 
     shows: ["Danganronpa"],
 
@@ -14188,7 +14188,7 @@ window.CAST = [
     nickname: "Keebo",
     fullName: "K1-B0",
     gender: "male",
-    image: "cast/keebo.png",
+    image: "cast/keebo.webp",
 
     shows: ["Danganronpa"],
 
@@ -14202,7 +14202,7 @@ window.CAST = [
     nickname: "Tsumugi",
     fullName: "Tsumugi Shirogane",
     gender: "female",
-    image: "cast/tsumugi_shirogane.png",
+    image: "cast/tsumugi_shirogane.webp",
 
     shows: ["Danganronpa"],
 
@@ -14216,7 +14216,7 @@ window.CAST = [
     nickname: "Monotaro",
     fullName: "Monotaro",
     gender: "male",
-    image: "cast/monotaro.png",
+    image: "cast/monotaro.webp",
 
     shows: ["Danganronpa"],
 
@@ -14230,7 +14230,7 @@ window.CAST = [
     nickname: "Monokid",
     fullName: "Monokid",
     gender: "male",
-    image: "cast/monokid.png",
+    image: "cast/monokid.webp",
 
     shows: ["Danganronpa"],
 
@@ -14244,7 +14244,7 @@ window.CAST = [
     nickname: "Monosuke",
     fullName: "Monosuke",
     gender: "male",
-    image: "cast/monosuke.png",
+    image: "cast/monosuke.webp",
 
     shows: ["Danganronpa"],
 
@@ -14258,7 +14258,7 @@ window.CAST = [
     nickname: "Monophanie",
     fullName: "Monophanie",
     gender: "female",
-    image: "cast/monophanie.png",
+    image: "cast/monophanie.webp",
 
     shows: ["Danganronpa"],
 
@@ -14272,7 +14272,7 @@ window.CAST = [
     nickname: "Monodam",
     fullName: "Monodam",
     gender: "male",
-    image: "cast/monodam.png",
+    image: "cast/monodam.webp",
 
     shows: ["Danganronpa"],
 
@@ -14286,7 +14286,7 @@ window.CAST = [
     nickname: "Aaron",
     fullName: "Aaron Meredith",
     gender: "male",
-    image: "cast/aaron_meredith.png",
+    image: "cast/aaron_meredith.webp",
 
     shows: ["Survivor"],
 
@@ -14300,7 +14300,7 @@ window.CAST = [
     nickname: "Aaron",
     fullName: "Aaron Reisberger",
     gender: "male",
-    image: "cast/aaron_reisberger.png",
+    image: "cast/aaron_reisberger.webp",
 
     shows: ["Survivor"],
 
@@ -14314,7 +14314,7 @@ window.CAST = [
     nickname: "Abi-Maria",
     fullName: "Abi-Maria Gomes",
     gender: "female",
-    image: "cast/abi_maria_gomes.png",
+    image: "cast/abi_maria_gomes.webp",
 
     shows: ["Survivor"],
 
@@ -14328,7 +14328,7 @@ window.CAST = [
     nickname: "Ace",
     fullName: "Ace Gordon",
     gender: "male",
-    image: "cast/ace_gordon.png",
+    image: "cast/ace_gordon.webp",
 
     shows: ["Survivor"],
 
@@ -14342,7 +14342,7 @@ window.CAST = [
     nickname: "Adam",
     fullName: "Adam Gentry",
     gender: "male",
-    image: "cast/adam_gentry.png",
+    image: "cast/adam_gentry.webp",
 
     shows: ["Survivor"],
 
@@ -14356,7 +14356,7 @@ window.CAST = [
     nickname: "Adam",
     fullName: "Adam Klein",
     gender: "male",
-    image: "cast/adam_klein.png",
+    image: "cast/adam_klein.webp",
 
     shows: ["Survivor"],
 
@@ -14370,7 +14370,7 @@ window.CAST = [
     nickname: "Alan",
     fullName: "Alan Ball",
     gender: "male",
-    image: "cast/alan_ball.png",
+    image: "cast/alan_ball.webp",
 
     shows: ["Survivor"],
 
@@ -14384,7 +14384,7 @@ window.CAST = [
     nickname: "Albert",
     fullName: "Albert Destrade",
     gender: "male",
-    image: "cast/albert_destrade.png",
+    image: "cast/albert_destrade.webp",
 
     shows: ["Survivor"],
 
@@ -14398,7 +14398,7 @@ window.CAST = [
     nickname: "Alec",
     fullName: "Alec Christy",
     gender: "male",
-    image: "cast/alec_christy.png",
+    image: "cast/alec_christy.webp",
 
     shows: ["Survivor"],
 
@@ -14412,7 +14412,7 @@ window.CAST = [
     nickname: "Alec",
     fullName: "Alec Merlino",
     gender: "male",
-    image: "cast/alec_merlino.png",
+    image: "cast/alec_merlino.webp",
 
     shows: ["Survivor"],
 
@@ -14426,7 +14426,7 @@ window.CAST = [
     nickname: "Alecia",
     fullName: "Alecia Holden",
     gender: "female",
-    image: "cast/alecia_holden.png",
+    image: "cast/alecia_holden.webp",
 
     shows: ["Survivor"],
 
@@ -14440,7 +14440,7 @@ window.CAST = [
     nickname: "Alex",
     fullName: "Alex Angarita",
     gender: "male",
-    image: "cast/alex_angarita.png",
+    image: "cast/alex_angarita.webp",
 
     shows: ["Survivor"],
 
@@ -14454,7 +14454,7 @@ window.CAST = [
     nickname: "Alex",
     fullName: "Alex Bell",
     gender: "male",
-    image: "cast/alex_bell.png",
+    image: "cast/alex_bell.webp",
 
     shows: ["Survivor"],
 
@@ -14468,7 +14468,7 @@ window.CAST = [
     nickname: "Alex",
     fullName: "Alex Moore",
     gender: "male",
-    image: "cast/alex_moore.png",
+    image: "cast/alex_moore.webp",
 
     shows: ["Survivor"],
 
@@ -14482,7 +14482,7 @@ window.CAST = [
     nickname: "Alexandra",
     fullName: "Alexandra Pohevitz",
     gender: "female",
-    image: "cast/alexandra_pohevitz.png",
+    image: "cast/alexandra_pohevitz.webp",
 
     shows: ["Survivor"],
 
@@ -14496,7 +14496,7 @@ window.CAST = [
     nickname: "Ali",
     fullName: "Alexandrea Elliott",
     gender: "female",
-    image: "cast/alexandrea_elliott.png",
+    image: "cast/alexandrea_elliott.webp",
 
     shows: ["Survivor"],
 
@@ -14510,7 +14510,7 @@ window.CAST = [
     nickname: "Alexis",
     fullName: "Alexis Jones",
     gender: "female",
-    image: "cast/alexis_jones.png",
+    image: "cast/alexis_jones.webp",
 
     shows: ["Survivor"],
 
@@ -14524,7 +14524,7 @@ window.CAST = [
     nickname: "Alexis",
     fullName: "Alexis Maxwell",
     gender: "female",
-    image: "cast/alexis_maxwell.png",
+    image: "cast/alexis_maxwell.webp",
 
     shows: ["Survivor"],
 
@@ -14538,7 +14538,7 @@ window.CAST = [
     nickname: "Alicia",
     fullName: "Alicia Calaway",
     gender: "female",
-    image: "cast/alicia_calaway.png",
+    image: "cast/alicia_calaway.webp",
 
     shows: ["Survivor"],
 
@@ -14552,7 +14552,7 @@ window.CAST = [
     nickname: "Alicia",
     fullName: "Alicia Rosa",
     gender: "female",
-    image: "cast/alicia_rosa.png",
+    image: "cast/alicia_rosa.webp",
 
     shows: ["Survivor"],
 
@@ -14566,7 +14566,7 @@ window.CAST = [
     nickname: "Alina",
     fullName: "Alina Wilson",
     gender: "female",
-    image: "cast/alina_wilson.png",
+    image: "cast/alina_wilson.webp",
 
     shows: ["Survivor"],
 
@@ -14580,7 +14580,7 @@ window.CAST = [
     nickname: "Alison",
     fullName: "Alison Raybould",
     gender: "female",
-    image: "cast/alison_raybould.png",
+    image: "cast/alison_raybould.webp",
 
     shows: ["Survivor"],
 
@@ -14594,7 +14594,7 @@ window.CAST = [
     nickname: "Amanda",
     fullName: "Amanda Kimmel",
     gender: "female",
-    image: "cast/amanda_kimmel.png",
+    image: "cast/amanda_kimmel.webp",
 
     shows: ["Survivor"],
 
@@ -14608,7 +14608,7 @@ window.CAST = [
     nickname: "Amber",
     fullName: "Amber Mariano",
     gender: "female",
-    image: "cast/amber_mariano.png",
+    image: "cast/amber_mariano.webp",
 
     shows: [
       "Survivor",
@@ -14626,7 +14626,7 @@ window.CAST = [
     nickname: "Ami",
     fullName: "Ami Cusack",
     gender: "female",
-    image: "cast/ami_cusack.png",
+    image: "cast/ami_cusack.webp",
 
     shows: ["Survivor"],
 
@@ -14640,7 +14640,7 @@ window.CAST = [
     nickname: "Amy",
     fullName: "Amy O'Hara",
     gender: "female",
-    image: "cast/amy_ohara.png",
+    image: "cast/amy_ohara.webp",
 
     shows: ["Survivor"],
 
@@ -14654,7 +14654,7 @@ window.CAST = [
     nickname: "Andrea",
     fullName: "Andrea Boehlke",
     gender: "female",
-    image: "cast/andrea_boehlke.png",
+    image: "cast/andrea_boehlke.webp",
 
     shows: ["Survivor"],
 
@@ -14668,7 +14668,7 @@ window.CAST = [
     nickname: "Andrew",
     fullName: "Andrew Savage",
     gender: "male",
-    image: "cast/andrew_savage.png",
+    image: "cast/andrew_savage.webp",
 
     shows: ["Survivor"],
 
@@ -14682,7 +14682,7 @@ window.CAST = [
     nickname: "Andria",
     fullName: "Andria Herd",
     gender: "male",
-    image: "cast/andria_herd.png",
+    image: "cast/andria_herd.webp",
 
     shows: ["Survivor"],
 
@@ -14696,7 +14696,7 @@ window.CAST = [
     nickname: "Andy",
     fullName: "Andy Rueda",
     gender: "male",
-    image: "cast/andy_rueda.png",
+    image: "cast/andy_rueda.webp",
 
     shows: ["Survivor"],
 
@@ -14710,7 +14710,7 @@ window.CAST = [
     nickname: "Angela",
     fullName: "Angela Perkins",
     gender: "female",
-    image: "cast/angela_perkins.png",
+    image: "cast/angela_perkins.webp",
 
     shows: ["Survivor"],
 
@@ -14724,7 +14724,7 @@ window.CAST = [
     nickname: "Angelina",
     fullName: "Angelina Keeley",
     gender: "female",
-    image: "cast/angelina_keeley.png",
+    image: "cast/angelina_keeley.webp",
 
     shows: ["Survivor"],
 
@@ -14738,7 +14738,7 @@ window.CAST = [
     nickname: "Angie",
     fullName: "Angie Jakusz",
     gender: "female",
-    image: "cast/angie_jakusz.png",
+    image: "cast/angie_jakusz.webp",
 
     shows: ["Survivor"],
 
@@ -14752,7 +14752,7 @@ window.CAST = [
     nickname: "Angie",
     fullName: "Angie Layton",
     gender: "female",
-    image: "cast/angie_layton.png",
+    image: "cast/angie_layton.webp",
 
     shows: ["Survivor"],
 
@@ -14766,7 +14766,7 @@ window.CAST = [
     nickname: "Cao Boi",
     fullName: "Anh-Tuan Bui",
     gender: "male",
-    image: "cast/anh_tuan_bui.png",
+    image: "cast/anh_tuan_bui.webp",
 
     shows: ["Survivor"],
 
@@ -14780,7 +14780,7 @@ window.CAST = [
     nickname: "Anika",
     fullName: "Anika Dhar",
     gender: "female",
-    image: "cast/anika_dhar.png",
+    image: "cast/anika_dhar.webp",
 
     shows: ["Survivor"],
 
@@ -14794,7 +14794,7 @@ window.CAST = [
     nickname: "Anna",
     fullName: "Anna Khait",
     gender: "female",
-    image: "cast/anna_khait.png",
+    image: "cast/anna_khait.webp",
 
     shows: ["Survivor"],
 
@@ -14808,7 +14808,7 @@ window.CAST = [
     nickname: "Annie",
     fullName: "Annie Davis",
     gender: "female",
-    image: "cast/annie_davis.png",
+    image: "cast/annie_davis.webp",
 
     shows: ["Survivor"],
 
@@ -14822,7 +14822,7 @@ window.CAST = [
     nickname: "Anthony",
     fullName: "Anthony Robinson",
     gender: "male",
-    image: "cast/anthony_robinson.png",
+    image: "cast/anthony_robinson.webp",
 
     shows: ["Survivor"],
 
@@ -14836,7 +14836,7 @@ window.CAST = [
     nickname: "Aras",
     fullName: "Aras Baskauskas",
     gender: "male",
-    image: "cast/aras_baskauskas.png",
+    image: "cast/aras_baskauskas.webp",
 
     shows: ["Survivor"],
 
@@ -14850,7 +14850,7 @@ window.CAST = [
     nickname: "Artis",
     fullName: "Artis Silvester",
     gender: "male",
-    image: "cast/artis_silvester.png",
+    image: "cast/artis_silvester.webp",
 
     shows: ["Survivor"],
 
@@ -14864,7 +14864,7 @@ window.CAST = [
     nickname: "Ashlee",
     fullName: "Ashlee Ashby",
     gender: "female",
-    image: "cast/ashlee_ashby.png",
+    image: "cast/ashlee_ashby.webp",
 
     shows: ["Survivor"],
 
@@ -14878,7 +14878,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Massaro",
     gender: "female",
-    image: "cast/ashley_massaro.png",
+    image: "cast/ashley_massaro.webp",
 
     shows: ["Survivor"],
 
@@ -14892,7 +14892,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Nolan",
     gender: "female",
-    image: "cast/ashley_nolan.png",
+    image: "cast/ashley_nolan.webp",
 
     shows: ["Survivor"],
 
@@ -14906,7 +14906,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Trainer",
     gender: "female",
-    image: "cast/ashley_trainer.png",
+    image: "cast/ashley_trainer.webp",
 
     shows: ["Survivor"],
 
@@ -14920,7 +14920,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Underwood",
     gender: "female",
-    image: "cast/ashley_underwood.png",
+    image: "cast/ashley_underwood.webp",
 
     shows: ["Survivor"],
 
@@ -14934,7 +14934,7 @@ window.CAST = [
     nickname: "Aubry",
     fullName: "Aubry Bracco",
     gender: "female",
-    image: "cast/aubry_bracco.png",
+    image: "cast/aubry_bracco.webp",
 
     shows: ["Survivor"],
 
@@ -14948,7 +14948,7 @@ window.CAST = [
     nickname: "Aurora",
     fullName: "Aurora McCreary",
     gender: "female",
-    image: "cast/aurora_mccreary.png",
+    image: "cast/aurora_mccreary.webp",
 
     shows: ["Survivor"],
 
@@ -14962,7 +14962,7 @@ window.CAST = [
     nickname: "Austin",
     fullName: "Austin Carty",
     gender: "male",
-    image: "cast/austin_carty.png",
+    image: "cast/austin_carty.webp",
 
     shows: ["Survivor"],
 
@@ -14976,7 +14976,7 @@ window.CAST = [
     nickname: "Austin",
     fullName: "Austin Li Coon",
     gender: "male",
-    image: "cast/austin_li_coon.png",
+    image: "cast/austin_li_coon.webp",
 
     shows: ["Survivor"],
 
@@ -14990,7 +14990,7 @@ window.CAST = [
     nickname: "Aysha",
     fullName: "Aysha Welch",
     gender: "female",
-    image: "cast/aysha_welch.png",
+    image: "cast/aysha_welch.webp",
 
     shows: ["Survivor"],
 
@@ -15004,7 +15004,7 @@ window.CAST = [
     nickname: "B.B.",
     fullName: "B.B. Andersen",
     gender: "male",
-    image: "cast/b_b_andersen.png",
+    image: "cast/b_b_andersen.webp",
 
     shows: ["Survivor"],
 
@@ -15018,7 +15018,7 @@ window.CAST = [
     nickname: "Baylor",
     fullName: "Baylor Wilson",
     gender: "female",
-    image: "cast/baylor_wilson.png",
+    image: "cast/baylor_wilson.webp",
 
     shows: ["Survivor"],
 
@@ -15032,7 +15032,7 @@ window.CAST = [
     nickname: "Ben",
     fullName: "Ben Browning",
     gender: "male",
-    image: "cast/ben_browning.png",
+    image: "cast/ben_browning.webp",
 
     shows: ["Survivor"],
 
@@ -15046,7 +15046,7 @@ window.CAST = [
     nickname: "Ben",
     fullName: "Ben Driebergen",
     gender: "male",
-    image: "cast/ben_driebergen.png",
+    image: "cast/ben_driebergen.webp",
 
     shows: [
       "Survivor",
@@ -15066,7 +15066,7 @@ window.CAST = [
     nickname: "Ben",
     fullName: "Ben Henry",
     gender: "male",
-    image: "cast/ben_henry.png",
+    image: "cast/ben_henry.webp",
 
     shows: ["Survivor"],
 
@@ -15080,7 +15080,7 @@ window.CAST = [
     nickname: "Ben",
     fullName: "Ben Katzman",
     gender: "male",
-    image: "cast/ben_katzman.png",
+    image: "cast/ben_katzman.webp",
 
     shows: ["Survivor"],
 
@@ -15094,7 +15094,7 @@ window.CAST = [
     nickname: "Coach",
     fullName: "Benjamin Wade",
     gender: "male",
-    image: "cast/benjamin_wade.png",
+    image: "cast/benjamin_wade.webp",
 
     shows: ["Survivor"],
 
@@ -15108,7 +15108,7 @@ window.CAST = [
     nickname: "Betsy",
     fullName: "Betsy Bolan",
     gender: "female",
-    image: "cast/betsy_bolan.png",
+    image: "cast/betsy_bolan.webp",
 
     shows: ["Survivor"],
 
@@ -15122,7 +15122,7 @@ window.CAST = [
     nickname: "Bhanu",
     fullName: "Bhanu Gopal",
     gender: "male",
-    image: "cast/bhanu_gopal.png",
+    image: "cast/bhanu_gopal.webp",
 
     shows: ["Survivor"],
 
@@ -15136,7 +15136,7 @@ window.CAST = [
     nickname: "Bi",
     fullName: "Bi Nguyen",
     gender: "female",
-    image: "cast/bi_nguyen.png",
+    image: "cast/bi_nguyen.webp",
 
     shows: ["Survivor"],
 
@@ -15150,7 +15150,7 @@ window.CAST = [
     nickname: "Bianca",
     fullName: "Bianca Roses",
     gender: "female",
-    image: "cast/bianca_roses.png",
+    image: "cast/bianca_roses.webp",
 
     shows: ["Survivor"],
 
@@ -15164,7 +15164,7 @@ window.CAST = [
     nickname: "Bill",
     fullName: "Bill Posley",
     gender: "male",
-    image: "cast/bill_posley.png",
+    image: "cast/bill_posley.webp",
 
     shows: ["Survivor"],
 
@@ -15178,7 +15178,7 @@ window.CAST = [
     nickname: "Blake",
     fullName: "Blake Towsley",
     gender: "male",
-    image: "cast/blake_towsley.png",
+    image: "cast/blake_towsley.webp",
 
     shows: ["Survivor"],
 
@@ -15192,7 +15192,7 @@ window.CAST = [
     nickname: "Bobby",
     fullName: "Bobby Jon Drinkard",
     gender: "male",
-    image: "cast/bobby_jon_drinkard.png",
+    image: "cast/bobby_jon_drinkard.webp",
 
     shows: ["Survivor"],
 
@@ -15206,7 +15206,7 @@ window.CAST = [
     nickname: "Bobby",
     fullName: "Bobby Mason",
     gender: "male",
-    image: "cast/bobby_mason.png",
+    image: "cast/bobby_mason.webp",
 
     shows: ["Survivor"],
 
@@ -15220,7 +15220,7 @@ window.CAST = [
     nickname: "Brad",
     fullName: "Brad Culpepper",
     gender: "male",
-    image: "cast/brad_culpepper.png",
+    image: "cast/brad_culpepper.webp",
 
     shows: ["Survivor"],
 
@@ -15234,7 +15234,7 @@ window.CAST = [
     nickname: "Brad",
     fullName: "Brad Reese",
     gender: "male",
-    image: "cast/brad_reese.png",
+    image: "cast/brad_reese.webp",
 
     shows: ["Survivor"],
 
@@ -15248,7 +15248,7 @@ window.CAST = [
     nickname: "Brad",
     fullName: "Brad Virata",
     gender: "male",
-    image: "cast/brad_virata.png",
+    image: "cast/brad_virata.webp",
 
     shows: ["Survivor"],
 
@@ -15262,7 +15262,7 @@ window.CAST = [
     nickname: "Bradley",
     fullName: "Bradley Kleihege",
     gender: "male",
-    image: "cast/bradley_kleihege.png",
+    image: "cast/bradley_kleihege.webp",
 
     shows: ["Survivor"],
 
@@ -15276,7 +15276,7 @@ window.CAST = [
     nickname: "Brady",
     fullName: "Brady Finta",
     gender: "male",
-    image: "cast/brady_finta.png",
+    image: "cast/brady_finta.webp",
 
     shows: ["Survivor"],
 
@@ -15290,7 +15290,7 @@ window.CAST = [
     nickname: "Brando",
     fullName: "Brando Meyer",
     gender: "male",
-    image: "cast/brando_meyer.png",
+    image: "cast/brando_meyer.webp",
 
     shows: ["Survivor"],
 
@@ -15304,7 +15304,7 @@ window.CAST = [
     nickname: "Brandon",
     fullName: "Brandon Bellinger",
     gender: "male",
-    image: "cast/brandon_bellinger.png",
+    image: "cast/brandon_bellinger.webp",
 
     shows: ["Survivor"],
 
@@ -15318,7 +15318,7 @@ window.CAST = [
     nickname: "Brandon",
     fullName: "Brandon Cottom",
     gender: "male",
-    image: "cast/brandon_cottom.png",
+    image: "cast/brandon_cottom.webp",
 
     shows: ["Survivor"],
 
@@ -15332,7 +15332,7 @@ window.CAST = [
     nickname: "Brandon",
     fullName: "Brandon Donlon",
     gender: "male",
-    image: "cast/brandon_donlon.png",
+    image: "cast/brandon_donlon.webp",
 
     shows: ["Survivor"],
 
@@ -15346,7 +15346,7 @@ window.CAST = [
     nickname: "Brandon",
     fullName: "Brandon Hantz",
     gender: "male",
-    image: "cast/brandon_hantz.png",
+    image: "cast/brandon_hantz.webp",
 
     shows: ["Survivor"],
 
@@ -15360,7 +15360,7 @@ window.CAST = [
     nickname: "Brandon",
     fullName: "Brandon Quinton",
     gender: "male",
-    image: "cast/brandon_quinton.png",
+    image: "cast/brandon_quinton.webp",
 
     shows: ["Survivor"],
 
@@ -15374,7 +15374,7 @@ window.CAST = [
     nickname: "Brenda",
     fullName: "Brenda Lowe",
     gender: "female",
-    image: "cast/brenda_lowe.png",
+    image: "cast/brenda_lowe.webp",
 
     shows: ["Survivor"],
 
@@ -15388,7 +15388,7 @@ window.CAST = [
     nickname: "Brendan",
     fullName: "Brendan Shapiro",
     gender: "male",
-    image: "cast/brendan_shapiro.png",
+    image: "cast/brendan_shapiro.webp",
 
     shows: ["Survivor"],
 
@@ -15402,7 +15402,7 @@ window.CAST = [
     nickname: "Brendan",
     fullName: "Brendan Synnott",
     gender: "male",
-    image: "cast/brendan_synnott.png",
+    image: "cast/brendan_synnott.webp",
 
     shows: ["Survivor"],
 
@@ -15416,7 +15416,7 @@ window.CAST = [
     nickname: "Bret",
     fullName: "Bret LaBelle",
     gender: "male",
-    image: "cast/bret_labelle.png",
+    image: "cast/bret_labelle.webp",
 
     shows: [
       "Survivor",
@@ -15434,7 +15434,7 @@ window.CAST = [
     nickname: "Brett",
     fullName: "Brett Clouser",
     gender: "male",
-    image: "cast/brett_clouser.png",
+    image: "cast/brett_clouser.webp",
 
     shows: ["Survivor"],
 
@@ -15448,7 +15448,7 @@ window.CAST = [
     nickname: "Brian",
     fullName: "Brian Corridan",
     gender: "male",
-    image: "cast/brian_corridan.png",
+    image: "cast/brian_corridan.webp",
 
     shows: ["Survivor"],
 
@@ -15462,7 +15462,7 @@ window.CAST = [
     nickname: "Brian",
     fullName: "Brian Heidik",
     gender: "male",
-    image: "cast/brian_heidik.png",
+    image: "cast/brian_heidik.webp",
 
     shows: ["Survivor"],
 
@@ -15476,7 +15476,7 @@ window.CAST = [
     nickname: "Brianna",
     fullName: "Brianna Varela",
     gender: "female",
-    image: "cast/brianna_varela.png",
+    image: "cast/brianna_varela.webp",
 
     shows: ["Survivor"],
 
@@ -15490,7 +15490,7 @@ window.CAST = [
     nickname: "Brice",
     fullName: "Brice Johnston",
     gender: "male",
-    image: "cast/brice_johnston.png",
+    image: "cast/brice_johnston.webp",
 
     shows: ["Survivor"],
 
@@ -15504,7 +15504,7 @@ window.CAST = [
     nickname: "Brook",
     fullName: "Brook Geraghty",
     gender: "male",
-    image: "cast/brook_geraghty.png",
+    image: "cast/brook_geraghty.webp",
 
     shows: ["Survivor"],
 
@@ -15518,7 +15518,7 @@ window.CAST = [
     nickname: "Brooke",
     fullName: "Brooke Struck",
     gender: "female",
-    image: "cast/brooke_struck.png",
+    image: "cast/brooke_struck.webp",
 
     shows: ["Survivor"],
 
@@ -15532,7 +15532,7 @@ window.CAST = [
     nickname: "Bruce",
     fullName: "Bruce Kanegai",
     gender: "male",
-    image: "cast/bruce_kanegai.png",
+    image: "cast/bruce_kanegai.webp",
 
     shows: ["Survivor"],
 
@@ -15546,7 +15546,7 @@ window.CAST = [
     nickname: "Bruce",
     fullName: "Bruce Perreault",
     gender: "male",
-    image: "cast/bruce_perreault.png",
+    image: "cast/bruce_perreault.webp",
 
     shows: ["Survivor"],
 
@@ -15560,7 +15560,7 @@ window.CAST = [
     nickname: "Burton",
     fullName: "Burton Roberts",
     gender: "male",
-    image: "cast/burton_roberts.png",
+    image: "cast/burton_roberts.webp",
 
     shows: ["Survivor"],
 
@@ -15574,7 +15574,7 @@ window.CAST = [
     nickname: "Butch",
     fullName: "Butch Lockley",
     gender: "male",
-    image: "cast/butch_lockley.png",
+    image: "cast/butch_lockley.webp",
 
     shows: ["Survivor"],
 
@@ -15588,7 +15588,7 @@ window.CAST = [
     nickname: "Caleb",
     fullName: "Caleb Bankston",
     gender: "male",
-    image: "cast/caleb_bankston.png",
+    image: "cast/caleb_bankston.webp",
 
     shows: ["Survivor"],
 
@@ -15602,7 +15602,7 @@ window.CAST = [
     nickname: "Caleb",
     fullName: "Caleb Reynolds",
     gender: "male",
-    image: "cast/caleb_reynolds.png",
+    image: "cast/caleb_reynolds.webp",
 
     shows: [
       "Survivor",
@@ -15620,7 +15620,7 @@ window.CAST = [
     nickname: "Candace",
     fullName: "Candace Smith",
     gender: "female",
-    image: "cast/candace_smith.png",
+    image: "cast/candace_smith.webp",
 
     shows: ["Survivor"],
 
@@ -15634,7 +15634,7 @@ window.CAST = [
     nickname: "Candice",
     fullName: "Candice Cody",
     gender: "female",
-    image: "cast/candice_cody.png",
+    image: "cast/candice_cody.webp",
 
     shows: ["Survivor"],
 
@@ -15648,7 +15648,7 @@ window.CAST = [
     nickname: "Carl",
     fullName: "Carl Bilancione",
     gender: "male",
-    image: "cast/carl_bilancione.png",
+    image: "cast/carl_bilancione.webp",
 
     shows: ["Survivor"],
 
@@ -15662,7 +15662,7 @@ window.CAST = [
     nickname: "Carl",
     fullName: "Carl Boudreaux",
     gender: "male",
-    image: "cast/carl_boudreaux.png",
+    image: "cast/carl_boudreaux.webp",
 
     shows: ["Survivor"],
 
@@ -15676,7 +15676,7 @@ window.CAST = [
     nickname: "Carolina",
     fullName: "Carolina Eastwood",
     gender: "female",
-    image: "cast/carolina_eastwood.png",
+    image: "cast/carolina_eastwood.webp",
 
     shows: ["Survivor"],
 
@@ -15690,7 +15690,7 @@ window.CAST = [
     nickname: "Caroline",
     fullName: "Caroline Vidmar",
     gender: "female",
-    image: "cast/caroline_vidmar.png",
+    image: "cast/caroline_vidmar.webp",
 
     shows: ["Survivor"],
 
@@ -15704,7 +15704,7 @@ window.CAST = [
     nickname: "Carolyn",
     fullName: "Carolyn Rivera",
     gender: "female",
-    image: "cast/carolyn_rivera.png",
+    image: "cast/carolyn_rivera.webp",
 
     shows: ["Survivor"],
 
@@ -15718,7 +15718,7 @@ window.CAST = [
     nickname: "Carolyn",
     fullName: "Carolyn Wiger",
     gender: "female",
-    image: "cast/carolyn_wiger.png",
+    image: "cast/carolyn_wiger.webp",
 
     shows: [
       "Survivor",
@@ -15736,7 +15736,7 @@ window.CAST = [
     nickname: "Carson",
     fullName: "Carson Garrett",
     gender: "male",
-    image: "cast/carson_garrett.png",
+    image: "cast/carson_garrett.webp",
 
     shows: ["Survivor"],
 
@@ -15750,7 +15750,7 @@ window.CAST = [
     nickname: "Carter",
     fullName: "Carter Williams",
     gender: "male",
-    image: "cast/carter_williams.png",
+    image: "cast/carter_williams.webp",
 
     shows: ["Survivor"],
 
@@ -15764,7 +15764,7 @@ window.CAST = [
     nickname: "Caryn",
     fullName: "Caryn Groedel",
     gender: "female",
-    image: "cast/caryn_groedel.png",
+    image: "cast/caryn_groedel.webp",
 
     shows: ["Survivor"],
 
@@ -15778,7 +15778,7 @@ window.CAST = [
     nickname: "Cassandra",
     fullName: "Cassandra Franklin",
     gender: "female",
-    image: "cast/cassandra_franklin.png",
+    image: "cast/cassandra_franklin.webp",
 
     shows: ["Survivor"],
 
@@ -15792,7 +15792,7 @@ window.CAST = [
     nickname: "Cassidy",
     fullName: "Cassidy Clark",
     gender: "female",
-    image: "cast/cassidy_clark.png",
+    image: "cast/cassidy_clark.webp",
 
     shows: [
       "Survivor",
@@ -15812,7 +15812,7 @@ window.CAST = [
     nickname: "Cecilia",
     fullName: "Cecilia Mansilla",
     gender: "female",
-    image: "cast/cecilia_mansilla.png",
+    image: "cast/cecilia_mansilla.webp",
 
     shows: ["Survivor"],
 
@@ -15826,7 +15826,7 @@ window.CAST = [
     nickname: "Cedrek",
     fullName: "Cedrek McFadden",
     gender: "male",
-    image: "cast/cedrek_mcfadden.png",
+    image: "cast/cedrek_mcfadden.webp",
 
     shows: ["Survivor"],
 
@@ -15840,7 +15840,7 @@ window.CAST = [
     nickname: "Chanelle",
     fullName: "Chanelle Howell",
     gender: "female",
-    image: "cast/chanelle_howell.png",
+    image: "cast/chanelle_howell.webp",
 
     shows: [
       "Survivor",
@@ -15858,7 +15858,7 @@ window.CAST = [
     nickname: "Charity",
     fullName: "Charity Nelms",
     gender: "female",
-    image: "cast/charity_nelms.png",
+    image: "cast/charity_nelms.webp",
 
     shows: ["Survivor"],
 
@@ -15872,7 +15872,7 @@ window.CAST = [
     nickname: "Charlie",
     fullName: "Charlie Davis",
     gender: "male",
-    image: "cast/charlie_davis.png",
+    image: "cast/charlie_davis.webp",
 
     shows: ["Survivor"],
 
@@ -15886,7 +15886,7 @@ window.CAST = [
     nickname: "Charlie",
     fullName: "Charlie Herschel",
     gender: "male",
-    image: "cast/charlie_herschel.png",
+    image: "cast/charlie_herschel.webp",
 
     shows: ["Survivor"],
 
@@ -15900,7 +15900,7 @@ window.CAST = [
     nickname: "Chase",
     fullName: "Chase Rice",
     gender: "male",
-    image: "cast/chase_rice.png",
+    image: "cast/chase_rice.webp",
 
     shows: ["Survivor"],
 
@@ -15914,7 +15914,7 @@ window.CAST = [
     nickname: "Chelsea",
     fullName: "Chelsea Meissner",
     gender: "female",
-    image: "cast/chelsea_meissner.png",
+    image: "cast/chelsea_meissner.webp",
 
     shows: ["Survivor"],
 
@@ -15928,7 +15928,7 @@ window.CAST = [
     nickname: "Chelsea",
     fullName: "Chelsea Townsend",
     gender: "female",
-    image: "cast/chelsea_townsend.png",
+    image: "cast/chelsea_townsend.webp",
 
     shows: ["Survivor"],
 
@@ -15942,7 +15942,7 @@ window.CAST = [
     nickname: "Chelsea",
     fullName: "Chelsea Walker",
     gender: "female",
-    image: "cast/chelsea_walker.png",
+    image: "cast/chelsea_walker.webp",
 
     shows: ["Survivor"],
 
@@ -15956,7 +15956,7 @@ window.CAST = [
     nickname: "Chet",
     fullName: "Chet Welch",
     gender: "male",
-    image: "cast/chet_welch.png",
+    image: "cast/chet_welch.webp",
 
     shows: ["Survivor"],
 
@@ -15970,7 +15970,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Chris Daugherty",
     gender: "male",
-    image: "cast/chris_daugherty.png",
+    image: "cast/chris_daugherty.webp",
 
     shows: ["Survivor"],
 
@@ -15984,7 +15984,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Chris Hammons",
     gender: "male",
-    image: "cast/chris_hammons.png",
+    image: "cast/chris_hammons.webp",
 
     shows: [
       "Survivor",
@@ -16002,7 +16002,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Chris Noble",
     gender: "male",
-    image: "cast/chris_noble.png",
+    image: "cast/chris_noble.webp",
 
     shows: ["Survivor"],
 
@@ -16016,7 +16016,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Chris Underwood",
     gender: "male",
-    image: "cast/chris_underwood.png",
+    image: "cast/chris_underwood.webp",
 
     shows: [
       "Survivor",
@@ -16036,7 +16036,7 @@ window.CAST = [
     nickname: "Chrissy",
     fullName: "Chrissy Hofbeck",
     gender: "female",
-    image: "cast/chrissy_hofbeck.png",
+    image: "cast/chrissy_hofbeck.webp",
 
     shows: ["Survivor"],
 
@@ -16050,7 +16050,7 @@ window.CAST = [
     nickname: "Chrissy",
     fullName: "Chrissy Sarnowsky",
     gender: "female",
-    image: "cast/chrissy_sarnowsky.png",
+    image: "cast/chrissy_sarnowsky.webp",
 
     shows: ["Survivor"],
 
@@ -16064,7 +16064,7 @@ window.CAST = [
     nickname: "Christa",
     fullName: "Christa Hastie",
     gender: "female",
-    image: "cast/christa_hastie.png",
+    image: "cast/christa_hastie.webp",
 
     shows: ["Survivor"],
 
@@ -16078,7 +16078,7 @@ window.CAST = [
     nickname: "Christian",
     fullName: "Christian Hubicki",
     gender: "male",
-    image: "cast/christian_hubicki.png",
+    image: "cast/christian_hubicki.webp",
 
     shows: ["Survivor"],
 
@@ -16092,7 +16092,7 @@ window.CAST = [
     nickname: "Christina",
     fullName: "Christina Cha",
     gender: "female",
-    image: "cast/christina_cha.png",
+    image: "cast/christina_cha.webp",
 
     shows: ["Survivor"],
 
@@ -16106,7 +16106,7 @@ window.CAST = [
     nickname: "Christine",
     fullName: "Christine Shields Markoski",
     gender: "female",
-    image: "cast/christine_shields_markoski.png",
+    image: "cast/christine_shields_markoski.webp",
 
     shows: ["Survivor"],
 
@@ -16120,7 +16120,7 @@ window.CAST = [
     nickname: "Christy",
     fullName: "Christy Smith",
     gender: "female",
-    image: "cast/christy_smith.png",
+    image: "cast/christy_smith.webp",
 
     shows: ["Survivor"],
 
@@ -16134,7 +16134,7 @@ window.CAST = [
     nickname: "CeCe",
     fullName: "Ciandre Taylor",
     gender: "female",
-    image: "cast/ciandre_taylor.png",
+    image: "cast/ciandre_taylor.webp",
 
     shows: ["Survivor"],
 
@@ -16148,7 +16148,7 @@ window.CAST = [
     nickname: "Ciera",
     fullName: "Ciera Eastin",
     gender: "female",
-    image: "cast/ciera_eastin.png",
+    image: "cast/ciera_eastin.webp",
 
     shows: ["Survivor"],
 
@@ -16162,7 +16162,7 @@ window.CAST = [
     nickname: "Cindy",
     fullName: "Cindy Hall",
     gender: "female",
-    image: "cast/cindy_hall.png",
+    image: "cast/cindy_hall.webp",
 
     shows: ["Survivor"],
 
@@ -16176,7 +16176,7 @@ window.CAST = [
     nickname: "Cirie",
     fullName: "Cirie Fields",
     gender: "female",
-    image: "cast/cirie_fields.png",
+    image: "cast/cirie_fields.webp",
 
     shows: [
       "Survivor",
@@ -16198,7 +16198,7 @@ window.CAST = [
     nickname: "Claire",
     fullName: "Claire Rafson",
     gender: "female",
-    image: "cast/claire_rafson.png",
+    image: "cast/claire_rafson.webp",
 
     shows: ["Survivor"],
 
@@ -16212,7 +16212,7 @@ window.CAST = [
     nickname: "Clarence",
     fullName: "Clarence Black",
     gender: "male",
-    image: "cast/clarence_black.png",
+    image: "cast/clarence_black.webp",
 
     shows: ["Survivor"],
 
@@ -16226,7 +16226,7 @@ window.CAST = [
     nickname: "Clay",
     fullName: "Clay Jordan",
     gender: "male",
-    image: "cast/clay_jordan.png",
+    image: "cast/clay_jordan.webp",
 
     shows: ["Survivor"],
 
@@ -16240,7 +16240,7 @@ window.CAST = [
     nickname: "Cliff",
     fullName: "Cliff Robinson",
     gender: "male",
-    image: "cast/cliff_robinson.png",
+    image: "cast/cliff_robinson.webp",
 
     shows: ["Survivor"],
 
@@ -16254,7 +16254,7 @@ window.CAST = [
     nickname: "Coby",
     fullName: "Coby Archa",
     gender: "male",
-    image: "cast/coby_archa.png",
+    image: "cast/coby_archa.webp",
 
     shows: ["Survivor"],
 
@@ -16268,7 +16268,7 @@ window.CAST = [
     nickname: "Cody",
     fullName: "Cody Assenmacher",
     gender: "male",
-    image: "cast/cody_assenmacher.png",
+    image: "cast/cody_assenmacher.webp",
 
     shows: ["Survivor"],
 
@@ -16282,7 +16282,7 @@ window.CAST = [
     nickname: "Colby",
     fullName: "Colby Donaldson",
     gender: "male",
-    image: "cast/colby_donaldson.png",
+    image: "cast/colby_donaldson.webp",
 
     shows: ["Survivor"],
 
@@ -16296,7 +16296,7 @@ window.CAST = [
     nickname: "Cole",
     fullName: "Cole Medders",
     gender: "male",
-    image: "cast/cole_medders.png",
+    image: "cast/cole_medders.webp",
 
     shows: ["Survivor"],
 
@@ -16310,7 +16310,7 @@ window.CAST = [
     nickname: "Colleen",
     fullName: "Colleen Haskell",
     gender: "female",
-    image: "cast/colleen_haskell.png",
+    image: "cast/colleen_haskell.webp",
 
     shows: ["Survivor"],
 
@@ -16324,7 +16324,7 @@ window.CAST = [
     nickname: "Colton",
     fullName: "Colton Cumbie",
     gender: "male",
-    image: "cast/colton_cumbie.png",
+    image: "cast/colton_cumbie.webp",
 
     shows: ["Survivor"],
 
@@ -16338,7 +16338,7 @@ window.CAST = [
     nickname: "Corinne",
     fullName: "Corinne Kaplan",
     gender: "female",
-    image: "cast/corinne_kaplan.png",
+    image: "cast/corinne_kaplan.webp",
 
     shows: [
       "Survivor",
@@ -16356,7 +16356,7 @@ window.CAST = [
     nickname: "Courtney",
     fullName: "Courtney Marit",
     gender: "female",
-    image: "cast/courtney_marit.png",
+    image: "cast/courtney_marit.webp",
 
     shows: ["Survivor"],
 
@@ -16370,7 +16370,7 @@ window.CAST = [
     nickname: "Courtney",
     fullName: "Courtney Yates",
     gender: "female",
-    image: "cast/courtney_yates.png",
+    image: "cast/courtney_yates.webp",
 
     shows: ["Survivor"],
 
@@ -16384,7 +16384,7 @@ window.CAST = [
     nickname: "Cristina",
     fullName: "Cristina Coria",
     gender: "female",
-    image: "cast/cristina_coria.png",
+    image: "cast/cristina_coria.webp",
 
     shows: ["Survivor"],
 
@@ -16398,7 +16398,7 @@ window.CAST = [
     nickname: "Crystal",
     fullName: "Crystal Cox",
     gender: "female",
-    image: "cast/crystal_cox.png",
+    image: "cast/crystal_cox.webp",
 
     shows: ["Survivor"],
 
@@ -16412,7 +16412,7 @@ window.CAST = [
     nickname: "Cydney",
     fullName: "Cydney Gillon",
     gender: "female",
-    image: "cast/cydney_gillon.png",
+    image: "cast/cydney_gillon.webp",
 
     shows: ["Survivor"],
 
@@ -16426,7 +16426,7 @@ window.CAST = [
     nickname: "Dale",
     fullName: "Dale Wentworth",
     gender: "male",
-    image: "cast/dale_wentworth.png",
+    image: "cast/dale_wentworth.webp",
 
     shows: ["Survivor"],
 
@@ -16440,7 +16440,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Barry",
     gender: "male",
-    image: "cast/dan_barry.png",
+    image: "cast/dan_barry.webp",
 
     shows: ["Survivor"],
 
@@ -16454,7 +16454,7 @@ window.CAST = [
     nickname: "Wardog",
     fullName: "Dan DaSilva",
     gender: "male",
-    image: "cast/dan_dasilva.png",
+    image: "cast/dan_dasilva.webp",
 
     shows: ["Survivor"],
 
@@ -16468,7 +16468,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Foley",
     gender: "male",
-    image: "cast/dan_foley.png",
+    image: "cast/dan_foley.webp",
 
     shows: ["Survivor"],
 
@@ -16482,7 +16482,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Kay",
     gender: "male",
-    image: "cast/dan_kay.png",
+    image: "cast/dan_kay.webp",
 
     shows: ["Survivor"],
 
@@ -16496,7 +16496,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Lembo",
     gender: "male",
-    image: "cast/dan_lembo.png",
+    image: "cast/dan_lembo.webp",
 
     shows: ["Survivor"],
 
@@ -16510,7 +16510,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Rengering",
     gender: "male",
-    image: "cast/dan_rengering.png",
+    image: "cast/dan_rengering.webp",
 
     shows: ["Survivor"],
 
@@ -16524,7 +16524,7 @@ window.CAST = [
     nickname: "Dan",
     fullName: "Dan Spilo",
     gender: "male",
-    image: "cast/dan_spilo.png",
+    image: "cast/dan_spilo.webp",
 
     shows: ["Survivor"],
 
@@ -16538,7 +16538,7 @@ window.CAST = [
     nickname: "Dana",
     fullName: "Dana Lambert",
     gender: "female",
-    image: "cast/dana_lambert.png",
+    image: "cast/dana_lambert.webp",
 
     shows: ["Survivor"],
 
@@ -16552,7 +16552,7 @@ window.CAST = [
     nickname: "Daniel",
     fullName: "Daniel Lue",
     gender: "male",
-    image: "cast/daniel_lue.png",
+    image: "cast/daniel_lue.webp",
 
     shows: ["Survivor"],
 
@@ -16566,7 +16566,7 @@ window.CAST = [
     nickname: "Daniel",
     fullName: "Daniel Strunk",
     gender: "male",
-    image: "cast/daniel_strunk.png",
+    image: "cast/daniel_strunk.webp",
 
     shows: ["Survivor"],
 
@@ -16580,7 +16580,7 @@ window.CAST = [
     nickname: "Danielle",
     fullName: "Danielle DiLorenzo",
     gender: "female",
-    image: "cast/danielle_dilorenzo.png",
+    image: "cast/danielle_dilorenzo.webp",
 
     shows: ["Survivor"],
 
@@ -16594,7 +16594,7 @@ window.CAST = [
     nickname: "Danni",
     fullName: "Danni Boatwright",
     gender: "female",
-    image: "cast/danni_boatwright.png",
+    image: "cast/danni_boatwright.webp",
 
     shows: ["Survivor"],
 
@@ -16608,7 +16608,7 @@ window.CAST = [
     nickname: "GC",
     fullName: "Danny Brown",
     gender: "male",
-    image: "cast/danny_brown.png",
+    image: "cast/danny_brown.webp",
 
     shows: ["Survivor"],
 
@@ -16622,7 +16622,7 @@ window.CAST = [
     nickname: "Danny",
     fullName: "Danny Massa",
     gender: "male",
-    image: "cast/danny_massa.png",
+    image: "cast/danny_massa.webp",
 
     shows: ["Survivor"],
 
@@ -16636,7 +16636,7 @@ window.CAST = [
     nickname: "Danny",
     fullName: "Danny McCray",
     gender: "male",
-    image: "cast/danny_mccray.png",
+    image: "cast/danny_mccray.webp",
 
     shows: [
       "Survivor",
@@ -16656,7 +16656,7 @@ window.CAST = [
     nickname: "Darnell",
     fullName: "Darnell Hamilton",
     gender: "male",
-    image: "cast/darnell_hamilton.png",
+    image: "cast/darnell_hamilton.webp",
 
     shows: ["Survivor"],
 
@@ -16670,7 +16670,7 @@ window.CAST = [
     nickname: "Darrah",
     fullName: "Darrah Johnson",
     gender: "female",
-    image: "cast/darrah_johnson.png",
+    image: "cast/darrah_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -16684,7 +16684,7 @@ window.CAST = [
     nickname: "Dave",
     fullName: "Dave Ball",
     gender: "male",
-    image: "cast/dave_ball.png",
+    image: "cast/dave_ball.webp",
 
     shows: ["Survivor"],
 
@@ -16698,7 +16698,7 @@ window.CAST = [
     nickname: "Dave",
     fullName: "Dave Cruser",
     gender: "male",
-    image: "cast/dave_cruser.png",
+    image: "cast/dave_cruser.webp",
 
     shows: ["Survivor"],
 
@@ -16712,7 +16712,7 @@ window.CAST = [
     nickname: "Dave",
     fullName: "Dave Johnson",
     gender: "male",
-    image: "cast/dave_johnson.png",
+    image: "cast/dave_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -16726,7 +16726,7 @@ window.CAST = [
     nickname: "Jelinsky",
     fullName: "David Jelinsky",
     gender: "male",
-    image: "cast/david_jelinsky.png",
+    image: "cast/david_jelinsky.webp",
 
     shows: ["Survivor"],
 
@@ -16740,7 +16740,7 @@ window.CAST = [
     nickname: "David",
     fullName: "David Kinne",
     gender: "male",
-    image: "cast/david_kinne.png",
+    image: "cast/david_kinne.webp",
 
     shows: ["Survivor"],
 
@@ -16754,7 +16754,7 @@ window.CAST = [
     nickname: "David",
     fullName: "David Murphy",
     gender: "male",
-    image: "cast/david_murphy.png",
+    image: "cast/david_murphy.webp",
 
     shows: ["Survivor"],
 
@@ -16768,7 +16768,7 @@ window.CAST = [
     nickname: "David",
     fullName: "David Samson",
     gender: "male",
-    image: "cast/david_samson.png",
+    image: "cast/david_samson.webp",
 
     shows: ["Survivor"],
 
@@ -16782,7 +16782,7 @@ window.CAST = [
     nickname: "David",
     fullName: "David Voce",
     gender: "male",
-    image: "cast/david_voce.png",
+    image: "cast/david_voce.webp",
 
     shows: ["Survivor"],
 
@@ -16796,7 +16796,7 @@ window.CAST = [
     nickname: "David",
     fullName: "David Wright",
     gender: "male",
-    image: "cast/david_wright.png",
+    image: "cast/david_wright.webp",
 
     shows: ["Survivor"],
 
@@ -16810,7 +16810,7 @@ window.CAST = [
     nickname: "Davie",
     fullName: "Davie Rickenbacker",
     gender: "male",
-    image: "cast/davie_rickenbacker.png",
+    image: "cast/davie_rickenbacker.webp",
 
     shows: ["Survivor"],
 
@@ -16824,7 +16824,7 @@ window.CAST = [
     nickname: "Dawn",
     fullName: "Dawn Meehan",
     gender: "female",
-    image: "cast/dawn_meehan.png",
+    image: "cast/dawn_meehan.webp",
 
     shows: ["Survivor"],
 
@@ -16838,7 +16838,7 @@ window.CAST = [
     nickname: "Dean",
     fullName: "Dean Kowalski",
     gender: "male",
-    image: "cast/dean_kowalski.png",
+    image: "cast/dean_kowalski.webp",
 
     shows: ["Survivor"],
 
@@ -16852,7 +16852,7 @@ window.CAST = [
     nickname: "Debb",
     fullName: "Debb Eaton",
     gender: "female",
-    image: "cast/debb_eaton.png",
+    image: "cast/debb_eaton.webp",
 
     shows: ["Survivor"],
 
@@ -16866,7 +16866,7 @@ window.CAST = [
     nickname: "Debbie",
     fullName: "Debbie Wanner",
     gender: "female",
-    image: "cast/debbie_wanner.png",
+    image: "cast/debbie_wanner.webp",
 
     shows: ["Survivor"],
 
@@ -16880,7 +16880,7 @@ window.CAST = [
     nickname: "Debra",
     fullName: "Debra Beebe",
     gender: "female",
-    image: "cast/debra_beebe.png",
+    image: "cast/debra_beebe.webp",
 
     shows: ["Survivor"],
 
@@ -16894,7 +16894,7 @@ window.CAST = [
     nickname: "Dee",
     fullName: "Dee Valladares",
     gender: "female",
-    image: "cast/dee_valladares.png",
+    image: "cast/dee_valladares.webp",
 
     shows: [
       "Survivor",
@@ -16914,7 +16914,7 @@ window.CAST = [
     nickname: "Deena",
     fullName: "Deena Bennett",
     gender: "female",
-    image: "cast/deena_bennett.png",
+    image: "cast/deena_bennett.webp",
 
     shows: ["Survivor"],
 
@@ -16928,7 +16928,7 @@ window.CAST = [
     nickname: "Denise",
     fullName: "Denise Martin",
     gender: "female",
-    image: "cast/denise_martin.png",
+    image: "cast/denise_martin.webp",
 
     shows: ["Survivor"],
 
@@ -16942,7 +16942,7 @@ window.CAST = [
     nickname: "Denise",
     fullName: "Denise Stapley",
     gender: "female",
-    image: "cast/denise_stapley.png",
+    image: "cast/denise_stapley.webp",
 
     shows: ["Survivor"],
 
@@ -16956,7 +16956,7 @@ window.CAST = [
     nickname: "Deshawn",
     fullName: "Deshawn Radden",
     gender: "male",
-    image: "cast/deshawn_radden.png",
+    image: "cast/deshawn_radden.webp",
 
     shows: ["Survivor"],
 
@@ -16970,7 +16970,7 @@ window.CAST = [
     nickname: "Desiree",
     fullName: "Desiree Afuye",
     gender: "female",
-    image: "cast/desiree_afuye.png",
+    image: "cast/desiree_afuye.webp",
 
     shows: ["Survivor"],
 
@@ -16984,7 +16984,7 @@ window.CAST = [
     nickname: "Desiree",
     fullName: "Desiree Williams",
     gender: "female",
-    image: "cast/desiree_williams.png",
+    image: "cast/desiree_williams.webp",
 
     shows: [
       "Survivor",
@@ -17002,7 +17002,7 @@ window.CAST = [
     nickname: "Devon",
     fullName: "Devon Pinto",
     gender: "male",
-    image: "cast/devon_pinto.png",
+    image: "cast/devon_pinto.webp",
 
     shows: ["Survivor"],
 
@@ -17016,7 +17016,7 @@ window.CAST = [
     nickname: "Diane",
     fullName: "Diane Ogden",
     gender: "female",
-    image: "cast/diane_ogden.png",
+    image: "cast/diane_ogden.webp",
 
     shows: ["Survivor"],
 
@@ -17030,7 +17030,7 @@ window.CAST = [
     nickname: "Dirk",
     fullName: "Dirk Been",
     gender: "male",
-    image: "cast/dirk_been.png",
+    image: "cast/dirk_been.webp",
 
     shows: ["Survivor"],
 
@@ -17044,7 +17044,7 @@ window.CAST = [
     nickname: "Dolly",
     fullName: "Dolly Neely",
     gender: "female",
-    image: "cast/dolly_neely.png",
+    image: "cast/dolly_neely.webp",
 
     shows: ["Survivor"],
 
@@ -17058,7 +17058,7 @@ window.CAST = [
     nickname: "Domenick",
     fullName: "Domenick Abbate",
     gender: "male",
-    image: "cast/domenick_abbate.png",
+    image: "cast/domenick_abbate.webp",
 
     shows: [
       "Survivor",
@@ -17076,7 +17076,7 @@ window.CAST = [
     nickname: "Donathan",
     fullName: "Donathan Hurley",
     gender: "male",
-    image: "cast/donathan_hurley.png",
+    image: "cast/donathan_hurley.webp",
 
     shows: ["Survivor"],
 
@@ -17090,7 +17090,7 @@ window.CAST = [
     nickname: "Drea",
     fullName: "Drea Wheeler",
     gender: "female",
-    image: "cast/drea_wheeler.png",
+    image: "cast/drea_wheeler.webp",
 
     shows: ["Survivor"],
 
@@ -17104,7 +17104,7 @@ window.CAST = [
     nickname: "Drew",
     fullName: "Drew Basile",
     gender: "male",
-    image: "cast/drew_basile.png",
+    image: "cast/drew_basile.webp",
 
     shows: ["Survivor"],
 
@@ -17118,7 +17118,7 @@ window.CAST = [
     nickname: "Drew",
     fullName: "Drew Christy",
     gender: "male",
-    image: "cast/drew_christy.png",
+    image: "cast/drew_christy.webp",
 
     shows: ["Survivor"],
 
@@ -17132,7 +17132,7 @@ window.CAST = [
     nickname: "Dwight",
     fullName: "Dwight Moore",
     gender: "male",
-    image: "cast/dwight_moore.png",
+    image: "cast/dwight_moore.webp",
 
     shows: ["Survivor"],
 
@@ -17146,7 +17146,7 @@ window.CAST = [
     nickname: "Earl",
     fullName: "Earl Cole",
     gender: "male",
-    image: "cast/earl_cole.png",
+    image: "cast/earl_cole.webp",
 
     shows: ["Survivor"],
 
@@ -17160,7 +17160,7 @@ window.CAST = [
     nickname: "Edgardo",
     fullName: "Edgardo Rivera",
     gender: "male",
-    image: "cast/edgardo_rivera.png",
+    image: "cast/edgardo_rivera.webp",
 
     shows: ["Survivor"],
 
@@ -17174,7 +17174,7 @@ window.CAST = [
     nickname: "Edna",
     fullName: "Edna Ma",
     gender: "female",
-    image: "cast/edna_ma.png",
+    image: "cast/edna_ma.webp",
 
     shows: ["Survivor"],
 
@@ -17188,7 +17188,7 @@ window.CAST = [
     nickname: "Edward",
     fullName: "Edward Fox",
     gender: "male",
-    image: "cast/edward_fox.png",
+    image: "cast/edward_fox.webp",
 
     shows: ["Survivor"],
 
@@ -17202,7 +17202,7 @@ window.CAST = [
     nickname: "Elaine",
     fullName: "Elaine Stott",
     gender: "female",
-    image: "cast/elaine_stott.png",
+    image: "cast/elaine_stott.webp",
 
     shows: ["Survivor"],
 
@@ -17216,7 +17216,7 @@ window.CAST = [
     nickname: "Elie",
     fullName: "Elie Scott",
     gender: "female",
-    image: "cast/elie_scott.png",
+    image: "cast/elie_scott.webp",
 
     shows: ["Survivor"],
 
@@ -17230,7 +17230,7 @@ window.CAST = [
     nickname: "Elisabeth",
     fullName: "Elisabeth Filarski",
     gender: "female",
-    image: "cast/elisabeth_filarski.png",
+    image: "cast/elisabeth_filarski.webp",
 
     shows: ["Survivor"],
 
@@ -17244,7 +17244,7 @@ window.CAST = [
     nickname: "Elisabeth",
     fullName: "Elisabeth Markham",
     gender: "female",
-    image: "cast/elisabeth_markham.png",
+    image: "cast/elisabeth_markham.webp",
 
     shows: ["Survivor"],
 
@@ -17258,7 +17258,7 @@ window.CAST = [
     nickname: "Eliza",
     fullName: "Eliza Orlins",
     gender: "female",
-    image: "cast/eliza_orlins.png",
+    image: "cast/eliza_orlins.webp",
 
     shows: [
       "Survivor",
@@ -17276,7 +17276,7 @@ window.CAST = [
     nickname: "Elizabeth",
     fullName: "Elizabeth Beisel",
     gender: "female",
-    image: "cast/elizabeth_beisel.png",
+    image: "cast/elizabeth_beisel.webp",
 
     shows: ["Survivor"],
 
@@ -17290,7 +17290,7 @@ window.CAST = [
     nickname: "Liz",
     fullName: "Elizabeth Kim",
     gender: "female",
-    image: "cast/elizabeth_kim.png",
+    image: "cast/elizabeth_kim.webp",
 
     shows: ["Survivor"],
 
@@ -17304,7 +17304,7 @@ window.CAST = [
     nickname: "Elizabeth",
     fullName: "Elizabeth Olson",
     gender: "female",
-    image: "cast/elizabeth_olson.png",
+    image: "cast/elizabeth_olson.webp",
 
     shows: ["Survivor"],
 
@@ -17318,7 +17318,7 @@ window.CAST = [
     nickname: "Elyse",
     fullName: "Elyse Umemoto",
     gender: "female",
-    image: "cast/elyse_umemoto.png",
+    image: "cast/elyse_umemoto.webp",
 
     shows: ["Survivor"],
 
@@ -17332,7 +17332,7 @@ window.CAST = [
     nickname: "Emily",
     fullName: "Emily Flippen",
     gender: "female",
-    image: "cast/emily_flippen.png",
+    image: "cast/emily_flippen.webp",
 
     shows: ["Survivor"],
 
@@ -17346,7 +17346,7 @@ window.CAST = [
     nickname: "Eric",
     fullName: "Eric Abraham",
     gender: "male",
-    image: "cast/eric_abraham.png",
+    image: "cast/eric_abraham.webp",
 
     shows: ["Survivor"],
 
@@ -17360,7 +17360,7 @@ window.CAST = [
     nickname: "Eric",
     fullName: "Eric Hafemann",
     gender: "male",
-    image: "cast/eric_hafemann.png",
+    image: "cast/eric_hafemann.webp",
 
     shows: ["Survivor"],
 
@@ -17374,7 +17374,7 @@ window.CAST = [
     nickname: "Erica",
     fullName: "Erica Durousseau",
     gender: "female",
-    image: "cast/erica_durousseau.png",
+    image: "cast/erica_durousseau.webp",
 
     shows: ["Survivor"],
 
@@ -17388,7 +17388,7 @@ window.CAST = [
     nickname: "Erik",
     fullName: "Erik Cardona",
     gender: "male",
-    image: "cast/erik_cardona.png",
+    image: "cast/erik_cardona.webp",
 
     shows: ["Survivor"],
 
@@ -17402,7 +17402,7 @@ window.CAST = [
     nickname: "Erik",
     fullName: "Erik Huffman",
     gender: "male",
-    image: "cast/erik_huffman.png",
+    image: "cast/erik_huffman.webp",
 
     shows: ["Survivor"],
 
@@ -17416,7 +17416,7 @@ window.CAST = [
     nickname: "Erik",
     fullName: "Erik Reichenbach",
     gender: "male",
-    image: "cast/erik_reichenbach.png",
+    image: "cast/erik_reichenbach.webp",
 
     shows: ["Survivor"],
 
@@ -17430,7 +17430,7 @@ window.CAST = [
     nickname: "Erika",
     fullName: "Erika Casupanan",
     gender: "female",
-    image: "cast/erika_casupanan.png",
+    image: "cast/erika_casupanan.webp",
 
     shows: ["Survivor"],
 
@@ -17444,7 +17444,7 @@ window.CAST = [
     nickname: "Erin",
     fullName: "Erin Collins",
     gender: "female",
-    image: "cast/erin_collins.png",
+    image: "cast/erin_collins.webp",
 
     shows: ["Survivor"],
 
@@ -17458,7 +17458,7 @@ window.CAST = [
     nickname: "Erinn",
     fullName: "Erinn Lobdell",
     gender: "female",
-    image: "cast/erinn_lobdell.png",
+    image: "cast/erinn_lobdell.webp",
 
     shows: ["Survivor"],
 
@@ -17472,7 +17472,7 @@ window.CAST = [
     nickname: "Ethan",
     fullName: "Ethan Zohn",
     gender: "male",
-    image: "cast/ethan_zohn.png",
+    image: "cast/ethan_zohn.webp",
 
     shows: [
       "Survivor",
@@ -17490,7 +17490,7 @@ window.CAST = [
     nickname: "Eva",
     fullName: "Eva Erickson",
     gender: "female",
-    image: "cast/eva_erickson.png",
+    image: "cast/eva_erickson.webp",
 
     shows: ["Survivor"],
 
@@ -17504,7 +17504,7 @@ window.CAST = [
     nickname: "Evvie",
     fullName: "Evvie Jagoda",
     gender: "nonbinary",
-    image: "cast/evvie_jagoda.png",
+    image: "cast/evvie_jagoda.webp",
 
     shows: ["Survivor"],
 
@@ -17518,7 +17518,7 @@ window.CAST = [
     nickname: "Francesca",
     fullName: "Francesca Hogi",
     gender: "female",
-    image: "cast/francesca_hogi.png",
+    image: "cast/francesca_hogi.webp",
 
     shows: ["Survivor"],
 
@@ -17532,7 +17532,7 @@ window.CAST = [
     nickname: "Frank",
     fullName: "Frank Garrison",
     gender: "male",
-    image: "cast/frank_garrison.png",
+    image: "cast/frank_garrison.webp",
 
     shows: ["Survivor"],
 
@@ -17546,7 +17546,7 @@ window.CAST = [
     nickname: "Frannie",
     fullName: "Frannie Marin",
     gender: "female",
-    image: "cast/frannie_marin.png",
+    image: "cast/frannie_marin.webp",
 
     shows: ["Survivor"],
 
@@ -17560,7 +17560,7 @@ window.CAST = [
     nickname: "Gabby",
     fullName: "Gabby Pascuzzi",
     gender: "female",
-    image: "cast/gabby_pascuzzi.png",
+    image: "cast/gabby_pascuzzi.webp",
 
     shows: ["Survivor"],
 
@@ -17574,7 +17574,7 @@ window.CAST = [
     nickname: "Gabe",
     fullName: "Gabe Ortis",
     gender: "male",
-    image: "cast/gabe_ortis.png",
+    image: "cast/gabe_ortis.webp",
 
     shows: ["Survivor"],
 
@@ -17588,7 +17588,7 @@ window.CAST = [
     nickname: "Gabriel",
     fullName: "Gabriel Cade",
     gender: "male",
-    image: "cast/gabriel_cade.png",
+    image: "cast/gabriel_cade.webp",
 
     shows: ["Survivor"],
 
@@ -17602,7 +17602,7 @@ window.CAST = [
     nickname: "Garrett",
     fullName: "Garrett Adelstein",
     gender: "male",
-    image: "cast/garrett_adelstein.png",
+    image: "cast/garrett_adelstein.webp",
 
     shows: ["Survivor"],
 
@@ -17616,7 +17616,7 @@ window.CAST = [
     nickname: "Gary",
     fullName: "Gary Hogeboom",
     gender: "male",
-    image: "cast/gary_hogeboom.png",
+    image: "cast/gary_hogeboom.webp",
 
     shows: ["Survivor"],
 
@@ -17630,7 +17630,7 @@ window.CAST = [
     nickname: "Gary",
     fullName: "Gary Stritesky",
     gender: "male",
-    image: "cast/gary_stritesky.png",
+    image: "cast/gary_stritesky.webp",
 
     shows: ["Survivor"],
 
@@ -17644,7 +17644,7 @@ window.CAST = [
     nickname: "Gavin",
     fullName: "Gavin Whitson",
     gender: "male",
-    image: "cast/gavin_whitson.png",
+    image: "cast/gavin_whitson.webp",
 
     shows: ["Survivor"],
 
@@ -17658,7 +17658,7 @@ window.CAST = [
     nickname: "Genevieve",
     fullName: "Genevieve Mushaluk",
     gender: "female",
-    image: "cast/genevieve_mushaluk.png",
+    image: "cast/genevieve_mushaluk.webp",
 
     shows: ["Survivor"],
 
@@ -17672,7 +17672,7 @@ window.CAST = [
     nickname: "Genie",
     fullName: "Genie Chen",
     gender: "female",
-    image: "cast/genie_chen.png",
+    image: "cast/genie_chen.webp",
 
     shows: ["Survivor"],
 
@@ -17686,7 +17686,7 @@ window.CAST = [
     nickname: "Geo",
     fullName: "Geo Bustamante",
     gender: "male",
-    image: "cast/geo_bustamante.png",
+    image: "cast/geo_bustamante.webp",
 
     shows: ["Survivor"],
 
@@ -17700,7 +17700,7 @@ window.CAST = [
     nickname: "Gervase",
     fullName: "Gervase Peterson",
     gender: "male",
-    image: "cast/gervase_peterson.png",
+    image: "cast/gervase_peterson.webp",
 
     shows: ["Survivor"],
 
@@ -17714,7 +17714,7 @@ window.CAST = [
     nickname: "Ghandia",
     fullName: "Ghandia Johnson",
     gender: "female",
-    image: "cast/ghandia_johnson.png",
+    image: "cast/ghandia_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -17728,7 +17728,7 @@ window.CAST = [
     nickname: "Gillian",
     fullName: "Gillian Larson",
     gender: "female",
-    image: "cast/gillian_larson.png",
+    image: "cast/gillian_larson.webp",
 
     shows: ["Survivor"],
 
@@ -17742,7 +17742,7 @@ window.CAST = [
     nickname: "Gina",
     fullName: "Gina Crews",
     gender: "female",
-    image: "cast/gina_crews.png",
+    image: "cast/gina_crews.webp",
 
     shows: ["Survivor"],
 
@@ -17756,7 +17756,7 @@ window.CAST = [
     nickname: "Grant",
     fullName: "Grant Mattos",
     gender: "male",
-    image: "cast/grant_mattos.png",
+    image: "cast/grant_mattos.webp",
 
     shows: ["Survivor"],
 
@@ -17770,7 +17770,7 @@ window.CAST = [
     nickname: "Greg",
     fullName: "Greg Buis",
     gender: "male",
-    image: "cast/greg_buis.png",
+    image: "cast/greg_buis.webp",
 
     shows: ["Survivor"],
 
@@ -17784,7 +17784,7 @@ window.CAST = [
     nickname: "Greg",
     fullName: "Greg Smith",
     gender: "male",
-    image: "cast/greg_smith.png",
+    image: "cast/greg_smith.webp",
 
     shows: ["Survivor"],
 
@@ -17798,7 +17798,7 @@ window.CAST = [
     nickname: "Gregg",
     fullName: "Gregg Carey",
     gender: "male",
-    image: "cast/gregg_carey.png",
+    image: "cast/gregg_carey.webp",
 
     shows: ["Survivor"],
 
@@ -17812,7 +17812,7 @@ window.CAST = [
     nickname: "Gretchen",
     fullName: "Gretchen Cordy",
     gender: "female",
-    image: "cast/gretchen_cordy.png",
+    image: "cast/gretchen_cordy.webp",
 
     shows: ["Survivor"],
 
@@ -17826,7 +17826,7 @@ window.CAST = [
     nickname: "Hai",
     fullName: "Hai Giang",
     gender: "male",
-    image: "cast/hai_giang.png",
+    image: "cast/hai_giang.webp",
 
     shows: ["Survivor"],
 
@@ -17840,7 +17840,7 @@ window.CAST = [
     nickname: "Hali",
     fullName: "Hali Ford",
     gender: "female",
-    image: "cast/hali_ford.png",
+    image: "cast/hali_ford.webp",
 
     shows: ["Survivor"],
 
@@ -17854,7 +17854,7 @@ window.CAST = [
     nickname: "Hannah",
     fullName: "Hannah Rose",
     gender: "female",
-    image: "cast/hannah_rose.png",
+    image: "cast/hannah_rose.webp",
 
     shows: ["Survivor"],
 
@@ -17868,7 +17868,7 @@ window.CAST = [
     nickname: "Hannah",
     fullName: "Hannah Shapiro",
     gender: "female",
-    image: "cast/hannah_shapiro.png",
+    image: "cast/hannah_shapiro.webp",
 
     shows: ["Survivor"],
 
@@ -17882,7 +17882,7 @@ window.CAST = [
     nickname: "Hayden",
     fullName: "Hayden Moss",
     gender: "male",
-    image: "cast/hayden_moss.png",
+    image: "cast/hayden_moss.webp",
 
     shows: [
       "Survivor",
@@ -17900,7 +17900,7 @@ window.CAST = [
     nickname: "Heather",
     fullName: "Heather Aldret",
     gender: "female",
-    image: "cast/heather_aldret.png",
+    image: "cast/heather_aldret.webp",
 
     shows: ["Survivor"],
 
@@ -17914,7 +17914,7 @@ window.CAST = [
     nickname: "Heidi",
     fullName: "Heidi Lagares-Greenblatt",
     gender: "female",
-    image: "cast/heidi_lagares_greenblatt.png",
+    image: "cast/heidi_lagares_greenblatt.webp",
 
     shows: ["Survivor"],
 
@@ -17928,7 +17928,7 @@ window.CAST = [
     nickname: "Heidi",
     fullName: "Heidi Strobel",
     gender: "female",
-    image: "cast/heidi_strobel.png",
+    image: "cast/heidi_strobel.webp",
 
     shows: ["Survivor"],
 
@@ -17942,7 +17942,7 @@ window.CAST = [
     nickname: "Helen",
     fullName: "Helen Glover",
     gender: "female",
-    image: "cast/helen_glover.png",
+    image: "cast/helen_glover.webp",
 
     shows: ["Survivor"],
 
@@ -17956,7 +17956,7 @@ window.CAST = [
     nickname: "Helen",
     fullName: "Helen Li",
     gender: "female",
-    image: "cast/helen_li.png",
+    image: "cast/helen_li.webp",
 
     shows: ["Survivor"],
 
@@ -17970,7 +17970,7 @@ window.CAST = [
     nickname: "Holly",
     fullName: "Holly Hoffman",
     gender: "female",
-    image: "cast/holly_hoffman.png",
+    image: "cast/holly_hoffman.webp",
 
     shows: ["Survivor"],
 
@@ -17984,7 +17984,7 @@ window.CAST = [
     nickname: "Hope",
     fullName: "Hope Driskill",
     gender: "female",
-    image: "cast/hope_driskill.png",
+    image: "cast/hope_driskill.webp",
 
     shows: ["Survivor"],
 
@@ -17998,7 +17998,7 @@ window.CAST = [
     nickname: "Hunter",
     fullName: "Hunter Ellis",
     gender: "male",
-    image: "cast/hunter_ellis.png",
+    image: "cast/hunter_ellis.webp",
 
     shows: ["Survivor"],
 
@@ -18012,7 +18012,7 @@ window.CAST = [
     nickname: "Hunter",
     fullName: "Hunter McKnight",
     gender: "male",
-    image: "cast/hunter_mcknight.png",
+    image: "cast/hunter_mcknight.webp",
 
     shows: ["Survivor"],
 
@@ -18026,7 +18026,7 @@ window.CAST = [
     nickname: "Ian",
     fullName: "Ian Rosenberger",
     gender: "male",
-    image: "cast/ian_rosenberger.png",
+    image: "cast/ian_rosenberger.webp",
 
     shows: ["Survivor"],
 
@@ -18040,7 +18040,7 @@ window.CAST = [
     nickname: "Ibrehem",
     fullName: "Ibrehem Rahman",
     gender: "male",
-    image: "cast/ibrehem_rahman.png",
+    image: "cast/ibrehem_rahman.webp",
 
     shows: ["Survivor"],
 
@@ -18054,7 +18054,7 @@ window.CAST = [
     nickname: "J'Tia",
     fullName: "J'Tia Taylor",
     gender: "female",
-    image: "cast/jtia_taylor.png",
+    image: "cast/jtia_taylor.webp",
 
     shows: ["Survivor"],
 
@@ -18068,7 +18068,7 @@ window.CAST = [
     nickname: "J. Maya",
     fullName: "J. Maya",
     gender: "female",
-    image: "cast/j_maya.png",
+    image: "cast/j_maya.webp",
 
     shows: ["Survivor"],
 
@@ -18082,7 +18082,7 @@ window.CAST = [
     nickname: "Jack",
     fullName: "Jack Nichting",
     gender: "male",
-    image: "cast/jack_nichting.png",
+    image: "cast/jack_nichting.webp",
 
     shows: ["Survivor"],
 
@@ -18096,7 +18096,7 @@ window.CAST = [
     nickname: "Jackson",
     fullName: "Jackson Fox",
     gender: "male",
-    image: "cast/jackson_fox.png",
+    image: "cast/jackson_fox.webp",
 
     shows: ["Survivor"],
 
@@ -18110,7 +18110,7 @@ window.CAST = [
     nickname: "Jaclyn",
     fullName: "Jaclyn Schultz",
     gender: "female",
-    image: "cast/jaclyn_schultz.png",
+    image: "cast/jaclyn_schultz.webp",
 
     shows: ["Survivor"],
 
@@ -18124,7 +18124,7 @@ window.CAST = [
     nickname: "Jacob",
     fullName: "Jacob Derwin",
     gender: "male",
-    image: "cast/jacob_derwin.png",
+    image: "cast/jacob_derwin.webp",
 
     shows: ["Survivor"],
 
@@ -18138,7 +18138,7 @@ window.CAST = [
     nickname: "Jacquie",
     fullName: "Jacquie Berg",
     gender: "female",
-    image: "cast/jacquie_berg.png",
+    image: "cast/jacquie_berg.webp",
 
     shows: ["Survivor"],
 
@@ -18152,7 +18152,7 @@ window.CAST = [
     nickname: "Jaime",
     fullName: "Jaime Dugan",
     gender: "female",
-    image: "cast/jaime_dugan.png",
+    image: "cast/jaime_dugan.webp",
 
     shows: ["Survivor"],
 
@@ -18166,7 +18166,7 @@ window.CAST = [
     nickname: "Jaime",
     fullName: "Jaime Lynn Ruiz",
     gender: "female",
-    image: "cast/jaime_lynn_ruiz.png",
+    image: "cast/jaime_lynn_ruiz.webp",
 
     shows: ["Survivor"],
 
@@ -18180,7 +18180,7 @@ window.CAST = [
     nickname: "Jairus",
     fullName: "Jairus Robinson",
     gender: "male",
-    image: "cast/jairus_robinson.png",
+    image: "cast/jairus_robinson.webp",
 
     shows: ["Survivor"],
 
@@ -18194,7 +18194,7 @@ window.CAST = [
     nickname: "Jaison",
     fullName: "Jaison Robinson",
     gender: "male",
-    image: "cast/jaison_robinson.png",
+    image: "cast/jaison_robinson.webp",
 
     shows: ["Survivor"],
 
@@ -18208,7 +18208,7 @@ window.CAST = [
     nickname: "Jake",
     fullName: "Jake Billingsley",
     gender: "male",
-    image: "cast/jake_billingsley.png",
+    image: "cast/jake_billingsley.webp",
 
     shows: ["Survivor"],
 
@@ -18222,7 +18222,7 @@ window.CAST = [
     nickname: "Jake",
     fullName: "Jake Latimer",
     gender: "male",
-    image: "cast/jake_latimer.png",
+    image: "cast/jake_latimer.webp",
 
     shows: ["Survivor"],
 
@@ -18236,7 +18236,7 @@ window.CAST = [
     nickname: "Jake",
     fullName: "Jake O'Kane",
     gender: "male",
-    image: "cast/jake_okane.png",
+    image: "cast/jake_okane.webp",
 
     shows: ["Survivor"],
 
@@ -18250,7 +18250,7 @@ window.CAST = [
     nickname: "Jamal",
     fullName: "Jamal Shipman",
     gender: "male",
-    image: "cast/jamal_shipman.png",
+    image: "cast/jamal_shipman.webp",
 
     shows: ["Survivor"],
 
@@ -18264,7 +18264,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Clement",
     gender: "male",
-    image: "cast/james_clement.png",
+    image: "cast/james_clement.webp",
 
     shows: ["Survivor"],
 
@@ -18278,7 +18278,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Crittenden",
     gender: "male",
-    image: "cast/james_crittenden.png",
+    image: "cast/james_crittenden.webp",
 
     shows: ["Survivor"],
 
@@ -18292,7 +18292,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Jones",
     gender: "male",
-    image: "cast/james_jones.png",
+    image: "cast/james_jones.webp",
 
     shows: ["Survivor"],
 
@@ -18306,7 +18306,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Lim",
     gender: "male",
-    image: "cast/james_lim.png",
+    image: "cast/james_lim.webp",
 
     shows: ["Survivor"],
 
@@ -18320,7 +18320,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Miller",
     gender: "male",
-    image: "cast/james_miller.png",
+    image: "cast/james_miller.webp",
 
     shows: ["Survivor"],
 
@@ -18334,7 +18334,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Reid",
     gender: "male",
-    image: "cast/james_reid.png",
+    image: "cast/james_reid.webp",
 
     shows: ["Survivor"],
 
@@ -18348,7 +18348,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Tarantino",
     gender: "male",
-    image: "cast/james_tarantino.png",
+    image: "cast/james_tarantino.webp",
 
     shows: ["Survivor"],
 
@@ -18362,7 +18362,7 @@ window.CAST = [
     nickname: "James",
     fullName: "James Thomas Jr.",
     gender: "male",
-    image: "cast/james_thomas_jr.png",
+    image: "cast/james_thomas_jr.webp",
 
     shows: ["Survivor"],
 
@@ -18376,7 +18376,7 @@ window.CAST = [
     nickname: "Jamie",
     fullName: "Jamie Newton",
     gender: "male",
-    image: "cast/jamie_newton.png",
+    image: "cast/jamie_newton.webp",
 
     shows: ["Survivor"],
 
@@ -18390,7 +18390,7 @@ window.CAST = [
     nickname: "Jan",
     fullName: "Jan Gentry",
     gender: "female",
-    image: "cast/jan_gentry.png",
+    image: "cast/jan_gentry.webp",
 
     shows: ["Survivor"],
 
@@ -18404,7 +18404,7 @@ window.CAST = [
     nickname: "Jane",
     fullName: "Jane Bright",
     gender: "female",
-    image: "cast/jane_bright.png",
+    image: "cast/jane_bright.webp",
 
     shows: ["Survivor"],
 
@@ -18418,7 +18418,7 @@ window.CAST = [
     nickname: "Janet",
     fullName: "Janet Carbin",
     gender: "female",
-    image: "cast/janet_carbin.png",
+    image: "cast/janet_carbin.webp",
 
     shows: ["Survivor"],
 
@@ -18432,7 +18432,7 @@ window.CAST = [
     nickname: "Janet",
     fullName: "Janet Koth",
     gender: "female",
-    image: "cast/janet_koth.png",
+    image: "cast/janet_koth.webp",
 
     shows: ["Survivor"],
 
@@ -18446,7 +18446,7 @@ window.CAST = [
     nickname: "Janu",
     fullName: "Janu Tornell",
     gender: "female",
-    image: "cast/janu_tornell.png",
+    image: "cast/janu_tornell.webp",
 
     shows: ["Survivor"],
 
@@ -18460,7 +18460,7 @@ window.CAST = [
     nickname: "Jason",
     fullName: "Jason Linden",
     gender: "male",
-    image: "cast/jason_linden.png",
+    image: "cast/jason_linden.webp",
 
     shows: ["Survivor"],
 
@@ -18474,7 +18474,7 @@ window.CAST = [
     nickname: "Jason",
     fullName: "Jason Siska",
     gender: "male",
-    image: "cast/jason_siska.png",
+    image: "cast/jason_siska.webp",
 
     shows: ["Survivor"],
 
@@ -18488,7 +18488,7 @@ window.CAST = [
     nickname: "Jason",
     fullName: "Jason Treul",
     gender: "male",
-    image: "cast/jason_treul.png",
+    image: "cast/jason_treul.webp",
 
     shows: ["Survivor"],
 
@@ -18502,7 +18502,7 @@ window.CAST = [
     nickname: "Jawan",
     fullName: "Jawan Pitts",
     gender: "male",
-    image: "cast/jawan_pitts.png",
+    image: "cast/jawan_pitts.webp",
 
     shows: ["Survivor"],
 
@@ -18516,7 +18516,7 @@ window.CAST = [
     nickname: "Jay",
     fullName: "Jay Byars",
     gender: "male",
-    image: "cast/jay_byars.png",
+    image: "cast/jay_byars.webp",
 
     shows: ["Survivor"],
 
@@ -18530,7 +18530,7 @@ window.CAST = [
     nickname: "Jean-Robert",
     fullName: "Jean-Robert Bellande",
     gender: "male",
-    image: "cast/jean_robert_bellande.png",
+    image: "cast/jean_robert_bellande.webp",
 
     shows: ["Survivor"],
 
@@ -18544,7 +18544,7 @@ window.CAST = [
     nickname: "Jeanine",
     fullName: "Jeanine Zheng",
     gender: "female",
-    image: "cast/jeanine_zheng.png",
+    image: "cast/jeanine_zheng.webp",
 
     shows: ["Survivor"],
 
@@ -18558,7 +18558,7 @@ window.CAST = [
     nickname: "Jeanne",
     fullName: "Jeanne Hebert",
     gender: "female",
-    image: "cast/jeanne_hebert.png",
+    image: "cast/jeanne_hebert.webp",
 
     shows: ["Survivor"],
 
@@ -18572,7 +18572,7 @@ window.CAST = [
     nickname: "Jed",
     fullName: "Jed Hildebrand",
     gender: "male",
-    image: "cast/jed_hildebrand.png",
+    image: "cast/jed_hildebrand.webp",
 
     shows: ["Survivor"],
 
@@ -18586,7 +18586,7 @@ window.CAST = [
     nickname: "Jeff",
     fullName: "Jeff Kent",
     gender: "male",
-    image: "cast/jeff_kent.png",
+    image: "cast/jeff_kent.webp",
 
     shows: ["Survivor"],
 
@@ -18600,7 +18600,7 @@ window.CAST = [
     nickname: "Jeff",
     fullName: "Jeff Varner",
     gender: "male",
-    image: "cast/jeff_varner.png",
+    image: "cast/jeff_varner.webp",
 
     shows: ["Survivor"],
 
@@ -18614,7 +18614,7 @@ window.CAST = [
     nickname: "Jeff",
     fullName: "Jeff Wilson",
     gender: "male",
-    image: "cast/jeff_wilson.png",
+    image: "cast/jeff_wilson.webp",
 
     shows: ["Survivor"],
 
@@ -18628,7 +18628,7 @@ window.CAST = [
     nickname: "Jefra",
     fullName: "Jefra Bland",
     gender: "female",
-    image: "cast/jefra_bland.png",
+    image: "cast/jefra_bland.webp",
 
     shows: ["Survivor"],
 
@@ -18642,7 +18642,7 @@ window.CAST = [
     nickname: "Jem",
     fullName: "Jem Hussain-Adams",
     gender: "female",
-    image: "cast/jem_hussain_adams.png",
+    image: "cast/jem_hussain_adams.webp",
 
     shows: ["Survivor"],
 
@@ -18656,7 +18656,7 @@ window.CAST = [
     nickname: "Jenn",
     fullName: "Jenn Brown",
     gender: "female",
-    image: "cast/jenn_brown.png",
+    image: "cast/jenn_brown.webp",
 
     shows: ["Survivor"],
 
@@ -18670,7 +18670,7 @@ window.CAST = [
     nickname: "Jenna",
     fullName: "Jenna Bowman",
     gender: "female",
-    image: "cast/jenna_bowman.png",
+    image: "cast/jenna_bowman.webp",
 
     shows: ["Survivor"],
 
@@ -18684,7 +18684,7 @@ window.CAST = [
     nickname: "Jenna",
     fullName: "Jenna Lewis-Dougherty",
     gender: "female",
-    image: "cast/jenna_lewis_dougherty.png",
+    image: "cast/jenna_lewis_dougherty.webp",
 
     shows: ["Survivor"],
 
@@ -18698,7 +18698,7 @@ window.CAST = [
     nickname: "Jenna",
     fullName: "Jenna Morasca",
     gender: "female",
-    image: "cast/jenna_morasca.png",
+    image: "cast/jenna_morasca.webp",
 
     shows: [
       "Survivor",
@@ -18716,7 +18716,7 @@ window.CAST = [
     nickname: "Jennifer",
     fullName: "Jennifer Lanzetti",
     gender: "female",
-    image: "cast/jennifer_lanzetti.png",
+    image: "cast/jennifer_lanzetti.webp",
 
     shows: ["Survivor"],
 
@@ -18730,7 +18730,7 @@ window.CAST = [
     nickname: "Jennifer",
     fullName: "Jennifer Lyon",
     gender: "female",
-    image: "cast/jennifer_lyon.png",
+    image: "cast/jennifer_lyon.webp",
 
     shows: ["Survivor"],
 
@@ -18744,7 +18744,7 @@ window.CAST = [
     nickname: "Jenny",
     fullName: "Jenny Guzon-Bae",
     gender: "female",
-    image: "cast/jenny_guzon_bae.png",
+    image: "cast/jenny_guzon_bae.webp",
 
     shows: ["Survivor"],
 
@@ -18758,7 +18758,7 @@ window.CAST = [
     nickname: "Jenny",
     fullName: "Jenny Kim",
     gender: "female",
-    image: "cast/jenny_kim.png",
+    image: "cast/jenny_kim.webp",
 
     shows: ["Survivor"],
 
@@ -18772,7 +18772,7 @@ window.CAST = [
     nickname: "Jeremiah",
     fullName: "Jeremiah Ing",
     gender: "male",
-    image: "cast/jeremiah_ing.png",
+    image: "cast/jeremiah_ing.webp",
 
     shows: ["Survivor"],
 
@@ -18786,7 +18786,7 @@ window.CAST = [
     nickname: "Jeremiah",
     fullName: "Jeremiah Wood",
     gender: "male",
-    image: "cast/jeremiah_wood.png",
+    image: "cast/jeremiah_wood.webp",
 
     shows: ["Survivor"],
 
@@ -18800,7 +18800,7 @@ window.CAST = [
     nickname: "Jeremy",
     fullName: "Jeremy Collins",
     gender: "male",
-    image: "cast/jeremy_collins.png",
+    image: "cast/jeremy_collins.webp",
 
     shows: [
       "Survivor",
@@ -18818,7 +18818,7 @@ window.CAST = [
     nickname: "Jeremy",
     fullName: "Jeremy Crawford",
     gender: "male",
-    image: "cast/jeremy_crawford.png",
+    image: "cast/jeremy_crawford.webp",
 
     shows: ["Survivor"],
 
@@ -18832,7 +18832,7 @@ window.CAST = [
     nickname: "Jerri",
     fullName: "Jerri Manthey",
     gender: "female",
-    image: "cast/jerri_manthey.png",
+    image: "cast/jerri_manthey.webp",
 
     shows: ["Survivor"],
 
@@ -18846,7 +18846,7 @@ window.CAST = [
     nickname: "Jerry",
     fullName: "Jerry Sims",
     gender: "male",
-    image: "cast/jerry_sims.png",
+    image: "cast/jerry_sims.webp",
 
     shows: ["Survivor"],
 
@@ -18860,7 +18860,7 @@ window.CAST = [
     nickname: "Jess",
     fullName: "Jess Chong",
     gender: "female",
-    image: "cast/jess_chong.png",
+    image: "cast/jess_chong.webp",
 
     shows: ["Survivor"],
 
@@ -18874,7 +18874,7 @@ window.CAST = [
     nickname: "Jesse",
     fullName: "Jesse Lopez",
     gender: "male",
-    image: "cast/jesse_lopez.png",
+    image: "cast/jesse_lopez.webp",
 
     shows: ["Survivor"],
 
@@ -18888,7 +18888,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica deBen",
     gender: "female",
-    image: "cast/jessica_deben.png",
+    image: "cast/jessica_deben.webp",
 
     shows: ["Survivor"],
 
@@ -18902,7 +18902,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Figueroa",
     gender: "female",
-    image: "cast/jessica_figueroa.png",
+    image: "cast/jessica_figueroa.webp",
 
     shows: ["Survivor"],
 
@@ -18916,7 +18916,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Johnston",
     gender: "female",
-    image: "cast/jessica_johnston.png",
+    image: "cast/jessica_johnston.webp",
 
     shows: ["Survivor"],
 
@@ -18930,7 +18930,7 @@ window.CAST = [
     nickname: "Sugar",
     fullName: "Jessica Kiper",
     gender: "female",
-    image: "cast/jessica_kiper.png",
+    image: "cast/jessica_kiper.webp",
 
     shows: ["Survivor"],
 
@@ -18944,7 +18944,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Lewis",
     gender: "female",
-    image: "cast/jessica_lewis.png",
+    image: "cast/jessica_lewis.webp",
 
     shows: ["Survivor"],
 
@@ -18958,7 +18958,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Peet",
     gender: "female",
-    image: "cast/jessica_peet.png",
+    image: "cast/jessica_peet.webp",
 
     shows: ["Survivor"],
 
@@ -18972,7 +18972,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Smith",
     gender: "female",
-    image: "cast/jessica_smith.png",
+    image: "cast/jessica_smith.webp",
 
     shows: ["Survivor"],
 
@@ -18986,7 +18986,7 @@ window.CAST = [
     nickname: "Jessie",
     fullName: "Jessie Camacho",
     gender: "female",
-    image: "cast/jessie_camacho.png",
+    image: "cast/jessie_camacho.webp",
 
     shows: ["Survivor"],
 
@@ -19000,7 +19000,7 @@ window.CAST = [
     nickname: "Jill",
     fullName: "Jill Behm",
     gender: "female",
-    image: "cast/jill_behm.png",
+    image: "cast/jill_behm.webp",
 
     shows: ["Survivor"],
 
@@ -19014,7 +19014,7 @@ window.CAST = [
     nickname: "Jim",
     fullName: "Jim Lynch",
     gender: "male",
-    image: "cast/jim_lynch.png",
+    image: "cast/jim_lynch.webp",
 
     shows: ["Survivor"],
 
@@ -19028,7 +19028,7 @@ window.CAST = [
     nickname: "Jim",
     fullName: "Jim Rice",
     gender: "male",
-    image: "cast/jim_rice.png",
+    image: "cast/jim_rice.webp",
 
     shows: ["Survivor"],
 
@@ -19042,7 +19042,7 @@ window.CAST = [
     nickname: "Jimmy",
     fullName: "Jimmy Johnson",
     gender: "male",
-    image: "cast/jimmy_johnson.png",
+    image: "cast/jimmy_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -19056,7 +19056,7 @@ window.CAST = [
     nickname: "JoAnna",
     fullName: "JoAnna Ward",
     gender: "female",
-    image: "cast/joanna_ward.png",
+    image: "cast/joanna_ward.webp",
 
     shows: ["Survivor"],
 
@@ -19070,7 +19070,7 @@ window.CAST = [
     nickname: "Joaquin",
     fullName: "Joaquin Souberbielle",
     gender: "male",
-    image: "cast/joaquin_souberbielle.png",
+    image: "cast/joaquin_souberbielle.webp",
 
     shows: ["Survivor"],
 
@@ -19084,7 +19084,7 @@ window.CAST = [
     nickname: "Joe",
     fullName: "Joe Anglim",
     gender: "male",
-    image: "cast/joe_anglim.png",
+    image: "cast/joe_anglim.webp",
 
     shows: ["Survivor"],
 
@@ -19098,7 +19098,7 @@ window.CAST = [
     nickname: "Joe",
     fullName: "Joe Dowdle",
     gender: "male",
-    image: "cast/joe_dowdle.png",
+    image: "cast/joe_dowdle.webp",
 
     shows: ["Survivor"],
 
@@ -19112,7 +19112,7 @@ window.CAST = [
     nickname: "Joe",
     fullName: "Joe Hunter",
     gender: "male",
-    image: "cast/joe_hunter.png",
+    image: "cast/joe_hunter.webp",
 
     shows: ["Survivor"],
 
@@ -19126,7 +19126,7 @@ window.CAST = [
     nickname: "Joe",
     fullName: "Joe Mena",
     gender: "male",
-    image: "cast/joe_mena.png",
+    image: "cast/joe_mena.webp",
 
     shows: ["Survivor"],
 
@@ -19140,7 +19140,7 @@ window.CAST = [
     nickname: "Joel",
     fullName: "Joel Anderson",
     gender: "male",
-    image: "cast/joel_anderson.png",
+    image: "cast/joel_anderson.webp",
 
     shows: ["Survivor"],
 
@@ -19154,7 +19154,7 @@ window.CAST = [
     nickname: "Joel",
     fullName: "Joel Klug",
     gender: "male",
-    image: "cast/joel_klug.png",
+    image: "cast/joel_klug.webp",
 
     shows: ["Survivor"],
 
@@ -19168,7 +19168,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Calderon",
     gender: "male",
-    image: "cast/john_calderon.png",
+    image: "cast/john_calderon.webp",
 
     shows: ["Survivor"],
 
@@ -19182,7 +19182,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Carroll",
     gender: "male",
-    image: "cast/john_carroll.png",
+    image: "cast/john_carroll.webp",
 
     shows: ["Survivor"],
 
@@ -19196,7 +19196,7 @@ window.CAST = [
     nickname: "Cochran",
     fullName: "John Cochran",
     gender: "male",
-    image: "cast/john_cochran.png",
+    image: "cast/john_cochran.webp",
 
     shows: ["Survivor"],
 
@@ -19210,7 +19210,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Cody",
     gender: "male",
-    image: "cast/john_cody.png",
+    image: "cast/john_cody.webp",
 
     shows: ["Survivor"],
 
@@ -19224,7 +19224,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Fincher",
     gender: "male",
-    image: "cast/john_fincher.png",
+    image: "cast/john_fincher.webp",
 
     shows: ["Survivor"],
 
@@ -19238,7 +19238,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Hennigan",
     gender: "male",
-    image: "cast/john_hennigan.png",
+    image: "cast/john_hennigan.webp",
 
     shows: ["Survivor"],
 
@@ -19252,7 +19252,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Hilsabeck",
     gender: "male",
-    image: "cast/john_hilsabeck.png",
+    image: "cast/john_hilsabeck.webp",
 
     shows: ["Survivor"],
 
@@ -19266,7 +19266,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Kenney",
     gender: "male",
-    image: "cast/john_kenney.png",
+    image: "cast/john_kenney.webp",
 
     shows: ["Survivor"],
 
@@ -19280,7 +19280,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Palyok",
     gender: "male",
-    image: "cast/john_palyok.png",
+    image: "cast/john_palyok.webp",
 
     shows: ["Survivor"],
 
@@ -19294,7 +19294,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Raymond",
     gender: "male",
-    image: "cast/john_raymond.png",
+    image: "cast/john_raymond.webp",
 
     shows: ["Survivor"],
 
@@ -19308,7 +19308,7 @@ window.CAST = [
     nickname: "John",
     fullName: "John Rocker",
     gender: "male",
-    image: "cast/john_rocker.png",
+    image: "cast/john_rocker.webp",
 
     shows: ["Survivor"],
 
@@ -19322,7 +19322,7 @@ window.CAST = [
     nickname: "Jolanda",
     fullName: "Jolanda Jones",
     gender: "female",
-    image: "cast/jolanda_jones.png",
+    image: "cast/jolanda_jones.webp",
 
     shows: ["Survivor"],
 
@@ -19336,7 +19336,7 @@ window.CAST = [
     nickname: "Jonny Fairplay",
     fullName: "Jon Dalton",
     gender: "male",
-    image: "cast/jon_dalton.png",
+    image: "cast/jon_dalton.webp",
 
     shows: [
       "Survivor",
@@ -19354,7 +19354,7 @@ window.CAST = [
     nickname: "Jon",
     fullName: "Jon Lovett",
     gender: "male",
-    image: "cast/jon_lovett.png",
+    image: "cast/jon_lovett.webp",
 
     shows: ["Survivor"],
 
@@ -19368,7 +19368,7 @@ window.CAST = [
     nickname: "Jon",
     fullName: "Jon Misch",
     gender: "male",
-    image: "cast/jon_misch.png",
+    image: "cast/jon_misch.webp",
 
     shows: ["Survivor"],
 
@@ -19382,7 +19382,7 @@ window.CAST = [
     nickname: "Jonas",
     fullName: "Jonas Otsuji",
     gender: "male",
-    image: "cast/jonas_otsuji.png",
+    image: "cast/jonas_otsuji.webp",
 
     shows: ["Survivor"],
 
@@ -19396,7 +19396,7 @@ window.CAST = [
     nickname: "Jonathan",
     fullName: "Jonathan Libby",
     gender: "male",
-    image: "cast/jonathan_libby.png",
+    image: "cast/jonathan_libby.webp",
 
     shows: ["Survivor"],
 
@@ -19410,7 +19410,7 @@ window.CAST = [
     nickname: "Penner",
     fullName: "Jonathan Penner",
     gender: "male",
-    image: "cast/jonathan_penner.png",
+    image: "cast/jonathan_penner.webp",
 
     shows: ["Survivor"],
 
@@ -19424,7 +19424,7 @@ window.CAST = [
     nickname: "Jonathan",
     fullName: "Jonathan Young",
     gender: "male",
-    image: "cast/jonathan_young.png",
+    image: "cast/jonathan_young.webp",
 
     shows: ["Survivor"],
 
@@ -19438,7 +19438,7 @@ window.CAST = [
     nickname: "Joseph",
     fullName: "Joseph Del Campo",
     gender: "male",
-    image: "cast/joseph_del_campo.png",
+    image: "cast/joseph_del_campo.webp",
 
     shows: ["Survivor"],
 
@@ -19452,7 +19452,7 @@ window.CAST = [
     nickname: "Josh",
     fullName: "Josh Canfield",
     gender: "male",
-    image: "cast/josh_canfield.png",
+    image: "cast/josh_canfield.webp",
 
     shows: ["Survivor"],
 
@@ -19466,7 +19466,7 @@ window.CAST = [
     nickname: "Josh",
     fullName: "Josh Wilder",
     gender: "male",
-    image: "cast/josh_wilder.png",
+    image: "cast/josh_wilder.webp",
 
     shows: ["Survivor"],
 
@@ -19480,7 +19480,7 @@ window.CAST = [
     nickname: "Jud",
     fullName: "Jud Birza",
     gender: "male",
-    image: "cast/jud_birza.png",
+    image: "cast/jud_birza.webp",
 
     shows: ["Survivor"],
 
@@ -19494,7 +19494,7 @@ window.CAST = [
     nickname: "Judd",
     fullName: "Judd Sergeant",
     gender: "male",
-    image: "cast/judd_sergeant.png",
+    image: "cast/judd_sergeant.webp",
 
     shows: ["Survivor"],
 
@@ -19508,7 +19508,7 @@ window.CAST = [
     nickname: "Julia",
     fullName: "Julia Carter",
     gender: "female",
-    image: "cast/julia_carter.png",
+    image: "cast/julia_carter.webp",
 
     shows: ["Survivor"],
 
@@ -19522,7 +19522,7 @@ window.CAST = [
     nickname: "Julia",
     fullName: "Julia Landauer",
     gender: "female",
-    image: "cast/julia_landauer.png",
+    image: "cast/julia_landauer.webp",
 
     shows: ["Survivor"],
 
@@ -19536,7 +19536,7 @@ window.CAST = [
     nickname: "Julia",
     fullName: "Julia Sokolowski",
     gender: "female",
-    image: "cast/julia_sokolowski.png",
+    image: "cast/julia_sokolowski.webp",
 
     shows: ["Survivor"],
 
@@ -19550,7 +19550,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie Alley",
     gender: "female",
-    image: "cast/julie_alley.png",
+    image: "cast/julie_alley.webp",
 
     shows: ["Survivor"],
 
@@ -19564,7 +19564,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie Berry",
     gender: "female",
-    image: "cast/julie_berry.png",
+    image: "cast/julie_berry.webp",
 
     shows: ["Survivor"],
 
@@ -19578,7 +19578,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie McGee",
     gender: "female",
-    image: "cast/julie_mcgee.png",
+    image: "cast/julie_mcgee.webp",
 
     shows: ["Survivor"],
 
@@ -19592,7 +19592,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie Rosenberg",
     gender: "female",
-    image: "cast/julie_rosenberg.png",
+    image: "cast/julie_rosenberg.webp",
 
     shows: ["Survivor"],
 
@@ -19606,7 +19606,7 @@ window.CAST = [
     nickname: "Julie",
     fullName: "Julie Wolfe",
     gender: "female",
-    image: "cast/julie_wolfe.png",
+    image: "cast/julie_wolfe.webp",
 
     shows: ["Survivor"],
 
@@ -19620,7 +19620,7 @@ window.CAST = [
     nickname: "Justin",
     fullName: "Justin Pioppi",
     gender: "male",
-    image: "cast/justin_pioppi.png",
+    image: "cast/justin_pioppi.webp",
 
     shows: ["Survivor"],
 
@@ -19634,7 +19634,7 @@ window.CAST = [
     nickname: "Justine",
     fullName: "Justine Brennan",
     gender: "female",
-    image: "cast/justine_brennan.png",
+    image: "cast/justine_brennan.webp",
 
     shows: ["Survivor"],
 
@@ -19648,7 +19648,7 @@ window.CAST = [
     nickname: "Kaleb",
     fullName: "Kaleb Gebrewold",
     gender: "male",
-    image: "cast/kaleb_gebrewold.png",
+    image: "cast/kaleb_gebrewold.webp",
 
     shows: ["Survivor"],
 
@@ -19662,7 +19662,7 @@ window.CAST = [
     nickname: "Kamilla",
     fullName: "Kamilla Karthigesu",
     gender: "female",
-    image: "cast/kamilla_karthigesu.png",
+    image: "cast/kamilla_karthigesu.webp",
 
     shows: ["Survivor"],
 
@@ -19676,7 +19676,7 @@ window.CAST = [
     nickname: "Kane",
     fullName: "Kane Fritzler",
     gender: "male",
-    image: "cast/kane_fritzler.png",
+    image: "cast/kane_fritzler.webp",
 
     shows: ["Survivor"],
 
@@ -19690,7 +19690,7 @@ window.CAST = [
     nickname: "Kara",
     fullName: "Kara Kay",
     gender: "female",
-    image: "cast/kara_kay.png",
+    image: "cast/kara_kay.webp",
 
     shows: ["Survivor"],
 
@@ -19704,7 +19704,7 @@ window.CAST = [
     nickname: "Karishma",
     fullName: "Karishma Patel",
     gender: "female",
-    image: "cast/karishma_patel.png",
+    image: "cast/karishma_patel.webp",
 
     shows: ["Survivor"],
 
@@ -19718,7 +19718,7 @@ window.CAST = [
     nickname: "Karla",
     fullName: "Karla Cruz Godoy",
     gender: "female",
-    image: "cast/karla_cruz_godoy.png",
+    image: "cast/karla_cruz_godoy.webp",
 
     shows: ["Survivor"],
 
@@ -19732,7 +19732,7 @@ window.CAST = [
     nickname: "Kass",
     fullName: "Kassandra McQuillen",
     gender: "female",
-    image: "cast/kassandra_mcquillen.png",
+    image: "cast/kassandra_mcquillen.webp",
 
     shows: ["Survivor"],
 
@@ -19746,7 +19746,7 @@ window.CAST = [
     nickname: "Kat",
     fullName: "Kat Edorsson",
     gender: "female",
-    image: "cast/kat_edorsson.png",
+    image: "cast/kat_edorsson.webp",
 
     shows: ["Survivor"],
 
@@ -19760,7 +19760,7 @@ window.CAST = [
     nickname: "Kathleen",
     fullName: "Kathleen Sleckman",
     gender: "female",
-    image: "cast/kathleen_sleckman.png",
+    image: "cast/kathleen_sleckman.webp",
 
     shows: ["Survivor"],
 
@@ -19774,7 +19774,7 @@ window.CAST = [
     nickname: "Kathy",
     fullName: "Kathy Vavrick-O'Brien",
     gender: "female",
-    image: "cast/kathy_vavrick_obrien.png",
+    image: "cast/kathy_vavrick_obrien.webp",
 
     shows: ["Survivor"],
 
@@ -19788,7 +19788,7 @@ window.CAST = [
     nickname: "Katie",
     fullName: "Katie Collins",
     gender: "female",
-    image: "cast/katie_collins.png",
+    image: "cast/katie_collins.webp",
 
     shows: ["Survivor"],
 
@@ -19802,7 +19802,7 @@ window.CAST = [
     nickname: "Katie",
     fullName: "Katie Gallagher",
     gender: "female",
-    image: "cast/katie_gallagher.png",
+    image: "cast/katie_gallagher.webp",
 
     shows: ["Survivor"],
 
@@ -19816,7 +19816,7 @@ window.CAST = [
     nickname: "Katie",
     fullName: "Katie Hanson",
     gender: "female",
-    image: "cast/katie_hanson.png",
+    image: "cast/katie_hanson.webp",
 
     shows: ["Survivor"],
 
@@ -19830,7 +19830,7 @@ window.CAST = [
     nickname: "Katrina",
     fullName: "Katrina Radke",
     gender: "female",
-    image: "cast/katrina_radke.png",
+    image: "cast/katrina_radke.webp",
 
     shows: ["Survivor"],
 
@@ -19844,7 +19844,7 @@ window.CAST = [
     nickname: "Katurah",
     fullName: "Katurah Topps",
     gender: "female",
-    image: "cast/katurah_topps.png",
+    image: "cast/katurah_topps.webp",
 
     shows: ["Survivor"],
 
@@ -19858,7 +19858,7 @@ window.CAST = [
     nickname: "Keith",
     fullName: "Keith Famie",
     gender: "male",
-    image: "cast/keith_famie.png",
+    image: "cast/keith_famie.webp",
 
     shows: ["Survivor"],
 
@@ -19872,7 +19872,7 @@ window.CAST = [
     nickname: "Keith",
     fullName: "Keith Nale",
     gender: "male",
-    image: "cast/keith_nale.png",
+    image: "cast/keith_nale.webp",
 
     shows: ["Survivor"],
 
@@ -19886,7 +19886,7 @@ window.CAST = [
     nickname: "Keith",
     fullName: "Keith Sowell",
     gender: "male",
-    image: "cast/keith_sowell.png",
+    image: "cast/keith_sowell.webp",
 
     shows: ["Survivor"],
 
@@ -19900,7 +19900,7 @@ window.CAST = [
     nickname: "Keith",
     fullName: "Keith Tollefson",
     gender: "male",
-    image: "cast/keith_tollefson.png",
+    image: "cast/keith_tollefson.webp",
 
     shows: [
       "Survivor",
@@ -19918,7 +19918,7 @@ window.CAST = [
     nickname: "Kel",
     fullName: "Kel Gleason",
     gender: "male",
-    image: "cast/kel_gleason.png",
+    image: "cast/kel_gleason.webp",
 
     shows: ["Survivor"],
 
@@ -19932,7 +19932,7 @@ window.CAST = [
     nickname: "Kellee",
     fullName: "Kellee Kim",
     gender: "female",
-    image: "cast/kellee_kim.png",
+    image: "cast/kellee_kim.webp",
 
     shows: ["Survivor"],
 
@@ -19946,7 +19946,7 @@ window.CAST = [
     nickname: "Kelley",
     fullName: "Kelley Wentworth",
     gender: "female",
-    image: "cast/kelley_wentworth.png",
+    image: "cast/kelley_wentworth.webp",
 
     shows: ["Survivor"],
 
@@ -19960,7 +19960,7 @@ window.CAST = [
     nickname: "Kellie",
     fullName: "Kellie Nalbandian",
     gender: "female",
-    image: "cast/kellie_nalbandian.png",
+    image: "cast/kellie_nalbandian.webp",
 
     shows: ["Survivor"],
 
@@ -19974,7 +19974,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Bruno",
     gender: "female",
-    image: "cast/kelly_bruno.png",
+    image: "cast/kelly_bruno.webp",
 
     shows: ["Survivor"],
 
@@ -19988,7 +19988,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Czarnecki",
     gender: "female",
-    image: "cast/kelly_czarnecki.png",
+    image: "cast/kelly_czarnecki.webp",
 
     shows: ["Survivor"],
 
@@ -20002,7 +20002,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Goldsmith",
     gender: "female",
-    image: "cast/kelly_goldsmith.png",
+    image: "cast/kelly_goldsmith.webp",
 
     shows: ["Survivor"],
 
@@ -20016,7 +20016,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Remington",
     gender: "female",
-    image: "cast/kelly_remington.png",
+    image: "cast/kelly_remington.webp",
 
     shows: ["Survivor"],
 
@@ -20030,7 +20030,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Sharbaugh",
     gender: "female",
-    image: "cast/kelly_sharbaugh.png",
+    image: "cast/kelly_sharbaugh.webp",
 
     shows: ["Survivor"],
 
@@ -20044,7 +20044,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Shinn",
     gender: "female",
-    image: "cast/kelly_shinn.png",
+    image: "cast/kelly_shinn.webp",
 
     shows: ["Survivor"],
 
@@ -20058,7 +20058,7 @@ window.CAST = [
     nickname: "Kelly",
     fullName: "Kelly Wiglesworth",
     gender: "female",
-    image: "cast/kelly_wiglesworth.png",
+    image: "cast/kelly_wiglesworth.webp",
 
     shows: ["Survivor"],
 
@@ -20072,7 +20072,7 @@ window.CAST = [
     nickname: "Kellyn",
     fullName: "Kellyn Bechtold",
     gender: "female",
-    image: "cast/kellyn_bechtold.png",
+    image: "cast/kellyn_bechtold.webp",
 
     shows: ["Survivor"],
 
@@ -20086,7 +20086,7 @@ window.CAST = [
     nickname: "Ken",
     fullName: "Ken Hoang",
     gender: "male",
-    image: "cast/ken_hoang.png",
+    image: "cast/ken_hoang.webp",
 
     shows: ["Survivor"],
 
@@ -20100,7 +20100,7 @@ window.CAST = [
     nickname: "Ken",
     fullName: "Ken McNickle",
     gender: "male",
-    image: "cast/ken_mcnickle.png",
+    image: "cast/ken_mcnickle.webp",
 
     shows: ["Survivor"],
 
@@ -20114,7 +20114,7 @@ window.CAST = [
     nickname: "Ken",
     fullName: "Ken Stafford",
     gender: "male",
-    image: "cast/ken_stafford.png",
+    image: "cast/ken_stafford.webp",
 
     shows: ["Survivor"],
 
@@ -20128,7 +20128,7 @@ window.CAST = [
     nickname: "Kendra",
     fullName: "Kendra McQuarrie",
     gender: "female",
-    image: "cast/kendra_mcquarrie.png",
+    image: "cast/kendra_mcquarrie.webp",
 
     shows: ["Survivor"],
 
@@ -20142,7 +20142,7 @@ window.CAST = [
     nickname: "Boo",
     fullName: "Kenward Bernis",
     gender: "male",
-    image: "cast/kenward_bernis.png",
+    image: "cast/kenward_bernis.webp",
 
     shows: ["Survivor"],
 
@@ -20156,7 +20156,7 @@ window.CAST = [
     nickname: "Kenzie",
     fullName: "Kenzie Petty",
     gender: "female",
-    image: "cast/kenzie_petty.png",
+    image: "cast/kenzie_petty.webp",
 
     shows: ["Survivor"],
 
@@ -20170,7 +20170,7 @@ window.CAST = [
     nickname: "Kevin",
     fullName: "Kevin Leung",
     gender: "male",
-    image: "cast/kevin_leung.png",
+    image: "cast/kevin_leung.webp",
 
     shows: ["Survivor"],
 
@@ -20184,7 +20184,7 @@ window.CAST = [
     nickname: "Kim",
     fullName: "Kim Johnson",
     gender: "female",
-    image: "cast/kim_johnson.png",
+    image: "cast/kim_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -20198,7 +20198,7 @@ window.CAST = [
     nickname: "Kim",
     fullName: "Kim Powers",
     gender: "female",
-    image: "cast/kim_powers.png",
+    image: "cast/kim_powers.webp",
 
     shows: ["Survivor"],
 
@@ -20212,7 +20212,7 @@ window.CAST = [
     nickname: "Kim",
     fullName: "Kim Spradlin-Wolfe",
     gender: "female",
-    image: "cast/kim_spradlin_wolfe.png",
+    image: "cast/kim_spradlin_wolfe.webp",
 
     shows: ["Survivor"],
 
@@ -20226,7 +20226,7 @@ window.CAST = [
     nickname: "Kimberly",
     fullName: "Kimberly Mullen",
     gender: "female",
-    image: "cast/kimberly_mullen.png",
+    image: "cast/kimberly_mullen.webp",
 
     shows: ["Survivor"],
 
@@ -20240,7 +20240,7 @@ window.CAST = [
     nickname: "Kimmi",
     fullName: "Kimmi Kappenberg",
     gender: "female",
-    image: "cast/kimmi_kappenberg.png",
+    image: "cast/kimmi_kappenberg.webp",
 
     shows: ["Survivor"],
 
@@ -20254,7 +20254,7 @@ window.CAST = [
     nickname: "Kishan",
     fullName: "Kishan Patel",
     gender: "male",
-    image: "cast/kishan_patel.png",
+    image: "cast/kishan_patel.webp",
 
     shows: ["Survivor"],
 
@@ -20268,7 +20268,7 @@ window.CAST = [
     nickname: "Kourtney",
     fullName: "Kourtney Moon",
     gender: "female",
-    image: "cast/kourtney_moon.png",
+    image: "cast/kourtney_moon.webp",
 
     shows: ["Survivor"],
 
@@ -20282,7 +20282,7 @@ window.CAST = [
     nickname: "Krista",
     fullName: "Krista Klumpp",
     gender: "female",
-    image: "cast/krista_klumpp.png",
+    image: "cast/krista_klumpp.webp",
 
     shows: ["Survivor"],
 
@@ -20296,7 +20296,7 @@ window.CAST = [
     nickname: "Kristina",
     fullName: "Kristina Kell",
     gender: "female",
-    image: "cast/kristina_kell.png",
+    image: "cast/kristina_kell.webp",
 
     shows: ["Survivor"],
 
@@ -20310,7 +20310,7 @@ window.CAST = [
     nickname: "Kristina",
     fullName: "Kristina Mills",
     gender: "female",
-    image: "cast/kristina_mills.png",
+    image: "cast/kristina_mills.webp",
 
     shows: ["Survivor"],
 
@@ -20324,7 +20324,7 @@ window.CAST = [
     nickname: "Kyle",
     fullName: "Kyle Fraser",
     gender: "male",
-    image: "cast/kyle_fraser.png",
+    image: "cast/kyle_fraser.webp",
 
     shows: ["Survivor"],
 
@@ -20338,7 +20338,7 @@ window.CAST = [
     nickname: "Kyle",
     fullName: "Kyle Jason",
     gender: "male",
-    image: "cast/kyle_jason.png",
+    image: "cast/kyle_jason.webp",
 
     shows: ["Survivor"],
 
@@ -20352,7 +20352,7 @@ window.CAST = [
     nickname: "Kyle",
     fullName: "Kyle Ostwald",
     gender: "male",
-    image: "cast/kyle_ostwald.png",
+    image: "cast/kyle_ostwald.webp",
 
     shows: ["Survivor"],
 
@@ -20366,7 +20366,7 @@ window.CAST = [
     nickname: "Tasha",
     fullName: "Latasha Fox",
     gender: "female",
-    image: "cast/latasha_fox.png",
+    image: "cast/latasha_fox.webp",
 
     shows: [
       "Survivor",
@@ -20384,7 +20384,7 @@ window.CAST = [
     nickname: "Laura",
     fullName: "Laura Alexander",
     gender: "female",
-    image: "cast/laura_alexander.png",
+    image: "cast/laura_alexander.webp",
 
     shows: ["Survivor"],
 
@@ -20398,7 +20398,7 @@ window.CAST = [
     nickname: "Laura",
     fullName: "Laura Boneham",
     gender: "female",
-    image: "cast/laura_boneham.png",
+    image: "cast/laura_boneham.webp",
 
     shows: [
       "Survivor",
@@ -20416,7 +20416,7 @@ window.CAST = [
     nickname: "Laura",
     fullName: "Laura Morett",
     gender: "female",
-    image: "cast/laura_morett.png",
+    image: "cast/laura_morett.webp",
 
     shows: ["Survivor"],
 
@@ -20430,7 +20430,7 @@ window.CAST = [
     nickname: "Laurel",
     fullName: "Laurel Johnson",
     gender: "female",
-    image: "cast/laurel_johnson.png",
+    image: "cast/laurel_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -20444,7 +20444,7 @@ window.CAST = [
     nickname: "Lauren",
     fullName: "Lauren Beck",
     gender: "female",
-    image: "cast/lauren_beck.png",
+    image: "cast/lauren_beck.webp",
 
     shows: ["Survivor"],
 
@@ -20458,7 +20458,7 @@ window.CAST = [
     nickname: "Lauren",
     fullName: "Lauren Harpe",
     gender: "female",
-    image: "cast/lauren_harpe.png",
+    image: "cast/lauren_harpe.webp",
 
     shows: ["Survivor"],
 
@@ -20472,7 +20472,7 @@ window.CAST = [
     nickname: "Lauren",
     fullName: "Lauren O'Connell",
     gender: "female",
-    image: "cast/lauren_oconnell.png",
+    image: "cast/lauren_oconnell.webp",
 
     shows: ["Survivor"],
 
@@ -20486,7 +20486,7 @@ window.CAST = [
     nickname: "Lauren",
     fullName: "Lauren Rimmer",
     gender: "female",
-    image: "cast/lauren_rimmer.png",
+    image: "cast/lauren_rimmer.webp",
 
     shows: ["Survivor"],
 
@@ -20500,7 +20500,7 @@ window.CAST = [
     nickname: "Sarge",
     fullName: "Lea Masters",
     gender: "male",
-    image: "cast/lea_masters.png",
+    image: "cast/lea_masters.webp",
 
     shows: ["Survivor"],
 
@@ -20514,7 +20514,7 @@ window.CAST = [
     nickname: "Leann",
     fullName: "Leann Slaby",
     gender: "female",
-    image: "cast/leann_slaby.png",
+    image: "cast/leann_slaby.webp",
 
     shows: ["Survivor"],
 
@@ -20528,7 +20528,7 @@ window.CAST = [
     nickname: "Leif",
     fullName: "Leif Manson",
     gender: "male",
-    image: "cast/leif_manson.png",
+    image: "cast/leif_manson.webp",
 
     shows: ["Survivor"],
 
@@ -20542,7 +20542,7 @@ window.CAST = [
     nickname: "Leslie",
     fullName: "Leslie Nease",
     gender: "female",
-    image: "cast/leslie_nease.png",
+    image: "cast/leslie_nease.webp",
 
     shows: ["Survivor"],
 
@@ -20556,7 +20556,7 @@ window.CAST = [
     nickname: "Lex",
     fullName: "Lex van den Berghe",
     gender: "male",
-    image: "cast/lex_van_den_berghe.png",
+    image: "cast/lex_van_den_berghe.webp",
 
     shows: ["Survivor"],
 
@@ -20570,7 +20570,7 @@ window.CAST = [
     nickname: "Liana",
     fullName: "Liana Wallace",
     gender: "female",
-    image: "cast/liana_wallace.png",
+    image: "cast/liana_wallace.webp",
 
     shows: ["Survivor"],
 
@@ -20584,7 +20584,7 @@ window.CAST = [
     nickname: "Libby",
     fullName: "Libby Vincek",
     gender: "female",
-    image: "cast/libby_vincek.png",
+    image: "cast/libby_vincek.webp",
 
     shows: ["Survivor"],
 
@@ -20598,7 +20598,7 @@ window.CAST = [
     nickname: "Liliana",
     fullName: "Liliana Gomez",
     gender: "female",
-    image: "cast/liliana_gomez.png",
+    image: "cast/liliana_gomez.webp",
 
     shows: ["Survivor"],
 
@@ -20612,7 +20612,7 @@ window.CAST = [
     nickname: "Lillian",
     fullName: "Lillian Morris",
     gender: "female",
-    image: "cast/lillian_morris.png",
+    image: "cast/lillian_morris.webp",
 
     shows: ["Survivor"],
 
@@ -20626,7 +20626,7 @@ window.CAST = [
     nickname: "Linda",
     fullName: "Linda Spencer",
     gender: "female",
-    image: "cast/linda_spencer.png",
+    image: "cast/linda_spencer.webp",
 
     shows: ["Survivor"],
 
@@ -20640,7 +20640,7 @@ window.CAST = [
     nickname: "Lindsay",
     fullName: "Lindsay Carmine",
     gender: "female",
-    image: "cast/lindsay_carmine.png",
+    image: "cast/lindsay_carmine.webp",
 
     shows: ["Survivor"],
 
@@ -20654,7 +20654,7 @@ window.CAST = [
     nickname: "Lindsay",
     fullName: "Lindsay Dolashewich",
     gender: "female",
-    image: "cast/lindsay_dolashewich.png",
+    image: "cast/lindsay_dolashewich.webp",
 
     shows: ["Survivor"],
 
@@ -20668,7 +20668,7 @@ window.CAST = [
     nickname: "Lindsey",
     fullName: "Lindsey Cascaddan",
     gender: "female",
-    image: "cast/lindsey_cascaddan.png",
+    image: "cast/lindsey_cascaddan.webp",
 
     shows: ["Survivor"],
 
@@ -20682,7 +20682,7 @@ window.CAST = [
     nickname: "Lindsey",
     fullName: "Lindsey Ogle",
     gender: "female",
-    image: "cast/lindsey_ogle.png",
+    image: "cast/lindsey_ogle.webp",
 
     shows: ["Survivor"],
 
@@ -20696,7 +20696,7 @@ window.CAST = [
     nickname: "Lindsey",
     fullName: "Lindsey Richter",
     gender: "female",
-    image: "cast/lindsey_richter.png",
+    image: "cast/lindsey_richter.webp",
 
     shows: ["Survivor"],
 
@@ -20710,7 +20710,7 @@ window.CAST = [
     nickname: "Lisa",
     fullName: "Lisa Keiffer",
     gender: "female",
-    image: "cast/lisa_keiffer.png",
+    image: "cast/lisa_keiffer.webp",
 
     shows: ["Survivor"],
 
@@ -20724,7 +20724,7 @@ window.CAST = [
     nickname: "Lisa",
     fullName: "Lisa Whelchel",
     gender: "female",
-    image: "cast/lisa_whelchel.png",
+    image: "cast/lisa_whelchel.webp",
 
     shows: ["Survivor"],
 
@@ -20738,7 +20738,7 @@ window.CAST = [
     nickname: "Lisette",
     fullName: "Lisette Linares",
     gender: "female",
-    image: "cast/lisette_linares.png",
+    image: "cast/lisette_linares.webp",
 
     shows: ["Survivor"],
 
@@ -20752,7 +20752,7 @@ window.CAST = [
     nickname: "Liz",
     fullName: "Liz Wilcox",
     gender: "female",
-    image: "cast/liz_wilcox.png",
+    image: "cast/liz_wilcox.webp",
 
     shows: ["Survivor"],
 
@@ -20766,7 +20766,7 @@ window.CAST = [
     nickname: "LJ",
     fullName: "LJ McKanas",
     gender: "male",
-    image: "cast/lj_mckanas.png",
+    image: "cast/lj_mckanas.webp",
 
     shows: ["Survivor"],
 
@@ -20780,7 +20780,7 @@ window.CAST = [
     nickname: "Lucy",
     fullName: "Lucy Huang",
     gender: "female",
-    image: "cast/lucy_huang.png",
+    image: "cast/lucy_huang.webp",
 
     shows: ["Survivor"],
 
@@ -20794,7 +20794,7 @@ window.CAST = [
     nickname: "Lydia",
     fullName: "Lydia Meredith",
     gender: "female",
-    image: "cast/lydia_meredith.png",
+    image: "cast/lydia_meredith.webp",
 
     shows: ["Survivor"],
 
@@ -20808,7 +20808,7 @@ window.CAST = [
     nickname: "Lydia",
     fullName: "Lydia Morales",
     gender: "female",
-    image: "cast/lydia_morales.png",
+    image: "cast/lydia_morales.webp",
 
     shows: ["Survivor"],
 
@@ -20822,7 +20822,7 @@ window.CAST = [
     nickname: "Lyrsa",
     fullName: "Lyrsa Torres",
     gender: "female",
-    image: "cast/lyrsa_torres.png",
+    image: "cast/lyrsa_torres.webp",
 
     shows: ["Survivor"],
 
@@ -20836,7 +20836,7 @@ window.CAST = [
     nickname: "Maddy",
     fullName: "Maddy Pomilla",
     gender: "female",
-    image: "cast/maddy_pomilla.png",
+    image: "cast/maddy_pomilla.webp",
 
     shows: ["Survivor"],
 
@@ -20850,7 +20850,7 @@ window.CAST = [
     nickname: "Malcolm",
     fullName: "Malcolm Freberg",
     gender: "male",
-    image: "cast/malcolm_freberg.png",
+    image: "cast/malcolm_freberg.webp",
 
     shows: ["Survivor"],
 
@@ -20864,7 +20864,7 @@ window.CAST = [
     nickname: "Maralyn",
     fullName: "Maralyn Hershey",
     gender: "female",
-    image: "cast/maralyn_hershey.png",
+    image: "cast/maralyn_hershey.webp",
 
     shows: ["Survivor"],
 
@@ -20878,7 +20878,7 @@ window.CAST = [
     nickname: "Marcus",
     fullName: "Marcus Lehman",
     gender: "male",
-    image: "cast/marcus_lehman.png",
+    image: "cast/marcus_lehman.webp",
 
     shows: ["Survivor"],
 
@@ -20892,7 +20892,7 @@ window.CAST = [
     nickname: "Margaret",
     fullName: "Margaret Bobonich",
     gender: "female",
-    image: "cast/margaret_bobonich.png",
+    image: "cast/margaret_bobonich.webp",
 
     shows: ["Survivor"],
 
@@ -20906,7 +20906,7 @@ window.CAST = [
     nickname: "Mari",
     fullName: "Mari Takahashi",
     gender: "female",
-    image: "cast/mari_takahashi.png",
+    image: "cast/mari_takahashi.webp",
 
     shows: ["Survivor"],
 
@@ -20920,7 +20920,7 @@ window.CAST = [
     nickname: "Maria",
     fullName: "Maria Shrime Gonzalez",
     gender: "female",
-    image: "cast/maria_shrime_gonzalez.png",
+    image: "cast/maria_shrime_gonzalez.webp",
 
     shows: ["Survivor"],
 
@@ -20934,7 +20934,7 @@ window.CAST = [
     nickname: "Marisa",
     fullName: "Marisa Calihan",
     gender: "female",
-    image: "cast/marisa_calihan.png",
+    image: "cast/marisa_calihan.webp",
 
     shows: ["Survivor"],
 
@@ -20948,7 +20948,7 @@ window.CAST = [
     nickname: "Marissa",
     fullName: "Marissa Peterson",
     gender: "female",
-    image: "cast/marissa_peterson.png",
+    image: "cast/marissa_peterson.webp",
 
     shows: ["Survivor"],
 
@@ -20962,7 +20962,7 @@ window.CAST = [
     nickname: "Mark",
     fullName: "Mark Caruso",
     gender: "male",
-    image: "cast/mark_caruso.png",
+    image: "cast/mark_caruso.webp",
 
     shows: ["Survivor"],
 
@@ -20976,7 +20976,7 @@ window.CAST = [
     nickname: "Marty",
     fullName: "Marty Piombo",
     gender: "male",
-    image: "cast/marty_piombo.png",
+    image: "cast/marty_piombo.webp",
 
     shows: ["Survivor"],
 
@@ -20990,7 +20990,7 @@ window.CAST = [
     nickname: "Mary",
     fullName: "Mary Sartain",
     gender: "female",
-    image: "cast/mary_sartain.png",
+    image: "cast/mary_sartain.webp",
 
     shows: ["Survivor"],
 
@@ -21004,7 +21004,7 @@ window.CAST = [
     nickname: "Mary",
     fullName: "Mary Zheng",
     gender: "female",
-    image: "cast/mary_zheng.png",
+    image: "cast/mary_zheng.webp",
 
     shows: ["Survivor"],
 
@@ -21018,7 +21018,7 @@ window.CAST = [
     nickname: "Marya",
     fullName: "Marya Sherron",
     gender: "female",
-    image: "cast/marya_sherron.png",
+    image: "cast/marya_sherron.webp",
 
     shows: ["Survivor"],
 
@@ -21032,7 +21032,7 @@ window.CAST = [
     nickname: "Maryanne",
     fullName: "Maryanne Oketch",
     gender: "female",
-    image: "cast/maryanne_oketch.png",
+    image: "cast/maryanne_oketch.webp",
 
     shows: ["Survivor"],
 
@@ -21046,7 +21046,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matt Bischoff",
     gender: "male",
-    image: "cast/matt_bischoff.png",
+    image: "cast/matt_bischoff.webp",
 
     shows: ["Survivor"],
 
@@ -21060,7 +21060,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matt Blankinship",
     gender: "male",
-    image: "cast/matt_blankinship.png",
+    image: "cast/matt_blankinship.webp",
 
     shows: ["Survivor"],
 
@@ -21074,7 +21074,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matt Elrod",
     gender: "male",
-    image: "cast/matt_elrod.png",
+    image: "cast/matt_elrod.webp",
 
     shows: ["Survivor"],
 
@@ -21088,7 +21088,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matt Quinlan",
     gender: "male",
-    image: "cast/matt_quinlan.png",
+    image: "cast/matt_quinlan.webp",
 
     shows: ["Survivor"],
 
@@ -21102,7 +21102,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matt Williams",
     gender: "male",
-    image: "cast/matt_williams.png",
+    image: "cast/matt_williams.webp",
 
     shows: ["Survivor"],
 
@@ -21116,7 +21116,7 @@ window.CAST = [
     nickname: "Matthew",
     fullName: "Matthew Grinstead-Mayle",
     gender: "male",
-    image: "cast/matthew_grinstead_mayle.png",
+    image: "cast/matthew_grinstead_mayle.webp",
 
     shows: ["Survivor"],
 
@@ -21130,7 +21130,7 @@ window.CAST = [
     nickname: "Matthew",
     fullName: "Matthew Lenahan",
     gender: "male",
-    image: "cast/matthew_lenahan.png",
+    image: "cast/matthew_lenahan.webp",
 
     shows: ["Survivor"],
 
@@ -21144,7 +21144,7 @@ window.CAST = [
     nickname: "Matthew",
     fullName: "Matthew von Ertfelda",
     gender: "male",
-    image: "cast/matthew_von_ertfelda.png",
+    image: "cast/matthew_von_ertfelda.webp",
 
     shows: ["Survivor"],
 
@@ -21158,7 +21158,7 @@ window.CAST = [
     nickname: "Matty",
     fullName: "Matty Whitmore",
     gender: "male",
-    image: "cast/matty_whitmore.png",
+    image: "cast/matty_whitmore.webp",
 
     shows: ["Survivor"],
 
@@ -21172,7 +21172,7 @@ window.CAST = [
     nickname: "Max",
     fullName: "Max Dawson",
     gender: "male",
-    image: "cast/max_dawson.png",
+    image: "cast/max_dawson.webp",
 
     shows: ["Survivor"],
 
@@ -21186,7 +21186,7 @@ window.CAST = [
     nickname: "MC",
     fullName: "MC Chukwujekwu",
     gender: "female",
-    image: "cast/mc_chukwujekwu.png",
+    image: "cast/mc_chukwujekwu.webp",
 
     shows: ["Survivor"],
 
@@ -21200,7 +21200,7 @@ window.CAST = [
     nickname: "Melinda",
     fullName: "Melinda Hyder",
     gender: "female",
-    image: "cast/melinda_hyder.png",
+    image: "cast/melinda_hyder.webp",
 
     shows: ["Survivor"],
 
@@ -21214,7 +21214,7 @@ window.CAST = [
     nickname: "Mia",
     fullName: "Mia Galeotalanza",
     gender: "female",
-    image: "cast/mia_galeotalanza.png",
+    image: "cast/mia_galeotalanza.webp",
 
     shows: ["Survivor"],
 
@@ -21228,7 +21228,7 @@ window.CAST = [
     nickname: "Mikey B",
     fullName: "Michael Bortone",
     gender: "male",
-    image: "cast/michael_bortone.png",
+    image: "cast/michael_bortone.webp",
 
     shows: ["Survivor"],
 
@@ -21242,7 +21242,7 @@ window.CAST = [
     nickname: "Michael",
     fullName: "Michael Jefferson",
     gender: "male",
-    image: "cast/michael_jefferson.png",
+    image: "cast/michael_jefferson.webp",
 
     shows: ["Survivor"],
 
@@ -21256,7 +21256,7 @@ window.CAST = [
     nickname: "Michael",
     fullName: "Michael Snow",
     gender: "male",
-    image: "cast/michael_snow.png",
+    image: "cast/michael_snow.webp",
 
     shows: ["Survivor"],
 
@@ -21270,7 +21270,7 @@ window.CAST = [
     nickname: "Michael",
     fullName: "Michael Yerger",
     gender: "male",
-    image: "cast/michael_yerger.png",
+    image: "cast/michael_yerger.webp",
 
     shows: ["Survivor"],
 
@@ -21284,7 +21284,7 @@ window.CAST = [
     nickname: "Michael",
     fullName: "Michael Zernow",
     gender: "male",
-    image: "cast/michael_zernow.png",
+    image: "cast/michael_zernow.webp",
 
     shows: ["Survivor"],
 
@@ -21298,7 +21298,7 @@ window.CAST = [
     nickname: "Michelle",
     fullName: "Michelle Chase",
     gender: "female",
-    image: "cast/michelle_chase.png",
+    image: "cast/michelle_chase.webp",
 
     shows: ["Survivor"],
 
@@ -21312,7 +21312,7 @@ window.CAST = [
     nickname: "Michelle",
     fullName: "Michelle Schubert",
     gender: "female",
-    image: "cast/michelle_schubert.png",
+    image: "cast/michelle_schubert.webp",
 
     shows: ["Survivor"],
 
@@ -21326,7 +21326,7 @@ window.CAST = [
     nickname: "Michelle",
     fullName: "Michelle Tesauro",
     gender: "female",
-    image: "cast/michelle_tesauro.png",
+    image: "cast/michelle_tesauro.webp",
 
     shows: ["Survivor"],
 
@@ -21340,7 +21340,7 @@ window.CAST = [
     nickname: "Michelle",
     fullName: "Michelle Yi",
     gender: "female",
-    image: "cast/michelle_yi.png",
+    image: "cast/michelle_yi.webp",
 
     shows: ["Survivor"],
 
@@ -21354,7 +21354,7 @@ window.CAST = [
     nickname: "Mick",
     fullName: "Mick Trimming",
     gender: "male",
-    image: "cast/mick_trimming.png",
+    image: "cast/mick_trimming.webp",
 
     shows: ["Survivor"],
 
@@ -21368,7 +21368,7 @@ window.CAST = [
     nickname: "Mikayla",
     fullName: "Mikayla Wingle",
     gender: "female",
-    image: "cast/mikayla_wingle.png",
+    image: "cast/mikayla_wingle.webp",
 
     shows: ["Survivor"],
 
@@ -21382,7 +21382,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Borassi",
     gender: "male",
-    image: "cast/mike_borassi.png",
+    image: "cast/mike_borassi.webp",
 
     shows: ["Survivor"],
 
@@ -21396,7 +21396,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Chiesl",
     gender: "male",
-    image: "cast/mike_chiesl.png",
+    image: "cast/mike_chiesl.webp",
 
     shows: ["Survivor"],
 
@@ -21410,7 +21410,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Gabler",
     gender: "male",
-    image: "cast/mike_gabler.png",
+    image: "cast/mike_gabler.webp",
 
     shows: ["Survivor"],
 
@@ -21424,7 +21424,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Holloway",
     gender: "male",
-    image: "cast/mike_holloway.png",
+    image: "cast/mike_holloway.webp",
 
     shows: ["Survivor"],
 
@@ -21438,7 +21438,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Turner",
     gender: "male",
-    image: "cast/mike_turner.png",
+    image: "cast/mike_turner.webp",
 
     shows: ["Survivor"],
 
@@ -21452,7 +21452,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike White",
     gender: "male",
-    image: "cast/mike_white.png",
+    image: "cast/mike_white.webp",
 
     shows: [
       "Survivor",
@@ -21470,7 +21470,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Mike Zahalsky",
     gender: "male",
-    image: "cast/mike_zahalsky.png",
+    image: "cast/mike_zahalsky.webp",
 
     shows: ["Survivor"],
 
@@ -21484,7 +21484,7 @@ window.CAST = [
     nickname: "Missy",
     fullName: "Missy Byrd",
     gender: "female",
-    image: "cast/missy_byrd.png",
+    image: "cast/missy_byrd.webp",
 
     shows: ["Survivor"],
 
@@ -21498,7 +21498,7 @@ window.CAST = [
     nickname: "Missy",
     fullName: "Missy Payne",
     gender: "female",
-    image: "cast/missy_payne.png",
+    image: "cast/missy_payne.webp",
 
     shows: ["Survivor"],
 
@@ -21512,7 +21512,7 @@ window.CAST = [
     nickname: "Misty",
     fullName: "Misty Giles",
     gender: "female",
-    image: "cast/misty_giles.png",
+    image: "cast/misty_giles.webp",
 
     shows: ["Survivor"],
 
@@ -21526,7 +21526,7 @@ window.CAST = [
     nickname: "Mitch",
     fullName: "Mitch Guerra",
     gender: "male",
-    image: "cast/mitch_guerra.png",
+    image: "cast/mitch_guerra.webp",
 
     shows: ["Survivor"],
 
@@ -21540,7 +21540,7 @@ window.CAST = [
     nickname: "Mitchell",
     fullName: "Mitchell Olson",
     gender: "male",
-    image: "cast/mitchell_olson.png",
+    image: "cast/mitchell_olson.webp",
 
     shows: ["Survivor"],
 
@@ -21554,7 +21554,7 @@ window.CAST = [
     nickname: "Molly",
     fullName: "Molly Byman",
     gender: "female",
-    image: "cast/molly_byman.png",
+    image: "cast/molly_byman.webp",
 
     shows: ["Survivor"],
 
@@ -21568,7 +21568,7 @@ window.CAST = [
     nickname: "Monica",
     fullName: "Monica Culpepper",
     gender: "female",
-    image: "cast/monica_culpepper.png",
+    image: "cast/monica_culpepper.webp",
 
     shows: ["Survivor"],
 
@@ -21582,7 +21582,7 @@ window.CAST = [
     nickname: "Monica",
     fullName: "Monica Padilla",
     gender: "female",
-    image: "cast/monica_padilla.png",
+    image: "cast/monica_padilla.webp",
 
     shows: ["Survivor"],
 
@@ -21596,7 +21596,7 @@ window.CAST = [
     nickname: "Mookie",
     fullName: "Mookie Lee",
     gender: "male",
-    image: "cast/mookie_lee.png",
+    image: "cast/mookie_lee.webp",
 
     shows: ["Survivor"],
 
@@ -21610,7 +21610,7 @@ window.CAST = [
     nickname: "Morgan",
     fullName: "Morgan McDevitt",
     gender: "female",
-    image: "cast/morgan_mcdevitt.png",
+    image: "cast/morgan_mcdevitt.webp",
 
     shows: ["Survivor"],
 
@@ -21624,7 +21624,7 @@ window.CAST = [
     nickname: "Morgan",
     fullName: "Morgan McLeod",
     gender: "female",
-    image: "cast/morgan_mcleod.png",
+    image: "cast/morgan_mcleod.webp",
 
     shows: ["Survivor"],
 
@@ -21638,7 +21638,7 @@ window.CAST = [
     nickname: "Morgan",
     fullName: "Morgan Ricke",
     gender: "female",
-    image: "cast/morgan_ricke.png",
+    image: "cast/morgan_ricke.webp",
 
     shows: ["Survivor"],
 
@@ -21652,7 +21652,7 @@ window.CAST = [
     nickname: "Moriah",
     fullName: "Moriah Gaynor",
     gender: "female",
-    image: "cast/moriah_gaynor.png",
+    image: "cast/moriah_gaynor.webp",
 
     shows: ["Survivor"],
 
@@ -21666,7 +21666,7 @@ window.CAST = [
     nickname: "Morriah",
     fullName: "Morriah Young",
     gender: "female",
-    image: "cast/morriah_young.png",
+    image: "cast/morriah_young.webp",
 
     shows: ["Survivor"],
 
@@ -21680,7 +21680,7 @@ window.CAST = [
     nickname: "Nadiya",
     fullName: "Nadiya Anderson",
     gender: "female",
-    image: "cast/nadiya_anderson.png",
+    image: "cast/nadiya_anderson.webp",
 
     shows: [
       "Survivor",
@@ -21698,7 +21698,7 @@ window.CAST = [
     nickname: "NaOnka",
     fullName: "NaOnka Mixon",
     gender: "female",
-    image: "cast/naonka_mixon.png",
+    image: "cast/naonka_mixon.webp",
 
     shows: ["Survivor"],
 
@@ -21712,7 +21712,7 @@ window.CAST = [
     nickname: "Naseer",
     fullName: "Naseer Muttalif",
     gender: "male",
-    image: "cast/naseer_muttalif.png",
+    image: "cast/naseer_muttalif.webp",
 
     shows: ["Survivor"],
 
@@ -21726,7 +21726,7 @@ window.CAST = [
     nickname: "Natalia",
     fullName: "Natalia Azoqa",
     gender: "female",
-    image: "cast/natalia_azoqa.png",
+    image: "cast/natalia_azoqa.webp",
 
     shows: ["Survivor"],
 
@@ -21740,7 +21740,7 @@ window.CAST = [
     nickname: "Natalie",
     fullName: "Natalie Bolton",
     gender: "female",
-    image: "cast/natalie_bolton.png",
+    image: "cast/natalie_bolton.webp",
 
     shows: ["Survivor"],
 
@@ -21754,7 +21754,7 @@ window.CAST = [
     nickname: "Natalie",
     fullName: "Natalie Cole",
     gender: "female",
-    image: "cast/natalie_cole.png",
+    image: "cast/natalie_cole.webp",
 
     shows: ["Survivor"],
 
@@ -21768,7 +21768,7 @@ window.CAST = [
     nickname: "Natalie",
     fullName: "Natalie Tenerelli",
     gender: "female",
-    image: "cast/natalie_tenerelli.png",
+    image: "cast/natalie_tenerelli.webp",
 
     shows: ["Survivor"],
 
@@ -21782,7 +21782,7 @@ window.CAST = [
     nickname: "Natalie",
     fullName: "Natalie White",
     gender: "female",
-    image: "cast/natalie_white.png",
+    image: "cast/natalie_white.webp",
 
     shows: ["Survivor"],
 
@@ -21796,7 +21796,7 @@ window.CAST = [
     nickname: "Nate",
     fullName: "Nate Moore",
     gender: "male",
-    image: "cast/nate_moore.png",
+    image: "cast/nate_moore.webp",
 
     shows: ["Survivor"],
 
@@ -21810,7 +21810,7 @@ window.CAST = [
     nickname: "Nathan",
     fullName: "Nathan Gonzalez",
     gender: "male",
-    image: "cast/nathan_gonzalez.png",
+    image: "cast/nathan_gonzalez.webp",
 
     shows: ["Survivor"],
 
@@ -21824,7 +21824,7 @@ window.CAST = [
     nickname: "Neal",
     fullName: "Neal Gottlieb",
     gender: "male",
-    image: "cast/neal_gottlieb.png",
+    image: "cast/neal_gottlieb.webp",
 
     shows: ["Survivor"],
 
@@ -21838,7 +21838,7 @@ window.CAST = [
     nickname: "Neleh",
     fullName: "Neleh Dennis",
     gender: "female",
-    image: "cast/neleh_dennis.png",
+    image: "cast/neleh_dennis.webp",
 
     shows: ["Survivor"],
 
@@ -21852,7 +21852,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nick Brown",
     gender: "male",
-    image: "cast/nick_brown.png",
+    image: "cast/nick_brown.webp",
 
     shows: ["Survivor"],
 
@@ -21866,7 +21866,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nick Maiorano",
     gender: "male",
-    image: "cast/nick_maiorano.png",
+    image: "cast/nick_maiorano.webp",
 
     shows: ["Survivor"],
 
@@ -21880,7 +21880,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nick Stanbury",
     gender: "male",
-    image: "cast/nick_stanbury.png",
+    image: "cast/nick_stanbury.webp",
 
     shows: ["Survivor"],
 
@@ -21894,7 +21894,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nick Wilson",
     gender: "male",
-    image: "cast/nick_wilson.png",
+    image: "cast/nick_wilson.webp",
 
     shows: ["Survivor"],
 
@@ -21908,7 +21908,7 @@ window.CAST = [
     nickname: "Nicole",
     fullName: "Nicole Delma",
     gender: "female",
-    image: "cast/nicole_delma.png",
+    image: "cast/nicole_delma.webp",
 
     shows: ["Survivor"],
 
@@ -21922,7 +21922,7 @@ window.CAST = [
     nickname: "Nicole",
     fullName: "Nicole Mazullo",
     gender: "female",
-    image: "cast/nicole_mazullo.png",
+    image: "cast/nicole_mazullo.webp",
 
     shows: ["Survivor"],
 
@@ -21936,7 +21936,7 @@ window.CAST = [
     nickname: "Nina",
     fullName: "Nina Acosta",
     gender: "female",
-    image: "cast/nina_acosta.png",
+    image: "cast/nina_acosta.webp",
 
     shows: ["Survivor"],
 
@@ -21950,7 +21950,7 @@ window.CAST = [
     nickname: "Nina",
     fullName: "Nina Poersch",
     gender: "female",
-    image: "cast/nina_poersch.png",
+    image: "cast/nina_poersch.webp",
 
     shows: ["Survivor"],
 
@@ -21964,7 +21964,7 @@ window.CAST = [
     nickname: "Nneka",
     fullName: "Nneka Ejere",
     gender: "female",
-    image: "cast/nneka_ejere.png",
+    image: "cast/nneka_ejere.webp",
 
     shows: ["Survivor"],
 
@@ -21978,7 +21978,7 @@ window.CAST = [
     nickname: "Noelle",
     fullName: "Noelle Lambert",
     gender: "female",
-    image: "cast/noelle_lambert.png",
+    image: "cast/noelle_lambert.webp",
 
     shows: ["Survivor"],
 
@@ -21992,7 +21992,7 @@ window.CAST = [
     nickname: "Noura",
     fullName: "Noura Salman",
     gender: "female",
-    image: "cast/noura_salman.png",
+    image: "cast/noura_salman.webp",
 
     shows: ["Survivor"],
 
@@ -22006,7 +22006,7 @@ window.CAST = [
     nickname: "Omar",
     fullName: "Omar Zaheer",
     gender: "male",
-    image: "cast/omar_zaheer.png",
+    image: "cast/omar_zaheer.webp",
 
     shows: ["Survivor"],
 
@@ -22020,7 +22020,7 @@ window.CAST = [
     nickname: "Ozzy",
     fullName: "Oscar Lusth",
     gender: "male",
-    image: "cast/oscar_lusth.png",
+    image: "cast/oscar_lusth.webp",
 
     shows: ["Survivor"],
 
@@ -22034,7 +22034,7 @@ window.CAST = [
     nickname: "Osten",
     fullName: "Osten Taylor",
     gender: "male",
-    image: "cast/osten_taylor.png",
+    image: "cast/osten_taylor.webp",
 
     shows: ["Survivor"],
 
@@ -22048,7 +22048,7 @@ window.CAST = [
     nickname: "Owen",
     fullName: "Owen Knight",
     gender: "male",
-    image: "cast/owen_knight.png",
+    image: "cast/owen_knight.webp",
 
     shows: ["Survivor"],
 
@@ -22062,7 +22062,7 @@ window.CAST = [
     nickname: "Paloma",
     fullName: "Paloma Soto-Castillo",
     gender: "female",
-    image: "cast/paloma_soto_castillo.png",
+    image: "cast/paloma_soto_castillo.webp",
 
     shows: ["Survivor"],
 
@@ -22076,7 +22076,7 @@ window.CAST = [
     nickname: "Parvati",
     fullName: "Parvati Shallow",
     gender: "female",
-    image: "cast/parvati_shallow.png",
+    image: "cast/parvati_shallow.webp",
 
     shows: [
       "Survivor",
@@ -22096,7 +22096,7 @@ window.CAST = [
     nickname: "Paschal",
     fullName: "Paschal English",
     gender: "male",
-    image: "cast/paschal_english.png",
+    image: "cast/paschal_english.webp",
 
     shows: ["Survivor"],
 
@@ -22110,7 +22110,7 @@ window.CAST = [
     nickname: "Pat",
     fullName: "Pat Cusack",
     gender: "male",
-    image: "cast/pat_cusack.png",
+    image: "cast/pat_cusack.webp",
 
     shows: ["Survivor"],
 
@@ -22124,7 +22124,7 @@ window.CAST = [
     nickname: "Patricia",
     fullName: "Patricia Jackson",
     gender: "female",
-    image: "cast/patricia_jackson.png",
+    image: "cast/patricia_jackson.webp",
 
     shows: ["Survivor"],
 
@@ -22138,7 +22138,7 @@ window.CAST = [
     nickname: "Patrick",
     fullName: "Patrick Bolton",
     gender: "male",
-    image: "cast/patrick_bolton.png",
+    image: "cast/patrick_bolton.webp",
 
     shows: ["Survivor"],
 
@@ -22152,7 +22152,7 @@ window.CAST = [
     nickname: "Paul",
     fullName: "Paul Wachter",
     gender: "male",
-    image: "cast/paul_wachter.png",
+    image: "cast/paul_wachter.webp",
 
     shows: ["Survivor"],
 
@@ -22166,7 +22166,7 @@ window.CAST = [
     nickname: "Peih-Gee",
     fullName: "Peih-Gee Law",
     gender: "female",
-    image: "cast/peih_gee_law.png",
+    image: "cast/peih_gee_law.webp",
 
     shows: ["Survivor"],
 
@@ -22180,7 +22180,7 @@ window.CAST = [
     nickname: "Penny",
     fullName: "Penny Ramsey",
     gender: "female",
-    image: "cast/penny_ramsey.png",
+    image: "cast/penny_ramsey.webp",
 
     shows: ["Survivor"],
 
@@ -22194,7 +22194,7 @@ window.CAST = [
     nickname: "Peter",
     fullName: "Peter Baggenstos",
     gender: "male",
-    image: "cast/peter_baggenstos.png",
+    image: "cast/peter_baggenstos.webp",
 
     shows: ["Survivor"],
 
@@ -22208,7 +22208,7 @@ window.CAST = [
     nickname: "Peter",
     fullName: "Peter Harkey",
     gender: "male",
-    image: "cast/peter_harkey.png",
+    image: "cast/peter_harkey.webp",
 
     shows: ["Survivor"],
 
@@ -22222,7 +22222,7 @@ window.CAST = [
     nickname: "Peter",
     fullName: "Peter Yurkowski",
     gender: "male",
-    image: "cast/peter_yurkowski.png",
+    image: "cast/peter_yurkowski.webp",
 
     shows: ["Survivor"],
 
@@ -22236,7 +22236,7 @@ window.CAST = [
     nickname: "Phillip",
     fullName: "Phillip Sheppard",
     gender: "male",
-    image: "cast/phillip_sheppard.png",
+    image: "cast/phillip_sheppard.webp",
 
     shows: ["Survivor"],
 
@@ -22250,7 +22250,7 @@ window.CAST = [
     nickname: "Q",
     fullName: "Q Burdette",
     gender: "male",
-    image: "cast/q_burdette.png",
+    image: "cast/q_burdette.webp",
 
     shows: ["Survivor"],
 
@@ -22264,7 +22264,7 @@ window.CAST = [
     nickname: "Rachel",
     fullName: "Rachel Ako",
     gender: "female",
-    image: "cast/rachel_ako.png",
+    image: "cast/rachel_ako.webp",
 
     shows: ["Survivor"],
 
@@ -22278,7 +22278,7 @@ window.CAST = [
     nickname: "Rachel",
     fullName: "Rachel Foulger",
     gender: "female",
-    image: "cast/rachel_foulger.png",
+    image: "cast/rachel_foulger.webp",
 
     shows: ["Survivor"],
 
@@ -22292,7 +22292,7 @@ window.CAST = [
     nickname: "Rachel",
     fullName: "Rachel LaMont",
     gender: "female",
-    image: "cast/rachel_lamont.png",
+    image: "cast/rachel_lamont.webp",
 
     shows: ["Survivor"],
 
@@ -22306,7 +22306,7 @@ window.CAST = [
     nickname: "Rafe",
     fullName: "Rafe Judkins",
     gender: "male",
-    image: "cast/rafe_judkins.png",
+    image: "cast/rafe_judkins.webp",
 
     shows: ["Survivor"],
 
@@ -22320,7 +22320,7 @@ window.CAST = [
     nickname: "Ralph",
     fullName: "Ralph Kiser",
     gender: "male",
-    image: "cast/ralph_kiser.png",
+    image: "cast/ralph_kiser.webp",
 
     shows: ["Survivor"],
 
@@ -22334,7 +22334,7 @@ window.CAST = [
     nickname: "Ramona",
     fullName: "Ramona Gray",
     gender: "female",
-    image: "cast/ramona_gray.png",
+    image: "cast/ramona_gray.webp",
 
     shows: ["Survivor"],
 
@@ -22348,7 +22348,7 @@ window.CAST = [
     nickname: "Randen",
     fullName: "Randen Montalvo",
     gender: "male",
-    image: "cast/randen_montalvo.png",
+    image: "cast/randen_montalvo.webp",
 
     shows: ["Survivor"],
 
@@ -22362,7 +22362,7 @@ window.CAST = [
     nickname: "Randy",
     fullName: "Randy Bailey",
     gender: "male",
-    image: "cast/randy_bailey.png",
+    image: "cast/randy_bailey.webp",
 
     shows: ["Survivor"],
 
@@ -22376,7 +22376,7 @@ window.CAST = [
     nickname: "Rebecca",
     fullName: "Rebecca Borman",
     gender: "female",
-    image: "cast/rebecca_borman.png",
+    image: "cast/rebecca_borman.webp",
 
     shows: ["Survivor"],
 
@@ -22390,7 +22390,7 @@ window.CAST = [
     nickname: "Rebekah",
     fullName: "Rebekah Lee",
     gender: "female",
-    image: "cast/rebekah_lee.png",
+    image: "cast/rebekah_lee.webp",
 
     shows: ["Survivor"],
 
@@ -22404,7 +22404,7 @@ window.CAST = [
     nickname: "Reed",
     fullName: "Reed Kelly",
     gender: "male",
-    image: "cast/reed_kelly.png",
+    image: "cast/reed_kelly.webp",
 
     shows: ["Survivor"],
 
@@ -22418,7 +22418,7 @@ window.CAST = [
     nickname: "Reem",
     fullName: "Reem Daly",
     gender: "female",
-    image: "cast/reem_daly.png",
+    image: "cast/reem_daly.webp",
 
     shows: ["Survivor"],
 
@@ -22432,7 +22432,7 @@ window.CAST = [
     nickname: "Reynold",
     fullName: "Reynold Toepfer",
     gender: "male",
-    image: "cast/reynold_toepfer.png",
+    image: "cast/reynold_toepfer.webp",
 
     shows: ["Survivor"],
 
@@ -22446,7 +22446,7 @@ window.CAST = [
     nickname: "Ricard",
     fullName: "Ricard Foye",
     gender: "male",
-    image: "cast/ricard_foye.png",
+    image: "cast/ricard_foye.webp",
 
     shows: ["Survivor"],
 
@@ -22460,7 +22460,7 @@ window.CAST = [
     nickname: "Richard",
     fullName: "Richard Hatch",
     gender: "male",
-    image: "cast/richard_hatch.png",
+    image: "cast/richard_hatch.webp",
 
     shows: [
       "Survivor",
@@ -22478,7 +22478,7 @@ window.CAST = [
     nickname: "Rick",
     fullName: "Rick Devens",
     gender: "male",
-    image: "cast/rick_devens.png",
+    image: "cast/rick_devens.webp",
 
     shows: [
       "Survivor",
@@ -22496,7 +22496,7 @@ window.CAST = [
     nickname: "Rick",
     fullName: "Rick Nelson",
     gender: "male",
-    image: "cast/rick_nelson.png",
+    image: "cast/rick_nelson.webp",
 
     shows: ["Survivor"],
 
@@ -22510,7 +22510,7 @@ window.CAST = [
     nickname: "Rita",
     fullName: "Rita Verreos",
     gender: "female",
-    image: "cast/rita_verreos.png",
+    image: "cast/rita_verreos.webp",
 
     shows: ["Survivor"],
 
@@ -22524,7 +22524,7 @@ window.CAST = [
     nickname: "Rizo",
     fullName: "Rizo Velovic",
     gender: "male",
-    image: "cast/rizo_velovic.png",
+    image: "cast/rizo_velovic.webp",
 
     shows: ["Survivor"],
 
@@ -22538,7 +22538,7 @@ window.CAST = [
     nickname: "Roark",
     fullName: "Roark Luskin",
     gender: "female",
-    image: "cast/roark_luskin.png",
+    image: "cast/roark_luskin.webp",
 
     shows: ["Survivor"],
 
@@ -22552,7 +22552,7 @@ window.CAST = [
     nickname: "Rob",
     fullName: "Rob Cesternino",
     gender: "male",
-    image: "cast/rob_cesternino.png",
+    image: "cast/rob_cesternino.webp",
 
     shows: [
       "Survivor",
@@ -22570,7 +22570,7 @@ window.CAST = [
     nickname: "Boston Rob",
     fullName: "Rob Mariano",
     gender: "male",
-    image: "cast/rob_mariano.png",
+    image: "cast/rob_mariano.webp",
 
     shows: [
       "Survivor",
@@ -22590,7 +22590,7 @@ window.CAST = [
     nickname: "Robert",
     fullName: "Robert Crowley",
     gender: "male",
-    image: "cast/robert_crowley.png",
+    image: "cast/robert_crowley.webp",
 
     shows: ["Survivor"],
 
@@ -22604,7 +22604,7 @@ window.CAST = [
     nickname: "Robert",
     fullName: "Robert DeCanio",
     gender: "male",
-    image: "cast/robert_decanio.png",
+    image: "cast/robert_decanio.webp",
 
     shows: ["Survivor"],
 
@@ -22618,7 +22618,7 @@ window.CAST = [
     nickname: "Robb",
     fullName: "Robert Zbacnik",
     gender: "male",
-    image: "cast/robert_zbacnik.png",
+    image: "cast/robert_zbacnik.webp",
 
     shows: ["Survivor"],
 
@@ -22632,7 +22632,7 @@ window.CAST = [
     nickname: "RC",
     fullName: "Roberta Saint-Amour",
     gender: "female",
-    image: "cast/roberta_saint_amour.png",
+    image: "cast/roberta_saint_amour.webp",
 
     shows: ["Survivor"],
 
@@ -22646,7 +22646,7 @@ window.CAST = [
     nickname: "Rocksroy",
     fullName: "Rocksroy Bailey",
     gender: "male",
-    image: "cast/rocksroy_bailey.png",
+    image: "cast/rocksroy_bailey.webp",
 
     shows: ["Survivor"],
 
@@ -22660,7 +22660,7 @@ window.CAST = [
     nickname: "Rodger",
     fullName: "Rodger Bingham",
     gender: "male",
-    image: "cast/rodger_bingham.png",
+    image: "cast/rodger_bingham.webp",
 
     shows: ["Survivor"],
 
@@ -22674,7 +22674,7 @@ window.CAST = [
     nickname: "Rodney",
     fullName: "Rodney Lavoie Jr.",
     gender: "male",
-    image: "cast/rodney_lavoie_jr.png",
+    image: "cast/rodney_lavoie_jr.webp",
 
     shows: ["Survivor"],
 
@@ -22688,7 +22688,7 @@ window.CAST = [
     nickname: "Roger",
     fullName: "Roger Sexton",
     gender: "male",
-    image: "cast/roger_sexton.png",
+    image: "cast/roger_sexton.webp",
 
     shows: ["Survivor"],
 
@@ -22702,7 +22702,7 @@ window.CAST = [
     nickname: "Rome",
     fullName: "Rome Cooney",
     gender: "male",
-    image: "cast/rome_cooney.png",
+    image: "cast/rome_cooney.webp",
 
     shows: ["Survivor"],
 
@@ -22716,7 +22716,7 @@ window.CAST = [
     nickname: "Romeo",
     fullName: "Romeo Escobar",
     gender: "male",
-    image: "cast/romeo_escobar.png",
+    image: "cast/romeo_escobar.webp",
 
     shows: ["Survivor"],
 
@@ -22730,7 +22730,7 @@ window.CAST = [
     nickname: "Ron",
     fullName: "Ron Clark",
     gender: "male",
-    image: "cast/ron_clark.png",
+    image: "cast/ron_clark.webp",
 
     shows: ["Survivor"],
 
@@ -22744,7 +22744,7 @@ window.CAST = [
     nickname: "Ronnie",
     fullName: "Ronnie Bardah",
     gender: "male",
-    image: "cast/ronnie_bardah.png",
+    image: "cast/ronnie_bardah.webp",
 
     shows: ["Survivor"],
 
@@ -22758,7 +22758,7 @@ window.CAST = [
     nickname: "Rory",
     fullName: "Rory Freeman",
     gender: "male",
-    image: "cast/rory_freeman.png",
+    image: "cast/rory_freeman.webp",
 
     shows: ["Survivor"],
 
@@ -22772,7 +22772,7 @@ window.CAST = [
     nickname: "Roxy",
     fullName: "Roxy Morris",
     gender: "female",
-    image: "cast/roxanne_morris.png",
+    image: "cast/roxanne_morris.webp",
 
     shows: ["Survivor"],
 
@@ -22786,7 +22786,7 @@ window.CAST = [
     nickname: "Rudy",
     fullName: "Rudy Boesch",
     gender: "male",
-    image: "cast/rudy_boesch.png",
+    image: "cast/rudy_boesch.webp",
 
     shows: ["Survivor"],
 
@@ -22800,7 +22800,7 @@ window.CAST = [
     nickname: "Rupert",
     fullName: "Rupert Boneham",
     gender: "male",
-    image: "cast/rupert_boneham.png",
+    image: "cast/rupert_boneham.webp",
 
     shows: [
       "Survivor",
@@ -22818,7 +22818,7 @@ window.CAST = [
     nickname: "Russell",
     fullName: "Russell Hantz",
     gender: "male",
-    image: "cast/russell_hantz.png",
+    image: "cast/russell_hantz.webp",
 
     shows: [
       "Survivor",
@@ -22836,7 +22836,7 @@ window.CAST = [
     nickname: "Russell",
     fullName: "Russell Swan",
     gender: "male",
-    image: "cast/russell_swan.png",
+    image: "cast/russell_swan.webp",
 
     shows: ["Survivor"],
 
@@ -22850,7 +22850,7 @@ window.CAST = [
     nickname: "Ruth Marie",
     fullName: "Ruth Marie Milliman",
     gender: "female",
-    image: "cast/ruth_marie_milliman.png",
+    image: "cast/ruth_marie_milliman.webp",
 
     shows: ["Survivor"],
 
@@ -22864,7 +22864,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Aiken",
     gender: "male",
-    image: "cast/ryan_aiken.png",
+    image: "cast/ryan_aiken.webp",
 
     shows: ["Survivor"],
 
@@ -22878,7 +22878,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Medrano",
     gender: "male",
-    image: "cast/ryan_medrano.png",
+    image: "cast/ryan_medrano.webp",
 
     shows: ["Survivor"],
 
@@ -22892,7 +22892,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Opray",
     gender: "male",
-    image: "cast/ryan_opray.png",
+    image: "cast/ryan_opray.webp",
 
     shows: ["Survivor"],
 
@@ -22906,7 +22906,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Shoulders",
     gender: "male",
-    image: "cast/ryan_shoulders.png",
+    image: "cast/ryan_shoulders.webp",
 
     shows: ["Survivor"],
 
@@ -22920,7 +22920,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Ulrich",
     gender: "male",
-    image: "cast/ryan_ulrich.png",
+    image: "cast/ryan_ulrich.webp",
 
     shows: ["Survivor"],
 
@@ -22934,7 +22934,7 @@ window.CAST = [
     nickname: "Sabiyah",
     fullName: "Sabiyah Broderick",
     gender: "female",
-    image: "cast/sabiyah_broderick.png",
+    image: "cast/sabiyah_broderick.webp",
 
     shows: ["Survivor"],
 
@@ -22948,7 +22948,7 @@ window.CAST = [
     nickname: "Sabrina",
     fullName: "Sabrina Thompson",
     gender: "female",
-    image: "cast/sabrina_thompson.png",
+    image: "cast/sabrina_thompson.webp",
 
     shows: ["Survivor"],
 
@@ -22962,7 +22962,7 @@ window.CAST = [
     nickname: "Sage",
     fullName: "Sage Ahrens-Nichols",
     gender: "female",
-    image: "cast/sage_ahrens_nichols.png",
+    image: "cast/sage_ahrens_nichols.webp",
 
     shows: ["Survivor"],
 
@@ -22976,7 +22976,7 @@ window.CAST = [
     nickname: "Sai",
     fullName: "Sai Hughley",
     gender: "female",
-    image: "cast/sai_hughley.png",
+    image: "cast/sai_hughley.webp",
 
     shows: ["Survivor"],
 
@@ -22990,7 +22990,7 @@ window.CAST = [
     nickname: "Sally",
     fullName: "Sally Schumann",
     gender: "female",
-    image: "cast/sally_schumann.png",
+    image: "cast/sally_schumann.webp",
 
     shows: ["Survivor"],
 
@@ -23004,7 +23004,7 @@ window.CAST = [
     nickname: "Sam",
     fullName: "Sam Phalen",
     gender: "male",
-    image: "cast/sam_phalen.png",
+    image: "cast/sam_phalen.webp",
 
     shows: ["Survivor"],
 
@@ -23018,7 +23018,7 @@ window.CAST = [
     nickname: "Sami",
     fullName: "Sami Layadi",
     gender: "male",
-    image: "cast/sami_layadi.png",
+    image: "cast/sami_layadi.webp",
 
     shows: ["Survivor"],
 
@@ -23032,7 +23032,7 @@ window.CAST = [
     nickname: "Sandra",
     fullName: "Sandra Diaz-Twine",
     gender: "female",
-    image: "cast/sandra_diaz_twine.png",
+    image: "cast/sandra_diaz_twine.webp",
 
     shows: [
       "Survivor",
@@ -23052,7 +23052,7 @@ window.CAST = [
     nickname: "Sandy",
     fullName: "Sandy Burgin",
     gender: "female",
-    image: "cast/sandy_burgin.png",
+    image: "cast/sandy_burgin.webp",
 
     shows: ["Survivor"],
 
@@ -23066,7 +23066,7 @@ window.CAST = [
     nickname: "Sara",
     fullName: "Sara Wilson",
     gender: "female",
-    image: "cast/sara_wilson.png",
+    image: "cast/sara_wilson.webp",
 
     shows: ["Survivor"],
 
@@ -23080,7 +23080,7 @@ window.CAST = [
     nickname: "Sarah",
     fullName: "Sarah Dawson",
     gender: "female",
-    image: "cast/sarah_dawson.png",
+    image: "cast/sarah_dawson.webp",
 
     shows: ["Survivor"],
 
@@ -23094,7 +23094,7 @@ window.CAST = [
     nickname: "Sarah",
     fullName: "Sarah Jones",
     gender: "female",
-    image: "cast/sarah_jones.png",
+    image: "cast/sarah_jones.webp",
 
     shows: ["Survivor"],
 
@@ -23108,7 +23108,7 @@ window.CAST = [
     nickname: "Sarah",
     fullName: "Sarah Lacina",
     gender: "female",
-    image: "cast/sarah_lacina.png",
+    image: "cast/sarah_lacina.webp",
 
     shows: [
       "Survivor",
@@ -23128,7 +23128,7 @@ window.CAST = [
     nickname: "Sarah",
     fullName: "Sarah Wade",
     gender: "female",
-    image: "cast/sarah_wade.png",
+    image: "cast/sarah_wade.webp",
 
     shows: ["Survivor"],
 
@@ -23142,7 +23142,7 @@ window.CAST = [
     nickname: "Sarita",
     fullName: "Sarita White",
     gender: "female",
-    image: "cast/sarita_white.png",
+    image: "cast/sarita_white.webp",
 
     shows: ["Survivor"],
 
@@ -23156,7 +23156,7 @@ window.CAST = [
     nickname: "Savannah",
     fullName: "Savannah Louie",
     gender: "female",
-    image: "cast/savannah_louie.png",
+    image: "cast/savannah_louie.webp",
 
     shows: ["Survivor"],
 
@@ -23170,7 +23170,7 @@ window.CAST = [
     nickname: "Scot",
     fullName: "Scot Pollard",
     gender: "male",
-    image: "cast/scot_pollard.png",
+    image: "cast/scot_pollard.webp",
 
     shows: ["Survivor"],
 
@@ -23184,7 +23184,7 @@ window.CAST = [
     nickname: "Scout",
     fullName: "Scout Cloud Lee",
     gender: "female",
-    image: "cast/scout_cloud_lee.png",
+    image: "cast/scout_cloud_lee.webp",
 
     shows: ["Survivor"],
 
@@ -23198,7 +23198,7 @@ window.CAST = [
     nickname: "Sean",
     fullName: "Sean Edwards",
     gender: "male",
-    image: "cast/sean_edwards.png",
+    image: "cast/sean_edwards.webp",
 
     shows: ["Survivor"],
 
@@ -23212,7 +23212,7 @@ window.CAST = [
     nickname: "Sean",
     fullName: "Sean Kenniff",
     gender: "male",
-    image: "cast/sean_kenniff.png",
+    image: "cast/sean_kenniff.webp",
 
     shows: ["Survivor"],
 
@@ -23226,7 +23226,7 @@ window.CAST = [
     nickname: "Sean",
     fullName: "Sean Rector",
     gender: "male",
-    image: "cast/sean_rector.png",
+    image: "cast/sean_rector.webp",
 
     shows: ["Survivor"],
 
@@ -23240,7 +23240,7 @@ window.CAST = [
     nickname: "Sebastian",
     fullName: "Sebastian Noel",
     gender: "male",
-    image: "cast/sebastian_noel.png",
+    image: "cast/sebastian_noel.webp",
 
     shows: [
       "Survivor",
@@ -23258,7 +23258,7 @@ window.CAST = [
     nickname: "Sekou",
     fullName: "Sekou Bunch",
     gender: "male",
-    image: "cast/sekou_bunch.png",
+    image: "cast/sekou_bunch.webp",
 
     shows: ["Survivor"],
 
@@ -23272,7 +23272,7 @@ window.CAST = [
     nickname: "Semhar",
     fullName: "Semhar Tadesse",
     gender: "female",
-    image: "cast/semhar_tadesse.png",
+    image: "cast/semhar_tadesse.webp",
 
     shows: ["Survivor"],
 
@@ -23286,7 +23286,7 @@ window.CAST = [
     nickname: "Shamar",
     fullName: "Shamar Thomas",
     gender: "male",
-    image: "cast/shamar_thomas.png",
+    image: "cast/shamar_thomas.webp",
 
     shows: ["Survivor"],
 
@@ -23300,7 +23300,7 @@ window.CAST = [
     nickname: "Shane",
     fullName: "Shane Powers",
     gender: "male",
-    image: "cast/shane_powers.png",
+    image: "cast/shane_powers.webp",
 
     shows: ["Survivor"],
 
@@ -23314,7 +23314,7 @@ window.CAST = [
     nickname: "Shannon",
     fullName: "Shannon Elkins",
     gender: "male",
-    image: "cast/shannon_elkins.png",
+    image: "cast/shannon_elkins.webp",
 
     shows: ["Survivor"],
 
@@ -23328,7 +23328,7 @@ window.CAST = [
     nickname: "Shannon",
     fullName: "Shannon Fairweather",
     gender: "female",
-    image: "cast/shannon_fairweather.png",
+    image: "cast/shannon_fairweather.webp",
 
     shows: ["Survivor"],
 
@@ -23342,7 +23342,7 @@ window.CAST = [
     nickname: "Shannon",
     fullName: "Shannon Waters",
     gender: "female",
-    image: "cast/shannon_waters.png",
+    image: "cast/shannon_waters.webp",
 
     shows: ["Survivor"],
 
@@ -23356,7 +23356,7 @@ window.CAST = [
     nickname: "Shantel",
     fullName: "Shantel Smith",
     gender: "female",
-    image: "cast/shantel_smith.png",
+    image: "cast/shantel_smith.webp",
 
     shows: [
       "Survivor",
@@ -23374,7 +23374,7 @@ window.CAST = [
     nickname: "Shauhin",
     fullName: "Shauhin Davari",
     gender: "male",
-    image: "cast/shauhin_davari.png",
+    image: "cast/shauhin_davari.webp",
 
     shows: ["Survivor"],
 
@@ -23388,7 +23388,7 @@ window.CAST = [
     nickname: "Shawn",
     fullName: "Shawn Cohen",
     gender: "male",
-    image: "cast/shawn_cohen.png",
+    image: "cast/shawn_cohen.webp",
 
     shows: ["Survivor"],
 
@@ -23402,7 +23402,7 @@ window.CAST = [
     nickname: "Shawna",
     fullName: "Shawna Mitchell",
     gender: "female",
-    image: "cast/shawna_mitchell.png",
+    image: "cast/shawna_mitchell.webp",
 
     shows: ["Survivor"],
 
@@ -23416,7 +23416,7 @@ window.CAST = [
     nickname: "Sherea",
     fullName: "Sherea Lloyd",
     gender: "female",
-    image: "cast/sherea_lloyd.png",
+    image: "cast/sherea_lloyd.webp",
 
     shows: ["Survivor"],
 
@@ -23430,7 +23430,7 @@ window.CAST = [
     nickname: "Sherri",
     fullName: "Sherri Biethman",
     gender: "female",
-    image: "cast/sherri_biethman.png",
+    image: "cast/sherri_biethman.webp",
 
     shows: ["Survivor"],
 
@@ -23444,7 +23444,7 @@ window.CAST = [
     nickname: "Shii",
     fullName: "Shii Ann Huang",
     gender: "female",
-    image: "cast/shii_ann_huang.png",
+    image: "cast/shii_ann_huang.webp",
 
     shows: ["Survivor"],
 
@@ -23458,7 +23458,7 @@ window.CAST = [
     nickname: "Shirin",
     fullName: "Shirin Oskooi",
     gender: "female",
-    image: "cast/shirin_oskooi.png",
+    image: "cast/shirin_oskooi.webp",
 
     shows: ["Survivor"],
 
@@ -23472,7 +23472,7 @@ window.CAST = [
     nickname: "Sierra",
     fullName: "Sierra Dawn Thomas",
     gender: "female",
-    image: "cast/sierra_dawn_thomas.png",
+    image: "cast/sierra_dawn_thomas.webp",
 
     shows: ["Survivor"],
 
@@ -23486,7 +23486,7 @@ window.CAST = [
     nickname: "Sierra",
     fullName: "Sierra Reed",
     gender: "female",
-    image: "cast/sierra_reed.png",
+    image: "cast/sierra_reed.webp",
 
     shows: ["Survivor"],
 
@@ -23500,7 +23500,7 @@ window.CAST = [
     nickname: "Sierra",
     fullName: "Sierra Wright",
     gender: "female",
-    image: "cast/sierra_wright.png",
+    image: "cast/sierra_wright.webp",
 
     shows: ["Survivor"],
 
@@ -23514,7 +23514,7 @@ window.CAST = [
     nickname: "Sifu",
     fullName: "Sifu Alsup",
     gender: "male",
-    image: "cast/sifu_alsup.png",
+    image: "cast/sifu_alsup.webp",
 
     shows: ["Survivor"],
 
@@ -23528,7 +23528,7 @@ window.CAST = [
     nickname: "Silas",
     fullName: "Silas Gaither",
     gender: "male",
-    image: "cast/silas_gaither.png",
+    image: "cast/silas_gaither.webp",
 
     shows: ["Survivor"],
 
@@ -23542,7 +23542,7 @@ window.CAST = [
     nickname: "Simone",
     fullName: "Simone Nguyen",
     gender: "female",
-    image: "cast/simone_nguyen.png",
+    image: "cast/simone_nguyen.webp",
 
     shows: ["Survivor"],
 
@@ -23556,7 +23556,7 @@ window.CAST = [
     nickname: "So",
     fullName: "So Kim",
     gender: "female",
-    image: "cast/so_kim.png",
+    image: "cast/so_kim.webp",
 
     shows: ["Survivor"],
 
@@ -23570,7 +23570,7 @@ window.CAST = [
     nickname: "Soda",
     fullName: "Soda Thompson",
     gender: "female",
-    image: "cast/soda_thompson.png",
+    image: "cast/soda_thompson.webp",
 
     shows: ["Survivor"],
 
@@ -23584,7 +23584,7 @@ window.CAST = [
     nickname: "Sol",
     fullName: "Sol Yi",
     gender: "male",
-    image: "cast/sol_yi.png",
+    image: "cast/sol_yi.webp",
 
     shows: ["Survivor"],
 
@@ -23598,7 +23598,7 @@ window.CAST = [
     nickname: "Sonja",
     fullName: "Sonja Christopher",
     gender: "female",
-    image: "cast/sonja_christopher.png",
+    image: "cast/sonja_christopher.webp",
 
     shows: ["Survivor"],
 
@@ -23612,7 +23612,7 @@ window.CAST = [
     nickname: "Sophi",
     fullName: "Sophi Balerdi",
     gender: "female",
-    image: "cast/sophi_balerdi.png",
+    image: "cast/sophi_balerdi.webp",
 
     shows: ["Survivor"],
 
@@ -23626,7 +23626,7 @@ window.CAST = [
     nickname: "Sophie",
     fullName: "Sophie Clarke",
     gender: "female",
-    image: "cast/sophie_clarke.png",
+    image: "cast/sophie_clarke.webp",
 
     shows: ["Survivor"],
 
@@ -23640,7 +23640,7 @@ window.CAST = [
     nickname: "Sophie",
     fullName: "Sophie Segreti",
     gender: "female",
-    image: "cast/sophie_segreti.png",
+    image: "cast/sophie_segreti.webp",
 
     shows: ["Survivor"],
 
@@ -23654,7 +23654,7 @@ window.CAST = [
     nickname: "Spencer",
     fullName: "Spencer Bledsoe",
     gender: "male",
-    image: "cast/spencer_bledsoe.png",
+    image: "cast/spencer_bledsoe.webp",
 
     shows: ["Survivor"],
 
@@ -23668,7 +23668,7 @@ window.CAST = [
     nickname: "Spencer",
     fullName: "Spencer Duhm",
     gender: "male",
-    image: "cast/spencer_duhm.png",
+    image: "cast/spencer_duhm.webp",
 
     shows: ["Survivor"],
 
@@ -23682,7 +23682,7 @@ window.CAST = [
     nickname: "Stacey",
     fullName: "Stacey Powell",
     gender: "female",
-    image: "cast/stacey_powell.png",
+    image: "cast/stacey_powell.webp",
 
     shows: ["Survivor"],
 
@@ -23696,7 +23696,7 @@ window.CAST = [
     nickname: "Stacey",
     fullName: "Stacey Stillman",
     gender: "female",
-    image: "cast/stacey_stillman.png",
+    image: "cast/stacey_stillman.webp",
 
     shows: ["Survivor"],
 
@@ -23710,7 +23710,7 @@ window.CAST = [
     nickname: "Stacy",
     fullName: "Stacy Kimball",
     gender: "female",
-    image: "cast/stacy_kimball.png",
+    image: "cast/stacy_kimball.webp",
 
     shows: ["Survivor"],
 
@@ -23724,7 +23724,7 @@ window.CAST = [
     nickname: "Star",
     fullName: "Star Toomey",
     gender: "female",
-    image: "cast/star_toomey.png",
+    image: "cast/star_toomey.webp",
 
     shows: ["Survivor"],
 
@@ -23738,7 +23738,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie Berger",
     gender: "female",
-    image: "cast/stephanie_berger.png",
+    image: "cast/stephanie_berger.webp",
 
     shows: ["Survivor"],
 
@@ -23752,7 +23752,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie Dill",
     gender: "female",
-    image: "cast/stephanie_dill.png",
+    image: "cast/stephanie_dill.webp",
 
     shows: ["Survivor"],
 
@@ -23766,7 +23766,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie Gonzalez",
     gender: "female",
-    image: "cast/stephanie_gonzalez.png",
+    image: "cast/stephanie_gonzalez.webp",
 
     shows: ["Survivor"],
 
@@ -23780,7 +23780,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie Johnson",
     gender: "female",
-    image: "cast/stephanie_johnson.png",
+    image: "cast/stephanie_johnson.webp",
 
     shows: ["Survivor"],
 
@@ -23794,7 +23794,7 @@ window.CAST = [
     nickname: "Stephanie",
     fullName: "Stephanie Valencia",
     gender: "female",
-    image: "cast/stephanie_valencia.png",
+    image: "cast/stephanie_valencia.webp",
 
     shows: ["Survivor"],
 
@@ -23808,7 +23808,7 @@ window.CAST = [
     nickname: "Stephannie",
     fullName: "Stephannie Favor",
     gender: "female",
-    image: "cast/stephannie_favor.png",
+    image: "cast/stephannie_favor.webp",
 
     shows: ["Survivor"],
 
@@ -23822,7 +23822,7 @@ window.CAST = [
     nickname: "Stephen",
     fullName: "Stephen Fishbach",
     gender: "male",
-    image: "cast/stephen_fishbach.png",
+    image: "cast/stephen_fishbach.webp",
 
     shows: ["Survivor"],
 
@@ -23836,7 +23836,7 @@ window.CAST = [
     nickname: "Stephenie",
     fullName: "Stephenie LaGrossa Kendrick",
     gender: "female",
-    image: "cast/stephenie_lagrossa_kendrick.png",
+    image: "cast/stephenie_lagrossa_kendrick.webp",
 
     shows: [
       "Survivor",
@@ -23854,7 +23854,7 @@ window.CAST = [
     nickname: "Steve",
     fullName: "Steve Morris",
     gender: "male",
-    image: "cast/steve_morris.png",
+    image: "cast/steve_morris.webp",
 
     shows: ["Survivor"],
 
@@ -23868,7 +23868,7 @@ window.CAST = [
     nickname: "Steve",
     fullName: "Steve Wright",
     gender: "male",
-    image: "cast/steve_wright.png",
+    image: "cast/steve_wright.webp",
 
     shows: ["Survivor"],
 
@@ -23882,7 +23882,7 @@ window.CAST = [
     nickname: "Steven",
     fullName: "Steven Ramm",
     gender: "male",
-    image: "cast/steven_ramm.png",
+    image: "cast/steven_ramm.webp",
 
     shows: ["Survivor"],
 
@@ -23896,7 +23896,7 @@ window.CAST = [
     nickname: "Sue",
     fullName: "Sue Smey",
     gender: "female",
-    image: "cast/sue_smey.png",
+    image: "cast/sue_smey.webp",
 
     shows: ["Survivor"],
 
@@ -23910,7 +23910,7 @@ window.CAST = [
     nickname: "Sunday",
     fullName: "Sunday Burquest",
     gender: "female",
-    image: "cast/sunday_burquest.png",
+    image: "cast/sunday_burquest.webp",
 
     shows: ["Survivor"],
 
@@ -23924,7 +23924,7 @@ window.CAST = [
     nickname: "Sundra",
     fullName: "Sundra Oakley",
     gender: "female",
-    image: "cast/sundra_oakley.png",
+    image: "cast/sundra_oakley.webp",
 
     shows: ["Survivor"],
 
@@ -23938,7 +23938,7 @@ window.CAST = [
     nickname: "Susan",
     fullName: "Susan Hawk",
     gender: "female",
-    image: "cast/susan_hawk.png",
+    image: "cast/susan_hawk.webp",
 
     shows: ["Survivor"],
 
@@ -23952,7 +23952,7 @@ window.CAST = [
     nickname: "Susie",
     fullName: "Susie Smith",
     gender: "female",
-    image: "cast/susie_smith.png",
+    image: "cast/susie_smith.webp",
 
     shows: ["Survivor"],
 
@@ -23966,7 +23966,7 @@ window.CAST = [
     nickname: "Swati",
     fullName: "Swati Goel",
     gender: "female",
-    image: "cast/swati_goel.png",
+    image: "cast/swati_goel.webp",
 
     shows: ["Survivor"],
 
@@ -23980,7 +23980,7 @@ window.CAST = [
     nickname: "Sydney",
     fullName: "Sydney Segal",
     gender: "female",
-    image: "cast/sydney_segal.png",
+    image: "cast/sydney_segal.webp",
 
     shows: [
       "Survivor",
@@ -23998,7 +23998,7 @@ window.CAST = [
     nickname: "Sydney",
     fullName: "Sydney Wheeler",
     gender: "female",
-    image: "cast/sydney_wheeler.png",
+    image: "cast/sydney_wheeler.webp",
 
     shows: ["Survivor"],
 
@@ -24012,7 +24012,7 @@ window.CAST = [
     nickname: "Sylvia",
     fullName: "Sylvia Kwan",
     gender: "female",
-    image: "cast/sylvia_kwan.png",
+    image: "cast/sylvia_kwan.webp",
 
     shows: ["Survivor"],
 
@@ -24026,7 +24026,7 @@ window.CAST = [
     nickname: "Tai",
     fullName: "Tai Trang",
     gender: "male",
-    image: "cast/tai_trang.png",
+    image: "cast/tai_trang.webp",
 
     shows: ["Survivor"],
 
@@ -24040,7 +24040,7 @@ window.CAST = [
     nickname: "Tamara",
     fullName: "Tamara Johnson-George",
     gender: "female",
-    image: "cast/tamara_johnson_george.png",
+    image: "cast/tamara_johnson_george.webp",
 
     shows: ["Survivor"],
 
@@ -24054,7 +24054,7 @@ window.CAST = [
     nickname: "Tammy",
     fullName: "Tammy Leitner",
     gender: "female",
-    image: "cast/tammy_leitner.png",
+    image: "cast/tammy_leitner.webp",
 
     shows: ["Survivor"],
 
@@ -24068,7 +24068,7 @@ window.CAST = [
     nickname: "Tanya",
     fullName: "Tanya Vance",
     gender: "female",
-    image: "cast/tanya_vance.png",
+    image: "cast/tanya_vance.webp",
 
     shows: ["Survivor"],
 
@@ -24082,7 +24082,7 @@ window.CAST = [
     nickname: "Taylor",
     fullName: "Taylor Lee Stocker",
     gender: "male",
-    image: "cast/taylor_lee_stocker.png",
+    image: "cast/taylor_lee_stocker.webp",
 
     shows: ["Survivor"],
 
@@ -24096,7 +24096,7 @@ window.CAST = [
     nickname: "Ted",
     fullName: "Ted Rogers Jr.",
     gender: "male",
-    image: "cast/ted_rogers_jr.png",
+    image: "cast/ted_rogers_jr.webp",
 
     shows: ["Survivor"],
 
@@ -24110,7 +24110,7 @@ window.CAST = [
     nickname: "Teeny",
     fullName: "Teeny Chirichillo",
     gender: "nonbinary",
-    image: "cast/teeny_chirichillo.png",
+    image: "cast/teeny_chirichillo.webp",
 
     shows: ["Survivor"],
 
@@ -24124,7 +24124,7 @@ window.CAST = [
     nickname: "Teresa",
     fullName: "Teresa Cooper",
     gender: "female",
-    image: "cast/teresa_cooper.png",
+    image: "cast/teresa_cooper.webp",
 
     shows: ["Survivor"],
 
@@ -24138,7 +24138,7 @@ window.CAST = [
     nickname: "Terry",
     fullName: "Terry Deitz",
     gender: "male",
-    image: "cast/terry_deitz.png",
+    image: "cast/terry_deitz.webp",
 
     shows: ["Survivor"],
 
@@ -24152,7 +24152,7 @@ window.CAST = [
     nickname: "Tevin",
     fullName: "Tevin Davis",
     gender: "male",
-    image: "cast/tevin_davis.png",
+    image: "cast/tevin_davis.webp",
 
     shows: ["Survivor"],
 
@@ -24166,7 +24166,7 @@ window.CAST = [
     nickname: "Thomas",
     fullName: "Thomas Krottinger",
     gender: "male",
-    image: "cast/thomas_krottinger.png",
+    image: "cast/thomas_krottinger.webp",
 
     shows: ["Survivor"],
 
@@ -24180,7 +24180,7 @@ window.CAST = [
     nickname: "Tiffany",
     fullName: "Tiffany Nicole Ervin",
     gender: "female",
-    image: "cast/tiffany_nicole_ervin.png",
+    image: "cast/tiffany_nicole_ervin.webp",
 
     shows: ["Survivor"],
 
@@ -24194,7 +24194,7 @@ window.CAST = [
     nickname: "Tiffany",
     fullName: "Tiffany Seely",
     gender: "female",
-    image: "cast/tiffany_seely.png",
+    image: "cast/tiffany_seely.webp",
 
     shows: ["Survivor"],
 
@@ -24208,7 +24208,7 @@ window.CAST = [
     nickname: "Tijuana",
     fullName: "Tijuana Bradley",
     gender: "female",
-    image: "cast/tijuana_bradley.png",
+    image: "cast/tijuana_bradley.webp",
 
     shows: ["Survivor"],
 
@@ -24222,7 +24222,7 @@ window.CAST = [
     nickname: "Tim",
     fullName: "Tim Spicer",
     gender: "male",
-    image: "cast/tim_spicer.png",
+    image: "cast/tim_spicer.webp",
 
     shows: ["Survivor"],
 
@@ -24236,7 +24236,7 @@ window.CAST = [
     nickname: "Tina",
     fullName: "Tina Scheer",
     gender: "female",
-    image: "cast/tina_scheer.png",
+    image: "cast/tina_scheer.webp",
 
     shows: ["Survivor"],
 
@@ -24250,7 +24250,7 @@ window.CAST = [
     nickname: "Tina",
     fullName: "Tina Wesson",
     gender: "female",
-    image: "cast/tina_wesson.png",
+    image: "cast/tina_wesson.webp",
 
     shows: ["Survivor"],
 
@@ -24264,7 +24264,7 @@ window.CAST = [
     nickname: "Tiyana",
     fullName: "Tiyana Hallums",
     gender: "female",
-    image: "cast/tiyana_hallums.png",
+    image: "cast/tiyana_hallums.webp",
 
     shows: ["Survivor"],
 
@@ -24278,7 +24278,7 @@ window.CAST = [
     nickname: "TK",
     fullName: "TK Foster",
     gender: "male",
-    image: "cast/tk_foster.png",
+    image: "cast/tk_foster.webp",
 
     shows: ["Survivor"],
 
@@ -24292,7 +24292,7 @@ window.CAST = [
     nickname: "Todd",
     fullName: "Todd Herzog",
     gender: "male",
-    image: "cast/todd_herzog.png",
+    image: "cast/todd_herzog.webp",
 
     shows: ["Survivor"],
 
@@ -24306,7 +24306,7 @@ window.CAST = [
     nickname: "Tom",
     fullName: "Tom Buchanan",
     gender: "male",
-    image: "cast/tom_buchanan.png",
+    image: "cast/tom_buchanan.webp",
 
     shows: ["Survivor"],
 
@@ -24320,7 +24320,7 @@ window.CAST = [
     nickname: "Tom",
     fullName: "Tom Laidlaw",
     gender: "male",
-    image: "cast/tom_laidlaw.png",
+    image: "cast/tom_laidlaw.webp",
 
     shows: ["Survivor"],
 
@@ -24334,7 +24334,7 @@ window.CAST = [
     nickname: "Tom",
     fullName: "Tom Westman",
     gender: "male",
-    image: "cast/tom_westman.png",
+    image: "cast/tom_westman.webp",
 
     shows: ["Survivor"],
 
@@ -24348,7 +24348,7 @@ window.CAST = [
     nickname: "Tony",
     fullName: "Tony Vlachos",
     gender: "male",
-    image: "cast/tony_vlachos.png",
+    image: "cast/tony_vlachos.webp",
 
     shows: [
       "Survivor",
@@ -24368,7 +24368,7 @@ window.CAST = [
     nickname: "Tori",
     fullName: "Tori Meehan",
     gender: "female",
-    image: "cast/tori_meehan.png",
+    image: "cast/tori_meehan.webp",
 
     shows: ["Survivor"],
 
@@ -24382,7 +24382,7 @@ window.CAST = [
     nickname: "Tracy",
     fullName: "Tracy Hughes-Wolf",
     gender: "female",
-    image: "cast/tracy_hughes_wolf.png",
+    image: "cast/tracy_hughes_wolf.webp",
 
     shows: ["Survivor"],
 
@@ -24396,7 +24396,7 @@ window.CAST = [
     nickname: "Travis",
     fullName: "Travis Sampson",
     gender: "male",
-    image: "cast/travis_sampson.png",
+    image: "cast/travis_sampson.webp",
 
     shows: ["Survivor"],
 
@@ -24410,7 +24410,7 @@ window.CAST = [
     nickname: "Trish",
     fullName: "Trish Dunn",
     gender: "female",
-    image: "cast/trish_dunn.png",
+    image: "cast/trish_dunn.webp",
 
     shows: ["Survivor"],
 
@@ -24424,7 +24424,7 @@ window.CAST = [
     nickname: "Trish",
     fullName: "Trish Hegarty",
     gender: "female",
-    image: "cast/trish_hegarty.png",
+    image: "cast/trish_hegarty.webp",
 
     shows: ["Survivor"],
 
@@ -24438,7 +24438,7 @@ window.CAST = [
     nickname: "Troy",
     fullName: "Troy Robertson",
     gender: "male",
-    image: "cast/troy_robertson.png",
+    image: "cast/troy_robertson.webp",
 
     shows: ["Survivor"],
 
@@ -24452,7 +24452,7 @@ window.CAST = [
     nickname: "Twila",
     fullName: "Twila Tanner",
     gender: "female",
-    image: "cast/twila_tanner.png",
+    image: "cast/twila_tanner.webp",
 
     shows: ["Survivor"],
 
@@ -24466,7 +24466,7 @@ window.CAST = [
     nickname: "Tyler",
     fullName: "Tyler Fredrickson",
     gender: "male",
-    image: "cast/tyler_fredrickson.png",
+    image: "cast/tyler_fredrickson.webp",
 
     shows: ["Survivor"],
 
@@ -24480,7 +24480,7 @@ window.CAST = [
     nickname: "Tyrone",
     fullName: "Tyrone Davis",
     gender: "male",
-    image: "cast/tyrone_davis.png",
+    image: "cast/tyrone_davis.webp",
 
     shows: ["Survivor"],
 
@@ -24494,7 +24494,7 @@ window.CAST = [
     nickname: "Tyson",
     fullName: "Tyson Apostol",
     gender: "male",
-    image: "cast/tyson_apostol.png",
+    image: "cast/tyson_apostol.webp",
 
     shows: [
       "Survivor",
@@ -24514,7 +24514,7 @@ window.CAST = [
     nickname: "Val",
     fullName: "Val Collins",
     gender: "female",
-    image: "cast/val_collins.png",
+    image: "cast/val_collins.webp",
 
     shows: ["Survivor"],
 
@@ -24528,7 +24528,7 @@ window.CAST = [
     nickname: "Vecepia",
     fullName: "Vecepia Towery",
     gender: "female",
-    image: "cast/vecepia_towery.png",
+    image: "cast/vecepia_towery.webp",
 
     shows: ["Survivor"],
 
@@ -24542,7 +24542,7 @@ window.CAST = [
     nickname: "Venus",
     fullName: "Venus Vafa",
     gender: "female",
-    image: "cast/venus_vafa.png",
+    image: "cast/venus_vafa.webp",
 
     shows: ["Survivor"],
 
@@ -24556,7 +24556,7 @@ window.CAST = [
     nickname: "Victoria",
     fullName: "Victoria Baamonde",
     gender: "female",
-    image: "cast/victoria_baamonde.png",
+    image: "cast/victoria_baamonde.webp",
 
     shows: ["Survivor"],
 
@@ -24570,7 +24570,7 @@ window.CAST = [
     nickname: "Vince",
     fullName: "Vince Moua",
     gender: "male",
-    image: "cast/vince_moua.png",
+    image: "cast/vince_moua.webp",
 
     shows: ["Survivor"],
 
@@ -24584,7 +24584,7 @@ window.CAST = [
     nickname: "Vince",
     fullName: "Vince Sly",
     gender: "male",
-    image: "cast/vince_sly.png",
+    image: "cast/vince_sly.webp",
 
     shows: ["Survivor"],
 
@@ -24598,7 +24598,7 @@ window.CAST = [
     nickname: "Virgilio",
     fullName: "Virgilio Garcia",
     gender: "male",
-    image: "cast/virgilio_garcia.png",
+    image: "cast/virgilio_garcia.webp",
 
     shows: ["Survivor"],
 
@@ -24612,7 +24612,7 @@ window.CAST = [
     nickname: "Vytas",
     fullName: "Vytas Baskauskas",
     gender: "male",
-    image: "cast/vytas_baskauskas.png",
+    image: "cast/vytas_baskauskas.webp",
 
     shows: ["Survivor"],
 
@@ -24626,7 +24626,7 @@ window.CAST = [
     nickname: "Wanda",
     fullName: "Wanda Shirk",
     gender: "female",
-    image: "cast/wanda_shirk.png",
+    image: "cast/wanda_shirk.webp",
 
     shows: ["Survivor"],
 
@@ -24640,7 +24640,7 @@ window.CAST = [
     nickname: "Wendell",
     fullName: "Wendell Holland",
     gender: "male",
-    image: "cast/wendell_holland.png",
+    image: "cast/wendell_holland.webp",
 
     shows: ["Survivor"],
 
@@ -24654,7 +24654,7 @@ window.CAST = [
     nickname: "Wendy",
     fullName: "Wendy Diaz",
     gender: "female",
-    image: "cast/wendy_diaz.png",
+    image: "cast/wendy_diaz.webp",
 
     shows: ["Survivor"],
 
@@ -24668,7 +24668,7 @@ window.CAST = [
     nickname: "Wendy-Jo",
     fullName: "Wendy-Jo DeSmidt-Kohlhoff",
     gender: "female",
-    image: "cast/wendy_jo_desmidt_kohlhoff.png",
+    image: "cast/wendy_jo_desmidt_kohlhoff.webp",
 
     shows: ["Survivor"],
 
@@ -24682,7 +24682,7 @@ window.CAST = [
     nickname: "Wes",
     fullName: "Wes Nale",
     gender: "male",
-    image: "cast/wes_nale.png",
+    image: "cast/wes_nale.webp",
 
     shows: ["Survivor"],
 
@@ -24696,7 +24696,7 @@ window.CAST = [
     nickname: "Whitney",
     fullName: "Whitney Duncan",
     gender: "female",
-    image: "cast/whitney_duncan.png",
+    image: "cast/whitney_duncan.webp",
 
     shows: [
       "Survivor",
@@ -24714,7 +24714,7 @@ window.CAST = [
     nickname: "Will",
     fullName: "Will Sims II",
     gender: "male",
-    image: "cast/will_sims_ii.png",
+    image: "cast/will_sims_ii.webp",
 
     shows: ["Survivor"],
 
@@ -24728,7 +24728,7 @@ window.CAST = [
     nickname: "Will",
     fullName: "Will Wahl",
     gender: "male",
-    image: "cast/will_wahl.png",
+    image: "cast/will_wahl.webp",
 
     shows: ["Survivor"],
 
@@ -24742,7 +24742,7 @@ window.CAST = [
     nickname: "Willard",
     fullName: "Willard Smith",
     gender: "male",
-    image: "cast/willard_smith.png",
+    image: "cast/willard_smith.webp",
 
     shows: ["Survivor"],
 
@@ -24756,7 +24756,7 @@ window.CAST = [
     nickname: "Xander",
     fullName: "Xander Hastings",
     gender: "male",
-    image: "cast/xander_hastings.png",
+    image: "cast/xander_hastings.webp",
 
     shows: ["Survivor"],
 
@@ -24770,7 +24770,7 @@ window.CAST = [
     nickname: "Yam Yam",
     fullName: "Yam Yam Arocho",
     gender: "male",
-    image: "cast/yam_yam_arocho.png",
+    image: "cast/yam_yam_arocho.webp",
 
     shows: [
       "Survivor",
@@ -24788,7 +24788,7 @@ window.CAST = [
     nickname: "Yasmin",
     fullName: "Yasmin Giles",
     gender: "female",
-    image: "cast/yasmin_giles.png",
+    image: "cast/yasmin_giles.webp",
 
     shows: ["Survivor"],
 
@@ -24802,7 +24802,7 @@ window.CAST = [
     nickname: "Yau-Man",
     fullName: "Yau-Man Chan",
     gender: "male",
-    image: "cast/yau_man_chan.png",
+    image: "cast/yau_man_chan.webp",
 
     shows: ["Survivor"],
 
@@ -24816,7 +24816,7 @@ window.CAST = [
     nickname: "Yul",
     fullName: "Yul Kwon",
     gender: "male",
-    image: "cast/yul_kwon.png",
+    image: "cast/yul_kwon.webp",
 
     shows: ["Survivor"],
 
@@ -24830,7 +24830,7 @@ window.CAST = [
     nickname: "Yung",
     fullName: "Yung Hwang",
     gender: "male",
-    image: "cast/yung_hwang.png",
+    image: "cast/yung_hwang.webp",
 
     shows: ["Survivor"],
 
@@ -24844,7 +24844,7 @@ window.CAST = [
     nickname: "Yve",
     fullName: "Yve Rojas",
     gender: "female",
-    image: "cast/yve_rojas.png",
+    image: "cast/yve_rojas.webp",
 
     shows: ["Survivor"],
 
@@ -24858,7 +24858,7 @@ window.CAST = [
     nickname: "Zach",
     fullName: "Zach Wurthenberger",
     gender: "male",
-    image: "cast/zach_wurthenberger.png",
+    image: "cast/zach_wurthenberger.webp",
 
     shows: ["Survivor"],
 
@@ -24872,7 +24872,7 @@ window.CAST = [
     nickname: "Zane",
     fullName: "Zane Knight",
     gender: "male",
-    image: "cast/zane_knight.png",
+    image: "cast/zane_knight.webp",
 
     shows: ["Survivor"],
 
@@ -24886,7 +24886,7 @@ window.CAST = [
     nickname: "Zeke",
     fullName: "Zeke Smith",
     gender: "male",
-    image: "cast/zeke_smith.png",
+    image: "cast/zeke_smith.webp",
 
     shows: ["Survivor"],
 
@@ -24900,7 +24900,7 @@ window.CAST = [
     nickname: "Zoe",
     fullName: "Zoe Zanidakis",
     gender: "female",
-    image: "cast/zoe_zanidakis.png",
+    image: "cast/zoe_zanidakis.webp",
 
     shows: ["Survivor"],
 
@@ -24913,7 +24913,7 @@ window.CAST = [
     nickname: "Ashley",
     fullName: "Ashley Brown",
     gender: "female",
-    image: "cast/ashley_brown.png",
+    image: "cast/ashley_brown.webp",
 
     shows: ["Until Dawn"],
 
@@ -24927,7 +24927,7 @@ window.CAST = [
     nickname: "Beth",
     fullName: "Beth Washington",
     gender: "female",
-    image: "cast/beth_washington.png",
+    image: "cast/beth_washington.webp",
 
     shows: ["Until Dawn"],
 
@@ -24941,7 +24941,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Christopher Hartley",
     gender: "male",
-    image: "cast/christopher_hartley.png",
+    image: "cast/christopher_hartley.webp",
 
     shows: ["Until Dawn"],
 
@@ -24955,7 +24955,7 @@ window.CAST = [
     nickname: "Dr. Hill",
     fullName: "Dr. Alan J. Hill",
     gender: "male",
-    image: "cast/alan_j_hill.png",
+    image: "cast/alan_j_hill.webp",
 
     shows: ["Until Dawn"],
 
@@ -24969,7 +24969,7 @@ window.CAST = [
     nickname: "Emily",
     fullName: "Emily Davis",
     gender: "female",
-    image: "cast/emily_davis.png",
+    image: "cast/emily_davis.webp",
 
     shows: ["Until Dawn"],
 
@@ -24983,7 +24983,7 @@ window.CAST = [
     nickname: "Hannah",
     fullName: "Hannah Washington",
     gender: "female",
-    image: "cast/hannah_washington.png",
+    image: "cast/hannah_washington.webp",
 
     shows: ["Until Dawn"],
 
@@ -24997,7 +24997,7 @@ window.CAST = [
     nickname: "Jack",
     fullName: "Jack Fiddler",
     gender: "male",
-    image: "cast/jack_fiddler.png",
+    image: "cast/jack_fiddler.webp",
 
     shows: ["Until Dawn"],
 
@@ -25011,7 +25011,7 @@ window.CAST = [
     nickname: "Jessica",
     fullName: "Jessica Riley",
     gender: "female",
-    image: "cast/jessica_riley.png",
+    image: "cast/jessica_riley.webp",
 
     shows: ["Until Dawn"],
 
@@ -25025,7 +25025,7 @@ window.CAST = [
     nickname: "Josh",
     fullName: "Joshua Washington",
     gender: "male",
-    image: "cast/joshua_washington.png",
+    image: "cast/joshua_washington.webp",
 
     shows: ["Until Dawn"],
 
@@ -25039,7 +25039,7 @@ window.CAST = [
     nickname: "Matt",
     fullName: "Matthew Taylor",
     gender: "male",
-    image: "cast/matthew_taylor.png",
+    image: "cast/matthew_taylor.webp",
 
     shows: ["Until Dawn"],
 
@@ -25053,7 +25053,7 @@ window.CAST = [
     nickname: "Mike",
     fullName: "Michael Munroe",
     gender: "male",
-    image: "cast/michael_munroe.png",
+    image: "cast/michael_munroe.webp",
 
     shows: ["Until Dawn"],
 
@@ -25067,7 +25067,7 @@ window.CAST = [
     nickname: "Sam",
     fullName: "Samantha Giddings",
     gender: "female",
-    image: "cast/samantha_giddings.png",
+    image: "cast/samantha_giddings.webp",
 
     shows: ["Until Dawn"],
 
@@ -25081,7 +25081,7 @@ window.CAST = [
     nickname: "Abigail",
     fullName: "Abigail Blyg",
     gender: "female",
-    image: "cast/abigail_blyg.png",
+    image: "cast/abigail_blyg.webp",
 
     shows: ["The Quarry"],
 
@@ -25095,7 +25095,7 @@ window.CAST = [
     nickname: "Chris",
     fullName: "Christopher \"Chris\" Hackett",
     gender: "male",
-    image: "cast/christopher_hackett.png",
+    image: "cast/christopher_hackett.webp",
 
     shows: ["The Quarry"],
 
@@ -25109,7 +25109,7 @@ window.CAST = [
     nickname: "Constance",
     fullName: "Constance Hackett",
     gender: "female",
-    image: "cast/constance_hackett.png",
+    image: "cast/constance_hackett.webp",
 
     shows: ["The Quarry"],
 
@@ -25123,7 +25123,7 @@ window.CAST = [
     nickname: "Dylan",
     fullName: "Dylan Lenivy",
     gender: "male",
-    image: "cast/dylan_lenivy.png",
+    image: "cast/dylan_lenivy.webp",
 
     shows: ["The Quarry"],
 
@@ -25137,7 +25137,7 @@ window.CAST = [
     nickname: "Eliza",
     fullName: "Eliza Vorez",
     gender: "female",
-    image: "cast/eliza_vorez.png",
+    image: "cast/eliza_vorez.webp",
 
     shows: ["The Quarry"],
 
@@ -25151,7 +25151,7 @@ window.CAST = [
     nickname: "Emma",
     fullName: "Emma Mountebank",
     gender: "female",
-    image: "cast/emma_mountebank.png",
+    image: "cast/emma_mountebank.webp",
 
     shows: ["The Quarry"],
 
@@ -25165,7 +25165,7 @@ window.CAST = [
     nickname: "Jacob",
     fullName: "Jacob Custos",
     gender: "male",
-    image: "cast/jacob_custos.png",
+    image: "cast/jacob_custos.webp",
 
     shows: ["The Quarry"],
 
@@ -25179,7 +25179,7 @@ window.CAST = [
     nickname: "Jedediah",
     fullName: "Jedediah Hackett",
     gender: "male",
-    image: "cast/jedediah_hackett.png",
+    image: "cast/jedediah_hackett.webp",
 
     shows: ["The Quarry"],
 
@@ -25193,7 +25193,7 @@ window.CAST = [
     nickname: "Kaitlyn",
     fullName: "Kaitlyn Ka",
     gender: "female",
-    image: "cast/kaitlyn_ka.png",
+    image: "cast/kaitlyn_ka.webp",
 
     shows: ["The Quarry"],
 
@@ -25207,7 +25207,7 @@ window.CAST = [
     nickname: "Laura",
     fullName: "Laura Kearney",
     gender: "female",
-    image: "cast/laura_kearney.png",
+    image: "cast/laura_kearney.webp",
 
     shows: ["The Quarry"],
 
@@ -25221,7 +25221,7 @@ window.CAST = [
     nickname: "Max",
     fullName: "Max Brinly",
     gender: "male",
-    image: "cast/max_brinly.png",
+    image: "cast/max_brinly.webp",
 
     shows: ["The Quarry"],
 
@@ -25235,7 +25235,7 @@ window.CAST = [
     nickname: "Nick",
     fullName: "Nick Furcillo",
     gender: "male",
-    image: "cast/nick_furcillo.png",
+    image: "cast/nick_furcillo.webp",
 
     shows: ["The Quarry"],
 
@@ -25249,7 +25249,7 @@ window.CAST = [
     nickname: "Bobby",
     fullName: "Robert N. \"Bobby\" Hackett",
     gender: "male",
-    image: "cast/robert_n_hackett.png",
+    image: "cast/robert_n_hackett.webp",
 
     shows: ["The Quarry"],
 
@@ -25263,7 +25263,7 @@ window.CAST = [
     nickname: "Ryan",
     fullName: "Ryan Erzahler",
     gender: "male",
-    image: "cast/ryan_erzahler.png",
+    image: "cast/ryan_erzahler.webp",
 
     shows: ["The Quarry"],
 
@@ -25277,7 +25277,7 @@ window.CAST = [
     nickname: "Travis",
     fullName: "Travis Hackett",
     gender: "male",
-    image: "cast/travis_hackett.png",
+    image: "cast/travis_hackett.webp",
 
     shows: ["The Quarry"],
 
@@ -25291,7 +25291,7 @@ window.CAST = [
   nickname: "Wydowna",
   fullName: "Wydowna Spider",
   gender: "female",
-  image: "cast/wydowna_spider.png",
+  image: "cast/wydowna_spider.webp",
 
   shows: ["Monster High"],
 
@@ -25305,7 +25305,7 @@ window.CAST = [
   nickname: "Catty",
   fullName: "Catty Noir",
   gender: "female",
-  image: "cast/catty_noir.png",
+  image: "cast/catty_noir.webp",
 
   shows: ["Monster High"],
 
@@ -25319,7 +25319,7 @@ window.CAST = [
   nickname: "Nefera",
   fullName: "Nefera de Nile",
   gender: "female",
-  image: "cast/nefera_de_nile.png",
+  image: "cast/nefera_de_nile.webp",
 
   shows: ["Monster High"],
 
@@ -25333,7 +25333,7 @@ window.CAST = [
   nickname: "Catrine",
   fullName: "Catrine DeMew",
   gender: "female",
-  image: "cast/catrine_demew.png",
+  image: "cast/catrine_demew.webp",
 
   shows: ["Monster High"],
 
@@ -25347,7 +25347,7 @@ window.CAST = [
   nickname: "Skelita",
   fullName: "Skelita Calaveras",
   gender: "female",
-  image: "cast/skelita_calaveras.png",
+  image: "cast/skelita_calaveras.webp",
 
   shows: ["Monster High"],
 
@@ -25361,7 +25361,7 @@ window.CAST = [
   nickname: "Jinafire",
   fullName: "Jinafire Long",
   gender: "female",
-  image: "cast/jinafire_long.png",
+  image: "cast/jinafire_long.webp",
 
   shows: ["Monster High"],
 
@@ -25375,7 +25375,7 @@ window.CAST = [
   nickname: "Twyla",
   fullName: "Twyla Boogeyman",
   gender: "female",
-  image: "cast/twyla_boogeyman.png",
+  image: "cast/twyla_boogeyman.webp",
 
   shows: ["Monster High"],
 
@@ -25389,7 +25389,7 @@ window.CAST = [
   nickname: "Cupid",
   fullName: "C.A. Cupid",
   gender: "female",
-  image: "cast/c_a_cupid.png",
+  image: "cast/c_a_cupid.webp",
 
   shows: ["Monster High"],
 
@@ -25403,7 +25403,7 @@ window.CAST = [
   nickname: "Hoodude",
   fullName: "Hoodude Voodoo",
   gender: "male",
-  image: "cast/hoodude_voodoo.png",
+  image: "cast/hoodude_voodoo.webp",
 
   shows: ["Monster High"],
 
@@ -25417,7 +25417,7 @@ window.CAST = [
   nickname: "Purrsephone",
   fullName: "Purrsephone",
   gender: "female",
-  image: "cast/purrsephone.png",
+  image: "cast/purrsephone.webp",
 
   shows: ["Monster High"],
 
@@ -25431,7 +25431,7 @@ window.CAST = [
   nickname: "Meowlody",
   fullName: "Meowlody",
   gender: "female",
-  image: "cast/meowlody.png",
+  image: "cast/meowlody.webp",
 
   shows: ["Monster High"],
 
@@ -25445,7 +25445,7 @@ window.CAST = [
   nickname: "Sloman",
   fullName: "Sloman Mortavitch",
   gender: "male",
-  image: "cast/sloman_mortavitch.png",
+  image: "cast/sloman_mortavitch.webp",
 
   shows: ["Monster High"],
 
@@ -25459,7 +25459,7 @@ window.CAST = [
   nickname: "Iris",
   fullName: "Iris Clops",
   gender: "female",
-  image: "cast/iris_clops.png",
+  image: "cast/iris_clops.webp",
 
   shows: ["Monster High"],
 
@@ -25473,7 +25473,7 @@ window.CAST = [
   nickname: "Manny",
   fullName: "Manny Taur",
   gender: "male",
-  image: "cast/manny_taur.png",
+  image: "cast/manny_taur.webp",
 
   shows: ["Monster High"],
 
@@ -25487,7 +25487,7 @@ window.CAST = [
   nickname: "Billy",
   fullName: "Invisi Billy",
   gender: "male",
-  image: "cast/invisi_billy.png",
+  image: "cast/invisi_billy.webp",
 
   shows: ["Monster High"],
 
@@ -25501,7 +25501,7 @@ window.CAST = [
   nickname: "Scarah",
   fullName: "Scarah Screams",
   gender: "female",
-  image: "cast/scarah_screams.png",
+  image: "cast/scarah_screams.webp",
 
   shows: ["Monster High"],
 
@@ -25515,7 +25515,7 @@ window.CAST = [
   nickname: "Robecca",
   fullName: "Robecca Steam",
   gender: "female",
-  image: "cast/robecca_steam.png",
+  image: "cast/robecca_steam.webp",
 
   shows: ["Monster High"],
 
@@ -25529,7 +25529,7 @@ window.CAST = [
   nickname: "Rochelle",
   fullName: "Rochelle Goyle",
   gender: "female",
-  image: "cast/rochelle_goyle.png",
+  image: "cast/rochelle_goyle.webp",
 
   shows: ["Monster High"],
 
@@ -25543,7 +25543,7 @@ window.CAST = [
   nickname: "Venus",
   fullName: "Venus McFlytrap",
   gender: "female",
-  image: "cast/venus_mcflytrap.png",
+  image: "cast/venus_mcflytrap.webp",
 
   shows: ["Monster High"],
 
@@ -25557,7 +25557,7 @@ window.CAST = [
   nickname: "Gil",
   fullName: "Gillington \"Gil\" Webber",
   gender: "male",
-  image: "cast/gillington_webber.png",
+  image: "cast/gillington_webber.webp",
 
   shows: ["Monster High"],
 
@@ -25571,7 +25571,7 @@ window.CAST = [
   nickname: "Holt",
   fullName: "Holt Hyde",
   gender: "male",
-  image: "cast/holt_hyde.png",
+  image: "cast/holt_hyde.webp",
 
   shows: ["Monster High"],
 
@@ -25585,7 +25585,7 @@ window.CAST = [
   nickname: "Jackson",
   fullName: "Jackson Jekyll",
   gender: "male",
-  image: "cast/jackson_jekyll.png",
+  image: "cast/jackson_jekyll.webp",
 
   shows: ["Monster High"],
 
@@ -25599,7 +25599,7 @@ window.CAST = [
   nickname: "Howleen",
   fullName: "Howleen Wolf",
   gender: "female",
-  image: "cast/howleen_wolf.png",
+  image: "cast/howleen_wolf.webp",
 
   shows: ["Monster High"],
 
@@ -25613,7 +25613,7 @@ window.CAST = [
   nickname: "Operetta",
   fullName: "Operetta",
   gender: "female",
-  image: "cast/operetta.png",
+  image: "cast/operetta.webp",
 
   shows: ["Monster High"],
 
@@ -25627,7 +25627,7 @@ window.CAST = [
   nickname: "Spectra",
   fullName: "Spectra Vondergeist",
   gender: "female",
-  image: "cast/spectra_vondergeist.png",
+  image: "cast/spectra_vondergeist.webp",
 
   shows: ["Monster High"],
 
@@ -25641,7 +25641,7 @@ window.CAST = [
   nickname: "Bloodgood",
   fullName: "Headmistress Bloodgood",
   gender: "female",
-  image: "cast/headmistress_bloodgood.png",
+  image: "cast/headmistress_bloodgood.webp",
 
   shows: ["Monster High"],
 
@@ -25655,7 +25655,7 @@ window.CAST = [
   nickname: "Heath",
   fullName: "Heath Burns",
   gender: "male",
-  image: "cast/heath_burns.png",
+  image: "cast/heath_burns.webp",
 
   shows: ["Monster High"],
 
@@ -25669,7 +25669,7 @@ window.CAST = [
   nickname: "Toralei",
   fullName: "Toralei Stripe",
   gender: "female",
-  image: "cast/toralei_stripe.png",
+  image: "cast/toralei_stripe.webp",
 
   shows: ["Monster High"],
 
@@ -25683,7 +25683,7 @@ window.CAST = [
   nickname: "Deuce",
   fullName: "Deuce Gorgon",
   gender: "male",
-  image: "cast/deuce_gorgon.png",
+  image: "cast/deuce_gorgon.webp",
 
   shows: ["Monster High"],
 
@@ -25697,7 +25697,7 @@ window.CAST = [
   nickname: "Abbey",
   fullName: "Abbey Bominable",
   gender: "female",
-  image: "cast/abbey_bominable.png",
+  image: "cast/abbey_bominable.webp",
 
   shows: ["Monster High"],
 
@@ -25711,7 +25711,7 @@ window.CAST = [
   nickname: "Ghoulia",
   fullName: "Ghoulia Yelps",
   gender: "female",
-  image: "cast/ghoulia_yelps.png",
+  image: "cast/ghoulia_yelps.webp",
 
   shows: ["Monster High"],
 
@@ -25725,7 +25725,7 @@ window.CAST = [
   nickname: "Lagoona",
   fullName: "Lagoona Blue",
   gender: "female",
-  image: "cast/lagoona_blue.png",
+  image: "cast/lagoona_blue.webp",
 
   shows: ["Monster High"],
 
@@ -25739,7 +25739,7 @@ window.CAST = [
   nickname: "Cleo",
   fullName: "Cleo de Nile",
   gender: "female",
-  image: "cast/cleo_de_nile.png",
+  image: "cast/cleo_de_nile.webp",
 
   shows: ["Monster High"],
 
@@ -25753,7 +25753,7 @@ window.CAST = [
   nickname: "Clawdeen",
   fullName: "Clawdeen Wolf",
   gender: "female",
-  image: "cast/clawdeen_wolf.png",
+  image: "cast/clawdeen_wolf.webp",
 
   shows: ["Monster High"],
 
@@ -25767,7 +25767,7 @@ window.CAST = [
   nickname: "Draculaura",
   fullName: "Draculaura",
   gender: "female",
-  image: "cast/draculaura.png",
+  image: "cast/draculaura.webp",
 
   shows: ["Monster High"],
 
@@ -25781,7 +25781,7 @@ window.CAST = [
   nickname: "Frankie",
   fullName: "Frankie Stein",
   gender: "female",
-  image: "cast/frankie_stein.png",
+  image: "cast/frankie_stein.webp",
 
   shows: ["Monster High"],
 
@@ -25795,7 +25795,7 @@ window.CAST = [
   nickname: "Lina",
   fullName: "Lina McKnight",
   gender: "female",
-  image: "cast/lina_mcknight.png",
+  image: "cast/lina_mcknight.webp",
 
   shows: ["Bratz"],
 
@@ -25809,7 +25809,7 @@ window.CAST = [
   nickname: "Cymbeline",
   fullName: "Cymbeline Devlin",
   gender: "female",
-  image: "cast/cymbeline_devlin.png",
+  image: "cast/cymbeline_devlin.webp",
 
   shows: ["Bratz"],
 
@@ -25823,7 +25823,7 @@ window.CAST = [
   nickname: "Dee",
   fullName: "Dee Devlin",
   gender: "female",
-  image: "cast/dee_devlin.png",
+  image: "cast/dee_devlin.webp",
 
   shows: ["Bratz"],
 
@@ -25837,7 +25837,7 @@ window.CAST = [
   nickname: "Breeana",
   fullName: "Breeana Devlin",
   gender: "female",
-  image: "cast/breeana_devlin.png",
+  image: "cast/breeana_devlin.webp",
 
   shows: ["Bratz"],
 
@@ -25851,7 +25851,7 @@ window.CAST = [
   nickname: "Kristy",
   fullName: "Kristy Baker",
   gender: "female",
-  image: "cast/kristy_baker.png",
+  image: "cast/kristy_baker.webp",
 
   shows: ["Bratz"],
 
@@ -25865,7 +25865,7 @@ window.CAST = [
   nickname: "Mandy",
   fullName: "Mandy Pickett",
   gender: "female",
-  image: "cast/mandy_pickett.png",
+  image: "cast/mandy_pickett.webp",
 
   shows: ["Bratz"],
 
@@ -25879,7 +25879,7 @@ window.CAST = [
   nickname: "Sharidan",
   fullName: "Sharidan Jones",
   gender: "female",
-  image: "cast/sharidan_jones.png",
+  image: "cast/sharidan_jones.webp",
 
   shows: ["Bratz"],
 
@@ -25893,7 +25893,7 @@ window.CAST = [
   nickname: "Bryce",
   fullName: "Bryce",
   gender: "male",
-  image: "cast/bryce.png",
+  image: "cast/bryce.webp",
 
   shows: ["Bratz"],
 
@@ -25907,7 +25907,7 @@ window.CAST = [
   nickname: "Katia",
   fullName: "Katia Eziz",
   gender: "female",
-  image: "cast/katia_eziz.png",
+  image: "cast/katia_eziz.webp",
 
   shows: ["Bratz"],
 
@@ -25921,7 +25921,7 @@ window.CAST = [
   nickname: "Gertrude",
   fullName: "Gertrude",
   gender: "female",
-  image: "cast/gertrude.png",
+  image: "cast/gertrude.webp",
 
   shows: ["Bratz"],
 
@@ -25935,7 +25935,7 @@ window.CAST = [
   nickname: "Roberta",
   fullName: "Roberta",
   gender: "female",
-  image: "cast/roberta.png",
+  image: "cast/roberta.webp",
 
   shows: ["Bratz"],
 
@@ -25949,7 +25949,7 @@ window.CAST = [
   nickname: "Shane",
   fullName: "Shane",
   gender: "male",
-  image: "cast/shane.png",
+  image: "cast/shane.webp",
 
   shows: ["Bratz"],
 
@@ -25963,7 +25963,7 @@ window.CAST = [
   nickname: "Damon",
   fullName: "Damon Van Doren",
   gender: "male",
-  image: "cast/damon_van_doren.png",
+  image: "cast/damon_van_doren.webp",
 
   shows: ["Bratz"],
 
@@ -25977,7 +25977,7 @@ window.CAST = [
   nickname: "London",
   fullName: "London Milton",
   gender: "female",
-  image: "cast/london_milton.png",
+  image: "cast/london_milton.webp",
 
   shows: ["Bratz"],
 
@@ -25991,7 +25991,7 @@ window.CAST = [
   nickname: "Byron",
   fullName: "Byron Powell",
   gender: "male",
-  image: "cast/byron_powell.png",
+  image: "cast/byron_powell.webp",
 
   shows: ["Bratz"],
 
@@ -26005,7 +26005,7 @@ window.CAST = [
   nickname: "Meygan",
   fullName: "Meygan",
   gender: "female",
-  image: "cast/meygan.png",
+  image: "cast/meygan.webp",
 
   shows: ["Bratz"],
 
@@ -26019,7 +26019,7 @@ window.CAST = [
   nickname: "Roxxi",
   fullName: "Roxxi",
   gender: "female",
-  image: "cast/roxxi.png",
+  image: "cast/roxxi.webp",
 
   shows: ["Bratz"],
 
@@ -26033,7 +26033,7 @@ window.CAST = [
   nickname: "Kirstee",
   fullName: "Kirstee",
   gender: "female",
-  image: "cast/kirstee.png",
+  image: "cast/kirstee.webp",
 
   shows: ["Bratz"],
 
@@ -26047,7 +26047,7 @@ window.CAST = [
   nickname: "Kaycee",
   fullName: "Kaycee",
   gender: "female",
-  image: "cast/kaycee.png",
+  image: "cast/kaycee.webp",
 
   shows: ["Bratz"],
 
@@ -26061,7 +26061,7 @@ window.CAST = [
   nickname: "Burdine",
   fullName: "Burdine Maxwell",
   gender: "female",
-  image: "cast/burdine_maxwell.png",
+  image: "cast/burdine_maxwell.webp",
 
   shows: ["Bratz"],
 
@@ -26075,7 +26075,7 @@ window.CAST = [
   nickname: "Eitan",
   fullName: "Eitan",
   gender: "male",
-  image: "cast/eitan.png",
+  image: "cast/eitan.webp",
 
   shows: ["Bratz"],
 
@@ -26089,7 +26089,7 @@ window.CAST = [
   nickname: "Dylan",
   fullName: "Dylan",
   gender: "male",
-  image: "cast/dylan.png",
+  image: "cast/dylan.webp",
 
   shows: ["Bratz"],
 
@@ -26103,7 +26103,7 @@ window.CAST = [
   nickname: "Cameron",
   fullName: "Cameron",
   gender: "male",
-  image: "cast/cameron.png",
+  image: "cast/cameron.webp",
 
   shows: ["Bratz"],
 
@@ -26117,7 +26117,7 @@ window.CAST = [
   nickname: "Yasmin",
   fullName: "Yasmin",
   gender: "female",
-  image: "cast/yasmin.png",
+  image: "cast/yasmin.webp",
 
   shows: ["Bratz"],
 
@@ -26131,7 +26131,7 @@ window.CAST = [
   nickname: "Sasha",
   fullName: "Sasha",
   gender: "female",
-  image: "cast/sasha.png",
+  image: "cast/sasha.webp",
 
   shows: ["Bratz"],
 
@@ -26145,7 +26145,7 @@ window.CAST = [
   nickname: "Jade",
   fullName: "Jade",
   gender: "female",
-  image: "cast/jade.png",
+  image: "cast/jade.webp",
 
   shows: ["Bratz"],
 
@@ -26159,7 +26159,7 @@ window.CAST = [
   nickname: "Cloe",
   fullName: "Cloe",
   gender: "female",
-  image: "cast/cloe.png",
+  image: "cast/cloe.webp",
 
   shows: ["Bratz"],
 
@@ -26173,7 +26173,7 @@ window.CAST = [
   nickname: "Brittany",
   fullName: "Brittany Petros",
   gender: "female",
-  image: "cast/brittany_petros.png",
+  image: "cast/brittany_petros.webp",
 
   shows: ["Big Brother"],
 
@@ -26187,7 +26187,7 @@ window.CAST = [
   nickname: "Cassandra",
   fullName: "Cassandra Waldon",
   gender: "female",
-  image: "cast/cassandra_waldon.png",
+  image: "cast/cassandra_waldon.webp",
 
   shows: ["Big Brother"],
 
@@ -26201,7 +26201,7 @@ window.CAST = [
   nickname: "Curtis",
   fullName: "Curtis Kin",
   gender: "male",
-  image: "cast/curtis_kin.png",
+  image: "cast/curtis_kin.webp",
 
   shows: ["Big Brother"],
 
@@ -26215,7 +26215,7 @@ window.CAST = [
   nickname: "Eddie",
   fullName: "Eddie McGee",
   gender: "male",
-  image: "cast/eddie_mcgee.png",
+  image: "cast/eddie_mcgee.webp",
 
   shows: ["Big Brother"],
 
@@ -26229,7 +26229,7 @@ window.CAST = [
   nickname: "Chicken George",
   fullName: "George Boswell",
   gender: "male",
-  image: "cast/george_boswell.png",
+  image: "cast/george_boswell.webp",
 
   shows: ["Big Brother"],
 
@@ -26243,7 +26243,7 @@ window.CAST = [
   nickname: "Jamie",
   fullName: "Jamie Kern",
   gender: "female",
-  image: "cast/jamie_kern.png",
+  image: "cast/jamie_kern.webp",
 
   shows: ["Big Brother"],
 
@@ -26257,7 +26257,7 @@ window.CAST = [
   nickname: "Jean",
   fullName: "Jean Jordan",
   gender: "female",
-  image: "cast/jean_jordan.png",
+  image: "cast/jean_jordan.webp",
 
   shows: ["Big Brother"],
 
@@ -26271,7 +26271,7 @@ window.CAST = [
   nickname: "Josh",
   fullName: "Josh Souza",
   gender: "male",
-  image: "cast/josh_souza.png",
+  image: "cast/josh_souza.webp",
 
   shows: ["Big Brother"],
 
@@ -26285,7 +26285,7 @@ window.CAST = [
   nickname: "Karen",
   fullName: "Karen Fowler",
   gender: "female",
-  image: "cast/karen_fowler.png",
+  image: "cast/karen_fowler.webp",
 
   shows: ["Big Brother"],
 
@@ -26299,7 +26299,7 @@ window.CAST = [
   nickname: "Will Mega",
   fullName: "William Collins",
   gender: "male",
-  image: "cast/william_collins.png",
+  image: "cast/william_collins.webp",
 
   shows: ["Big Brother"],
 
@@ -26313,7 +26313,7 @@ window.CAST = [
   nickname: "Will",
   fullName: "Will Kirby",
   gender: "male",
-  image: "cast/will_kirby.png",
+  image: "cast/will_kirby.webp",
 
   shows: [
     "Big Brother"
@@ -26329,7 +26329,7 @@ window.CAST = [
   nickname: "Nicole",
   fullName: "Nicole Nilson Schaffrich",
   gender: "female",
-  image: "cast/nicole_nilson_schaffrich.png",
+  image: "cast/nicole_nilson_schaffrich.webp",
 
   shows: ["Big Brother"],
 
@@ -26343,7 +26343,7 @@ window.CAST = [
   nickname: "Monica",
   fullName: "Monica Bailey",
   gender: "female",
-  image: "cast/monica_bailey.png",
+  image: "cast/monica_bailey.webp",
 
   shows: ["Big Brother"],
 
@@ -26357,7 +26357,7 @@ window.CAST = [
   nickname: "Hardy",
   fullName: "Hardy Ames-Hill",
   gender: "male",
-  image: "cast/hardy_ames_hill.png",
+  image: "cast/hardy_ames_hill.webp",
 
   shows: ["Big Brother"],
 
@@ -26371,7 +26371,7 @@ window.CAST = [
   nickname: "Bunky",
   fullName: "Bunky Miller",
   gender: "male",
-  image: "cast/william_miller.png",
+  image: "cast/william_miller.webp",
 
   shows: ["Big Brother"],
 
@@ -26385,7 +26385,7 @@ window.CAST = [
   nickname: "Krista",
   fullName: "Krista Stegall",
   gender: "female",
-  image: "cast/krista_stegall.png",
+  image: "cast/krista_stegall.webp",
 
   shows: ["Big Brother"],
 
@@ -26399,7 +26399,7 @@ window.CAST = [
   nickname: "Kent",
   fullName: "Kent Blackwelder",
   gender: "male",
-  image: "cast/kent_blackwelder.png",
+  image: "cast/kent_blackwelder.webp",
 
   shows: ["Big Brother"],
 
@@ -26413,7 +26413,7 @@ window.CAST = [
   nickname: "Boogie",
   fullName: "Mike Boogie Malin",
   gender: "male",
-  image: "cast/mike_malin.png",
+  image: "cast/mike_malin.webp",
 
   shows: ["Big Brother"],
 
@@ -26427,7 +26427,7 @@ window.CAST = [
   nickname: "Shannon",
   fullName: "Shannon Dragoo",
   gender: "female",
-  image: "cast/shannon_dragoo.png",
+  image: "cast/shannon_dragoo.webp",
 
   shows: ["Big Brother"],
 
@@ -26441,7 +26441,7 @@ window.CAST = [
   nickname: "Autumn",
   fullName: "Autumn Daly",
   gender: "female",
-  image: "cast/autumn_daly.png",
+  image: "cast/autumn_daly.webp",
 
   shows: ["Big Brother"],
 
@@ -26455,7 +26455,7 @@ window.CAST = [
   nickname: "Sheryl",
   fullName: "Sheryl Braxton",
   gender: "female",
-  image: "cast/sheryl_braxton.png",
+  image: "cast/sheryl_braxton.webp",
 
   shows: ["Big Brother"],
 
@@ -26469,7 +26469,7 @@ window.CAST = [
   nickname: "Justin",
   fullName: "Justin Sebik",
   gender: "male",
-  image: "cast/justin_sebik.png",
+  image: "cast/justin_sebik.webp",
 
   shows: ["Big Brother"],
 
@@ -26483,7 +26483,7 @@ window.CAST = [
   nickname: "Lisa",
   fullName: "Lisa Donahue",
   gender: "female",
-  image: "cast/lisa_donahue.png",
+  image: "cast/lisa_donahue.webp",
 
   shows: ["Big Brother"],
 
@@ -26497,7 +26497,7 @@ window.CAST = [
   nickname: "Danielle",
   fullName: "Danielle Reyes",
   gender: "female",
-  image: "cast/danielle_reyes.png",
+  image: "cast/danielle_reyes.webp",
 
   shows: [
     "Big Brother",
@@ -26517,7 +26517,7 @@ window.CAST = [
   nickname: "Jason",
   fullName: "Jason Guy",
   gender: "male",
-  image: "cast/jason_guy.png",
+  image: "cast/jason_guy.webp",
 
   shows: ["Big Brother"],
 
@@ -26531,7 +26531,7 @@ window.CAST = [
   nickname: "Amy",
   fullName: "Amy Crews",
   gender: "female",
-  image: "cast/amy_crews.png",
+  image: "cast/amy_crews.webp",
 
   shows: ["Big Brother"],
 
@@ -26545,7 +26545,7 @@ window.CAST = [
   nickname: "Marcellas",
   fullName: "Marcellas Reynolds",
   gender: "male",
-  image: "cast/marcellas_reynolds.png",
+  image: "cast/marcellas_reynolds.webp",
 
   shows: ["Big Brother"],
 
@@ -26559,7 +26559,7 @@ window.CAST = [
   nickname: "Roddy",
   fullName: "Roddy Mancuso",
   gender: "male",
-  image: "cast/roddy_mancuso.png",
+  image: "cast/roddy_mancuso.webp",
 
   shows: ["Big Brother"],
 
@@ -26573,7 +26573,7 @@ window.CAST = [
   nickname: "Gerry",
   fullName: "Gerry Lancaster",
   gender: "male",
-  image: "cast/gerry_lancaster.png",
+  image: "cast/gerry_lancaster.webp",
 
   shows: ["Big Brother"],
 
@@ -26587,7 +26587,7 @@ window.CAST = [
   nickname: "Chiara",
   fullName: "Chiara Berti",
   gender: "female",
-  image: "cast/chiara_berti.png",
+  image: "cast/chiara_berti.webp",
 
   shows: ["Big Brother"],
 
@@ -26601,7 +26601,7 @@ window.CAST = [
   nickname: "Josh",
   fullName: "Josh Feinberg",
   gender: "male",
-  image: "cast/josh_feinberg.png",
+  image: "cast/josh_feinberg.webp",
 
   shows: ["Big Brother"],
 
@@ -26615,7 +26615,7 @@ window.CAST = [
   nickname: "Eric",
   fullName: "Eric Ouellette",
   gender: "male",
-  image: "cast/eric_ouellette.png",
+  image: "cast/eric_ouellette.webp",
 
   shows: ["Big Brother"],
 
@@ -26629,7 +26629,7 @@ window.CAST = [
   nickname: "Tonya",
   fullName: "Tonya Paoni",
   gender: "female",
-  image: "cast/tonya_paoni.png",
+  image: "cast/tonya_paoni.webp",
 
   shows: ["Big Brother"],
 
@@ -26643,7 +26643,7 @@ window.CAST = [
   nickname: "Lori",
   fullName: "Lori Olsen",
   gender: "female",
-  image: "cast/lori_olsen.png",
+  image: "cast/lori_olsen.webp",
 
   shows: ["Big Brother"],
 
@@ -26657,7 +26657,7 @@ window.CAST = [
   nickname: "Jun",
   fullName: "Jun Song",
   gender: "female",
-  image: "cast/jun_song.png",
+  image: "cast/jun_song.webp",
 
   shows: ["Big Brother"],
 
@@ -26671,7 +26671,7 @@ window.CAST = [
   nickname: "Alison",
   fullName: "Alison Irwin",
   gender: "female",
-  image: "cast/alison_irwin.png",
+  image: "cast/alison_irwin.webp",
 
   shows: [
     "Big Brother",
@@ -26689,7 +26689,7 @@ window.CAST = [
   nickname: "Robert",
   fullName: "Robert Roman",
   gender: "male",
-  image: "cast/robert_roman.png",
+  image: "cast/robert_roman.webp",
 
   shows: ["Big Brother"],
 
@@ -26703,7 +26703,7 @@ window.CAST = [
   nickname: "Erika",
   fullName: "Erika Landin",
   gender: "female",
-  image: "cast/erika_landin.png",
+  image: "cast/erika_landin.webp",
 
   shows: ["Big Brother"],
 
@@ -26717,7 +26717,7 @@ window.CAST = [
   nickname: "Jee",
   fullName: "Jee Choe",
   gender: "male",
-  image: "cast/jee_choe.png",
+  image: "cast/jee_choe.webp",
 
   shows: ["Big Brother"],
 
@@ -26731,7 +26731,7 @@ window.CAST = [
   nickname: "Jack",
   fullName: "Jack Owens",
   gender: "male",
-  image: "cast/jack_owens.png",
+  image: "cast/jack_owens.webp",
 
   shows: ["Big Brother"],
 
@@ -26745,7 +26745,7 @@ window.CAST = [
   nickname: "Justin",
   fullName: "Justin Giovinco",
   gender: "male",
-  image: "cast/justin_giovinco.png",
+  image: "cast/justin_giovinco.webp",
 
   shows: ["Big Brother"],
 
@@ -26759,7 +26759,7 @@ window.CAST = [
   nickname: "Nathan",
   fullName: "Nathan Marlow",
   gender: "male",
-  image: "cast/nathan_marlow.png",
+  image: "cast/nathan_marlow.webp",
 
   shows: ["Big Brother"],
 
@@ -26773,7 +26773,7 @@ window.CAST = [
   nickname: "Dana",
   fullName: "Dana Varela",
   gender: "female",
-  image: "cast/dana_varela.png",
+  image: "cast/dana_varela.webp",
 
   shows: ["Big Brother"],
 
@@ -26787,7 +26787,7 @@ window.CAST = [
   nickname: "David",
   fullName: "David Lane",
   gender: "male",
-  image: "cast/david_lane.png",
+  image: "cast/david_lane.webp",
 
   shows: ["Big Brother"],
 
@@ -26801,7 +26801,7 @@ window.CAST = [
   nickname: "Michelle",
   fullName: "Michelle Maradie",
   gender: "female",
-  image: "cast/michelle_maradie.png",
+  image: "cast/michelle_maradie.webp",
 
   shows: ["Big Brother"],
 
@@ -26815,7 +26815,7 @@ window.CAST = [
   nickname: "Amanda",
   fullName: "Amanda Craig",
   gender: "female",
-  image: "cast/amanda_craig.png",
+  image: "cast/amanda_craig.webp",
 
   shows: ["Big Brother"],
 
@@ -26829,7 +26829,7 @@ window.CAST = [
   nickname: "Scott",
   fullName: "Scott Weintraub",
   gender: "male",
-  image: "cast/scott_weintraub.png",
+  image: "cast/scott_weintraub.webp",
 
   shows: ["Big Brother"],
 
@@ -26843,7 +26843,7 @@ window.CAST = [
   nickname: "Drew",
   fullName: "Drew Daniel",
   gender: "male",
-  image: "cast/drew_daniel.png",
+  image: "cast/drew_daniel.webp",
 
   shows: ["Big Brother"],
 
@@ -26857,7 +26857,7 @@ window.CAST = [
   nickname: "Cowboy",
   fullName: "Michael Ellis",
   gender: "male",
-  image: "cast/michael_ellis.png",
+  image: "cast/michael_ellis.webp",
 
   shows: ["Big Brother"],
 
@@ -26871,7 +26871,7 @@ window.CAST = [
   nickname: "Diane",
   fullName: "Diane Henry",
   gender: "female",
-  image: "cast/diane_henry.png",
+  image: "cast/diane_henry.webp",
 
   shows: ["Big Brother"],
 
@@ -26885,7 +26885,7 @@ window.CAST = [
   nickname: "Nakomis",
   fullName: "Nakomis Dedmon",
   gender: "female",
-  image: "cast/jennifer_dedmon.png",
+  image: "cast/jennifer_dedmon.webp",
 
   shows: ["Big Brother"],
 
@@ -26899,7 +26899,7 @@ window.CAST = [
   nickname: "Karen",
   fullName: "Karen Ganci",
   gender: "female",
-  image: "cast/karen_ganci.png",
+  image: "cast/karen_ganci.webp",
 
   shows: ["Big Brother"],
 
@@ -26913,7 +26913,7 @@ window.CAST = [
   nickname: "Marvin",
   fullName: "Marvin Latimer",
   gender: "male",
-  image: "cast/marvin_latimer.png",
+  image: "cast/marvin_latimer.webp",
 
   shows: ["Big Brother"],
 
@@ -26927,7 +26927,7 @@ window.CAST = [
   nickname: "Adria",
   fullName: "Adria Klein",
   gender: "female",
-  image: "cast/adria_klein.png",
+  image: "cast/adria_klein.webp",
 
   shows: ["Big Brother"],
 
@@ -26941,7 +26941,7 @@ window.CAST = [
   nickname: "Natalie",
   fullName: "Natalie Carroll",
   gender: "female",
-  image: "cast/natalie_carroll.png",
+  image: "cast/natalie_carroll.webp",
 
   shows: ["Big Brother"],
 
@@ -26955,7 +26955,7 @@ window.CAST = [
   nickname: "Will",
   fullName: "Will Wikle",
   gender: "male",
-  image: "cast/will_wikle.png",
+  image: "cast/will_wikle.webp",
 
   shows: ["Big Brother"],
 
@@ -26969,7 +26969,7 @@ window.CAST = [
   nickname: "Jase",
   fullName: "Jason Wirey",
   gender: "male",
-  image: "cast/jason_wirey.png",
+  image: "cast/jason_wirey.webp",
 
   shows: ["Big Brother"],
 
@@ -26983,7 +26983,7 @@ window.CAST = [
   nickname: "Scott",
   fullName: "Scott Long",
   gender: "male",
-  image: "cast/scott_long.png",
+  image: "cast/scott_long.webp",
 
   shows: ["Big Brother"],
 
@@ -26997,7 +26997,7 @@ window.CAST = [
   nickname: "Holly",
   fullName: "Holly King",
   gender: "female",
-  image: "cast/holly_king.png",
+  image: "cast/holly_king.webp",
 
   shows: ["Big Brother"],
 
@@ -27011,7 +27011,7 @@ window.CAST = [
   nickname: "Lori",
   fullName: "Lori Valenti",
   gender: "female",
-  image: "cast/lori_valenti.png",
+  image: "cast/lori_valenti.webp",
 
   shows: ["Big Brother"],
 
@@ -27025,7 +27025,7 @@ window.CAST = [
   nickname: "Mike",
   fullName: "Mike Lubinski",
   gender: "male",
-  image: "cast/mike_lubinski.png",
+  image: "cast/mike_lubinski.webp",
 
   shows: ["Big Brother"],
 
@@ -27039,7 +27039,7 @@ window.CAST = [
   nickname: "Maggie",
   fullName: "Maggie Ausburn",
   gender: "female",
-  image: "cast/maggie_ausburn.png",
+  image: "cast/maggie_ausburn.webp",
 
   shows: ["Big Brother"],
 
@@ -27053,7 +27053,7 @@ window.CAST = [
   nickname: "Ivette",
   fullName: "Ivette Corredero",
   gender: "female",
-  image: "cast/ivette_corredero.png",
+  image: "cast/ivette_corredero.webp",
 
   shows: ["Big Brother"],
 
@@ -27067,7 +27067,7 @@ window.CAST = [
   nickname: "Janelle",
   fullName: "Janelle Pierzina",
   gender: "female",
-  image: "cast/janelle_pierzina.png",
+  image: "cast/janelle_pierzina.webp",
 
   shows: [
     "Big Brother",
@@ -27087,7 +27087,7 @@ window.CAST = [
   nickname: "April",
   fullName: "April Lewis",
   gender: "female",
-  image: "cast/april_lewis.png",
+  image: "cast/april_lewis.webp",
 
   shows: ["Big Brother"],
 
@@ -27101,7 +27101,7 @@ window.CAST = [
   nickname: "Howie",
   fullName: "Howie Gordon",
   gender: "male",
-  image: "cast/howie_gordon.png",
+  image: "cast/howie_gordon.webp",
 
   shows: ["Big Brother"],
 
@@ -27115,7 +27115,7 @@ window.CAST = [
   nickname: "Beau",
   fullName: "Beau Beasley",
   gender: "male",
-  image: "cast/beau_beasley.png",
+  image: "cast/beau_beasley.webp",
 
   shows: ["Big Brother"],
 
@@ -27129,7 +27129,7 @@ window.CAST = [
   nickname: "James",
   fullName: "James Rhine",
   gender: "male",
-  image: "cast/james_rhine.png",
+  image: "cast/james_rhine.webp",
 
   shows: ["Big Brother"],
 
@@ -27143,7 +27143,7 @@ window.CAST = [
   nickname: "Rachel",
   fullName: "Rachel Plencner",
   gender: "female",
-  image: "cast/rachel_plencner.png",
+  image: "cast/rachel_plencner.webp",
 
   shows: ["Big Brother"],
 
@@ -27157,7 +27157,7 @@ window.CAST = [
   nickname: "Jennifer",
   fullName: "Jennifer Vasquez",
   gender: "female",
-  image: "cast/jennifer_vasquez.png",
+  image: "cast/jennifer_vasquez.webp",
 
   shows: ["Big Brother"],
 
@@ -27171,7 +27171,7 @@ window.CAST = [
   nickname: "Kaysar",
   fullName: "Kaysar Ridha",
   gender: "male",
-  image: "cast/kaysar_ridha.png",
+  image: "cast/kaysar_ridha.webp",
 
   shows: ["Big Brother"],
 
@@ -27185,7 +27185,7 @@ window.CAST = [
   nickname: "Sarah",
   fullName: "Sarah Hrejsa",
   gender: "female",
-  image: "cast/sarah_hrejsa.png",
+  image: "cast/sarah_hrejsa.webp",
 
   shows: ["Big Brother"],
 
@@ -27199,7 +27199,7 @@ window.CAST = [
   nickname: "Eric",
   fullName: "Eric Littmann",
   gender: "male",
-  image: "cast/eric_littmann.png",
+  image: "cast/eric_littmann.webp",
 
   shows: ["Big Brother"],
 
@@ -27213,7 +27213,7 @@ window.CAST = [
   nickname: "Michael",
   fullName: "Michael Donnellan",
   gender: "male",
-  image: "cast/michael_donnellan.png",
+  image: "cast/michael_donnellan.webp",
 
   shows: ["Big Brother"],
 
@@ -27227,7 +27227,7 @@ window.CAST = [
   nickname: "Ashlea",
   fullName: "Ashlea Evans",
   gender: "female",
-  image: "cast/ashlea_evans.png",
+  image: "cast/ashlea_evans.webp",
 
   shows: ["Big Brother"],
 
@@ -27241,7 +27241,7 @@ window.CAST = [
   nickname: "Evel Dick",
   fullName: "Richard Donato",
   gender: "male",
-  image: "cast/richard_donato.png",
+  image: "cast/richard_donato.webp",
 
   shows: ["Big Brother"],
 
@@ -27255,7 +27255,7 @@ window.CAST = [
   nickname: "Daniele",
   fullName: "Daniele Briones",
   gender: "female",
-  image: "cast/daniele_briones.png",
+  image: "cast/daniele_briones.webp",
 
   shows: ["Big Brother"],
 
@@ -27269,7 +27269,7 @@ window.CAST = [
   nickname: "Zach",
   fullName: "Zach Swerdzewski",
   gender: "male",
-  image: "cast/zach_swerdzewski.png",
+  image: "cast/zach_swerdzewski.webp",
 
   shows: ["Big Brother"],
 
@@ -27283,7 +27283,7 @@ window.CAST = [
   nickname: "Jameka",
   fullName: "Jameka Cameron",
   gender: "female",
-  image: "cast/jameka_cameron.png",
+  image: "cast/jameka_cameron.webp",
 
   shows: ["Big Brother"],
 
@@ -27297,7 +27297,7 @@ window.CAST = [
   nickname: "Eric",
   fullName: "Eric Stein",
   gender: "male",
-  image: "cast/eric_stein.png",
+  image: "cast/eric_stein.webp",
 
   shows: ["Big Brother"],
 
@@ -27311,7 +27311,7 @@ window.CAST = [
   nickname: "Jessica",
   fullName: "Jessica Hughbanks",
   gender: "female",
-  image: "cast/jessica_hughbanks.png",
+  image: "cast/jessica_hughbanks.webp",
 
   shows: ["Big Brother"],
 
@@ -27325,7 +27325,7 @@ window.CAST = [
   nickname: "Amber",
   fullName: "Amber Siyavus",
   gender: "female",
-  image: "cast/amber_siyavus.png",
+  image: "cast/amber_siyavus.webp",
 
   shows: ["Big Brother"],
 
@@ -27339,7 +27339,7 @@ window.CAST = [
   nickname: "Jen",
   fullName: "Jen Johnson",
   gender: "female",
-  image: "cast/jen_johnson.png",
+  image: "cast/jen_johnson.webp",
 
   shows: ["Big Brother"],
 
@@ -27353,7 +27353,7 @@ window.CAST = [
   nickname: "Dustin",
   fullName: "Dustin Erikstrup",
   gender: "male",
-  image: "cast/dustin_erikstrup.png",
+  image: "cast/dustin_erikstrup.webp",
 
   shows: ["Big Brother"],
 
@@ -27367,7 +27367,7 @@ window.CAST = [
   nickname: "Kail",
   fullName: "Kail Harbick",
   gender: "female",
-  image: "cast/kail_harbick.png",
+  image: "cast/kail_harbick.webp",
 
   shows: ["Big Brother"],
 
@@ -27381,7 +27381,7 @@ window.CAST = [
   nickname: "Nick",
   fullName: "Nick Starcevic",
   gender: "male",
-  image: "cast/nick_starcevic.png",
+  image: "cast/nick_starcevic.webp",
 
   shows: ["Big Brother"],
 
@@ -27395,7 +27395,7 @@ window.CAST = [
   nickname: "Mike",
   fullName: "Mike Dutz",
   gender: "male",
-  image: "cast/mike_dutz.png",
+  image: "cast/mike_dutz.webp",
 
   shows: ["Big Brother"],
 
@@ -27409,7 +27409,7 @@ window.CAST = [
   nickname: "Joe",
   fullName: "Joe Barber",
   gender: "male",
-  image: "cast/joe_barber.png",
+  image: "cast/joe_barber.webp",
 
   shows: ["Big Brother"],
 
@@ -27423,7 +27423,7 @@ window.CAST = [
   nickname: "Carol",
   fullName: "Carol Journey",
   gender: "female",
-  image: "cast/carol_journey.png",
+  image: "cast/carol_journey.webp",
 
   shows: ["Big Brother"],
 
@@ -27437,7 +27437,7 @@ window.CAST = [
   nickname: "Adam",
   fullName: "Adam Jasinski",
   gender: "male",
-  image: "cast/adam_jasinski.png",
+  image: "cast/adam_jasinski.webp",
 
   shows: ["Big Brother"],
 
@@ -27451,7 +27451,7 @@ window.CAST = [
   nickname: "Ryan",
   fullName: "Ryan Quicksall",
   gender: "male",
-  image: "cast/ryan_quicksall.png",
+  image: "cast/ryan_quicksall.webp",
 
   shows: ["Big Brother"],
 
@@ -27465,7 +27465,7 @@ window.CAST = [
   nickname: "Sheila",
   fullName: "Sheila Kennedy",
   gender: "female",
-  image: "cast/sheila_kennedy.png",
+  image: "cast/sheila_kennedy.webp",
 
   shows: ["Big Brother"],
 
@@ -27479,7 +27479,7 @@ window.CAST = [
   nickname: "Sharon",
   fullName: "Sharon Obermueller",
   gender: "female",
-  image: "cast/sharon_obermueller.png",
+  image: "cast/sharon_obermueller.webp",
 
   shows: ["Big Brother"],
 
@@ -27493,7 +27493,7 @@ window.CAST = [
   nickname: "Natalie",
   fullName: "Natalie Cunial",
   gender: "female",
-  image: "cast/natalie_cunial.png",
+  image: "cast/natalie_cunial.webp",
 
   shows: ["Big Brother"],
 
@@ -27507,7 +27507,7 @@ window.CAST = [
   nickname: "James",
   fullName: "James Zinkand",
   gender: "male",
-  image: "cast/james_zinkand.png",
+  image: "cast/james_zinkand.webp",
 
   shows: ["Big Brother"],
 
@@ -27521,7 +27521,7 @@ window.CAST = [
   nickname: "Joshua",
   fullName: "Joshua Welch",
   gender: "male",
-  image: "cast/joshua_welch.png",
+  image: "cast/joshua_welch.webp",
 
   shows: ["Big Brother"],
 
@@ -27535,7 +27535,7 @@ window.CAST = [
   nickname: "Chelsia",
   fullName: "Chelsia Hart",
   gender: "female",
-  image: "cast/chelsia_hart.png",
+  image: "cast/chelsia_hart.webp",
 
   shows: ["Big Brother"],
 
@@ -27549,7 +27549,7 @@ window.CAST = [
   nickname: "Matty",
   fullName: "Matthew McDonald",
   gender: "male",
-  image: "cast/matthew_mcdonald.png",
+  image: "cast/matthew_mcdonald.webp",
 
   shows: ["Big Brother"],
 
@@ -27563,7 +27563,7 @@ window.CAST = [
   nickname: "Allison",
   fullName: "Allison Nichols",
   gender: "female",
-  image: "cast/allison_nichols.png",
+  image: "cast/allison_nichols.webp",
 
   shows: ["Big Brother"],
 
@@ -27577,7 +27577,7 @@ window.CAST = [
   nickname: "Alex",
   fullName: "Alex Coladonato",
   gender: "male",
-  image: "cast/alex_coladonato.png",
+  image: "cast/alex_coladonato.webp",
 
   shows: ["Big Brother"],
 
@@ -27591,7 +27591,7 @@ window.CAST = [
   nickname: "Amanda",
   fullName: "Amanda Hensen",
   gender: "female",
-  image: "cast/amanda_hensen.png",
+  image: "cast/amanda_hensen.webp",
 
   shows: ["Big Brother"],
 
@@ -27605,7 +27605,7 @@ window.CAST = [
   nickname: "Jen",
   fullName: "Jen DiTurno",
   gender: "female",
-  image: "cast/jen_diturno.png",
+  image: "cast/jen_diturno.webp",
 
   shows: ["Big Brother"],
 
@@ -27619,7 +27619,7 @@ window.CAST = [
   nickname: "Parker",
   fullName: "Parker Somerville",
   gender: "male",
-  image: "cast/parker_somerville.png",
+  image: "cast/parker_somerville.webp",
 
   shows: ["Big Brother"],
 
@@ -27633,7 +27633,7 @@ window.CAST = [
   nickname: "Neil",
   fullName: "Neil Garcia",
   gender: "male",
-  image: "cast/neil_garcia.png",
+  image: "cast/neil_garcia.webp",
 
   shows: ["Big Brother"],
 
@@ -27647,7 +27647,7 @@ window.CAST = [
   nickname: "Jacob",
   fullName: "Jacob Heald",
   gender: "male",
-  image: "cast/jacob_heald.png",
+  image: "cast/jacob_heald.webp",
 
   shows: ["Big Brother"],
 
@@ -27661,7 +27661,7 @@ window.CAST = [
   nickname: "Dan",
   fullName: "Dan Gheesling",
   gender: "male",
-  image: "cast/dan_gheesling.png",
+  image: "cast/dan_gheesling.webp",
 
   shows: [
     "Big Brother",
@@ -27679,7 +27679,7 @@ window.CAST = [
   nickname: "Memphis",
   fullName: "Memphis Garrett",
   gender: "male",
-  image: "cast/robert_garrett.png",
+  image: "cast/robert_garrett.webp",
 
   shows: ["Big Brother"],
 
@@ -27693,7 +27693,7 @@ window.CAST = [
   nickname: "Jerry",
   fullName: "Jerry MacDonald",
   gender: "male",
-  image: "cast/jerry_macdonald.png",
+  image: "cast/jerry_macdonald.webp",
 
   shows: ["Big Brother"],
 
@@ -27707,7 +27707,7 @@ window.CAST = [
   nickname: "Keesha",
   fullName: "Keesha Smith",
   gender: "female",
-  image: "cast/keesha_smith.png",
+  image: "cast/keesha_smith.webp",
 
   shows: ["Big Brother"],
 
@@ -27721,7 +27721,7 @@ window.CAST = [
   nickname: "Renny",
   fullName: "Renny Martyn",
   gender: "female",
-  image: "cast/renny_martyn.png",
+  image: "cast/renny_martyn.webp",
 
   shows: ["Big Brother"],
 
@@ -27735,7 +27735,7 @@ window.CAST = [
   nickname: "Ollie",
   fullName: "Bryan Ollie",
   gender: "male",
-  image: "cast/bryan_ollie.png",
+  image: "cast/bryan_ollie.webp",
 
   shows: ["Big Brother"],
 
@@ -27749,7 +27749,7 @@ window.CAST = [
   nickname: "Michelle",
   fullName: "Michelle Costa",
   gender: "female",
-  image: "cast/michelle_costa.png",
+  image: "cast/michelle_costa.webp",
 
   shows: ["Big Brother"],
 
@@ -27763,7 +27763,7 @@ window.CAST = [
   nickname: "April",
   fullName: "April Dowling",
   gender: "female",
-  image: "cast/april_dowling.png",
+  image: "cast/april_dowling.webp",
 
   shows: ["Big Brother"],
 
@@ -27777,7 +27777,7 @@ window.CAST = [
   nickname: "Libra",
   fullName: "Libra Thompson",
   gender: "female",
-  image: "cast/libra_thompson.png",
+  image: "cast/libra_thompson.webp",
 
   shows: ["Big Brother"],
 
@@ -27791,7 +27791,7 @@ window.CAST = [
   nickname: "Jessie",
   fullName: "Jessie Godderz",
   gender: "male",
-  image: "cast/jessie_godderz.png",
+  image: "cast/jessie_godderz.webp",
 
   shows: [
     "Big Brother",
@@ -27809,7 +27809,7 @@ window.CAST = [
   nickname: "Angie",
   fullName: "Angie Swindell",
   gender: "female",
-  image: "cast/angie_swindell.png",
+  image: "cast/angie_swindell.webp",
 
   shows: ["Big Brother"],
 
@@ -27823,7 +27823,7 @@ window.CAST = [
   nickname: "Steven",
   fullName: "Steven Daigle",
   gender: "male",
-  image: "cast/steven_daigle.png",
+  image: "cast/steven_daigle.webp",
 
   shows: ["Big Brother"],
 
@@ -27837,7 +27837,7 @@ window.CAST = [
   nickname: "Brian",
   fullName: "Brian Hart",
   gender: "male",
-  image: "cast/brian_hart.png",
+  image: "cast/brian_hart.webp",
 
   shows: ["Big Brother"],
 
@@ -27851,7 +27851,7 @@ window.CAST = [
   nickname: "Jordan",
   fullName: "Jordan Lloyd",
   gender: "female",
-  image: "cast/jordan_lloyd.png",
+  image: "cast/jordan_lloyd.webp",
 
   shows: [
     "Big Brother",
@@ -27869,7 +27869,7 @@ window.CAST = [
   nickname: "Natalie",
   fullName: "Natalie Martinez",
   gender: "female",
-  image: "cast/natalie_martinez.png",
+  image: "cast/natalie_martinez.webp",
 
   shows: ["Big Brother"],
 
@@ -27883,7 +27883,7 @@ window.CAST = [
   nickname: "Kevin",
   fullName: "Kevin Campbell",
   gender: "male",
-  image: "cast/kevin_campbell.png",
+  image: "cast/kevin_campbell.webp",
 
   shows: ["Big Brother"],
 
@@ -27897,7 +27897,7 @@ window.CAST = [
   nickname: "Michele",
   fullName: "Michele Noonan",
   gender: "female",
-  image: "cast/michele_noonan.png",
+  image: "cast/michele_noonan.webp",
 
   shows: ["Big Brother"],
 
@@ -27911,7 +27911,7 @@ window.CAST = [
   nickname: "Jeff",
   fullName: "Jeff Schroeder",
   gender: "male",
-  image: "cast/jeff_schroeder.png",
+  image: "cast/jeff_schroeder.webp",
 
   shows: [
     "Big Brother",
@@ -27929,7 +27929,7 @@ window.CAST = [
   nickname: "Russell",
   fullName: "Russell Kairouz",
   gender: "male",
-  image: "cast/russell_kairouz.png",
+  image: "cast/russell_kairouz.webp",
 
   shows: ["Big Brother"],
 
@@ -27943,7 +27943,7 @@ window.CAST = [
   nickname: "Lydia",
   fullName: "Lydia Tavera",
   gender: "female",
-  image: "cast/lydia_tavera.png",
+  image: "cast/lydia_tavera.webp",
 
   shows: ["Big Brother"],
 
@@ -27957,7 +27957,7 @@ window.CAST = [
   nickname: "Chima",
   fullName: "Chima Simone",
   gender: "female",
-  image: "cast/chima_simone.png",
+  image: "cast/chima_simone.webp",
 
   shows: ["Big Brother"],
 
@@ -27971,7 +27971,7 @@ window.CAST = [
   nickname: "Ronnie",
   fullName: "Ronnie Talbott",
   gender: "male",
-  image: "cast/ronnie_talbott.png",
+  image: "cast/ronnie_talbott.webp",
 
   shows: ["Big Brother"],
 
@@ -27985,7 +27985,7 @@ window.CAST = [
   nickname: "Casey",
   fullName: "Casey Turner",
   gender: "male",
-  image: "cast/casey_turner.png",
+  image: "cast/casey_turner.webp",
 
   shows: ["Big Brother"],
 
@@ -27999,7 +27999,7 @@ window.CAST = [
   nickname: "Laura",
   fullName: "Laura Crosby",
   gender: "female",
-  image: "cast/laura_crosby.png",
+  image: "cast/laura_crosby.webp",
 
   shows: ["Big Brother"],
 
@@ -28013,7 +28013,7 @@ window.CAST = [
   nickname: "Braden",
   fullName: "Braden Bacha",
   gender: "male",
-  image: "cast/braden_bacha.png",
+  image: "cast/braden_bacha.webp",
 
   shows: ["Big Brother"],
 
@@ -28027,7 +28027,7 @@ window.CAST = [
   nickname: "Lane",
   fullName: "Lane Elenburg",
   gender: "male",
-  image: "cast/lane_elenburg.png",
+  image: "cast/lane_elenburg.webp",
 
   shows: ["Big Brother"],
 
@@ -28041,7 +28041,7 @@ window.CAST = [
   nickname: "Enzo",
   fullName: "Enzo Palumbo",
   gender: "male",
-  image: "cast/enzo_palumbo.png",
+  image: "cast/enzo_palumbo.webp",
 
   shows: [
     "Big Brother",
@@ -28061,7 +28061,7 @@ window.CAST = [
   nickname: "Britney",
   fullName: "Britney Haynes",
   gender: "female",
-  image: "cast/britney_haynes.png",
+  image: "cast/britney_haynes.webp",
 
   shows: [
     "Big Brother",
@@ -28083,7 +28083,7 @@ window.CAST = [
   nickname: "Ragan",
   fullName: "Ragan Fox",
   gender: "male",
-  image: "cast/ragan_fox.png",
+  image: "cast/ragan_fox.webp",
 
   shows: ["Big Brother"],
 
@@ -28097,7 +28097,7 @@ window.CAST = [
   nickname: "Brendon",
   fullName: "Brendon Villegas",
   gender: "male",
-  image: "cast/brendon_villegas.png",
+  image: "cast/brendon_villegas.webp",
 
   shows: [
     "Big Brother",
@@ -28115,7 +28115,7 @@ window.CAST = [
   nickname: "Matt",
   fullName: "Matt Hoffman",
   gender: "male",
-  image: "cast/matt_hoffman.png",
+  image: "cast/matt_hoffman.webp",
 
   shows: ["Big Brother"],
 
@@ -28129,7 +28129,7 @@ window.CAST = [
   nickname: "Kathy",
   fullName: "Kathy Hillis",
   gender: "female",
-  image: "cast/kathy_hillis.png",
+  image: "cast/kathy_hillis.webp",
 
   shows: ["Big Brother"],
 
@@ -28143,7 +28143,7 @@ window.CAST = [
   nickname: "Rachel",
   fullName: "Rachel Reilly",
   gender: "female",
-  image: "cast/rachel_reilly.png",
+  image: "cast/rachel_reilly.webp",
 
   shows: [
     "Big Brother",
@@ -28163,7 +28163,7 @@ window.CAST = [
   nickname: "Kristen",
   fullName: "Kristen Bitting",
   gender: "female",
-  image: "cast/kristen_bitting.png",
+  image: "cast/kristen_bitting.webp",
 
   shows: ["Big Brother"],
 
@@ -28177,7 +28177,7 @@ window.CAST = [
   nickname: "Andrew",
   fullName: "Andrew Gordon",
   gender: "male",
-  image: "cast/andrew_gordon.png",
+  image: "cast/andrew_gordon.webp",
 
   shows: ["Big Brother"],
 
@@ -28191,7 +28191,7 @@ window.CAST = [
   nickname: "Monet",
   fullName: "Monet Stunson",
   gender: "female",
-  image: "cast/monet_stunson.png",
+  image: "cast/monet_stunson.webp",
 
   shows: ["Big Brother"],
 
@@ -28205,7 +28205,7 @@ window.CAST = [
   nickname: "Annie",
   fullName: "Annie Whittington",
   gender: "female",
-  image: "cast/annie_whittington.png",
+  image: "cast/annie_whittington.webp",
 
   shows: ["Big Brother"],
 
@@ -28219,7 +28219,7 @@ window.CAST = [
   nickname: "Porsche",
   fullName: "Porsche Briggs",
   gender: "female",
-  image: "cast/porsche_briggs.png",
+  image: "cast/porsche_briggs.webp",
 
   shows: ["Big Brother"],
 
@@ -28233,7 +28233,7 @@ window.CAST = [
   nickname: "Adam",
   fullName: "Adam Poch",
   gender: "male",
-  image: "cast/adam_poch.png",
+  image: "cast/adam_poch.webp",
 
   shows: ["Big Brother"],
 
@@ -28247,7 +28247,7 @@ window.CAST = [
   nickname: "Kalia",
   fullName: "Kalia Booker",
   gender: "female",
-  image: "cast/kalia_booker.png",
+  image: "cast/kalia_booker.webp",
 
   shows: ["Big Brother"],
 
@@ -28261,7 +28261,7 @@ window.CAST = [
   nickname: "Shelly",
   fullName: "Shelly Moore",
   gender: "male",
-  image: "cast/shelly_moore.png",
+  image: "cast/shelly_moore.webp",
 
   shows: ["Big Brother"],
 
@@ -28275,7 +28275,7 @@ window.CAST = [
   nickname: "Lawon",
   fullName: "Lawon Exum",
   gender: "male",
-  image: "cast/lawon_exum.png",
+  image: "cast/lawon_exum.webp",
 
   shows: ["Big Brother"],
 
@@ -28289,7 +28289,7 @@ window.CAST = [
   nickname: "Dominic",
   fullName: "Dominic Briones",
   gender: "male",
-  image: "cast/dominic_briones.png",
+  image: "cast/dominic_briones.webp",
 
   shows: ["Big Brother"],
 
@@ -28303,7 +28303,7 @@ window.CAST = [
   nickname: "Cassi",
   fullName: "Cassi Colvin",
   gender: "female",
-  image: "cast/cassi_colvin.png",
+  image: "cast/cassi_colvin.webp",
 
   shows: ["Big Brother"],
 
@@ -28317,7 +28317,7 @@ window.CAST = [
   nickname: "Keith",
   fullName: "Keith Henderson",
   gender: "male",
-  image: "cast/keith_henderson.png",
+  image: "cast/keith_henderson.webp",
 
   shows: ["Big Brother"],
 
@@ -28331,7 +28331,7 @@ window.CAST = [
   nickname: "Ian",
   fullName: "Ian Terry",
   gender: "male",
-  image: "cast/ian_terry.png",
+  image: "cast/ian_terry.webp",
 
   shows: [
     "Big Brother",
@@ -28349,7 +28349,7 @@ window.CAST = [
   nickname: "Danielle",
   fullName: "Danielle Murphree",
   gender: "female",
-  image: "cast/danielle_murphree.png",
+  image: "cast/danielle_murphree.webp",
 
   shows: ["Big Brother"],
 
@@ -28363,7 +28363,7 @@ window.CAST = [
   nickname: "Shane",
   fullName: "Shane Meaney",
   gender: "male",
-  image: "cast/shane_meaney.png",
+  image: "cast/shane_meaney.webp",
 
   shows: ["Big Brother"],
 
@@ -28377,7 +28377,7 @@ window.CAST = [
   nickname: "JennCity",
   fullName: "Jenn Arroyo",
   gender: "female",
-  image: "cast/jenn_arroyo.png",
+  image: "cast/jenn_arroyo.webp",
 
   shows: ["Big Brother"],
 
@@ -28391,7 +28391,7 @@ window.CAST = [
   nickname: "Joe",
   fullName: "Joe Arvin",
   gender: "male",
-  image: "cast/joe_arvin.png",
+  image: "cast/joe_arvin.webp",
 
   shows: ["Big Brother"],
 
@@ -28405,7 +28405,7 @@ window.CAST = [
   nickname: "Frank",
   fullName: "Frank Eudy",
   gender: "male",
-  image: "cast/frank_eudy.png",
+  image: "cast/frank_eudy.webp",
 
   shows: ["Big Brother"],
 
@@ -28419,7 +28419,7 @@ window.CAST = [
   nickname: "Ashley",
   fullName: "Ashley Iocco",
   gender: "female",
-  image: "cast/ashley_iocco.png",
+  image: "cast/ashley_iocco.webp",
 
   shows: ["Big Brother"],
 
@@ -28433,7 +28433,7 @@ window.CAST = [
   nickname: "Wil",
   fullName: "Wil Heuser",
   gender: "male",
-  image: "cast/wil_heuser.png",
+  image: "cast/wil_heuser.webp",
 
   shows: ["Big Brother"],
 
@@ -28447,7 +28447,7 @@ window.CAST = [
   nickname: "JoJo",
   fullName: "Josephine Spatafora",
   gender: "female",
-  image: "cast/josephine_spatafora.png",
+  image: "cast/josephine_spatafora.webp",
 
   shows: ["Big Brother"],
 
@@ -28461,7 +28461,7 @@ window.CAST = [
   nickname: "Willie",
   fullName: "Willie Hantz",
   gender: "male",
-  image: "cast/willie_hantz.png",
+  image: "cast/willie_hantz.webp",
 
   shows: ["Big Brother"],
 
@@ -28475,7 +28475,7 @@ window.CAST = [
   nickname: "Kara",
   fullName: "Kara Monaco",
   gender: "female",
-  image: "cast/kara_monaco.png",
+  image: "cast/kara_monaco.webp",
 
   shows: ["Big Brother"],
 
@@ -28489,7 +28489,7 @@ window.CAST = [
   nickname: "Jodi",
   fullName: "Jodi Rollins",
   gender: "female",
-  image: "cast/jodi_rollins.png",
+  image: "cast/jodi_rollins.webp",
 
   shows: ["Big Brother"],
 
@@ -28503,7 +28503,7 @@ window.CAST = [
   nickname: "Andy",
   fullName: "Andy Herren",
   gender: "male",
-  image: "cast/andy_herren.png",
+  image: "cast/andy_herren.webp",
 
   shows: ["Big Brother"],
 
@@ -28517,7 +28517,7 @@ window.CAST = [
   nickname: "GinaMarie",
   fullName: "GinaMarie Zimmerman",
   gender: "female",
-  image: "cast/ginamarie_zimmerman.png",
+  image: "cast/ginamarie_zimmerman.webp",
 
   shows: ["Big Brother"],
 
@@ -28531,7 +28531,7 @@ window.CAST = [
   nickname: "Spencer",
   fullName: "Spencer Clawson",
   gender: "male",
-  image: "cast/spencer_clawson.png",
+  image: "cast/spencer_clawson.webp",
 
   shows: ["Big Brother"],
 
@@ -28545,7 +28545,7 @@ window.CAST = [
   nickname: "McCrae",
   fullName: "McCrae Olson",
   gender: "male",
-  image: "cast/mccrae_olson.png",
+  image: "cast/mccrae_olson.webp",
 
   shows: ["Big Brother"],
 
@@ -28559,7 +28559,7 @@ window.CAST = [
   nickname: "Judd",
   fullName: "Judd Daugherty",
   gender: "male",
-  image: "cast/judd_daugherty.png",
+  image: "cast/judd_daugherty.webp",
 
   shows: ["Big Brother"],
 
@@ -28573,7 +28573,7 @@ window.CAST = [
   nickname: "Elissa",
   fullName: "Elissa Slater",
   gender: "female",
-  image: "cast/elissa_slater.png",
+  image: "cast/elissa_slater.webp",
 
   shows: [
     "Big Brother",
@@ -28591,7 +28591,7 @@ window.CAST = [
   nickname: "Amanda",
   fullName: "Amanda Zuckerman",
   gender: "female",
-  image: "cast/amanda_zuckerman.png",
+  image: "cast/amanda_zuckerman.webp",
 
   shows: ["Big Brother"],
 
@@ -28605,7 +28605,7 @@ window.CAST = [
   nickname: "Aaryn",
   fullName: "Aaryn Gries",
   gender: "female",
-  image: "cast/aaryn_gries.png",
+  image: "cast/aaryn_gries.webp",
 
   shows: ["Big Brother"],
 
@@ -28619,7 +28619,7 @@ window.CAST = [
   nickname: "Helen",
   fullName: "Helen Kim",
   gender: "female",
-  image: "cast/helen_kim.png",
+  image: "cast/helen_kim.webp",
 
   shows: ["Big Brother"],
 
@@ -28633,7 +28633,7 @@ window.CAST = [
   nickname: "Jessie",
   fullName: "Jessie Kowalski",
   gender: "female",
-  image: "cast/jessie_kowalski.png",
+  image: "cast/jessie_kowalski.webp",
 
   shows: ["Big Brother"],
 
@@ -28647,7 +28647,7 @@ window.CAST = [
   nickname: "Candice",
   fullName: "Candice Stewart",
   gender: "female",
-  image: "cast/candice_stewart.png",
+  image: "cast/candice_stewart.webp",
 
   shows: ["Big Brother"],
 
@@ -28661,7 +28661,7 @@ window.CAST = [
   nickname: "Howard",
   fullName: "Howard Overby",
   gender: "male",
-  image: "cast/howard_overby.png",
+  image: "cast/howard_overby.webp",
 
   shows: ["Big Brother"],
 
@@ -28675,7 +28675,7 @@ window.CAST = [
   nickname: "Kaitlin",
   fullName: "Kaitlin Barnaby",
   gender: "female",
-  image: "cast/kaitlin_barnaby.png",
+  image: "cast/kaitlin_barnaby.webp",
 
   shows: ["Big Brother"],
 
@@ -28689,7 +28689,7 @@ window.CAST = [
   nickname: "Jeremy",
   fullName: "Jeremy McGuire",
   gender: "male",
-  image: "cast/jeremy_mcguire.png",
+  image: "cast/jeremy_mcguire.webp",
 
   shows: ["Big Brother"],
 
@@ -28703,7 +28703,7 @@ window.CAST = [
   nickname: "Nick",
   fullName: "Nick Uhas",
   gender: "male",
-  image: "cast/nick_uhas.png",
+  image: "cast/nick_uhas.webp",
 
   shows: ["Big Brother"],
 
@@ -28717,7 +28717,7 @@ window.CAST = [
   nickname: "David",
   fullName: "David Griton",
   gender: "male",
-  image: "cast/david_griton.png",
+  image: "cast/david_griton.webp",
 
   shows: ["Big Brother"],
 
@@ -28731,7 +28731,7 @@ window.CAST = [
   nickname: "Derrick",
   fullName: "Derrick Levasseur",
   gender: "male",
-  image: "cast/derrick_levasseur.png",
+  image: "cast/derrick_levasseur.webp",
 
   shows: ["Big Brother"],
 
@@ -28745,7 +28745,7 @@ window.CAST = [
   nickname: "Cody",
   fullName: "Cody Calafiore",
   gender: "male",
-  image: "cast/cody_calafiore.png",
+  image: "cast/cody_calafiore.webp",
 
   shows: [
     "Big Brother",
@@ -28765,7 +28765,7 @@ window.CAST = [
   nickname: "Victoria",
   fullName: "Victoria Rafaeli",
   gender: "female",
-  image: "cast/victoria_rafaeli.png",
+  image: "cast/victoria_rafaeli.webp",
 
   shows: ["Big Brother"],
 
@@ -28779,7 +28779,7 @@ window.CAST = [
   nickname: "Frankie",
   fullName: "Frankie Grande",
   gender: "male",
-  image: "cast/frankie_grande.png",
+  image: "cast/frankie_grande.webp",
 
   shows: [
     "Big Brother",
@@ -28797,7 +28797,7 @@ window.CAST = [
   nickname: "Christine",
   fullName: "Christine Brecht",
   gender: "female",
-  image: "cast/christine_brecht.png",
+  image: "cast/christine_brecht.webp",
 
   shows: ["Big Brother"],
 
@@ -28811,7 +28811,7 @@ window.CAST = [
   nickname: "Nicole",
   fullName: "Nicole Franzel",
   gender: "female",
-  image: "cast/nicole_franzel.png",
+  image: "cast/nicole_franzel.webp",
 
   shows: [
     "Big Brother",
@@ -28831,7 +28831,7 @@ window.CAST = [
   nickname: "Donny",
   fullName: "Donny Thompson",
   gender: "male",
-  image: "cast/donny_thompson.png",
+  image: "cast/donny_thompson.webp",
 
   shows: ["Big Brother"],
 
@@ -28845,7 +28845,7 @@ window.CAST = [
   nickname: "Zach",
   fullName: "Zach Rance",
   gender: "male",
-  image: "cast/zach_rance.png",
+  image: "cast/zach_rance.webp",
 
   shows: ["Big Brother"],
 
@@ -28859,7 +28859,7 @@ window.CAST = [
   nickname: "Hayden",
   fullName: "Hayden Voss",
   gender: "male",
-  image: "cast/hayden_voss.png",
+  image: "cast/hayden_voss.webp",
 
   shows: ["Big Brother"],
 
@@ -28873,7 +28873,7 @@ window.CAST = [
   nickname: "Jocasta",
   fullName: "Jocasta Odom",
   gender: "female",
-  image: "cast/jocasta_odom.png",
+  image: "cast/jocasta_odom.webp",
 
   shows: ["Big Brother"],
 
@@ -28887,7 +28887,7 @@ window.CAST = [
   nickname: "Brittany",
   fullName: "Brittany Martinez",
   gender: "female",
-  image: "cast/brittany_martinez.png",
+  image: "cast/brittany_martinez.webp",
 
   shows: ["Big Brother"],
 
@@ -28901,7 +28901,7 @@ window.CAST = [
   nickname: "Devin",
   fullName: "Devin Shepherd",
   gender: "male",
-  image: "cast/devin_shepherd.png",
+  image: "cast/devin_shepherd.webp",
 
   shows: ["Big Brother"],
 
@@ -28915,7 +28915,7 @@ window.CAST = [
   nickname: "Pao-Pao",
   fullName: "Paola Shea",
   gender: "female",
-  image: "cast/paola_shea.png",
+  image: "cast/paola_shea.webp",
 
   shows: ["Big Brother"],
 
@@ -28929,7 +28929,7 @@ window.CAST = [
   nickname: "Joey",
   fullName: "Joey Van Pelt",
   gender: "female",
-  image: "cast/joey_van_pelt.png",
+  image: "cast/joey_van_pelt.webp",
 
   shows: ["Big Brother"],
 
@@ -28943,7 +28943,7 @@ window.CAST = [
   nickname: "Steven",
   fullName: "Steven Moses",
   gender: "male",
-  image: "cast/steven_moses.png",
+  image: "cast/steven_moses.webp",
 
   shows: ["Big Brother"],
 
@@ -28957,7 +28957,7 @@ window.CAST = [
   nickname: "Vanessa",
   fullName: "Vanessa Rousso",
   gender: "female",
-  image: "cast/vanessa_rousso.png",
+  image: "cast/vanessa_rousso.webp",
 
   shows: ["Big Brother"],
 
@@ -28971,7 +28971,7 @@ window.CAST = [
   nickname: "Johnny Mac",
   fullName: "John McGuire",
   gender: "male",
-  image: "cast/john_mcguire.png",
+  image: "cast/john_mcguire.webp",
 
   shows: ["Big Brother"],
 
@@ -28985,7 +28985,7 @@ window.CAST = [
   nickname: "Austin",
   fullName: "Austin Matelson",
   gender: "male",
-  image: "cast/austin_matelson.png",
+  image: "cast/austin_matelson.webp",
 
   shows: ["Big Brother"],
 
@@ -28999,7 +28999,7 @@ window.CAST = [
   nickname: "James",
   fullName: "James Huling",
   gender: "male",
-  image: "cast/james_huling.png",
+  image: "cast/james_huling.webp",
 
   shows: ["Big Brother"],
 
@@ -29013,7 +29013,7 @@ window.CAST = [
   nickname: "Meg",
   fullName: "Meg Maley",
   gender: "female",
-  image: "cast/meg_maley.png",
+  image: "cast/meg_maley.webp",
 
   shows: ["Big Brother"],
 
@@ -29027,7 +29027,7 @@ window.CAST = [
   nickname: "Becky",
   fullName: "Becky Burgess",
   gender: "female",
-  image: "cast/becky_burgess.png",
+  image: "cast/becky_burgess.webp",
 
   shows: ["Big Brother"],
 
@@ -29041,7 +29041,7 @@ window.CAST = [
   nickname: "Jackie",
   fullName: "Jackie Ibarra",
   gender: "female",
-  image: "cast/jackie_ibarra.png",
+  image: "cast/jackie_ibarra.webp",
 
   shows: [
     "Big Brother",
@@ -29059,7 +29059,7 @@ window.CAST = [
   nickname: "Shelli",
   fullName: "Shelli Poole",
   gender: "female",
-  image: "cast/shelli_poole.png",
+  image: "cast/shelli_poole.webp",
 
   shows: ["Big Brother"],
 
@@ -29073,7 +29073,7 @@ window.CAST = [
   nickname: "Clay",
   fullName: "Clay Honeycutt",
   gender: "male",
-  image: "cast/clay_honeycutt.png",
+  image: "cast/clay_honeycutt.webp",
 
   shows: ["Big Brother"],
 
@@ -29087,7 +29087,7 @@ window.CAST = [
   nickname: "Jason",
   fullName: "Jason Roy",
   gender: "male",
-  image: "cast/jason_roy.png",
+  image: "cast/jason_roy.webp",
 
   shows: [
     "Big Brother",
@@ -29105,7 +29105,7 @@ window.CAST = [
   nickname: "Audrey",
   fullName: "Audrey Middleton",
   gender: "female",
-  image: "cast/audrey_middleton.png",
+  image: "cast/audrey_middleton.webp",
 
   shows: ["Big Brother"],
 
@@ -29119,7 +29119,7 @@ window.CAST = [
   nickname: "Jeff",
   fullName: "Jeff Weldon",
   gender: "male",
-  image: "cast/jeff_weldon.png",
+  image: "cast/jeff_weldon.webp",
 
   shows: [
     "Big Brother",
@@ -29137,7 +29137,7 @@ window.CAST = [
   nickname: "Jace",
   fullName: "Jace Agolli",
   gender: "male",
-  image: "cast/jace_agolli.png",
+  image: "cast/jace_agolli.webp",
 
   shows: ["Big Brother"],
 
@@ -29151,7 +29151,7 @@ window.CAST = [
   nickname: "Paul",
   fullName: "Paul Abrahamian",
   gender: "male",
-  image: "cast/paul_abrahamian.png",
+  image: "cast/paul_abrahamian.webp",
 
   shows: [
     "Big Brother",
@@ -29169,7 +29169,7 @@ window.CAST = [
   nickname: "Corey",
   fullName: "Corey Brooks",
   gender: "male",
-  image: "cast/corey_brooks.png",
+  image: "cast/corey_brooks.webp",
 
   shows: [
     "Big Brother",
@@ -29187,7 +29187,7 @@ window.CAST = [
   nickname: "Michelle",
   fullName: "Michelle Meyer",
   gender: "female",
-  image: "cast/michelle_meyer.png",
+  image: "cast/michelle_meyer.webp",
 
   shows: ["Big Brother"],
 
@@ -29201,7 +29201,7 @@ window.CAST = [
   nickname: "Bridgette",
   fullName: "Bridgette Dunning",
   gender: "female",
-  image: "cast/bridgette_dunning.png",
+  image: "cast/bridgette_dunning.webp",
 
   shows: ["Big Brother"],
 
@@ -29215,7 +29215,7 @@ window.CAST = [
   nickname: "Zakiya",
   fullName: "Zakiya Everette",
   gender: "female",
-  image: "cast/zakiya_everette.png",
+  image: "cast/zakiya_everette.webp",
 
   shows: ["Big Brother"],
 
@@ -29229,7 +29229,7 @@ window.CAST = [
   nickname: "Tiffany",
   fullName: "Tiffany Rousso",
   gender: "female",
-  image: "cast/tiffany_rousso.png",
+  image: "cast/tiffany_rousso.webp",
 
   shows: ["Big Brother"],
 
@@ -29243,7 +29243,7 @@ window.CAST = [
   nickname: "Bronte",
   fullName: "Bronte D'Acquisto",
   gender: "female",
-  image: "cast/bronte_dacquisto.png",
+  image: "cast/bronte_dacquisto.webp",
 
   shows: ["Big Brother"],
 
@@ -29257,7 +29257,7 @@ window.CAST = [
   nickname: "Glenn",
   fullName: "Glenn Garcia",
   gender: "male",
-  image: "cast/glenn_garcia.png",
+  image: "cast/glenn_garcia.webp",
 
   shows: ["Big Brother"],
 
@@ -29271,7 +29271,7 @@ window.CAST = [
   nickname: "Christmas",
   fullName: "Christmas Abbott",
   gender: "female",
-  image: "cast/christmas_abbott.png",
+  image: "cast/christmas_abbott.webp",
 
   shows: ["Big Brother"],
 
@@ -29285,7 +29285,7 @@ window.CAST = [
   nickname: "Kevin",
   fullName: "Kevin Schlehuber",
   gender: "male",
-  image: "cast/kevin_schlehuber.png",
+  image: "cast/kevin_schlehuber.webp",
 
   shows: ["Big Brother"],
 
@@ -29299,7 +29299,7 @@ window.CAST = [
   nickname: "Alex",
   fullName: "Alex Ow",
   gender: "female",
-  image: "cast/alex_ow.png",
+  image: "cast/alex_ow.webp",
 
   shows: ["Big Brother"],
 
@@ -29313,7 +29313,7 @@ window.CAST = [
   nickname: "Raven",
   fullName: "Raven Walton",
   gender: "female",
-  image: "cast/raven_walton.png",
+  image: "cast/raven_walton.webp",
 
   shows: ["Big Brother"],
 
@@ -29327,7 +29327,7 @@ window.CAST = [
   nickname: "Jason",
   fullName: "Jason Dent",
   gender: "male",
-  image: "cast/jason_dent.png",
+  image: "cast/jason_dent.webp",
 
   shows: ["Big Brother"],
 
@@ -29341,7 +29341,7 @@ window.CAST = [
   nickname: "Matt",
   fullName: "Matt Clines",
   gender: "male",
-  image: "cast/matt_clines.png",
+  image: "cast/matt_clines.webp",
 
   shows: ["Big Brother"],
 
@@ -29355,7 +29355,7 @@ window.CAST = [
   nickname: "Mark",
   fullName: "Mark Jansen",
   gender: "male",
-  image: "cast/mark_jansen.png",
+  image: "cast/mark_jansen.webp",
 
   shows: [
     "Big Brother",
@@ -29373,7 +29373,7 @@ window.CAST = [
   nickname: "Elena",
   fullName: "Elena Davies",
   gender: "female",
-  image: "cast/elena_davies.png",
+  image: "cast/elena_davies.webp",
 
   shows: [
     "Big Brother",
@@ -29391,7 +29391,7 @@ window.CAST = [
   nickname: "Cody",
   fullName: "Cody Nickson",
   gender: "male",
-  image: "cast/cody_nickson.png",
+  image: "cast/cody_nickson.webp",
 
   shows: [
     "Big Brother",
@@ -29409,7 +29409,7 @@ window.CAST = [
   nickname: "Jessica",
   fullName: "Jessica Graf",
   gender: "female",
-  image: "cast/jessica_graf.png",
+  image: "cast/jessica_graf.webp",
 
   shows: [
     "Big Brother",
@@ -29427,7 +29427,7 @@ window.CAST = [
   nickname: "Ramses",
   fullName: "Ramses Soto",
   gender: "male",
-  image: "cast/ramses_soto.png",
+  image: "cast/ramses_soto.webp",
 
   shows: ["Big Brother"],
 
@@ -29441,7 +29441,7 @@ window.CAST = [
   nickname: "Dominique",
   fullName: "Dominique Cooper",
   gender: "female",
-  image: "cast/dominique_cooper.png",
+  image: "cast/dominique_cooper.webp",
 
   shows: ["Big Brother"],
 
@@ -29455,7 +29455,7 @@ window.CAST = [
   nickname: "Jillian",
   fullName: "Jillian Parker",
   gender: "female",
-  image: "cast/jillian_parker.png",
+  image: "cast/jillian_parker.webp",
 
   shows: ["Big Brother"],
 
@@ -29469,7 +29469,7 @@ window.CAST = [
   nickname: "Megan",
   fullName: "Megan Lowder",
   gender: "female",
-  image: "cast/megan_lowder.png",
+  image: "cast/megan_lowder.webp",
 
   shows: ["Big Brother"],
 
@@ -29483,7 +29483,7 @@ window.CAST = [
   nickname: "Cameron",
   fullName: "Cameron Heard",
   gender: "male",
-  image: "cast/cameron_heard.png",
+  image: "cast/cameron_heard.webp",
 
   shows: ["Big Brother"],
 
@@ -29497,7 +29497,7 @@ window.CAST = [
   nickname: "Tyler",
   fullName: "Tyler Crispen",
   gender: "male",
-  image: "cast/tyler_crispen.png",
+  image: "cast/tyler_crispen.webp",
 
   shows: [
     "Big Brother",
@@ -29515,7 +29515,7 @@ window.CAST = [
   nickname: "JC",
   fullName: "JC Mounduix",
   gender: "male",
-  image: "cast/jc_mounduix.png",
+  image: "cast/jc_mounduix.webp",
 
   shows: ["Big Brother"],
 
@@ -29529,7 +29529,7 @@ window.CAST = [
   nickname: "Angela",
   fullName: "Angela Rummans",
   gender: "female",
-  image: "cast/angela_rummans.png",
+  image: "cast/angela_rummans.webp",
 
   shows: [
     "Big Brother",
@@ -29547,7 +29547,7 @@ window.CAST = [
   nickname: "Sam",
   fullName: "Samantha Bledsoe",
   gender: "female",
-  image: "cast/samantha_bledsoe.png",
+  image: "cast/samantha_bledsoe.webp",
 
   shows: ["Big Brother"],
 
@@ -29561,7 +29561,7 @@ window.CAST = [
   nickname: "Brett",
   fullName: "Brett Robinson",
   gender: "male",
-  image: "cast/brett_robinson.png",
+  image: "cast/brett_robinson.webp",
 
   shows: [
     "Big Brother"
@@ -29577,7 +29577,7 @@ window.CAST = [
   nickname: "Haleigh",
   fullName: "Haleigh Broucher",
   gender: "female",
-  image: "cast/haleigh_broucher.png",
+  image: "cast/haleigh_broucher.webp",
 
   shows: ["Big Brother"],
 
@@ -29591,7 +29591,7 @@ window.CAST = [
   nickname: "Scottie",
   fullName: "Scottie Salton",
   gender: "male",
-  image: "cast/scottie_salton.png",
+  image: "cast/scottie_salton.webp",
 
   shows: ["Big Brother"],
 
@@ -29605,7 +29605,7 @@ window.CAST = [
   nickname: "Rockstar",
   fullName: "Rockstar Lantry",
   gender: "female",
-  image: "cast/angie_lantry.png",
+  image: "cast/angie_lantry.webp",
 
   shows: ["Big Brother"],
 
@@ -29619,7 +29619,7 @@ window.CAST = [
   nickname: "Rachel",
   fullName: "Rachel Swindler",
   gender: "female",
-  image: "cast/rachel_swindler.png",
+  image: "cast/rachel_swindler.webp",
 
   shows: ["Big Brother"],
 
@@ -29633,7 +29633,7 @@ window.CAST = [
   nickname: "Kaitlyn",
   fullName: "Kaitlyn Herman",
   gender: "female",
-  image: "cast/kaitlyn_herman.png",
+  image: "cast/kaitlyn_herman.webp",
 
   shows: ["Big Brother"],
 
@@ -29647,7 +29647,7 @@ window.CAST = [
   nickname: "Winston",
   fullName: "Winston Hines",
   gender: "male",
-  image: "cast/winston_hines.png",
+  image: "cast/winston_hines.webp",
 
   shows: ["Big Brother"],
 
@@ -29661,7 +29661,7 @@ window.CAST = [
   nickname: "Steve",
   fullName: "Steve Arienta",
   gender: "male",
-  image: "cast/steve_arienta.png",
+  image: "cast/steve_arienta.webp",
 
   shows: ["Big Brother"],
 
@@ -29675,7 +29675,7 @@ window.CAST = [
   nickname: "Michie",
   fullName: "Jackson Michie",
   gender: "male",
-  image: "cast/jackson_michie.png",
+  image: "cast/jackson_michie.webp",
 
   shows: ["Big Brother"],
 
@@ -29689,7 +29689,7 @@ window.CAST = [
   nickname: "Holly",
   fullName: "Holly Allen",
   gender: "female",
-  image: "cast/holly_allen.png",
+  image: "cast/holly_allen.webp",
 
   shows: ["Big Brother"],
 
@@ -29703,7 +29703,7 @@ window.CAST = [
   nickname: "Nicole",
   fullName: "Nicole Anthony",
   gender: "female",
-  image: "cast/nicole_anthony.png",
+  image: "cast/nicole_anthony.webp",
 
   shows: ["Big Brother"],
 
@@ -29717,7 +29717,7 @@ window.CAST = [
   nickname: "Cliff",
   fullName: "Cliff Hogg",
   gender: "male",
-  image: "cast/cliff_hogg.png",
+  image: "cast/cliff_hogg.webp",
 
   shows: ["Big Brother"],
 
@@ -29731,7 +29731,7 @@ window.CAST = [
   nickname: "Christie",
   fullName: "Christie Murphy",
   gender: "female",
-  image: "cast/christie_murphy.png",
+  image: "cast/christie_murphy.webp",
 
   shows: ["Big Brother"],
 
@@ -29745,7 +29745,7 @@ window.CAST = [
   nickname: "Jess",
   fullName: "Jessica Milagros",
   gender: "female",
-  image: "cast/jessica_milagros.png",
+  image: "cast/jessica_milagros.webp",
 
   shows: ["Big Brother"],
 
@@ -29759,7 +29759,7 @@ window.CAST = [
   nickname: "Nick",
   fullName: "Nick Maccarone",
   gender: "male",
-  image: "cast/nick_maccarone.png",
+  image: "cast/nick_maccarone.webp",
 
   shows: ["Big Brother"],
 
@@ -29773,7 +29773,7 @@ window.CAST = [
   nickname: "Kat",
   fullName: "Kathryn Dunn",
   gender: "female",
-  image: "cast/kathryn_dunn.png",
+  image: "cast/kathryn_dunn.webp",
 
   shows: [
     "Big Brother",
@@ -29793,7 +29793,7 @@ window.CAST = [
   nickname: "Jack",
   fullName: "Jack Matthews",
   gender: "male",
-  image: "cast/jack_matthews.png",
+  image: "cast/jack_matthews.webp",
 
   shows: ["Big Brother"],
 
@@ -29807,7 +29807,7 @@ window.CAST = [
   nickname: "Sam",
   fullName: "Sam Smith",
   gender: "male",
-  image: "cast/sam_smith.png",
+  image: "cast/sam_smith.webp",
 
   shows: ["Big Brother"],
 
@@ -29821,7 +29821,7 @@ window.CAST = [
   nickname: "Bella",
   fullName: "Isabella Wang",
   gender: "female",
-  image: "cast/isabella_wang.png",
+  image: "cast/isabella_wang.webp",
 
   shows: ["Big Brother"],
 
@@ -29835,7 +29835,7 @@ window.CAST = [
   nickname: "Kemi",
   fullName: "Kemi Fakunle",
   gender: "female",
-  image: "cast/kemi_fakunle.png",
+  image: "cast/kemi_fakunle.webp",
 
   shows: ["Big Brother"],
 
@@ -29849,7 +29849,7 @@ window.CAST = [
   nickname: "Ovi",
   fullName: "Ovi Kabir",
   gender: "male",
-  image: "cast/ovi_kabir.png",
+  image: "cast/ovi_kabir.webp",
 
   shows: ["Big Brother"],
 
@@ -29863,7 +29863,7 @@ window.CAST = [
   nickname: "David",
   fullName: "David Alexander",
   gender: "male",
-  image: "cast/david_alexander.png",
+  image: "cast/david_alexander.webp",
 
   shows: [
     "Big Brother",
@@ -29881,7 +29881,7 @@ window.CAST = [
   nickname: "Travis",
   fullName: "Travis Long",
   gender: "male",
-  image: "cast/travis_long.png",
+  image: "cast/travis_long.webp",
 
   shows: ["Big Brother"],
 
@@ -29895,7 +29895,7 @@ window.CAST = [
   nickname: "Frenchie",
   fullName: "Brandon French",
   gender: "male",
-  image: "cast/brandon_french.png",
+  image: "cast/brandon_french.webp",
 
   shows: ["Big Brother"],
 
@@ -29909,7 +29909,7 @@ window.CAST = [
   nickname: "Brent",
   fullName: "Brent Champagne",
   gender: "male",
-  image: "cast/brent_champagne.png",
+  image: "cast/brent_champagne.webp",
 
   shows: ["Big Brother"],
 
@@ -29923,7 +29923,7 @@ window.CAST = [
   nickname: "Whitney",
   fullName: "Whitney Williams",
   gender: "female",
-  image: "cast/whitney_williams.png",
+  image: "cast/whitney_williams.webp",
 
   shows: ["Big Brother"],
 
@@ -29937,7 +29937,7 @@ window.CAST = [
   nickname: "Christian",
   fullName: "Christian Birkenberger",
   gender: "male",
-  image: "cast/christian_birkenberger.png",
+  image: "cast/christian_birkenberger.webp",
 
   shows: ["Big Brother"],
 
@@ -29951,7 +29951,7 @@ window.CAST = [
   nickname: "Britini",
   fullName: "Britini D'Angelo",
   gender: "female",
-  image: "cast/britini_dangelo.png",
+  image: "cast/britini_dangelo.webp",
 
   shows: ["Big Brother"],
 
@@ -29965,7 +29965,7 @@ window.CAST = [
   nickname: "Derek X",
   fullName: "Derek Xiao",
   gender: "male",
-  image: "cast/derek_xiao.png",
+  image: "cast/derek_xiao.webp",
 
   shows: [
     "Big Brother",
@@ -29985,7 +29985,7 @@ window.CAST = [
   nickname: "Sarah Beth",
   fullName: "Sarah Steagall",
   gender: "female",
-  image: "cast/sarah_steagall.png",
+  image: "cast/sarah_steagall.webp",
 
   shows: ["Big Brother"],
 
@@ -29999,7 +29999,7 @@ window.CAST = [
   nickname: "Claire",
   fullName: "Claire Rehfuss",
   gender: "female",
-  image: "cast/claire_rehfuss.png",
+  image: "cast/claire_rehfuss.webp",
 
   shows: [
     "Big Brother",
@@ -30017,7 +30017,7 @@ window.CAST = [
   nickname: "Alyssa",
   fullName: "Alyssa Lopez",
   gender: "female",
-  image: "cast/alyssa_lopez.png",
+  image: "cast/alyssa_lopez.webp",
 
   shows: [
     "Big Brother",
@@ -30035,7 +30035,7 @@ window.CAST = [
   nickname: "Tiffany",
   fullName: "Tiffany Mitchell",
   gender: "female",
-  image: "cast/tiffany_mitchell.png",
+  image: "cast/tiffany_mitchell.webp",
 
   shows: [
     "Big Brother",
@@ -30055,7 +30055,7 @@ window.CAST = [
   nickname: "Hannah",
   fullName: "Hannah Chaddha",
   gender: "female",
-  image: "cast/hannah_chaddha.png",
+  image: "cast/hannah_chaddha.webp",
 
   shows: [
     "Big Brother",
@@ -30073,7 +30073,7 @@ window.CAST = [
   nickname: "Azah",
   fullName: "Azah Awasum",
   gender: "female",
-  image: "cast/azah_awasum.png",
+  image: "cast/azah_awasum.webp",
 
   shows: [
     "Big Brother",
@@ -30091,7 +30091,7 @@ window.CAST = [
   nickname: "Big D",
   fullName: "Derek Frazier",
   gender: "male",
-  image: "cast/derek_frazier.png",
+  image: "cast/derek_frazier.webp",
 
   shows: ["Big Brother"],
 
@@ -30105,7 +30105,7 @@ window.CAST = [
   nickname: "Xavier",
   fullName: "Xavier Prather",
   gender: "male",
-  image: "cast/xavier_prather.png",
+  image: "cast/xavier_prather.webp",
 
   shows: [
     "Big Brother",
@@ -30125,7 +30125,7 @@ window.CAST = [
   nickname: "Paloma",
   fullName: "Paloma Aguilar",
   gender: "female",
-  image: "cast/paloma_aguilar.png",
+  image: "cast/paloma_aguilar.webp",
 
   shows: ["Big Brother"],
 
@@ -30139,7 +30139,7 @@ window.CAST = [
   nickname: "Pooch",
   fullName: "Joe Pucciarelli",
   gender: "male",
-  image: "cast/joe_pucciarelli.png",
+  image: "cast/joe_pucciarelli.webp",
 
   shows: ["Big Brother"],
 
@@ -30153,7 +30153,7 @@ window.CAST = [
   nickname: "Ameerah",
   fullName: "Ameerah Jones",
   gender: "female",
-  image: "cast/ameerah_jones.png",
+  image: "cast/ameerah_jones.webp",
 
   shows: [
     "Big Brother",
@@ -30171,7 +30171,7 @@ window.CAST = [
   nickname: "Nicole",
   fullName: "Nicole Layog",
   gender: "female",
-  image: "cast/nicole_layog.png",
+  image: "cast/nicole_layog.webp",
 
   shows: ["Big Brother"],
 
@@ -30185,7 +30185,7 @@ window.CAST = [
   nickname: "Daniel",
   fullName: "Daniel Durston",
   gender: "male",
-  image: "cast/daniel_durston.png",
+  image: "cast/daniel_durston.webp",
 
   shows: ["Big Brother"],
 
@@ -30199,7 +30199,7 @@ window.CAST = [
   nickname: "Indy",
   fullName: "Indiana Santos",
   gender: "female",
-  image: "cast/indiana_santos.png",
+  image: "cast/indiana_santos.webp",
 
   shows: ["Big Brother"],
 
@@ -30213,7 +30213,7 @@ window.CAST = [
   nickname: "Jasmine",
   fullName: "Jasmine Davis",
   gender: "female",
-  image: "cast/jasmine_davis.png",
+  image: "cast/jasmine_davis.webp",
 
   shows: ["Big Brother"],
 
@@ -30227,7 +30227,7 @@ window.CAST = [
   nickname: "Joseph",
   fullName: "Joseph Abdin",
   gender: "male",
-  image: "cast/joseph_abdin.png",
+  image: "cast/joseph_abdin.webp",
 
   shows: [
     "Big Brother",
@@ -30245,7 +30245,7 @@ window.CAST = [
   nickname: "Kyle",
   fullName: "Kyle Capener",
   gender: "male",
-  image: "cast/kyle_capener.png",
+  image: "cast/kyle_capener.webp",
 
   shows: ["Big Brother"],
 
@@ -30259,7 +30259,7 @@ window.CAST = [
   nickname: "Terrance",
   fullName: "Terrance Higgins",
   gender: "male",
-  image: "cast/terrance_higgins.png",
+  image: "cast/terrance_higgins.webp",
 
   shows: ["Big Brother"],
 
@@ -30273,7 +30273,7 @@ window.CAST = [
   nickname: "Michael",
   fullName: "Michael Bruner",
   gender: "male",
-  image: "cast/michael_bruner.png",
+  image: "cast/michael_bruner.webp",
 
   shows: ["Big Brother"],
 
@@ -30287,7 +30287,7 @@ window.CAST = [
   nickname: "Alyssa",
   fullName: "Alyssa Snider",
   gender: "female",
-  image: "cast/alyssa_snider.png",
+  image: "cast/alyssa_snider.webp",
 
   shows: [
     "Big Brother",
@@ -30305,7 +30305,7 @@ window.CAST = [
   nickname: "Brittany",
   fullName: "Brittany Hoopes",
   gender: "female",
-  image: "cast/brittany_hoopes.png",
+  image: "cast/brittany_hoopes.webp",
 
   shows: ["Big Brother"],
 
@@ -30319,7 +30319,7 @@ window.CAST = [
   nickname: "Turner",
   fullName: "Matthew Turner",
   gender: "male",
-  image: "cast/matthew_turner.png",
+  image: "cast/matthew_turner.webp",
 
   shows: [
     "Big Brother",
@@ -30337,7 +30337,7 @@ window.CAST = [
   nickname: "Monte",
   fullName: "Monte Taylor",
   gender: "male",
-  image: "cast/monte_taylor.png",
+  image: "cast/monte_taylor.webp",
 
   shows: [
     "Big Brother",
@@ -30355,7 +30355,7 @@ window.CAST = [
   nickname: "Taylor",
   fullName: "Taylor Hale",
   gender: "female",
-  image: "cast/taylor_hale.png",
+  image: "cast/taylor_hale.webp",
 
   shows: [
     "Big Brother",
@@ -30375,7 +30375,7 @@ window.CAST = [
   nickname: "Kirsten",
   fullName: "Kirsten Elwin",
   gender: "female",
-  image: "cast/kirsten_elwin.png",
+  image: "cast/kirsten_elwin.webp",
 
   shows: ["Big Brother"],
 
@@ -30389,7 +30389,7 @@ window.CAST = [
   nickname: "Reilly",
   fullName: "Reilly Smedley",
   gender: "female",
-  image: "cast/reilly_smedley.png",
+  image: "cast/reilly_smedley.webp",
 
   shows: [
     "Big Brother",
@@ -30407,7 +30407,7 @@ window.CAST = [
   nickname: "Hisam",
   fullName: "Hisam Goueli",
   gender: "male",
-  image: "cast/hisam_goueli.png",
+  image: "cast/hisam_goueli.webp",
 
   shows: ["Big Brother"],
 
@@ -30421,7 +30421,7 @@ window.CAST = [
   nickname: "Red",
   fullName: "Red Utley",
   gender: "male",
-  image: "cast/michael_utley.png",
+  image: "cast/michael_utley.webp",
 
   shows: ["Big Brother"],
 
@@ -30435,7 +30435,7 @@ window.CAST = [
   nickname: "Izzy",
   fullName: "Isabel Gleicher",
   gender: "female",
-  image: "cast/isabel_gleicher.png",
+  image: "cast/isabel_gleicher.webp",
 
   shows: [
     "Big Brother",
@@ -30453,7 +30453,7 @@ window.CAST = [
   nickname: "Jared",
   fullName: "Jared Fields",
   gender: "male",
-  image: "cast/jared_fields.png",
+  image: "cast/jared_fields.webp",
 
   shows: ["Big Brother"],
 
@@ -30467,7 +30467,7 @@ window.CAST = [
   nickname: "Meme",
   fullName: "Mecole Hayes",
   gender: "female",
-  image: "cast/mecole_hayes.png",
+  image: "cast/mecole_hayes.webp",
 
   shows: ["Big Brother"],
 
@@ -30481,7 +30481,7 @@ window.CAST = [
   nickname: "Cameron",
   fullName: "Cameron Hardin",
   gender: "male",
-  image: "cast/cameron_hardin.png",
+  image: "cast/cameron_hardin.webp",
 
   shows: [
     "Big Brother",
@@ -30499,7 +30499,7 @@ window.CAST = [
   nickname: "Cory",
   fullName: "Cory Wurtenberger",
   gender: "male",
-  image: "cast/cory_wurtenberger.png",
+  image: "cast/cory_wurtenberger.webp",
 
   shows: ["Big Brother"],
 
@@ -30513,7 +30513,7 @@ window.CAST = [
   nickname: "Blue",
   fullName: "Blue Kim",
   gender: "female",
-  image: "cast/blue_kim.png",
+  image: "cast/blue_kim.webp",
 
   shows: [
     "Big Brother",
@@ -30531,7 +30531,7 @@ window.CAST = [
   nickname: "America",
   fullName: "America Lopez",
   gender: "female",
-  image: "cast/america_lopez.png",
+  image: "cast/america_lopez.webp",
 
   shows: [
     "Big Brother",
@@ -30549,7 +30549,7 @@ window.CAST = [
   nickname: "Mama Fe",
   fullName: "Felicia Cannon",
   gender: "female",
-  image: "cast/felicia_cannon.png",
+  image: "cast/felicia_cannon.webp",
 
   shows: ["Big Brother"],
 
@@ -30563,7 +30563,7 @@ window.CAST = [
   nickname: "Bowie",
   fullName: "Bowie Jane Ball",
   gender: "female",
-  image: "cast/bowie_jane_ball.png",
+  image: "cast/bowie_jane_ball.webp",
 
   shows: ["Big Brother"],
 
@@ -30577,7 +30577,7 @@ window.CAST = [
   nickname: "Matt",
   fullName: "Matthew Klotz",
   gender: "male",
-  image: "cast/matthew_klotz.png",
+  image: "cast/matthew_klotz.webp",
 
   shows: ["Big Brother"],
 
@@ -30591,7 +30591,7 @@ window.CAST = [
   nickname: "Jag",
   fullName: "Jagateshwar Bains",
   gender: "male",
-  image: "cast/jagateshwar_bains.png",
+  image: "cast/jagateshwar_bains.webp",
 
   shows: [
     "Big Brother",
@@ -30609,7 +30609,7 @@ window.CAST = [
   nickname: "Matt",
   fullName: "Matt Hardeman",
   gender: "male",
-  image: "cast/matt_hardeman.png",
+  image: "cast/matt_hardeman.webp",
 
   shows: ["Big Brother"],
 
@@ -30623,7 +30623,7 @@ window.CAST = [
   nickname: "Lisa",
   fullName: "Lisa Weintraub",
   gender: "female",
-  image: "cast/lisa_weintraub.png",
+  image: "cast/lisa_weintraub.webp",
 
   shows: ["Big Brother"],
 
@@ -30637,7 +30637,7 @@ window.CAST = [
   nickname: "Kenney",
   fullName: "Kenney Kelley",
   gender: "male",
-  image: "cast/kenney_kelley.png",
+  image: "cast/kenney_kelley.webp",
 
   shows: ["Big Brother"],
 
@@ -30651,7 +30651,7 @@ window.CAST = [
   nickname: "Cedric",
   fullName: "Cedric Hodges",
   gender: "male",
-  image: "cast/cedric_hodges.png",
+  image: "cast/cedric_hodges.webp",
 
   shows: [
     "Big Brother",
@@ -30669,7 +30669,7 @@ window.CAST = [
   nickname: "Brooklyn",
   fullName: "Brooklyn Rivera",
   gender: "female",
-  image: "cast/brooklyn_rivera.png",
+  image: "cast/brooklyn_rivera.webp",
 
   shows: ["Big Brother"],
 
@@ -30683,7 +30683,7 @@ window.CAST = [
   nickname: "Tucker",
   fullName: "Tucker Des Lauriers",
   gender: "male",
-  image: "cast/tucker_des_lauriers.png",
+  image: "cast/tucker_des_lauriers.webp",
 
   shows: [
     "Big Brother",
@@ -30701,7 +30701,7 @@ window.CAST = [
   nickname: "Joseph",
   fullName: "Joseph Rodriguez",
   gender: "male",
-  image: "cast/joseph_rodriguez.png",
+  image: "cast/joseph_rodriguez.webp",
 
   shows: ["Big Brother"],
 
@@ -30715,7 +30715,7 @@ window.CAST = [
   nickname: "Quinn",
   fullName: "Quinn Martin",
   gender: "male",
-  image: "cast/quinn_martin.png",
+  image: "cast/quinn_martin.webp",
 
   shows: ["Big Brother"],
 
@@ -30729,7 +30729,7 @@ window.CAST = [
   nickname: "T'Kor",
   fullName: "T'Kor Clottey",
   gender: "female",
-  image: "cast/tkor_clottey.png",
+  image: "cast/tkor_clottey.webp",
 
   shows: ["Big Brother"],
 
@@ -30743,7 +30743,7 @@ window.CAST = [
   nickname: "Leah",
   fullName: "Leah Peters",
   gender: "female",
-  image: "cast/leah_peters.png",
+  image: "cast/leah_peters.webp",
 
   shows: ["Big Brother"],
 
@@ -30757,7 +30757,7 @@ window.CAST = [
   nickname: "Angela",
   fullName: "Angela Murray",
   gender: "female",
-  image: "cast/angela_murray.png",
+  image: "cast/angela_murray.webp",
 
   shows: [
     "Big Brother",
@@ -30775,7 +30775,7 @@ window.CAST = [
   nickname: "Kimo",
   fullName: "Kimo Apaka",
   gender: "male",
-  image: "cast/kimo_apaka.png",
+  image: "cast/kimo_apaka.webp",
 
   shows: ["Big Brother"],
 
@@ -30789,7 +30789,7 @@ window.CAST = [
   nickname: "Rubina",
   fullName: "Rubina Bernabe",
   gender: "female",
-  image: "cast/rubina_bernabe.png",
+  image: "cast/rubina_bernabe.webp",
 
   shows: [
     "Big Brother",
@@ -30807,7 +30807,7 @@ window.CAST = [
   nickname: "Cam",
   fullName: "Cameron Sullivan-Brown",
   gender: "male",
-  image: "cast/cameron_sullivan_brown.png",
+  image: "cast/cameron_sullivan_brown.webp",
 
   shows: ["Big Brother"],
 
@@ -30821,7 +30821,7 @@ window.CAST = [
   nickname: "MJ",
   fullName: "Makensy Manbeck",
   gender: "female",
-  image: "cast/makensy_manbeck.png",
+  image: "cast/makensy_manbeck.webp",
 
   shows: ["Big Brother"],
 
@@ -30835,7 +30835,7 @@ window.CAST = [
   nickname: "Chelsie",
   fullName: "Chelsie Baham",
   gender: "female",
-  image: "cast/chelsie_baham.png",
+  image: "cast/chelsie_baham.webp",
 
   shows: [
     "Big Brother",
@@ -30853,7 +30853,7 @@ window.CAST = [
   nickname: "Zae",
   fullName: "Zae Frederich",
   gender: "male",
-  image: "cast/isaiah_frederich.png",
+  image: "cast/isaiah_frederich.webp",
 
   shows: ["Big Brother"],
 
@@ -30867,7 +30867,7 @@ window.CAST = [
   nickname: "Amy",
   fullName: "Amy Bingham",
   gender: "female",
-  image: "cast/amy_bingham.png",
+  image: "cast/amy_bingham.webp",
 
   shows: ["Big Brother"],
 
@@ -30881,7 +30881,7 @@ window.CAST = [
   nickname: "Adrian",
   fullName: "Adrian Rocha",
   gender: "male",
-  image: "cast/adrian_rocha.png",
+  image: "cast/adrian_rocha.webp",
 
   shows: ["Big Brother"],
 
@@ -30895,7 +30895,7 @@ window.CAST = [
   nickname: "Jimmy",
   fullName: "Jimmy Heagerty",
   gender: "male",
-  image: "cast/jimmy_heagerty.png",
+  image: "cast/jimmy_heagerty.webp",
 
   shows: ["Big Brother"],
 
@@ -30909,7 +30909,7 @@ window.CAST = [
   nickname: "Zach",
   fullName: "Zach Cornell",
   gender: "male",
-  image: "cast/zach_cornell.png",
+  image: "cast/zach_cornell.webp",
 
   shows: ["Big Brother"],
 
@@ -30923,7 +30923,7 @@ window.CAST = [
   nickname: "Rylie",
   fullName: "Rylie Jeffries",
   gender: "male",
-  image: "cast/rylie_jeffries.png",
+  image: "cast/rylie_jeffries.webp",
 
   shows: ["Big Brother"],
 
@@ -30937,7 +30937,7 @@ window.CAST = [
   nickname: "Katherine",
   fullName: "Katherine Woodman",
   gender: "female",
-  image: "cast/katherine_woodman.png",
+  image: "cast/katherine_woodman.webp",
 
   shows: ["Big Brother"],
 
@@ -30951,7 +30951,7 @@ window.CAST = [
   nickname: "Mickey",
   fullName: "Mickey Lee",
   gender: "female",
-  image: "cast/mickey_lee.png",
+  image: "cast/mickey_lee.webp",
 
   shows: ["Big Brother"],
 
@@ -30965,7 +30965,7 @@ window.CAST = [
   nickname: "Will",
   fullName: "Will Williams",
   gender: "male",
-  image: "cast/cliffton_williams.png",
+  image: "cast/cliffton_williams.webp",
 
   shows: ["Big Brother"],
 
@@ -30979,7 +30979,7 @@ window.CAST = [
   nickname: "Kelley",
   fullName: "Kelley Jorgensen",
   gender: "female",
-  image: "cast/kelley_jorgensen.png",
+  image: "cast/kelley_jorgensen.webp",
 
   shows: ["Big Brother"],
 
@@ -30993,7 +30993,7 @@ window.CAST = [
   nickname: "Lauren",
   fullName: "Lauren Domingue",
   gender: "female",
-  image: "cast/lauren_domingue.png",
+  image: "cast/lauren_domingue.webp",
 
   shows: ["Big Brother"],
 
@@ -31007,7 +31007,7 @@ window.CAST = [
   nickname: "Keanu",
   fullName: "Keanu Soto",
   gender: "male",
-  image: "cast/keanu_soto.png",
+  image: "cast/keanu_soto.webp",
 
   shows: [
     "Big Brother",
@@ -31025,7 +31025,7 @@ window.CAST = [
   nickname: "Ava",
   fullName: "Ava Pearl",
   gender: "female",
-  image: "cast/ava_pearl.png",
+  image: "cast/ava_pearl.webp",
 
   shows: ["Big Brother"],
 
@@ -31039,7 +31039,7 @@ window.CAST = [
   nickname: "Morgan",
   fullName: "Morgan Pope",
   gender: "female",
-  image: "cast/morgan_pope.png",
+  image: "cast/morgan_pope.webp",
 
   shows: ["Big Brother"],
 
@@ -31053,7 +31053,7 @@ window.CAST = [
   nickname: "Vince",
   fullName: "Vince Panaro",
   gender: "male",
-  image: "cast/vince_panaro.png",
+  image: "cast/vince_panaro.webp",
 
   shows: ["Big Brother"],
 
@@ -31067,7 +31067,7 @@ window.CAST = [
   nickname: "Ashley",
   fullName: "Ashley Hollis",
   gender: "female",
-  image: "cast/ashley_hollis.png",
+  image: "cast/ashley_hollis.webp",
 
   shows: ["Big Brother"],
 
@@ -31081,7 +31081,7 @@ window.CAST = [
   nickname: "Ashley",
   fullName: "Ashley Trail",
   gender: "female",
-  image: "cast/ashley_trail.png",
+  image: "cast/ashley_trail.webp",
 
   shows: ["Big Brother"],
 
@@ -31095,7 +31095,7 @@ window.CAST = [
   nickname: "Barrett",
   fullName: "Barrett Pfeiffer",
   gender: "male",
-  image: "cast/barrett_pfeiffer.png",
+  image: "cast/barrett_pfeiffer.webp",
 
   shows: ["Big Brother"],
 
@@ -31109,7 +31109,7 @@ window.CAST = [
   nickname: "Chuk",
   fullName: "Chuk Anyanwu",
   gender: "male",
-  image: "cast/chuk_anyanwu.png",
+  image: "cast/chuk_anyanwu.webp",
 
   shows: ["Big Brother"],
 
@@ -31123,7 +31123,7 @@ window.CAST = [
   nickname: "Drew",
   fullName: "Drew Campbell",
   gender: "male",
-  image: "cast/drew_campbell.png",
+  image: "cast/drew_campbell.webp",
 
   shows: ["Big Brother"],
 
@@ -31137,7 +31137,7 @@ window.CAST = [
   nickname: "Haley",
   fullName: "Haley Thogmartin",
   gender: "female",
-  image: "cast/haley_thogmartin.png",
+  image: "cast/haley_thogmartin.webp",
 
   shows: ["Big Brother"],
 
@@ -31151,7 +31151,7 @@ window.CAST = [
   nickname: "Jason",
   fullName: "Jason De Puy",
   gender: "male",
-  image: "cast/jason_de_puy.png",
+  image: "cast/jason_de_puy.webp",
 
   shows: [
     "Big Brother"
@@ -31167,7 +31167,7 @@ window.CAST = [
   nickname: "Kamu",
   fullName: "Kamuela Kirk",
   gender: "male",
-  image: "cast/kamuela_kirk.png",
+  image: "cast/kamuela_kirk.webp",
 
   shows: ["Big Brother"],
 
@@ -31181,7 +31181,7 @@ window.CAST = [
   nickname: "LaLa",
   fullName: "LaTrice Verrett",
   gender: "female",
-  image: "cast/latrice_verrett.png",
+  image: "cast/latrice_verrett.webp",
 
   shows: ["Big Brother"],
 
@@ -31195,7 +31195,7 @@ window.CAST = [
   nickname: "Lyric",
   fullName: "Lyric Medeiros",
   gender: "female",
-  image: "cast/lyric_medeiros.png",
+  image: "cast/lyric_medeiros.webp",
 
   shows: ["Big Brother"],
 
@@ -31209,7 +31209,7 @@ window.CAST = [
   nickname: "Mallory",
   fullName: "Mallory Aurichio",
   gender: "female",
-  image: "cast/mallory_aurichio.png",
+  image: "cast/mallory_aurichio.webp",
 
   shows: ["Big Brother"],
 
@@ -31223,7 +31223,7 @@ window.CAST = [
   nickname: "Melody",
   fullName: "Melody Morris",
   gender: "female",
-  image: "cast/melody_morris.png",
+  image: "cast/melody_morris.webp",
 
   shows: ["Big Brother"],
 
@@ -31237,7 +31237,7 @@ window.CAST = [
   nickname: "Rome",
   fullName: "Rome Seymour",
   gender: "male",
-  image: "cast/rome_seymour.png",
+  image: "cast/rome_seymour.webp",
 
   shows: ["Big Brother"],
 
@@ -31251,7 +31251,7 @@ window.CAST = [
   nickname: "Taylor",
   fullName: "Taylor Brown",
   gender: "female",
-  image: "cast/taylor_brown.png",
+  image: "cast/taylor_brown.webp",
 
   shows: ["Big Brother"],
 
@@ -31265,7 +31265,7 @@ window.CAST = [
   nickname: "Yash",
   fullName: "Yash Patel",
   gender: "male",
-  image: "cast/yash_patel.png",
+  image: "cast/yash_patel.webp",
 
   shows: ["Big Brother"],
 
@@ -31279,7 +31279,7 @@ window.CAST = [
   nickname: "Adrienne",
   fullName: "Adrienne Naylor",
   gender: "female",
-  image: "cast/adrienne_naylor.png",
+  image: "cast/adrienne_naylor.webp",
 
   shows: ["The Challenge"],
 
@@ -31293,7 +31293,7 @@ window.CAST = [
   nickname: "Lete",
   fullName: "Alexis Lete",
   gender: "female",
-  image: "cast/alexis_lete.png",
+  image: "cast/alexis_lete.webp",
 
   shows: ["The Challenge"],
 
@@ -31307,7 +31307,7 @@ window.CAST = [
   nickname: "Aneesa",
   fullName: "Aneesa Ferreira",
   gender: "female",
-  image: "cast/aneesa_ferreira.png",
+  image: "cast/aneesa_ferreira.webp",
 
   shows: [
 
@@ -31331,7 +31331,7 @@ window.CAST = [
   nickname: "Anna Leigh",
   fullName: "Anna Leigh Wilson",
   gender: "female",
-  image: "cast/anna_leigh_wilson.png",
+  image: "cast/anna_leigh_wilson.webp",
 
   shows: [
     "The Amazing Race",
@@ -31349,7 +31349,7 @@ window.CAST = [
   nickname: "Leka",
   fullName: "Ayoleka Sodade",
   gender: "female",
-  image: "cast/ayoleka_sodade.png",
+  image: "cast/ayoleka_sodade.webp",
 
   shows: ["The Challenge"],
 
@@ -31363,7 +31363,7 @@ window.CAST = [
   nickname: "Ben",
   fullName: "Ben Davis",
   gender: "male",
-  image: "cast/ben_davis.png",
+  image: "cast/ben_davis.webp",
 
   shows: ["The Challenge"],
 
@@ -31377,7 +31377,7 @@ window.CAST = [
   nickname: "Deb",
   fullName: "Deb Chubb",
   gender: "female",
-  image: "cast/deb_chubb.png",
+  image: "cast/deb_chubb.webp",
 
   shows: [
     "Love Island",
@@ -31395,7 +31395,7 @@ window.CAST = [
   nickname: "Gabe",
   fullName: "Gabe Wai",
   gender: "male",
-  image: "cast/gabe_wai.png",
+  image: "cast/gabe_wai.webp",
 
   shows: ["The Challenge"],
 
@@ -31409,7 +31409,7 @@ window.CAST = [
   nickname: "Izzy",
   fullName: "Izzy Fairthorne",
   gender: "female",
-  image: "cast/izzy_fairthorne.png",
+  image: "cast/izzy_fairthorne.webp",
 
   shows: ["The Challenge"],
 
@@ -31423,7 +31423,7 @@ window.CAST = [
   nickname: "Jake",
   fullName: "Jake Cornish",
   gender: "male",
-  image: "cast/jake_cornish.png",
+  image: "cast/jake_cornish.webp",
 
   shows: [
     "Love Island",
@@ -31441,7 +31441,7 @@ window.CAST = [
   nickname: "Josh",
   fullName: "Josh Goldstein",
   gender: "male",
-  image: "cast/josh_goldstein.png",
+  image: "cast/josh_goldstein.webp",
 
   shows: [
     "Love Island",
@@ -31459,7 +31459,7 @@ window.CAST = [
   nickname: "Justin",
   fullName: "Justin Hinsley",
   gender: "male",
-  image: "cast/justin_hinsley.png",
+  image: "cast/justin_hinsley.webp",
 
   shows: ["The Challenge"],
 
@@ -31473,7 +31473,7 @@ window.CAST = [
   nickname: "Leo",
   fullName: "Leonardo Dionicio",
   gender: "male",
-  image: "cast/leonardo_dionicio.png",
+  image: "cast/leonardo_dionicio.webp",
 
   shows: [
     "Love Island",
@@ -31491,7 +31491,7 @@ window.CAST = [
   nickname: "Tay",
   fullName: "Tay Wilcoxson",
   gender: "female",
-  image: "cast/tay_wilcoxson.png",
+  image: "cast/tay_wilcoxson.webp",
 
   shows: ["The Challenge"],
 
@@ -31505,7 +31505,7 @@ window.CAST = [
   nickname: "Will",
   fullName: "Will Gagnon",
   gender: "male",
-  image: "cast/will_gagnon.png",
+  image: "cast/will_gagnon.webp",
 
   shows: [
     "Are You The One?",
@@ -31523,7 +31523,7 @@ window.CAST = [
   nickname: "Yeremi",
   fullName: "Yeremi Hykel",
   gender: "male",
-  image: "cast/yeremi_hykel.png",
+  image: "cast/yeremi_hykel.webp",
 
   shows: [
     "The Amazing Race",
@@ -31541,7 +31541,7 @@ window.CAST = [
   nickname: "Cashay",
   fullName: "Cashay Proudfoot",
   gender: "female",
-  image: "cast/cashay_proudfoot.png",
+  image: "cast/cashay_proudfoot.webp",
 
   shows: [
     "Love Island",
@@ -31559,7 +31559,7 @@ window.CAST = [
   nickname: "Cashel",
   fullName: "Cashel Barnett",
   gender: "male",
-  image: "cast/cashel_barnett.png",
+  image: "cast/cashel_barnett.webp",
 
   shows: [
     "Love Island",
@@ -31577,7 +31577,7 @@ window.CAST = [
   nickname: "Cayla",
   fullName: "Cayla Platt",
   gender: "female",
-  image: "cast/cayla_platt.png",
+  image: "cast/cayla_platt.webp",
 
   shows: [
     "The Amazing Race",
@@ -31595,7 +31595,7 @@ window.CAST = [
   nickname: "Cely",
   fullName: "Cely Vazquez",
   gender: "female",
-  image: "cast/cely_vazquez.png",
+  image: "cast/cely_vazquez.webp",
 
   shows: [
     "Love Island",
@@ -31613,7 +31613,7 @@ window.CAST = [
   nickname: "Dusty",
   fullName: "Dusty Harris",
   gender: "male",
-  image: "cast/dusty_harris.png",
+  image: "cast/dusty_harris.webp",
 
   shows: [
     "The Amazing Race",
@@ -31631,7 +31631,7 @@ window.CAST = [
   nickname: "James",
   fullName: "James Wallington",
   gender: "male",
-  image: "cast/james_wallington.png",
+  image: "cast/james_wallington.webp",
 
   shows: [
     "The Amazing Race",
@@ -31649,7 +31649,7 @@ window.CAST = [
   nickname: "Javonny",
   fullName: "Javonny Vega",
   gender: "male",
-  image: "cast/javonny_vega.png",
+  image: "cast/javonny_vega.webp",
 
   shows: [
     "Love Island",
@@ -31667,7 +31667,7 @@ window.CAST = [
   nickname: "Justine",
   fullName: "Justine Ndiba",
   gender: "female",
-  image: "cast/justine_ndiba.png",
+  image: "cast/justine_ndiba.webp",
 
   shows: [
     "Love Island",
@@ -31687,7 +31687,7 @@ window.CAST = [
   nickname: "Kyra",
   fullName: "Kyra Green",
   gender: "female",
-  image: "cast/kyra_green.png",
+  image: "cast/kyra_green.webp",
 
   shows: [
     "Love Island",
@@ -31705,7 +31705,7 @@ window.CAST = [
   nickname: "Leo",
   fullName: "Leo Temory",
   gender: "male",
-  image: "cast/leo_temory.png",
+  image: "cast/leo_temory.webp",
 
   shows: [
     "The Amazing Race",
@@ -31723,7 +31723,7 @@ window.CAST = [
   nickname: "Luis",
   fullName: "Luis Colón",
   gender: "male",
-  image: "cast/luis_colon.png",
+  image: "cast/luis_colon.webp",
 
   shows: [
     "The Amazing Race",
@@ -31741,7 +31741,7 @@ window.CAST = [
   nickname: "Cinco",
   fullName: "Melvin \"Cinco\" Holland Jr.",
   gender: "male",
-  image: "cast/melvin_cinco_holland_jr.png",
+  image: "cast/melvin_cinco_holland_jr.webp",
 
   shows: [
     "Love Island",
@@ -31759,7 +31759,7 @@ window.CAST = [
   nickname: "Shannon",
   fullName: "Shannon St. Clair",
   gender: "female",
-  image: "cast/shannon_st_clair.png",
+  image: "cast/shannon_st_clair.webp",
 
   shows: [
     "Love Island",
@@ -31777,7 +31777,7 @@ window.CAST = [
   nickname: "Benja",
   fullName: "Benjamín \"Benja\" Alfonso",
   gender: "male",
-  image: "cast/benjamin_benja_alfonso.png",
+  image: "cast/benjamin_benja_alfonso.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31791,7 +31791,7 @@ window.CAST = [
   nickname: "Claudia",
   fullName: "Claudia Albertario",
   gender: "female",
-  image: "cast/claudia_albertario.png",
+  image: "cast/claudia_albertario.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31805,7 +31805,7 @@ window.CAST = [
   nickname: "Emily",
   fullName: "Emily Seebohm",
   gender: "female",
-  image: "cast/emily_seebohm.png",
+  image: "cast/emily_seebohm.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31819,7 +31819,7 @@ window.CAST = [
   nickname: "Grant",
   fullName: "Grant Crapp",
   gender: "male",
-  image: "cast/grant_crapp.png",
+  image: "cast/grant_crapp.webp",
 
   shows: [
     "Love Island",
@@ -31837,7 +31837,7 @@ window.CAST = [
   nickname: "Kaz",
   fullName: "Kaz Crossley",
   gender: "female",
-  image: "cast/kaz_crossley.png",
+  image: "cast/kaz_crossley.webp",
 
   shows: [
     "Love Island",
@@ -31855,7 +31855,7 @@ window.CAST = [
   nickname: "Kiki",
   fullName: "Kiki Morris",
   gender: "female",
-  image: "cast/kiki_morris.png",
+  image: "cast/kiki_morris.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31869,7 +31869,7 @@ window.CAST = [
   nickname: "Nathan",
   fullName: "Nathan Henry",
   gender: "male",
-  image: "cast/nathan_henry.png",
+  image: "cast/nathan_henry.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31883,7 +31883,7 @@ window.CAST = [
   nickname: "Rodri",
   fullName: "Rodrigo \"Rodri\" Cascón",
   gender: "male",
-  image: "cast/rodrigo_rodri_cascon.png",
+  image: "cast/rodrigo_rodri_cascon.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31897,7 +31897,7 @@ window.CAST = [
   nickname: "Tristan",
   fullName: "Tristan Phipps",
   gender: "male",
-  image: "cast/tristan_phipps.png",
+  image: "cast/tristan_phipps.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31911,7 +31911,7 @@ window.CAST = [
   nickname: "Troy",
   fullName: "Troy Cullen",
   gender: "male",
-  image: "cast/troy_cullen.png",
+  image: "cast/troy_cullen.webp",
 
   shows: ["The Challenge World Championship"],
 
@@ -31925,7 +31925,7 @@ window.CAST = [
   nickname: "Arian",
   fullName: "Arian Foster",
   gender: "male",
-  image: "cast/arian_foster.png",
+  image: "cast/arian_foster.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -31939,7 +31939,7 @@ window.CAST = [
   nickname: "Ariane",
   fullName: "Ariane Andrew",
   gender: "female",
-  image: "cast/ariane_andrew.png",
+  image: "cast/ariane_andrew.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -31953,7 +31953,7 @@ window.CAST = [
   nickname: "Brooke",
   fullName: "Brooke Hogan",
   gender: "female",
-  image: "cast/brooke_hogan.png",
+  image: "cast/brooke_hogan.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -31967,7 +31967,7 @@ window.CAST = [
   nickname: "Casper",
   fullName: "Casper Smart",
   gender: "male",
-  image: "cast/casper_smart.png",
+  image: "cast/casper_smart.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -31981,7 +31981,7 @@ window.CAST = [
   nickname: "Booby",
   fullName: "Daniel Gibson",
   gender: "male",
-  image: "cast/daniel_gibson.png",
+  image: "cast/daniel_gibson.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -31995,7 +31995,7 @@ window.CAST = [
   nickname: "Drake",
   fullName: "Drake Bell",
   gender: "male",
-  image: "cast/drake_bell.png",
+  image: "cast/drake_bell.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32009,7 +32009,7 @@ window.CAST = [
   nickname: "Hennessy",
   fullName: "Hennessy Carolina",
   gender: "female",
-  image: "cast/hennessy_carolina.png",
+  image: "cast/hennessy_carolina.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32023,7 +32023,7 @@ window.CAST = [
   nickname: "Josh",
   fullName: "Josh Murray",
   gender: "male",
-  image: "cast/josh_murray.png",
+  image: "cast/josh_murray.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32037,7 +32037,7 @@ window.CAST = [
   nickname: "Justina",
   fullName: "Justina Valentine",
   gender: "female",
-  image: "cast/justina_valentine.png",
+  image: "cast/justina_valentine.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32051,7 +32051,7 @@ window.CAST = [
   nickname: "Kim",
   fullName: "Kim Glass",
   gender: "female",
-  image: "cast/kim_glass.png",
+  image: "cast/kim_glass.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32065,7 +32065,7 @@ window.CAST = [
   nickname: "Lil Mama",
   fullName: "Lil Mama",
   gender: "female",
-  image: "cast/lil_mama.png",
+  image: "cast/lil_mama.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32079,7 +32079,7 @@ window.CAST = [
   nickname: "Louise",
   fullName: "Louise Hazel",
   gender: "female",
-  image: "cast/louise_hazel.png",
+  image: "cast/louise_hazel.webp",
 
   shows: [
     "The Challenge: Champs vs. Stars",
@@ -32097,7 +32097,7 @@ window.CAST = [
   nickname: "Matt",
   fullName: "Matt Rife",
   gender: "male",
-  image: "cast/matt_rife.png",
+  image: "cast/matt_rife.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32111,7 +32111,7 @@ window.CAST = [
   nickname: "Michelle",
   fullName: "Michelle Waterson",
   gender: "female",
-  image: "cast/michelle_waterson.png",
+  image: "cast/michelle_waterson.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32125,7 +32125,7 @@ window.CAST = [
   nickname: "Riff Raff",
   fullName: "Riff Raff",
   gender: "male",
-  image: "cast/riff_raff.png",
+  image: "cast/riff_raff.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32139,7 +32139,7 @@ window.CAST = [
   nickname: "Romeo",
   fullName: "Romeo Miller",
   gender: "male",
-  image: "cast/romeo_miller.png",
+  image: "cast/romeo_miller.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32153,7 +32153,7 @@ window.CAST = [
   nickname: "Selita",
   fullName: "Selita Ebanks",
   gender: "female",
-  image: "cast/selita_ebanks.png",
+  image: "cast/selita_ebanks.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32167,7 +32167,7 @@ window.CAST = [
   nickname: "Shawn",
   fullName: "Shawn Johnson",
   gender: "female",
-  image: "cast/shawn_johnson.png",
+  image: "cast/shawn_johnson.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32181,7 +32181,7 @@ window.CAST = [
   nickname: "T.O.",
   fullName: "Terrell Owens",
   gender: "male",
-  image: "cast/terrell_owens.png",
+  image: "cast/terrell_owens.webp",
 
   shows: ["The Challenge: Champs vs. Stars"],
 
@@ -32195,7 +32195,7 @@ window.CAST = [
   nickname: "Candice",
   fullName: "Candice Wiggins",
   gender: "female",
-  image: "cast/candice_wiggins.png",
+  image: "cast/candice_wiggins.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32209,7 +32209,7 @@ window.CAST = [
   nickname: "CM Punk",
   fullName: "CM Punk",
   gender: "male",
-  image: "cast/cm_punk.png",
+  image: "cast/cm_punk.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32223,7 +32223,7 @@ window.CAST = [
   nickname: "Gus",
   fullName: "Gus Kenworthy",
   gender: "male",
-  image: "cast/gus_kenworthy.png",
+  image: "cast/gus_kenworthy.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32237,7 +32237,7 @@ window.CAST = [
   nickname: "Kamerion",
   fullName: "Kamerion Wimbley",
   gender: "male",
-  image: "cast/kamerion_wimbley.png",
+  image: "cast/kamerion_wimbley.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32251,7 +32251,7 @@ window.CAST = [
   nickname: "Lindsey",
   fullName: "Lindsey Jacobellis",
   gender: "female",
-  image: "cast/lindsey_jacobellis.png",
+  image: "cast/lindsey_jacobellis.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32265,7 +32265,7 @@ window.CAST = [
   nickname: "Louie",
   fullName: "Louie Vito",
   gender: "male",
-  image: "cast/louie_vito.png",
+  image: "cast/louie_vito.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32279,7 +32279,7 @@ window.CAST = [
   nickname: "Shawne",
   fullName: "Shawne Merriman",
   gender: "male",
-  image: "cast/shawne_merriman.png",
+  image: "cast/shawne_merriman.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
@@ -32293,7 +32293,7 @@ window.CAST = [
   nickname: "Tia",
   fullName: "Tia Blanco",
   gender: "female",
-  image: "cast/tia_blanco.png",
+  image: "cast/tia_blanco.webp",
 
   shows: ["The Challenge: Champs vs. Pros"],
 
