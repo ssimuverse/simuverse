@@ -2605,7 +2605,10 @@
   }
 
   function setImageWithFallback(img, contestant) {
-    const raw = String(contestant.image || '').trim();
+    const source = String(contestant.image || '').trim();
+    const raw = /^(?:https?:|data:|blob:)/i.test(source)
+      ? source
+      : source.replace(/\.png(?=([?#]|$))/i, '.webp');
     const candidates = [];
     if (/^(?:https?:|data:|blob:|\/)/i.test(raw)) candidates.push(raw);
     else if (raw) {
@@ -4275,6 +4278,12 @@
 
   function teamForContestant(id) {
     return state.teams.find(team => team.members.includes(id)) || null;
+  }
+
+  function teamForCurrentEpisodeContestant(id) {
+    if (state.merged) return null;
+    const snapshotTeam = (state.statusSnapshot || []).find(team => (team.members || []).includes(id));
+    return snapshotTeam || teamForContestant(id);
   }
 
   function teamRuntimeFor(teamName) {
@@ -10911,7 +10920,7 @@
     const contestant = state.contestantById.get(id);
     const wrap = document.createElement('span');
     wrap.className = 'challenge-participant';
-    const team = state.merged ? null : teamForContestant(id);
+    const team = teamForCurrentEpisodeContestant(id);
     const teamData = team ? teamOption(team.name) : null;
     if (teamData?.color) wrap.style.setProperty('--challenge-team-color', teamData.color);
     const image = document.createElement('img');
@@ -11006,6 +11015,15 @@
     note.className = 'challenge-winner-circumstance';
     note.textContent = text;
     copy.append(note);
+  }
+
+
+  function updateChallengeResultLayout() {
+    if (!elements.challengeTeamBoard) return;
+    const board = elements.challengeTeamBoard;
+    const hasPrimaryWinnerCard = Boolean(board.querySelector('.challenge-individual-winner-card, .challenge-team-card.is-winner'));
+    const hasSecondaryResult = Boolean(board.querySelector('.challenge-automatic-loser-card, .special-outcome-stack'));
+    board.classList.toggle('has-stacked-results', hasPrimaryWinnerCard && hasSecondaryResult);
   }
 
   function appendChallengeSpecialOutcomes() {
@@ -11104,7 +11122,7 @@
     renderChallengeHighlights();
     if (!elements.challengeTeamBoard) return;
     elements.challengeTeamBoard.replaceChildren();
-    elements.challengeTeamBoard.classList.remove('has-multiple-winners', 'has-showdown-results');
+    elements.challengeTeamBoard.classList.remove('has-multiple-winners', 'has-showdown-results', 'has-dual-result-cards', 'has-stacked-results');
 
     if (!state.challengeRevealed || !state.challengeResult) {
       if (elements.challengeExileArea) elements.challengeExileArea.hidden = true;
@@ -11137,7 +11155,7 @@
       elements.challengeTeamBoard.append(card);
 
       if (state.episodeType === 'final-four-showdown' && state.automaticEliminatedId) {
-        elements.challengeTeamBoard.classList.add('has-showdown-results');
+        elements.challengeTeamBoard.classList.add('has-showdown-results', 'has-dual-result-cards');
         const loserCard = document.createElement('article');
         loserCard.className = 'challenge-automatic-loser-card';
         const loserPortrait = createChallengePortrait(state.automaticEliminatedId);
@@ -11151,6 +11169,7 @@
         elements.challengeTeamBoard.append(loserCard);
       }
       appendChallengeSpecialOutcomes();
+      updateChallengeResultLayout();
       renderChallengeExile();
       return;
     }
@@ -11159,8 +11178,11 @@
       ? state.challengeResult.winners
       : [state.challengeResult.winner].filter(Boolean);
     const winningTeams = winnerNames
-      .map(name => state.teams.find(item => item.name === name))
-      .filter(Boolean);
+      .map(name => (state.statusSnapshot || []).find(item => item.name === name)
+        || state.teams.find(item => item.name === name)
+        || (state.challengeResult.teamScores || []).find(item => item.name === name)
+        || { name, members: [] })
+      .filter(team => team?.name);
     elements.challengeTeamBoard.classList.toggle('has-multiple-winners', winningTeams.length > 1);
     winningTeams.forEach(winningTeam => {
       const data = teamOption(winningTeam.name);
@@ -11184,6 +11206,7 @@
       elements.challengeTeamBoard.append(card);
     });
     appendChallengeSpecialOutcomes();
+    updateChallengeResultLayout();
     renderChallengeExile();
   }
 
@@ -12196,7 +12219,7 @@
     image.className = `ceremony-contestant-image ${className}`.trim();
     image.alt = contestant?.fullName || contestant?.nickname || 'Contestant';
     image.title = contestant?.fullName || contestant?.nickname || 'Contestant';
-    const team = state.merged ? null : teamForContestant(id);
+    const team = teamForCurrentEpisodeContestant(id);
     const data = team ? teamOption(team.name) : null;
     if (data?.color) image.style.setProperty('--ceremony-team-color', data.color);
     if (contestant) setImageWithFallback(image, contestant);
@@ -14133,7 +14156,7 @@
       episodeHeight: 31,
       outcomeHeight: 68,
       stageHeight: 48,
-      rowHeight: 40
+      rowHeight: 72
     };
     const headerHeight = metrics.phaseHeight + metrics.episodeHeight + metrics.outcomeHeight + metrics.stageHeight;
     const width = metrics.contestantWidth + columns.length * metrics.voteWidth;
@@ -14161,7 +14184,7 @@
     }
 
     drawExportCell(context, 0, 0, metrics.contestantWidth, headerHeight, '#fffaf0');
-    drawCanvasText(context, 'CONTESTANT', 0, 0, metrics.contestantWidth, headerHeight, {
+    drawCanvasText(context, 'CONTESTANTS', 0, 0, metrics.contestantWidth, headerHeight, {
       fontSize: 10, weight: 900, color: '#713a25', wrap: false
     });
 
@@ -14243,16 +14266,36 @@
     rowIds.forEach((id, rowIndex) => {
       const y = headerHeight + rowIndex * metrics.rowHeight;
       drawExportCell(context, 0, y, metrics.contestantWidth, metrics.rowHeight, '#fffaf0');
-      if (includePhotos && portraits.has(id)) drawCanvasPortrait(context, portraits.get(id), 7, y + 8, 24, 7);
-      const histories = contestantTeamHistory(id);
-      let markerX = includePhotos ? 36 : 8;
-      histories.slice(0, 4).forEach(teamName => {
-        drawVotingTeamMarker(context, markerX, y + metrics.rowHeight / 2, teamOption(teamName)?.color || '#94522f');
-        markerX += 9;
+
+      const hasPortrait = includePhotos && portraits.has(id);
+      const portraitSize = 34;
+      if (hasPortrait) {
+        drawCanvasPortrait(
+          context,
+          portraits.get(id),
+          (metrics.contestantWidth - portraitSize) / 2,
+          y + 5,
+          portraitSize,
+          8
+        );
+      }
+
+      const nameY = hasPortrait ? y + 40 : y + 17;
+      drawCanvasText(context, contestantDisplayName(id), 4, nameY, metrics.contestantWidth - 8, 20, {
+        fontSize: 10, weight: 900, color: '#17292f', wrap: false
       });
-      drawCanvasText(context, contestantDisplayName(id), markerX + 1, y, metrics.contestantWidth - markerX - 4, metrics.rowHeight, {
-        fontSize: 10, weight: 900, color: '#17292f', align: 'left', paddingLeft: 3, wrap: false
-      });
+
+      const histories = contestantTeamHistory(id).slice(0, 4);
+      if (histories.length) {
+        const markerStep = 9;
+        const markerWidth = (histories.length - 1) * markerStep + 7;
+        let markerX = (metrics.contestantWidth - markerWidth) / 2;
+        const markerY = y + metrics.rowHeight - 7;
+        histories.forEach(teamName => {
+          drawVotingTeamMarker(context, markerX, markerY, teamOption(teamName)?.color || '#94522f');
+          markerX += markerStep;
+        });
+      }
 
       let columnIndex = 0;
       while (columnIndex < columns.length) {
