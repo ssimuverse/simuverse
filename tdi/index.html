@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Build and simulate a custom Total Drama-inspired summer camp season.">
+  <title>Total Drama Simulator</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23f4eddc'/%3E%3Cpath d='M32 10 18 31h9L17 47h30L37 31h9L32 10Z' fill='%233b5a46'/%3E%3Crect x='29' y='44' width='6' height='10' rx='2' fill='%238a6749'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=20260808-drag-cast-1">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero-header">
+      <div class="brand-title" aria-label="Total Drama Simulator">TOTAL DRAMA SIMULATOR</div>
+      <a class="secondary-btn home-link-btn" href="../index.html">HOME</a>
+    </header>
+
+    <main class="page-shell">
+      
+      <section class="screen is-active" id="setup-screen" aria-labelledby="setupTitle">
+        <div class="setup-intro">
+          <div>
+            <p class="eyebrow">Season setup</p>
+            <h1 id="setupTitle">Build Your Camp Season</h1>
+            <p class="screen-description">Choose the main format, turn on the twists you want, and let the simulator handle the episode schedule.</p>
+          </div>
+          <div class="screen-action-row">
+            <button class="secondary-btn" id="resetSetupBtn" type="button">Reset</button>
+            <button class="primary-btn" type="button" data-go="participants-screen">Choose Cast</button>
+          </div>
+        </div>
+
+        <div class="setup-grid camp-setup-grid">
+          <article class="panel setup-card format-panel">
+            <div class="panel-head split">
+              <div>
+                <p class="eyebrow">Main format</p>
+                <h2>Season Structure</h2>
+              </div>
+            </div>
+
+            <div class="field-grid setup-core-grid camp-core-grid">
+              <label class="field field-span-2">
+                <span>Season Name</span>
+                <input type="text" id="simulationName" value="Camp Wawanakwa" maxlength="48" autocomplete="off">
+              </label>
+
+              <label class="field range-field cast-size-field">
+                <span>Cast Size <output class="range-pill" id="participantCountValue" for="participantCount">16</output></span>
+                <input type="range" id="participantCount" min="10" max="24" value="16" step="1">
+                <small class="field-help">Choose between 10 and 24 contestants.</small>
+              </label>
+
+              <fieldset class="field choice-field">
+                <legend>Teams</legend>
+                <div class="choice-pills team-choice" role="radiogroup" aria-label="Number of teams">
+                  <label><input type="radio" name="teamCount" value="2" checked><span>2 Teams</span></label>
+                  <label><input type="radio" name="teamCount" value="3"><span>3 Teams</span></label>
+                </div>
+              </fieldset>
+
+              <label class="field range-field merge-field">
+                <span>Merge At <output class="range-pill" id="mergeAtValue" for="mergeAt">9</output></span>
+                <input type="range" id="mergeAt" min="6" max="14" value="9" step="1">
+                <small class="field-help" id="mergeHelp">Recommended for a 16-person cast: 8–10.</small>
+              </label>
+
+              <label class="field">
+                <span>Finale Type</span>
+                <select id="endingFormat">
+                  <option value="final-two-race" selected>Final Two Race</option>
+                  <option value="final-two-jury">Final Two Jury</option>
+                  <option value="final-three-race">Final Three Race</option>
+                  <option value="final-three-jury">Final Three Jury</option>
+                  <option value="final-four-showdown">Final Four Showdown</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="season-preview" aria-live="polite">
+              <span class="preview-icon" aria-hidden="true">▲</span>
+              <div>
+                <strong id="seasonPreviewTitle">16 contestants · 2 teams of 8</strong>
+                <span id="seasonPreviewDetail">Merge at 9 · Final Two Race</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel setup-card options-panel">
+            <div class="panel-head split">
+              <div>
+                <p class="eyebrow">Season options</p>
+                <h2>Twists &amp; Situations</h2>
+              </div>
+            </div>
+
+            <div class="option-section">
+              <div class="option-section-head">
+                <h3>Major Twists</h3>
+                <p>These directly change the season structure.</p>
+              </div>
+              <div class="twist-grid">
+                <label class="option-tile"><input type="checkbox" name="twists" value="return" data-season-option="return"><span><strong>Return</strong><small>Chris personally brings an eliminated contestant back.</small></span></label>
+                <label class="option-tile"><input type="checkbox" name="twists" value="return-challenge" data-season-option="returnChallenge"><span><strong>Return Challenge</strong><small>Eliminated contestants compete to earn re-entry.</small></span></label>
+                <label class="option-tile"><input type="checkbox" name="twists" value="idol" data-season-option="immunityIdol"><span><strong>Immunity Idol</strong><small>One secret, single-use idol can overturn a vote.</small></span></label>
+                <label class="option-tile"><input type="checkbox" name="twists" value="late-entry" data-season-option="lateEntrant"><span><strong>Late Entrant</strong><small>A pre-selected contestant joins after several episodes.</small></span></label>
+                <label class="option-tile"><input type="checkbox" name="twists" value="exile" data-season-option="exile"><span><strong>Exile</strong><small>Challenge winners send a losing contestant to Boney Island.</small></span></label>
+                <label class="option-tile"><input type="checkbox" name="twists" value="team-swap" data-season-option="teamSwap"><span><strong>Planned Team Swap</strong><small>All remaining contestants are randomly reassigned into two balanced teams before the merge.</small></span></label>
+              </div>
+            </div>
+
+            <div class="option-section rules-section">
+              <div class="option-section-head">
+                <h3>Allow During the Season</h3>
+                <p>Rare situations stay possible without being guaranteed.</p>
+              </div>
+              <div class="rule-grid">
+                <label class="switch-row"><span>Non-elimination episodes</span><input type="checkbox" data-season-option="nonElimination"><i aria-hidden="true"></i></label>
+                <label class="switch-row"><span>Double eliminations</span><input type="checkbox" data-season-option="doubleElimination"><i aria-hidden="true"></i></label>
+                <label class="switch-row"><span>Challenge eliminations</span><input type="checkbox" data-season-option="challengeElimination"><i aria-hidden="true"></i></label>
+                <label class="switch-row"><span>Contestants may quit</span><input type="checkbox" data-season-option="quits"><i aria-hidden="true"></i></label>
+                <label class="switch-row"><span>Medical removals</span><input type="checkbox" data-season-option="medicalRemovals"><i aria-hidden="true"></i></label>
+                <label class="switch-row"><span>Disqualifications</span><input type="checkbox" data-season-option="disqualifications"><i aria-hidden="true"></i></label>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="setup-footer-actions">
+          <button class="primary-btn large-btn" type="button" data-go="participants-screen">Continue to Cast Selection</button>
+        </div>
+      </section>
+
+      
+      <section class="screen" id="participants-screen" aria-labelledby="participantsTitle">
+        <div class="screen-head">
+          <div>
+            <p class="eyebrow">Cast setup</p>
+            <h1 id="participantsTitle">Select the Contestants</h1>
+          </div>
+          <div class="screen-action-row">
+            <button class="secondary-btn" type="button" data-go="setup-screen">Back</button>
+            <button class="secondary-btn danger-outline-btn" id="resetCastBtn" type="button">Reset</button>
+            <button class="primary-btn" id="startSeasonBtn" type="button" disabled>Start Season</button>
+          </div>
+        </div>
+
+        <div class="cast-layout">
+          <aside class="panel roster-panel">
+            <div class="panel-head compact-head split">
+              <div>
+                <p class="eyebrow">Browse contestants</p>
+                <h2>Contestant Pool</h2>
+              </div>
+              <span class="meta-chip"><strong id="availableCount">0</strong> shown</span>
+            </div>
+
+            <div class="cast-filter-stack">
+              <div class="cast-filter-row">
+                <span class="cast-filter-label">Choose Show</span>
+                <details class="check-dropdown" id="showDropdown">
+                  <summary>
+                    <span id="showFilterLabel">All Shows</span>
+                    <span class="dropdown-chevron" aria-hidden="true">▾</span>
+                  </summary>
+                  <div class="check-dropdown-menu" id="showChecklist" role="group" aria-label="Filter contestants by show"></div>
+                </details>
+              </div>
+
+              <div class="cast-filter-row">
+                <span class="cast-filter-label">Choose Season</span>
+                <details class="check-dropdown" id="seasonDropdown">
+                  <summary>
+                    <span id="seasonFilterLabel">Choose a show first</span>
+                    <span class="dropdown-chevron" aria-hidden="true">▾</span>
+                  </summary>
+                  <div class="check-dropdown-menu season-checklist" id="seasonChecklist" role="group" aria-label="Filter contestants by season"></div>
+                </details>
+              </div>
+
+              <label class="cast-filter-row search-filter-row">
+                <span class="cast-filter-label">Search Contestant</span>
+                <input type="search" id="participantSearch" placeholder="Type a name..." autocomplete="off">
+              </label>
+            </div>
+
+            <div class="contestant-list-shell">
+              <div class="contestant-name-list" id="rosterGrid" role="listbox" aria-label="Available contestants"></div>
+            </div>
+
+            <div class="cast-tool-grid" aria-label="Cast tools">
+              <button class="primary-btn cast-tool-primary" id="randomizeCastBtn" type="button">Randomize Cast</button>
+              <button class="secondary-btn even-gender-cast-btn" id="randomizeEvenGenderCastBtn" type="button">Randomize Even-Gender Cast</button>
+              <button class="secondary-btn" id="addRandomContestantBtn" type="button">Add Random Contestant</button>
+              <button class="secondary-btn" id="openPresetCastBtn" type="button">Use Pre-Set Cast</button>
+              <button class="secondary-btn" id="openCreateContestantBtn" type="button">Create Contestant</button>
+              <button class="secondary-btn danger-outline-btn" id="clearParticipantsBtn" type="button">Clear Cast</button>
+            </div>
+          </aside>
+
+          <section class="panel selected-panel">
+            <div class="panel-head compact-head split selected-panel-head">
+              <div>
+                <p class="eyebrow">Selected contestants</p>
+                <h2>Season Cast</h2>
+              </div>
+              <div class="selected-panel-tools">
+                <button class="secondary-btn compact-header-btn" id="randomizeAllSkillsBtn" type="button" disabled>Randomize All Skills</button>
+                <button class="secondary-btn compact-header-btn" id="randomizeAllArchetypesBtn" type="button" disabled>Randomize All Archetypes</button>
+                <span class="meta-chip cast-count-chip"><strong id="selectedCount">0</strong>/<span id="slotCount">16</span> selected</span>
+              </div>
+            </div>
+            <div class="selected-grid" id="selectedGrid"></div>
+          </section>
+        </div>
+      </section>
+
+      
+      <section class="screen" id="simulation-screen" aria-labelledby="roundTitle">
+        <div class="episode-topbar">
+          <div class="episode-title-stack">
+            <p class="eyebrow">Season in progress</p>
+            <h1 id="roundTitle">Episode 1</h1>
+            <p class="episode-subline" id="roundSubline">Camp status</p>
+          </div>
+          <div class="episode-controls">
+            <select id="roundSelect" class="episode-select" aria-label="Select episode">
+              <option>Episode 1</option>
+            </select>
+            <button class="secondary-btn" type="button" data-go="participants-screen">Contestants</button>
+            <button class="secondary-btn danger-outline-btn" id="resetSeasonBtn" type="button">Reset</button>
+            <button class="primary-btn" type="button" data-go="statistics-screen">Statistics</button>
+          </div>
+        </div>
+
+        <div class="section-toggle-row episode-stage-tabs" role="tablist" aria-label="Episode stages">
+          <button class="section-toggle is-active" type="button" data-panel-target="overview">Status</button>
+          <button class="section-toggle" id="mergeStageTab" type="button" data-panel-target="merge" hidden>Merge</button>
+          <button class="section-toggle" id="returnChallengeStageTab" type="button" data-panel-target="return-challenge" hidden>Return Challenge</button>
+          <button class="section-toggle" type="button" data-panel-target="pre-challenge">Before Challenge</button>
+          <button class="section-toggle" type="button" data-panel-target="challenge">Challenge</button>
+          <button class="section-toggle" type="button" data-panel-target="pre-vote">Before Vote</button>
+          <button class="section-toggle" id="voteStageTab" type="button" data-panel-target="vote">Vote</button>
+          <button class="section-toggle" id="finaleStageTab" type="button" data-panel-target="finale" hidden>Finale</button>
+          <button class="section-toggle" type="button" data-panel-target="summary">Summary</button>
+        </div>
+
+        <div class="panel episode-panel-shell event-system-shell">
+          <section class="episode-panel is-active" data-panel="overview">
+            <div class="section-title">Camp Status</div>
+            <div class="season-team-overview" id="seasonTeamOverview"></div>
+            <div class="proceed-row">
+              <button class="primary-btn" type="button" data-open-panel="pre-challenge">Begin Camp Life</button>
+            </div>
+          </section>
+
+          <section class="episode-panel merge-announcement-panel" data-panel="merge">
+            <article class="merge-introduction-card">
+              <div class="vote-host-wrap">
+                <img id="mergeHostImage" src="images/chris.png" alt="Chris, the host">
+              </div>
+              <div class="merge-introduction-copy">
+                <p class="eyebrow">Game change</p>
+                <h2>Everybody, Drop Your Buffs!</h2>
+                <p id="mergeAnnouncementText"></p>
+              </div>
+            </article>
+
+            <article class="merge-roster-card">
+              <div class="merge-roster-heading">
+                <p class="eyebrow">The merged campers</p>
+                <h2 id="mergeTeamName">Merged Team</h2>
+              </div>
+              <div class="merge-contestant-grid" id="mergeContestantGrid"></div>
+            </article>
+
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="overview">Back</button>
+              <button class="primary-btn" id="mergeContinueBtn" type="button" data-open-panel="pre-challenge">Begin the Individual Game</button>
+            </div>
+          </section>
+
+          <section class="episode-panel return-challenge-panel" data-panel="return-challenge">
+            <article class="return-challenge-introduction-card">
+              <div class="challenge-host-wrap">
+                <img src="images/chris.png" alt="Chris, the host">
+              </div>
+              <div class="challenge-introduction-copy">
+                <p class="eyebrow">Comeback twist</p>
+                <h2>Return Challenge</h2>
+                <p id="returnChallengeIntroduction"></p>
+              </div>
+            </article>
+            <div class="return-challenge-competitor-grid" id="returnChallengeCompetitorGrid"></div>
+            <div class="challenge-run-row">
+              <button class="primary-btn large-btn" id="revealReturnChallengeBtn" type="button">Reveal Result</button>
+            </div>
+            <div class="return-challenge-result-area" id="returnChallengeResultArea" hidden></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" id="returnChallengeBackBtn" type="button" data-open-panel="overview">Back</button>
+              <button class="primary-btn" id="continueFromReturnChallengeBtn" type="button" data-open-panel="pre-challenge" disabled>Continue to Camp Life</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="pre-challenge">
+            <div class="event-stage-head">
+              <div>
+                <p class="eyebrow">Camp life</p>
+                <h2>Before the Challenge</h2>
+              </div>
+            </div>
+            <div class="camp-event-list" id="preChallengeEventList"></div>
+            <div class="event-empty-state" id="preChallengeEventEmpty">
+              <span>☀</span>
+              <strong>The camp is quiet—for now.</strong>
+              <p>Generate this episode’s first set of camp events.</p>
+            </div>
+            <div class="proceed-row event-stage-actions">
+              <button class="secondary-btn" id="preChallengeBackBtn" type="button" data-open-panel="overview">Back</button>
+              <button class="secondary-btn" id="generatePreChallengeEventsBtn" type="button">Generate Events</button>
+              <button class="primary-btn" id="continueToChallengeBtn" type="button" data-open-panel="challenge" disabled>Continue to Challenge</button>
+            </div>
+          </section>
+
+          <section class="episode-panel challenge-episode-panel" data-panel="challenge">
+            <article class="challenge-introduction-card">
+              <div class="challenge-host-wrap">
+                <img id="challengeHostImage" src="images/chris.png" alt="Chris, the host">
+              </div>
+              <div class="challenge-introduction-copy">
+                <p class="eyebrow" id="challengeEyebrow">Today’s team challenge</p>
+                <h2 id="challengeName">Challenge Loading…</h2>
+                <p class="challenge-introduction-text" id="challengeIntroduction"></p>
+              </div>
+            </article>
+
+            <div class="challenge-run-row">
+              <button class="primary-btn large-btn" id="runChallengeBtn" type="button" disabled>Run Challenge</button>
+            </div>
+
+            <div class="challenge-reveal" id="challengeReveal" hidden>
+              <div class="challenge-section-heading">
+                <p class="eyebrow">Challenge footage</p>
+                <h2>Performance Highlights</h2>
+              </div>
+              <div class="challenge-highlight-grid" id="challengeHighlights"></div>
+
+              <div class="challenge-section-heading challenge-results-heading">
+                <p class="eyebrow">Final standings</p>
+                <h2>Challenge Result</h2>
+              </div>
+              <div class="challenge-team-board" id="challengeTeamBoard"></div>
+              <div class="challenge-exile-area" id="challengeExileArea" hidden></div>
+            </div>
+
+            <div class="proceed-row event-stage-actions challenge-bottom-actions">
+              <button class="secondary-btn" type="button" data-open-panel="pre-challenge">Back</button>
+              <button class="primary-btn" id="continueToPreVoteBtn" type="button" data-open-panel="pre-vote" disabled>Continue to Camp</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="pre-vote">
+            <div class="event-stage-head">
+              <div>
+                <p class="eyebrow">After the challenge</p>
+                <h2>Before the Vote</h2>
+              </div>
+            </div>
+            <div class="camp-event-list" id="preVoteEventList"></div>
+            <div class="event-empty-state" id="preVoteEventEmpty">
+              <span>🔥</span>
+              <strong>No vote talk yet.</strong>
+              <p>Once the challenge is complete, the losing side will begin scrambling.</p>
+            </div>
+            <div class="proceed-row event-stage-actions">
+              <button class="secondary-btn" type="button" data-open-panel="challenge">Back</button>
+              <button class="secondary-btn" id="generatePreVoteEventsBtn" type="button" disabled>Generate Events</button>
+              <button class="primary-btn" id="continueToVoteBtn" type="button" data-open-panel="vote" disabled>Continue to Vote</button>
+            </div>
+          </section>
+
+          <section class="episode-panel vote-ceremony-panel" data-panel="vote">
+            <article class="vote-ceremony-intro-card">
+              <div class="vote-host-wrap">
+                <img id="voteHostImage" src="images/chris.png" alt="Chris, the host">
+              </div>
+              <div class="vote-ceremony-intro-copy">
+                <p class="eyebrow">Campfire ceremony</p>
+                <h2>Marshmallow Ceremony</h2>
+                <p>“You’ve all cast your votes and made your decision. The camper who does not receive a marshmallow tonight must immediately return to the Dock of Shame to catch the Boat of Losers. That means you’re out of the contest. And you can’t come back. Ever.”</p>
+              </div>
+            </article>
+
+            <div class="vote-reveal-controls" id="voteRevealControls">
+              <button class="primary-btn large-btn" id="revealSafeContestantsBtn" type="button" disabled>Reveal Safe Contestants</button>
+            </div>
+
+            <div class="safe-contestant-grid" id="safeContestantGrid" aria-live="polite"></div>
+
+            <section class="vote-tie-section" id="voteTieSection" hidden>
+              <div class="vote-tied-contestants" id="voteTiedContestants"></div>
+              <p class="vote-tie-message" id="voteTieMessage"></p>
+              <p class="vote-revote-label">REVOTE</p>
+              <button class="primary-btn large-btn" id="revealRevoteResultsBtn" type="button">Reveal Results</button>
+              <div class="vote-revote-safe-list" id="voteRevoteSafeList"></div>
+            </section>
+
+            <div class="vote-elimination-area" id="voteEliminationArea" aria-live="polite"></div>
+
+            <div class="vote-breakdown-controls" id="voteBreakdownControls" hidden>
+              <button class="secondary-btn" id="showVotesBtn" type="button">Show Votes</button>
+            </div>
+            <div class="vote-breakdown" id="voteBreakdown" hidden></div>
+
+            <div class="proceed-row dual vote-bottom-actions">
+              <button class="secondary-btn" type="button" data-open-panel="pre-vote">Back</button>
+              <button class="primary-btn" id="continueToSummaryBtn" type="button" data-open-panel="summary" disabled>View Episode Summary</button>
+            </div>
+          </section>
+
+          <section class="episode-panel finale-episode-panel" data-panel="finale">
+            <article class="finale-introduction-card">
+              <div class="vote-host-wrap">
+                <img id="finaleHostImage" src="images/chris.png" alt="Chris, the host">
+              </div>
+              <div class="finale-introduction-copy">
+                <p class="eyebrow">The last word</p>
+                <h2 id="finaleTitle">Finale</h2>
+                <p id="finaleAnnouncementText"></p>
+              </div>
+            </article>
+
+            <div class="finale-contestant-grid" id="finaleContestantGrid"></div>
+
+            <div class="finale-question-area" id="finaleQuestionArea" hidden></div>
+
+            <div class="finale-reveal-controls" id="finaleRevealControls">
+              <button class="primary-btn large-btn" id="revealFinaleResultBtn" type="button">Reveal Results</button>
+            </div>
+
+            <div class="finale-result-area" id="finaleResultArea" aria-live="polite"></div>
+            <div class="finale-jury-breakdown" id="finaleJuryBreakdown" hidden></div>
+
+            <div class="proceed-row dual finale-bottom-actions">
+              <button class="secondary-btn" type="button" data-open-panel="overview">Back to Status</button>
+              <button class="primary-btn" id="finaleToSummaryBtn" type="button" data-open-panel="summary" disabled>View Season Summary</button>
+            </div>
+          </section>
+
+          <section class="episode-panel episode-summary-panel" data-panel="summary">
+            <div class="episode-summary-heading">
+              <p class="eyebrow">Episode recap</p>
+              <h2>Episode Summary</h2>
+            </div>
+
+            <div class="episode-summary-stack">
+              <section class="episode-summary-block">
+                <div class="episode-summary-block-head">
+                  <span class="episode-summary-number">1</span>
+                  <div>
+                    <p class="eyebrow">Gameplay</p>
+                    <h3>Main Events</h3>
+                  </div>
+                </div>
+                <div class="episode-summary-event-list" id="summaryMainEvents"></div>
+              </section>
+
+              <section class="episode-summary-block">
+                <div class="episode-summary-block-head">
+                  <span class="episode-summary-number">2</span>
+                  <div>
+                    <p class="eyebrow">Challenge</p>
+                    <h3>Immunity Winners</h3>
+                  </div>
+                </div>
+                <div class="episode-summary-winner-grid" id="summaryChallengeWinners"></div>
+              </section>
+
+              <section class="episode-summary-block episode-summary-elimination-block">
+                <div class="episode-summary-block-head">
+                  <span class="episode-summary-number">3</span>
+                  <div>
+                    <p class="eyebrow">Campfire ceremony</p>
+                    <h3>Eliminated</h3>
+                  </div>
+                </div>
+                <div class="episode-summary-eliminated" id="summaryEliminated"></div>
+              </section>
+
+              <section class="episode-summary-block episode-summary-season-winner-block" id="summarySeasonWinnerBlock" hidden>
+                <div class="episode-summary-block-head">
+                  <span class="episode-summary-number">4</span>
+                  <div>
+                    <p class="eyebrow">Final result</p>
+                    <h3>Season Winner</h3>
+                  </div>
+                </div>
+                <div class="episode-summary-season-winner" id="summarySeasonWinner"></div>
+              </section>
+            </div>
+
+            <div class="proceed-row dual episode-summary-actions">
+              <button class="secondary-btn" type="button" data-open-panel="vote">Back</button>
+              <button class="primary-btn" id="proceedEpisodeBtn" type="button" disabled>Proceed</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      
+      <section class="screen" id="statistics-screen" aria-labelledby="statisticsTitle">
+        <div class="screen-head">
+          <div>
+            <p class="eyebrow">Season archive</p>
+            <h1 id="statisticsTitle">Statistics</h1>
+          </div>
+          <div class="screen-action-row">
+            <button class="secondary-btn" type="button" data-go="simulation-screen">Back</button>
+          </div>
+        </div>
+
+        <div class="stats-nav" role="tablist" aria-label="Statistics sections">
+          <button class="stats-tab is-active" type="button" data-stats-target="stats-voting">Voting History</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-popularity">Fan Popularity</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-edgic">EDGIC</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-challenges">Challenge Statistics</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-alliances">Alliances</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-records">Season Records</button>
+        </div>
+
+        <section class="stats-panel is-active" id="stats-voting">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Every ballot</p>
+                <h2>Voting History</h2>
+              </div>
+              <div class="stats-section-actions">
+                <button class="secondary-btn stats-download-btn" id="downloadVotingHistoryBtn" type="button">DOWNLOAD</button>
+              </div>
+            </div>
+            <div id="statsVotingHistory"></div>
+          </article>
+        </section>
+
+
+        <section class="stats-panel" id="stats-popularity">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Audience response</p>
+                <h2>Fan Popularity</h2>
+              </div>
+              <div class="stats-section-actions">
+                <button class="secondary-btn stats-download-btn" id="downloadFanPopularityBtn" type="button">DOWNLOAD</button>
+              </div>
+            </div>
+            <div id="statsFanPopularity"></div>
+          </article>
+        </section>
+
+        <section class="stats-panel" id="stats-edgic">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Episode portrayal</p>
+                <h2>EDGIC</h2>
+              </div>
+              <div class="stats-section-actions">
+                <button class="secondary-btn stats-download-btn" id="downloadEdgicBtn" type="button">DOWNLOAD</button>
+              </div>
+            </div>
+            <div id="statsEdgicHistory"></div>
+          </article>
+        </section>
+
+        <section class="stats-panel" id="stats-challenges">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Episode results</p>
+                <h2>Challenge Statistics</h2>
+              </div>
+            </div>
+            <div id="statsChallengeHistory"></div>
+          </article>
+        </section>
+
+        <section class="stats-panel" id="stats-alliances">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Strategic groups</p>
+                <h2>Alliances</h2>
+              </div>
+            </div>
+            <div id="statsAllianceHistory"></div>
+          </article>
+        </section>
+
+        <section class="stats-panel" id="stats-records">
+          <article class="panel stats-card stats-feature-card">
+            <div class="stats-section-head">
+              <div>
+                <p class="eyebrow">Season superlatives</p>
+                <h2>Season Records</h2>
+              </div>
+            </div>
+            <div class="season-records-grid" id="statsSeasonRecords"></div>
+          </article>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="contestantEditDialog">
+    <form class="modal-card contestant-edit-card" id="contestantEditForm" method="dialog">
+      <div class="modal-head contestant-modal-head">
+        <div class="contestant-modal-identity">
+          <img id="editContestantImage" class="edit-contestant-image" alt="">
+          <div>
+            <p class="eyebrow">Contestant profile</p>
+            <h2 id="editContestantName">Edit Contestant</h2>
+            <p class="modal-subtitle" id="editContestantFullName"></p>
+          </div>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+
+      <div class="contestant-editor-body">
+        <label class="field archetype-field">
+          <span>Archetype</span>
+          <select id="archetypeSelect" name="archetype"></select>
+        </label>
+
+        <section class="skill-editor-section" aria-labelledby="competitionSkillsTitle">
+          <div class="skill-section-head">
+            <div>
+              <p class="eyebrow">Physical &amp; mental</p>
+              <h3 id="competitionSkillsTitle">Competition Skills</h3>
+            </div>
+            <span>1–15</span>
+          </div>
+          <div class="stats-editor-grid" id="competitionSkillsGrid"></div>
+        </section>
+
+        <section class="skill-editor-section" aria-labelledby="socialSkillsTitle">
+          <div class="skill-section-head">
+            <div>
+              <p class="eyebrow">Personality &amp; gameplay</p>
+              <h3 id="socialSkillsTitle">Social Skills</h3>
+            </div>
+            <span>1–15</span>
+          </div>
+          <div class="stats-editor-grid social-stats-grid" id="socialSkillsGrid"></div>
+        </section>
+      </div>
+
+      <div class="modal-actions contestant-modal-actions">
+        <button class="secondary-btn" id="randomizeContestantStatsBtn" type="button">Randomize Skills</button>
+        <button class="secondary-btn" id="resetContestantStatsBtn" type="button">Reset Skills</button>
+        <span class="modal-action-spacer"></span>
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="presetCastDialog">
+    <form class="modal-card preset-cast-card" id="presetCastForm" method="dialog">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Pre-set cast</p>
+          <h2>Use a Show Cast</h2>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="modal-body preset-cast-fields">
+        <label class="field">
+          <span>Choose Show</span>
+          <select id="presetShowSelect" required></select>
+        </label>
+        <label class="field">
+          <span>Choose Season</span>
+          <select id="presetSeasonSelect" required disabled></select>
+        </label>
+        <div class="preset-cast-preview" id="presetCastPreview" aria-live="polite" hidden></div>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" id="applyPresetCastBtn" type="submit" disabled>Use This Cast</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="createContestantDialog">
+    <form class="modal-card create-contestant-card" id="customContestantForm" method="dialog">
+      <div class="modal-head">
+        <div>
+          <h2 id="customContestantTitle">Create Contestant</h2>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+
+      <div class="custom-contestant-body">
+        <section class="custom-identity-grid">
+          <div class="custom-image-column">
+            <img id="customContestantImagePreview" class="custom-contestant-image" alt="">
+            <label class="secondary-btn custom-upload-btn">
+              Upload Image
+              <input id="customContestantImageFile" type="file" accept="image/*">
+            </label>
+          </div>
+
+          <div class="custom-identity-fields">
+            <label class="field">
+              <span>Image URL</span>
+              <input id="customContestantImageUrl" type="url" inputmode="url" autocomplete="off">
+            </label>
+            <label class="field">
+              <span>Name</span>
+              <input id="customContestantName" name="customName" type="text" maxlength="80" autocomplete="off" required>
+            </label>
+            <label class="field">
+              <span>Nickname</span>
+              <input id="customContestantNickname" name="customNickname" type="text" maxlength="48" autocomplete="off">
+            </label>
+          </div>
+        </section>
+
+        <label class="field custom-archetype-field">
+          <span>Archetype</span>
+          <select id="customArchetypeSelect" name="customArchetype"></select>
+        </label>
+
+        <section class="skill-editor-section">
+          <div class="skill-section-head">
+            <h3>Competition Skills</h3>
+            <span>1–15</span>
+          </div>
+          <div class="stats-editor-grid" id="customCompetitionSkillsGrid"></div>
+        </section>
+
+        <section class="skill-editor-section">
+          <div class="skill-section-head">
+            <h3>Social Skills</h3>
+            <span>1–15</span>
+          </div>
+          <div class="stats-editor-grid social-stats-grid" id="customSocialSkillsGrid"></div>
+        </section>
+      </div>
+
+      <div class="modal-actions custom-contestant-actions">
+        <button class="secondary-btn danger-outline-btn" id="deleteCustomContestantBtn" type="button" hidden>Delete</button>
+        <button class="secondary-btn" id="randomizeCustomSkillsBtn" type="button">Randomize Skills</button>
+        <button class="secondary-btn" id="resetCustomSkillsBtn" type="button">Reset Skills</button>
+        <button class="secondary-btn" id="resetCustomContestantBtn" type="button">Reset Form</button>
+        <span class="modal-action-spacer"></span>
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" type="submit">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="randomizeAllSkillsDialog">
+    <div class="modal-card confirmation-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Confirm randomization</p>
+          <h2>Randomize Every Contestant?</h2>
+          <p class="modal-subtitle">This will replace the visible skills of every contestant currently in the season cast. Their archetypes will stay the same.</p>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" id="confirmRandomizeAllSkillsBtn" type="button">Randomize All Skills</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="randomizeAllArchetypesDialog">
+    <div class="modal-card confirmation-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Confirm randomization</p>
+          <h2>Randomize Every Archetype?</h2>
+          <p class="modal-subtitle">Each contestant will receive a random archetype. Its skill modifiers will replace their current skill values.</p>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" id="confirmRandomizeAllArchetypesBtn" type="button">Randomize All Archetypes</button>
+      </div>
+    </div>
+  </dialog>
+
+
+
+  <dialog id="lateEntrantDialog">
+    <div class="modal-card confirmation-card late-entrant-selection-card">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Season twist</p>
+          <h2>Choose the Late Entrant</h2>
+          <p class="modal-subtitle">This contestant will be withheld from the starting teams and enter later in the season.</p>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="late-entrant-selection-body">
+        <label class="field">
+          <span>Late Entrant</span>
+          <select id="lateEntrantSelect">
+            <option value="">Choose a contestant from the selected cast…</option>
+          </select>
+        </label>
+        <p class="team-setup-message" id="lateEntrantMessage" role="status" aria-live="polite" hidden></p>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" id="confirmLateEntrantBtn" type="button">Continue to Relationships</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="relationshipsDialog">
+    <div class="modal-card relationship-setup-card">
+      <div class="modal-head relationship-modal-head">
+        <div>
+          <p class="eyebrow">Pre-season connections</p>
+          <h2>Set Relationships</h2>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+
+      <div class="relationship-modal-body">
+        <div class="relationship-grid-shell">
+          <table class="relationship-grid" id="relationshipGrid" aria-label="Contestant relationship scores"></table>
+        </div>
+      </div>
+
+      <div class="modal-actions setup-flow-actions">
+        <button class="secondary-btn" id="randomizeRelationshipsBtn" type="button">Randomize</button>
+        <button class="secondary-btn" id="resetRelationshipsBtn" type="button">Reset</button>
+        <button class="primary-btn" id="confirmRelationshipsBtn" type="button">Confirm Relationships</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="teamSetupDialog">
+    <form class="modal-card team-setup-modal-card" id="teamSetupForm" method="dialog">
+      <div class="modal-head team-setup-modal-head">
+        <div>
+          <p class="eyebrow">Camp teams</p>
+          <h2>Set Up the Teams</h2>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+
+      <div class="team-setup-modal-body">
+        <div class="team-setup-grid" id="teamSetupGrid"></div>
+      </div>
+
+      <p class="team-setup-message" id="teamSetupMessage" role="status" aria-live="polite" hidden></p>
+
+      <div class="modal-actions setup-flow-actions">
+        <button class="secondary-btn" id="randomizeTeamsBtn" type="button">Randomize</button>
+        <button class="secondary-btn" id="randomizeEvenGenderTeamsBtn" type="button">Randomize Even-Gender Split</button>
+        <button class="secondary-btn" id="resetTeamsBtn" type="button">Reset</button>
+        <button class="primary-btn" id="confirmTeamsBtn" type="submit">Confirm Teams</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="seasonPreparingDialog" class="season-preparing-dialog" aria-labelledby="seasonPreparingTitle">
+    <div class="modal-card season-preparing-card">
+      <div class="season-preparing-spinner" aria-hidden="true"></div>
+      <p class="eyebrow">Season generation</p>
+      <h2 id="seasonPreparingTitle">Preparing the Season</h2>
+      <p id="seasonPreparingText">Setting up the first episode…</p>
+      <div class="season-preparing-progress" id="seasonPreparingProgress" role="progressbar" aria-label="Season preparation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span id="seasonPreparingBar"></span>
+      </div>
+      <small>This may take a moment for larger casts. The simulator is still working.</small>
+    </div>
+  </dialog>
+
+
+  <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../cast_data.js" onerror="this.onerror=null;this.src='cast_data.js'"></script>
+  <script src="../drag_race_data.js" onerror="this.onerror=null;this.src='drag_race_data.js'"></script>
+  <script src="simulator.js?v=20260808-drag-cast-1"></script>
+</body>
+</html>
