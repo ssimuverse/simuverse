@@ -618,29 +618,29 @@
   ]);
 
   const TEAM_OPTIONS = [
-    { name: 'Screaming Gaffers', colorName: 'Fiery Red', color: '#D01C1F', emblem: 'ScreamingGaffers.png' },
-    { name: 'Killer Grips', colorName: 'Greenery', color: '#88B04B', emblem: 'KillerGrips.png' },
-    { name: 'Mutant Maggots', colorName: 'Lime Punch', color: '#BFD641', emblem: 'MutantMaggots.png' },
-    { name: 'Toxic Rats', colorName: 'Poinciana', color: '#CA3422', emblem: 'ToxicRats.png' },
-    { name: 'Heroic Hamsters', colorName: 'Aspen Gold', color: '#FFD662', emblem: 'HeroicHamsters.png' },
-    { name: 'Villainous Vultures', colorName: 'Ultra Violet', color: '#5F4B8B', emblem: 'VillainousVultures.png' },
-    { name: 'Unfortunate Urchins', colorName: 'Adobe Rose', color: '#BA9F99', emblem: 'UnfortunateUrchins.png' },
-    { name: 'Confident Cougars', colorName: 'Flame Scarlet', color: '#CD1F28', emblem: 'ConfidentCougars.png' },
-    { name: 'Sneaky Snakes', colorName: 'Açai', color: '#46295A', emblem: 'SneakySnakes.png' },
-    { name: 'Stubborn Stallions', colorName: 'Turkish Sea', color: '#1A5190', emblem: 'StubbornStallions.png' },
-    { name: 'Howling Hyenas', colorName: 'Golden Rod', color: '#E2A829', emblem: 'HowlingHyenas.png' },
-    { name: 'Cursed Crows', colorName: 'Raven', color: '#413E3D', emblem: 'CursedCrows.png' },
-    { name: 'Shady Sharks', colorName: 'Mykonos Blue', color: '#005780', emblem: 'ShadySharks.png' },
-    { name: 'Pouncing Pumas', colorName: 'Fuchsia Purple', color: '#CC397B', emblem: 'PouncingPumas.png' },
-    { name: 'Charging Caribou', colorName: 'Bison', color: '#6E4F3A', emblem: 'ChargingCaribou.png' },
-    { name: 'Dizzy Dodos', colorName: 'Mimosa', color: '#F0C05A', emblem: 'DizzyDodos.png' },
-    { name: 'Grumpy Geese', colorName: 'Ultimate Gray', color: '#939597', emblem: 'GrumpyGeese.png' },
-    { name: 'Menacing Moose', colorName: 'Forest Night', color: '#434237', emblem: 'MenacingMoose.png' },
-    { name: 'Savage Squirrels', colorName: 'Chili Pepper', color: '#9B1B30', emblem: 'SavageSquirrels.png' },
-    { name: 'Reckless Raccoons', colorName: 'Russet Orange', color: '#E47127', emblem: 'RecklessRaccoons.png' },
-    { name: 'Panicked Pelicans', colorName: 'Scuba Blue', color: '#00ABC0', emblem: 'PanickedPelicans.png' },
-    { name: 'Confused Bears', colorName: 'Pastel Blue', color: '#BCD3D5', emblem: 'ConfusedBears.png' },
-    { name: 'Floating Salmons', colorName: 'Salmon', color: '#FAAA94', emblem: 'FloatingSalmons.png' }
+    { name: 'Screaming Gaffers', colorName: 'Fiery Red', color: '#D01C1F', emblem: 'ScreamingGaffers.webp' },
+    { name: 'Killer Grips', colorName: 'Greenery', color: '#88B04B', emblem: 'KillerGrips.webp' },
+    { name: 'Mutant Maggots', colorName: 'Lime Punch', color: '#BFD641', emblem: 'MutantMaggots.webp' },
+    { name: 'Toxic Rats', colorName: 'Poinciana', color: '#CA3422', emblem: 'ToxicRats.webp' },
+    { name: 'Heroic Hamsters', colorName: 'Aspen Gold', color: '#FFD662', emblem: 'HeroicHamsters.webp' },
+    { name: 'Villainous Vultures', colorName: 'Ultra Violet', color: '#5F4B8B', emblem: 'VillainousVultures.webp' },
+    { name: 'Unfortunate Urchins', colorName: 'Adobe Rose', color: '#BA9F99', emblem: 'UnfortunateUrchins.webp' },
+    { name: 'Confident Cougars', colorName: 'Flame Scarlet', color: '#CD1F28', emblem: 'ConfidentCougars.webp' },
+    { name: 'Sneaky Snakes', colorName: 'Açai', color: '#46295A', emblem: 'SneakySnakes.webp' },
+    { name: 'Stubborn Stallions', colorName: 'Turkish Sea', color: '#1A5190', emblem: 'StubbornStallions.webp' },
+    { name: 'Howling Hyenas', colorName: 'Golden Rod', color: '#E2A829', emblem: 'HowlingHyenas.webp' },
+    { name: 'Cursed Crows', colorName: 'Raven', color: '#413E3D', emblem: 'CursedCrows.webp' },
+    { name: 'Shady Sharks', colorName: 'Mykonos Blue', color: '#005780', emblem: 'ShadySharks.webp' },
+    { name: 'Pouncing Pumas', colorName: 'Fuchsia Purple', color: '#CC397B', emblem: 'PouncingPumas.webp' },
+    { name: 'Charging Caribou', colorName: 'Bison', color: '#6E4F3A', emblem: 'ChargingCaribou.webp' },
+    { name: 'Dizzy Dodos', colorName: 'Mimosa', color: '#F0C05A', emblem: 'DizzyDodos.webp' },
+    { name: 'Grumpy Geese', colorName: 'Ultimate Gray', color: '#939597', emblem: 'GrumpyGeese.webp' },
+    { name: 'Menacing Moose', colorName: 'Forest Night', color: '#434237', emblem: 'MenacingMoose.webp' },
+    { name: 'Savage Squirrels', colorName: 'Chili Pepper', color: '#9B1B30', emblem: 'SavageSquirrels.webp' },
+    { name: 'Reckless Raccoons', colorName: 'Russet Orange', color: '#E47127', emblem: 'RecklessRaccoons.webp' },
+    { name: 'Panicked Pelicans', colorName: 'Scuba Blue', color: '#00ABC0', emblem: 'PanickedPelicans.webp' },
+    { name: 'Confused Bears', colorName: 'Pastel Blue', color: '#BCD3D5', emblem: 'ConfusedBears.webp' },
+    { name: 'Floating Salmons', colorName: 'Salmon', color: '#FAAA94', emblem: 'FloatingSalmons.webp' }
   ];
   const TEAM_BY_NAME = new Map(TEAM_OPTIONS.map(team => [team.name, team]));
 
@@ -1784,7 +1784,7 @@
       participants: [id],
       text: `${contestantDisplayName(id)} ${sourceText} and secretly claims the only immunity idol in the game. It can be played after Chris names them as eliminated.`,
       effects: [`${contestantDisplayName(id)} secretly possesses the single-use immunity idol.`],
-      advantageImage: 'images/idol.png',
+      advantageImage: 'images/idol.webp',
       advantageLabel: 'Hidden Immunity Idol'
     }));
     return true;
@@ -4909,7 +4909,7 @@
   }
 
   function renderMergePanel() {
-    if (elements.mergeHostImage) setStaticImageFallback(elements.mergeHostImage, ['images/chris.png', '../images/chris.png']);
+    if (elements.mergeHostImage) setStaticImageFallback(elements.mergeHostImage, ['images/chris.webp', '../images/chris.webp']);
     if (elements.mergeAnnouncementText) {
       elements.mergeAnnouncementText.textContent = state.merged
         ? '“Congratulations, campers! You have officially survived the team phase, which means your teammates are no longer your problem—now everybody is your problem. From this point on, challenges are individual, immunity protects exactly one of you, and every camper gets a vote. Welcome to the merge!”'
@@ -10019,7 +10019,7 @@
     if (elements.challengeIntroduction) elements.challengeIntroduction.textContent = `“${challenge.introduction}”`;
     if (elements.challengeHostImage && !elements.challengeHostImage.dataset.fallbackBound) {
       elements.challengeHostImage.dataset.fallbackBound = 'true';
-      const candidates = ['images/chris.png', '../images/chris.png'];
+      const candidates = ['images/chris.webp', '../images/chris.webp'];
       let candidateIndex = 0;
       elements.challengeHostImage.onerror = () => {
         candidateIndex += 1;
@@ -12207,7 +12207,7 @@
     const image = document.createElement('img');
     image.className = 'ceremony-marshmallow-image';
     image.alt = 'Marshmallow';
-    setStaticImageFallback(image, ['images/marshmallow.png', '../images/marshmallow.png']);
+    setStaticImageFallback(image, ['images/marshmallow.webp', '../images/marshmallow.webp']);
     return image;
   }
 
@@ -12256,7 +12256,7 @@
     hostSide.className = 'vote-host-sendoff';
     const host = document.createElement('img');
     host.alt = 'Chris, the host';
-    setStaticImageFallback(host, ['images/chris.png', '../images/chris.png']);
+    setStaticImageFallback(host, ['images/chris.webp', '../images/chris.webp']);
     const quote = document.createElement('p');
     quote.textContent = `“${sendoff}”`;
     hostSide.append(host, quote);
@@ -12328,7 +12328,7 @@
     const idol = document.createElement('img');
     idol.className = 'idol-play-image';
     idol.alt = 'Hidden immunity idol';
-    setStaticImageFallback(idol, ['images/idol.png', '../images/idol.png']);
+    setStaticImageFallback(idol, ['images/idol.webp', '../images/idol.webp']);
     const portrait = ceremonyPortrait(play.holderId);
     const copy = document.createElement('div');
     copy.className = 'idol-play-copy';
@@ -12370,7 +12370,7 @@
 
   function renderVotingCeremony() {
     const result = state.voteResult;
-    if (elements.voteHostImage) setStaticImageFallback(elements.voteHostImage, ['images/chris.png', '../images/chris.png']);
+    if (elements.voteHostImage) setStaticImageFallback(elements.voteHostImage, ['images/chris.webp', '../images/chris.webp']);
     const introTitle = document.querySelector('.vote-ceremony-intro-copy h2');
     const introText = document.querySelector('.vote-ceremony-intro-copy p:last-child');
     if (introTitle && introText) {
@@ -12912,7 +12912,7 @@
   }
 
   function renderFinalePanel() {
-    if (elements.finaleHostImage) setStaticImageFallback(elements.finaleHostImage, ['images/chris.png', '../images/chris.png']);
+    if (elements.finaleHostImage) setStaticImageFallback(elements.finaleHostImage, ['images/chris.webp', '../images/chris.webp']);
     const result = state.juryResult;
     const revealBallots = result?.revealBallots?.length ? result.revealBallots : (result?.ballots || []);
     const revealCount = Math.max(0, Math.min(Number(state.juryRevealIndex || 0), revealBallots.length));
