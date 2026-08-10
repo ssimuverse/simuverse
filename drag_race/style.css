@@ -16162,7 +16162,11 @@ details.advanced-settings[open] > .advanced-settings-grid {
 .track-table.track-palette-configured .token-safe,
 .track-legend-palette-configured .token-safe { background: var(--tr-safe-bg) !important; color: var(--tr-safe-fg) !important; background-image: none !important; }
 .track-table.track-palette-configured .token-safe.immunity-protected,
-.track-legend-palette-configured .token-safe.immunity-protected,
+.track-legend-palette-configured .token-safe.immunity-protected {
+  background: var(--tr-safe-bg) !important;
+  color: var(--tr-safe-fg) !important;
+  background-image: none !important;
+}
 .track-table.track-palette-configured .token-imm,
 .track-legend-palette-configured .token-imm { background: var(--tr-immune-bg) !important; color: var(--tr-immune-fg) !important; }
 .track-table.track-palette-configured .token-low,
@@ -18799,4 +18803,22 @@ details.advanced-settings[open] > .advanced-settings-grid {
 
 .thailand-maxi-reveal-actions {
   padding-top: 4px;
+}
+
+
+/* Export parity: retain every special track-record border on export-stage tables. */
+.track-export-table .track-cell.golden-beaver-save,
+.track-export-table .track-cell.twist-gold-save,
+.track-export-table .track-cell.token-low-gold {
+  box-shadow: inset 0 0 0 4px #ffd166 !important;
+}
+.track-export-table .track-cell.immunity-protected {
+  box-shadow: inset 0 0 0 3px #ff4fd8 !important;
+}
+.track-export-table .track-cell.all-winners-blocked-win {
+  box-shadow: inset 0 0 0 3px #ff0000 !important;
+}
+
+.track-export-table .track-cell.token-slayoff-low {
+  box-shadow: inset 0 0 0 3px #ffd400 !important;
 }
