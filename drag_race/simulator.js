@@ -3109,6 +3109,21 @@
     function comebackFormat(season = state.season) {
         return season?.comeback?.format || season?.config?.comebackFormat || "none";
     }
+    function comebackStillPending(season) {
+        const format = comebackFormat(season);
+        if (!format || format === "none")
+            return false;
+        return !(season?.comeback?.used || season?.comebackUsed);
+    }
+    function shouldRunCuntTest(season) {
+        if (season?.config?.finaleType !== "cunt_test")
+            return false;
+        if (season.cuntTestUsed || season.rupaulCuntTestUsed || (season.episodes || []).some((ep) => ep?.type === "cunt_test"))
+            return false;
+        if (season.activeIds.length !== 5 || season.expandedFinaleReady)
+            return false;
+        return !comebackStillPending(season);
+    }
     function comebackEligibleEliminated(season) {
         return (season.eliminatedIds || []).filter((id) => season.contestants[id] && !season.activeIds.includes(id) && !season.contestants[id].isAssassin && !isIneligibleUnplannedExit(season, id));
     }
@@ -3347,6 +3362,7 @@
             specialSlayOffsUsed: false,
             specialReunionLalaparuzaUsed: false,
             specialMidSeasonRateAQueenUsed: false,
+            cuntTestUsed: false,
             fameGamesEpisodeUsed: false,
             fameGames: null,
             forceSlayersUsed: false,
@@ -6621,18 +6637,26 @@
     function applyRupaulEliminationSaveTwists(season, episode, eliminatedId, lipSync) {
         if (!eliminatedId)
             return false;
+        let saved = false;
         const chocolateSaved = applyChocolateBar(season, episode, eliminatedId);
         if (chocolateSaved) {
             if (lipSync)
                 lipSync.resultType = "chocolate_save";
-            return true;
+            saved = true;
         }
-        if (applyLuckyCowSave(season, episode, eliminatedId, lipSync))
-            return true;
-        markLuckyCowFailure(season, episode, eliminatedId);
-        if (maybeCreateBadonkaPull(season, episode, eliminatedId, lipSync))
-            return !(episode.eliminatedIds || []).includes(eliminatedId);
-        return false;
+        else if (applyLuckyCowSave(season, episode, eliminatedId, lipSync)) {
+            saved = true;
+        }
+        else {
+            markLuckyCowFailure(season, episode, eliminatedId);
+            saved = maybeCreateBadonkaPull(season, episode, eliminatedId, lipSync);
+        }
+        if (saved) {
+            episode.eliminatedIds = (episode.eliminatedIds || []).filter((id) => id !== eliminatedId);
+            if (!(episode.savedIds || []).includes(eliminatedId))
+                episode.savedIds.push(eliminatedId);
+        }
+        return saved;
     }
     async function runRupaulLipSyncResultFlow(season, episode) {
         if (episode.rupaulResultsConfirmed)
@@ -6762,7 +6786,7 @@
                 lipSync.resultType = assassinWon ? "assassin_group_vote" : "assassin_sole_vote";
                 const eliminatedId = resolveAssassinEliminationDecision(season, episode, lipSync);
                 episode.eliminatedIds = eliminatedId ? [eliminatedId] : [];
-                applyRupaulEliminationSaveTwists(season, episode, eliminatedId, lipSync);
+                const assassinEliminationSaved = applyRupaulEliminationSaveTwists(season, episode, eliminatedId, lipSync);
                 updateLipSyncStats(season, episode.winnerIds[0], winnerId === episode.winnerIds[0]);
                 season.votingStats = season.votingStats || [];
                 if (!season.votingStats.some((row) => row.label === episode.label && row.assassinId === battle.assassinId)) {
@@ -6781,7 +6805,9 @@
                         activeStartIds: (episode.activeStartIds || []).slice()
                     });
                 }
-                episode.resultText = eliminatedId ? `${displayName(season.contestants[eliminatedId])}, sashay away.` : "Nobody is eliminated.";
+                episode.resultText = assassinEliminationSaved
+                    ? nonEliminationSaveResultText(season, eliminatedId, lipSync?.resultType === "chocolate_save" ? "Golden Bar" : lipSync?.resultType === "lucky_cow_save" ? "Lucky Cow" : "Badonka Dunk Tank")
+                    : eliminatedId ? `${displayName(season.contestants[eliminatedId])}, sashay away.` : "Nobody is eliminated.";
             }
             else {
                 const survivors = decision.survivors || [];
@@ -6803,7 +6829,9 @@
                 lipSync.loserId = eliminated[0] || null;
                 episode.savedIds.push(...survivors);
                 episode.eliminatedIds.push(...eliminated);
-                eliminated.slice().forEach((id) => applyRupaulEliminationSaveTwists(season, episode, id, lipSync));
+                eliminated.slice().forEach((id) => {
+                    applyRupaulEliminationSaveTwists(season, episode, id, lipSync);
+                });
                 battle.ids.forEach((id) => updateLipSyncStats(season, id, !(episode.eliminatedIds || []).includes(id)));
                 episode.resultText = (episode.eliminatedIds || []).length ? `${sentenceList(episode.eliminatedIds, season, false)}, sashay away.` : `${sentenceList(survivors, season, false)}, shantay you stay.`;
                 if (battle.midSeasonRateAQueenBottom) {
@@ -7007,7 +7035,9 @@
             const first = storedFirst.length ? storedFirst : premiereIds.slice(0, Math.ceil(premiereIds.length / 2));
             const second = premiereIds.filter((id) => !first.includes(id));
             options.competingIds = (index === 0 ? first : second).slice();
-            options.runOnlyIds = premiereIds.filter((id) => !options.competingIds.includes(id));
+            const nonCompetingPremiereIds = premiereIds.filter((id) => !options.competingIds.includes(id));
+            options.runOnlyIds = type === "rate_a_queen_s17" ? nonCompetingPremiereIds.slice() : [];
+            options.absentIds = type === "rate_a_queen_s17" ? [] : nonCompetingPremiereIds.slice();
             options.splitGroup = `Group ${index + 1}`;
             options.rupaulSplitSequence = true;
             const splitChallengeType = season.rupaulSplitChallengeType || selectedType;
@@ -7750,37 +7780,55 @@
         }
         if (mode === "game_within_a_game") {
             const order = (episode.rupaulGameOrder || participants).slice();
+            const groups = (episode.rupaulGameGroups?.length ? episode.rupaulGameGroups : gameWithinGameEliminationGroups(season, order)).map((group) => group.slice());
             const lipSyncs = [];
-            let champion = order[0] || null;
-            for (let i = 1; i < order.length; i += 1) {
-                const challenger = order[i];
-                const ids = [champion, challenger].filter(Boolean);
-                if (ids.length < 2)
-                    continue;
-                const label = `Game Within a Game Lip Sync #${i}`;
+            let champion = null;
+            let battleNumber = 0;
+            const runBattle = async (ids, isFinalBattle) => {
+                const battleIds = [...new Set((ids || []).filter(Boolean))];
+                if (battleIds.length < 2) {
+                    champion = battleIds[0] || champion;
+                    return true;
+                }
+                battleNumber += 1;
+                const label = `Game Within a Game Lip Sync #${battleNumber}`;
                 const song = await openRupaulSongPicker(season, `Choose the Song — ${label}`);
                 if (!song)
                     return false;
-                const lipSync = createLipSyncFromSong(season, ids, song, label);
+                const lipSync = createLipSyncFromSong(season, battleIds, song, label);
                 lipSync.resultType = "game_within_a_game";
                 lipSync.gameWithinAGame = true;
-                lipSync.gameWithinAGameFinal = i === order.length - 1;
-                lipSync.roundNumber = i;
-                const decision = await openRupaulLipSyncResultPicker(season, episode, { ids, lipSync, kind: "for_win" }, { forWin: true, allowDouble: false });
+                lipSync.gameWithinAGameFinal = !!isFinalBattle;
+                lipSync.roundNumber = battleNumber;
+                const decision = await openRupaulLipSyncResultPicker(season, episode, { ids: battleIds, lipSync, kind: "for_win" }, { forWin: true, allowDouble: false });
                 if (!decision?.winnerId)
                     return false;
                 champion = decision.winnerId;
                 lipSync.winnerId = champion;
                 lipSync.winnerIds = [champion];
-                lipSync.loserId = ids.find((id) => id !== champion) || null;
-                ids.forEach((id) => updateLipSyncStats(season, id, id === champion));
+                lipSync.loserIds = battleIds.filter((id) => id !== champion);
+                lipSync.loserId = lipSync.loserIds[0] || null;
+                battleIds.forEach((id) => updateLipSyncStats(season, id, id === champion));
                 lipSyncs.push(lipSync);
                 episode.extraLipSyncs = lipSyncs.slice();
                 episode.lipSync = null;
                 saveState();
                 renderEpisode();
                 await Promise.resolve();
+                return true;
+            };
+            if (groups.length) {
+                const firstGroup = groups[0].slice();
+                if (firstGroup.length === 1)
+                    champion = firstGroup[0];
+                else if (!await runBattle(firstGroup, groups.length === 1))
+                    return false;
+                for (let i = 1; i < groups.length; i += 1) {
+                    if (!await runBattle([champion, ...groups[i]], i === groups.length - 1))
+                        return false;
+                }
             }
+            champion ||= order[0] || null;
             if (champion)
                 reviveContestant(season, champion);
             episode.returnedIds = [champion].filter(Boolean);
@@ -7790,6 +7838,7 @@
             episode.extraLipSyncs = lipSyncs;
             episode.lipSync = null;
             episode.comeback.returnedId = champion;
+            episode.comeback.eliminationGroups = groups.map((group) => group.slice());
             episode.resultText = champion ? `${displayName(season.contestants[champion])}, shantay you stay! You have earned your spot back in the competition.` : "The Game Within a Game is complete.";
             markComebackUsed(season);
             episode.rupaulSpecialCompleted = true;
@@ -8711,6 +8760,7 @@
         episode.rupaulRunwayConfirmed = true;
         episode.rupaulPlacementsConfirmed = true;
         episode.rupaulGameOrder = eligible.slice();
+        episode.rupaulGameGroups = gameWithinGameEliminationGroups(season, eligible).map((group) => group.slice());
         episode.rupaulOriginalActiveIds = season.activeIds.slice();
         episode.rupaulSpecialIds = eligible.slice();
         episode.activeStartIds = [...new Set([...season.activeIds, ...eligible])];
@@ -9083,8 +9133,9 @@
         }
         if (season.rupaulMidRateState && !season.rupaulMidRateState.complete)
             return prepareNextRupaulMidRatePart(season);
-        if (season.config.finaleType === "cunt_test" && season.activeIds.length === 5 && !season.rupaulCuntTestUsed && !season.expandedFinaleReady) {
+        if (shouldRunCuntTest(season)) {
             season.rupaulCuntTestUsed = true;
+            season.cuntTestUsed = true;
             return prepareRupaulCuntTestEpisode(season);
         }
         const target = effectiveFinalistSize(season);
@@ -9582,7 +9633,7 @@
         await simulateSeasonFromCurrentState(season);
     }
     async function simulateSeasonFromCurrentState(season) {
-        while (!season.seasonComplete && !season.expandedFinaleReady && (season.activeIds.length > effectiveFinalistSize(season) || shouldRunSpecialComeback(season))) {
+        while (!season.seasonComplete && !season.expandedFinaleReady && (season.activeIds.length > effectiveFinalistSize(season) || shouldRunSpecialComeback(season) || shouldRunDirectComeback(season))) {
             if (season.lalaparuzaQueued) {
                 const queued = season.lalaparuzaQueued;
                 simulateSpecialLalaparuzaSmackdown(season, {
@@ -9605,7 +9656,7 @@
                 simulateRegularEpisode(season, { specialPremiere: "rate_a_queen_merge", label: "Episode 3" });
                 season.rateAQueenMergeDone = true;
             }
-            else if (season.config.finaleType === "cunt_test" && season.activeIds.length === 5) {
+            else if (shouldRunCuntTest(season)) {
                 simulateCuntTestEpisode(season);
             }
             else {
@@ -11333,6 +11384,16 @@
     function scoreForEpisodeId(episode, id, field = "total") {
         return Number((episode.scores || []).find((x) => x.id === id)?.[field] || 0);
     }
+    function objectiveEpisodeScore(episode, id) {
+        const score = (episode?.scores || []).find((row) => row.id === id);
+        if (!score)
+            return 0;
+        const objective = Number(score.legacyBottomTotal);
+        return Number.isFinite(objective) ? objective : Number(score.total || 0);
+    }
+    function objectiveTeamAverage(episode, ids) {
+        return average((ids || []).map((id) => objectiveEpisodeScore(episode, id)));
+    }
     function chooseEliminationVote(season, voterId, bottomIds, episode, mode = "legacy") {
         const choices = (bottomIds || []).filter((id) => id && (bottomIds.length <= 1 || id !== voterId));
         const pool = choices.length ? choices : (bottomIds || []);
@@ -12279,9 +12340,31 @@
             return Number(a.total || 0) - Number(b.total || 0);
         }).map((s) => s.id);
     }
+    function immunityEpisodeParticipantIds(season, episode) {
+        if (!episode)
+            return [];
+        if (Array.isArray(episode.competingIds) && episode.competingIds.length)
+            return episode.competingIds.slice();
+        if (Array.isArray(episode.activeStartIds) && episode.activeStartIds.length)
+            return episode.activeStartIds.slice();
+        return (season.activeIds || []).slice();
+    }
+    function isImmunityEligibleEpisode(season, episode, id) {
+        if (!episode || episode.type !== "competitive" || episode.premiere)
+            return false;
+        return immunityEpisodeParticipantIds(season, episode).includes(id);
+    }
     function isProtectedByImmunity(season, episode, id) {
         const imm = season.immunity?.[id];
-        return !!(imm && imm.usableEpisodeNumber === episode.number && immunityStillActive(season));
+        if (!imm || imm.used || !isImmunityEligibleEpisode(season, episode, id))
+            return false;
+        const awardedEpisodeNumber = Number(imm.awardedEpisodeNumber);
+        if (Number.isFinite(awardedEpisodeNumber))
+            return Number(episode.number) > awardedEpisodeNumber;
+        const legacyUsableEpisodeNumber = Number(imm.usableEpisodeNumber);
+        if (Number.isFinite(legacyUsableEpisodeNumber))
+            return Number(episode.number) >= legacyUsableEpisodeNumber;
+        return true;
     }
     function filterImmunityProtected(season, episode, ids) {
         return (ids || []).filter((id) => !isProtectedByImmunity(season, episode, id));
@@ -12322,7 +12405,7 @@
         const legacy = isLegacyFormat(season);
         if (isAssassinFormat(season) && episode.teams?.mode === "groups" && (episode.teams.groups || []).length === 3) {
             const teamOrder = (episode.teams.groups || [])
-                .map((team) => ({ ...team, total: average((team.ids || []).map((id) => scoreForEpisodeId(episode, id, "total"))) }))
+                .map((team) => ({ ...team, total: objectiveTeamAverage(episode, team.ids) }))
                 .sort((a, b) => b.total - a.total);
             const winningTeam = teamOrder[0];
             const bottomTeam = teamOrder.at(-1);
@@ -13078,11 +13161,11 @@
     }
     function assignTeamLipSync(season, episode) {
         const groups = episode.teams?.groups || [];
-        const rankedTeams = groups.map((team) => ({ ...team, total: average(team.ids.map((id) => episode.scores.find((s) => s.id === id)?.total || 0)) })).sort((a, b) => b.total - a.total);
+        const rankedTeams = groups.map((team) => ({ ...team, total: objectiveTeamAverage(episode, team.ids) })).sort((a, b) => b.total - a.total);
         const winning = rankedTeams[0];
         const losing = rankedTeams.at(-1);
         const winningIds = winning?.ids || [];
-        const bestWinningId = winningIds.slice().sort((a, b) => (episode.scores.find((s) => s.id === b)?.total || 0) - (episode.scores.find((s) => s.id === a)?.total || 0))[0];
+        const bestWinningId = winningIds.slice().sort((a, b) => objectiveEpisodeScore(episode, b) - objectiveEpisodeScore(episode, a))[0];
         episode.judgedInTeams = true;
         season.teamJudgedEpisodes += 1;
         episode.winningTeamIds = winningIds.slice();
@@ -13095,11 +13178,11 @@
     }
     function assignWholeTeamWin(season, episode) {
         const groups = episode.teams?.groups || [];
-        const rankedTeams = groups.map((team) => ({ ...team, total: average(team.ids.map((id) => episode.scores.find((s) => s.id === id)?.total || 0)) })).sort((a, b) => b.total - a.total);
+        const rankedTeams = groups.map((team) => ({ ...team, total: objectiveTeamAverage(episode, team.ids) })).sort((a, b) => b.total - a.total);
         const winning = rankedTeams[0];
         const winningIds = winning?.ids || [];
         const weakWinningIds = new Set([...(episode.maxiGroups?.bad || []), ...(episode.maxiGroups?.flopped || [])].filter((id) => winningIds.includes(id)));
-        const bestWinningId = winningIds.slice().sort((a, b) => (episode.scores.find((s) => s.id === b)?.total || 0) - (episode.scores.find((s) => s.id === a)?.total || 0))[0];
+        const bestWinningId = winningIds.slice().sort((a, b) => objectiveEpisodeScore(episode, b) - objectiveEpisodeScore(episode, a))[0];
         episode.judgedInTeams = true;
         season.teamJudgedEpisodes += 1;
         episode.winningTeamIds = winningIds.slice();
@@ -13143,13 +13226,13 @@
     }
     function assignTeamJudgedPlacements(season, episode) {
         season.teamJudgedEpisodes += 1;
-        const groups = episode.teams.groups.map((team) => ({ ...team, total: average(team.ids.map((id) => episode.scores.find((s) => s.id === id)?.total || 0)) })).sort((a, b) => b.total - a.total);
+        const groups = episode.teams.groups.map((team) => ({ ...team, total: objectiveTeamAverage(episode, team.ids) })).sort((a, b) => b.total - a.total);
         const winning = groups[0];
         const winningIds = winning?.ids || [];
         episode.judgedInTeams = true;
         episode.winningTeamIds = winningIds.slice();
         const weakWinningIds = new Set([...(episode.maxiGroups?.bad || []), ...(episode.maxiGroups?.flopped || [])].filter((id) => winningIds.includes(id)));
-        const bestWinningId = winningIds.slice().sort((a, b) => (episode.scores.find((s) => s.id === b)?.total || 0) - (episode.scores.find((s) => s.id === a)?.total || 0))[0];
+        const bestWinningId = winningIds.slice().sort((a, b) => objectiveEpisodeScore(episode, b) - objectiveEpisodeScore(episode, a))[0];
         const secondTotal = groups[1]?.total ?? winning?.total ?? 0;
         const dominantSmallTeamWin = winningIds.length <= 3 && !weakWinningIds.size && ((Number(winning?.total || 0) - Number(secondTotal || 0)) >= 8 || Math.random() < 0.28);
         if (dominantSmallTeamWin) {
@@ -13174,14 +13257,14 @@
             return;
         }
         const bottomPool = groups.length === 2 ? groups.at(-1).ids : groups.slice(1).flatMap((team) => team.ids);
-        const bottomPoolRanked = bottomPool.slice().filter((id) => !winningIds.includes(id)).sort((a, b) => (episode.scores.find((s) => s.id === a)?.total || 0) - (episode.scores.find((s) => s.id === b)?.total || 0));
+        const bottomPoolRanked = bottomPool.slice().filter((id) => !winningIds.includes(id)).sort((a, b) => objectiveEpisodeScore(episode, a) - objectiveEpisodeScore(episode, b));
         episode.bottomIds = chooseBottomsRespectingImmunity(season, episode, bottomPoolRanked, 2);
         episode.lowIds = filterImmunityProtected(season, episode, bottomPoolRanked).filter((id) => !episode.bottomIds.includes(id)).slice(0, groups.length === 2 ? 1 : 2);
         setSafeIds(season, episode);
     }
     function assignPairJudgedPlacements(season, episode) {
         season.pairJudgedEpisodes += 1;
-        const pairs = episode.teams.groups.map((team) => ({ ...team, total: average(team.ids.map((id) => episode.scores.find((s) => s.id === id)?.total || 0)) })).sort((a, b) => b.total - a.total);
+        const pairs = episode.teams.groups.map((team) => ({ ...team, total: objectiveTeamAverage(episode, team.ids) })).sort((a, b) => b.total - a.total);
         episode.winnerIds = pairs[0]?.ids || [];
         if (pairs.length <= 2) {
             episode.highIds = [];
@@ -14101,6 +14184,7 @@
         generateHiddenNarrativeEvents(season, episode);
         updateEpisodeStats(season, episode);
         assignEpisodeEdgic(season, episode);
+        consumeEpisodeImmunity(season, episode);
         season.episodes.push(episode);
         if (season.trackColumnLabels && !season.trackColumnLabels.some((col) => col.label === episode.label)) {
             season.trackColumnLabels.push({ label: episode.label, title: episode.challenge ? `${episode.challenge.name} (${challengeTypeLabel(episode.challenge.type)})` : episode.title || episode.label, challengeType: episode.challenge ? challengeTypeLabel(episode.challenge.type) : "" });
@@ -14120,21 +14204,39 @@
             return;
         if (!season.config.twistImmunity)
             return;
-        if (!immunityStillActive(season))
+        if (!immunityStillActive(season, episode))
             return;
         if (episode.winnerIds.length !== 1)
             return;
-        if (episode.teams?.mode !== "solo" && episode.highIds.length > 1)
+        if (episode.teams && episode.teams.mode !== "solo" && episode.highIds.length > 1)
             return;
         const winnerId = episode.winnerIds[0];
-        season.immunity[winnerId] = { usableEpisodeNumber: episode.number + 1, used: false };
+        season.immunity[winnerId] = {
+            awardedEpisodeNumber: episode.number,
+            usableEpisodeNumber: episode.number + 1,
+            used: false
+        };
         episode.immunityAwardedId = winnerId;
-        episode.notes.push(`${displayName(season.contestants[winnerId])} earns immunity for the following episode.`);
+        episode.notes.push(`${displayName(season.contestants[winnerId])} earns immunity for their next competitive episode.`);
     }
-    function immunityStillActive(season) {
+    function consumeEpisodeImmunity(season, episode) {
+        Object.entries(season.immunity || {}).forEach(([id, imm]) => {
+            if (!imm || imm.used)
+                return;
+            if (!isProtectedByImmunity(season, episode, id))
+                return;
+            imm.used = true;
+            imm.usedEpisodeNumber = episode.number;
+            imm.usedEpisodeLabel = episode.label;
+        });
+    }
+    function immunityStillActive(season, episode = null) {
         const initial = season.castOrder.length;
         const midpoint = Math.ceil(initial / 2);
-        return season.activeIds.length > midpoint;
+        const activeCount = Array.isArray(episode?.activeStartIds) && episode.activeStartIds.length
+            ? episode.activeStartIds.length
+            : season.activeIds.length;
+        return activeCount > midpoint;
     }
     function hasCompetitiveEpisodePlacement(episode, id) {
         return [
@@ -14238,9 +14340,10 @@
         }
         if (episode.type === "mid_season_rate_a_queen") {
             const raq = episode.midSeasonRateAQueen || {};
-            if ((episode.eliminatedIds || []).includes(id) || raq.bottomLipSyncLoserId === id)
+            const ownsBottomBattle = Number(raq.part || 0) === 2;
+            if ((episode.eliminatedIds || []).includes(id) || (ownsBottomBattle && raq.bottomLipSyncLoserId === id))
                 return "ELIM";
-            if (raq.bottomLipSyncWinnerId === id || ((raq.bottomLipSyncIds || []).includes(id) && !(episode.eliminatedIds || []).includes(id)))
+            if (ownsBottomBattle && (raq.bottomLipSyncWinnerId === id || ((raq.bottomLipSyncIds || []).includes(id) && !(episode.eliminatedIds || []).includes(id))))
                 return "BTM2";
             if ((episode.winnerIds || []).includes(id))
                 return "WIN";
@@ -15557,17 +15660,11 @@
         lipSync.roundResultText = `${fullDisplayName(season.contestants[winnerId])}, shantay you stay. ${fullDisplayName(season.contestants[loserId])}, sashay away.`;
         episodeA.midSeasonRateAQueen = episodeA.midSeasonRateAQueen || {};
         episodeB.midSeasonRateAQueen = episodeB.midSeasonRateAQueen || {};
-        [episodeA, episodeB].forEach((ep) => {
-            ep.midSeasonRateAQueen.bottomLipSyncIds = [q1, q2];
-            ep.midSeasonRateAQueen.bottomLipSyncWinnerId = winnerId;
-            ep.midSeasonRateAQueen.bottomLipSyncLoserId = loserId;
-        });
-        if (loserId === q1) {
-            episodeA.eliminatedIds = [q1];
-        }
-        else {
-            episodeB.eliminatedIds = [q2];
-        }
+        episodeB.midSeasonRateAQueen.bottomLipSyncIds = [q1, q2];
+        episodeB.midSeasonRateAQueen.bottomLipSyncWinnerId = winnerId;
+        episodeB.midSeasonRateAQueen.bottomLipSyncLoserId = loserId;
+        episodeA.eliminatedIds = [];
+        episodeB.eliminatedIds = loserId ? [loserId] : [];
         episodeB.extraLipSyncs.push(lipSync);
         episodeB.s17SurvivalResultText = lipSync.roundResultText;
         episodeB.midSeasonRateAQueen.bottomLipSyncResultText = lipSync.roundResultText;
@@ -16365,6 +16462,27 @@
         markComebackUsed(season);
         finalizeEpisode(season, episode);
     }
+    function gameWithinGameEliminationGroups(season, eligibleIds = comebackEligibleEliminated(season)) {
+        const eligible = [...new Set((eligibleIds || []).filter(Boolean))];
+        const eligibleSet = new Set(eligible);
+        const latestEpisodeById = new Map();
+        (season.episodes || []).forEach((ep, episodeIndex) => {
+            (ep?.eliminatedIds || []).forEach((id) => {
+                if (eligibleSet.has(id))
+                    latestEpisodeById.set(id, episodeIndex);
+            });
+        });
+        const grouped = new Map();
+        eligible.forEach((id, fallbackIndex) => {
+            const episodeIndex = latestEpisodeById.has(id) ? latestEpisodeById.get(id) : Number.MAX_SAFE_INTEGER - eligible.length + fallbackIndex;
+            if (!grouped.has(episodeIndex))
+                grouped.set(episodeIndex, []);
+            grouped.get(episodeIndex).push(id);
+        });
+        return [...grouped.entries()]
+            .sort((a, b) => a[0] - b[0])
+            .map(([, ids]) => ids);
+    }
     function simulateGameWithinAGameEpisode(season) {
         const eliminated = comebackEligibleEliminated(season);
         const originalActive = season.activeIds.slice();
@@ -16382,33 +16500,49 @@
         episode.bottomIds = [];
         const lipSyncs = [];
         const lostIds = [];
-        let currentChampionId = eliminated[0];
-        eliminated.slice(1).forEach((challengerId, index, challengers) => {
-            const battleNumber = index + 1;
-            const ids = [currentChampionId, challengerId].filter(Boolean);
-            if (ids.length < 2)
+        const eliminationGroups = gameWithinGameEliminationGroups(season, eliminated);
+        let currentChampionId = null;
+        let battleNumber = 0;
+        const runBattle = (ids, isFinalBattle) => {
+            const battleIds = [...new Set((ids || []).filter(Boolean))];
+            if (battleIds.length < 2) {
+                currentChampionId = battleIds[0] || currentChampionId;
                 return;
-            const lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, ids, `Game Within a Game Lip Sync #${battleNumber}`));
-            const winnerId = lipSync.winnerId || ids[0];
-            const loserIds = ids.filter((id) => id !== winnerId);
+            }
+            battleNumber += 1;
+            const lipSync = applyRupaulLipSyncChoice(season, createLipSync(season, battleIds, `Game Within a Game Lip Sync #${battleNumber}`));
+            const winnerId = lipSync.winnerId || battleIds[0];
+            const loserIds = battleIds.filter((id) => id !== winnerId);
             const winnerName = fullDisplayName(season.contestants[winnerId] || {});
             const loserText = sentenceList(loserIds, season, false);
-            const isFinalBattle = index === challengers.length - 1;
             lipSync.context = `Game Within a Game Lip Sync #${battleNumber}`;
             lipSync.resultType = "game_within_a_game";
             lipSync.gameWithinAGame = true;
-            lipSync.gameWithinAGameFinal = isFinalBattle;
+            lipSync.gameWithinAGameFinal = !!isFinalBattle;
             lipSync.roundNumber = battleNumber;
             lipSync.roundPosition = 1;
+            lipSync.winnerIds = [winnerId];
+            lipSync.loserIds = loserIds.slice();
+            lipSync.loserId = loserIds[0] || null;
             lipSync.roundResultText = isFinalBattle
                 ? `${winnerName}, shantay you stay! You have earned your spot back in the competition.`
                 : `${winnerName}, shantay you stay. ${loserText}, thank you for an unforgettable season. Now, sashay away...`;
-            ids.forEach((id) => updateLipSyncStats(season, id, id === winnerId));
+            battleIds.forEach((id) => updateLipSyncStats(season, id, id === winnerId));
             lostIds.push(...loserIds);
             currentChampionId = winnerId;
             lipSyncs.push(lipSync);
-        });
-        const winnerId = currentChampionId;
+        };
+        if (eliminationGroups.length) {
+            const firstGroup = eliminationGroups[0].slice();
+            if (firstGroup.length === 1)
+                currentChampionId = firstGroup[0];
+            else
+                runBattle(firstGroup, eliminationGroups.length === 1);
+            eliminationGroups.slice(1).forEach((group, index, rest) => {
+                runBattle([currentChampionId, ...group], index === rest.length - 1);
+            });
+        }
+        const winnerId = currentChampionId || eliminated[0];
         reviveContestant(season, winnerId);
         episode.returnedIds = [winnerId].filter(Boolean);
         episode.runOnlyIds = originalActive.slice();
@@ -16420,6 +16554,7 @@
             episode.comebackPlacements[id] = "OUT"; });
         episode.comeback.returnedId = winnerId;
         episode.comeback.gauntletOrder = eliminated.slice();
+        episode.comeback.eliminationGroups = eliminationGroups.map((group) => group.slice());
         episode.resultText = `${displayName(season.contestants[winnerId])}, shantay you stay! You have earned your spot back in the competition.`;
         markComebackUsed(season);
         finalizeEpisode(season, episode);
@@ -16818,8 +16953,9 @@
     }
     function simulateCuntTestEpisode(season) {
         const ids = season.activeIds.slice();
-        if (ids.length !== 5)
+        if (ids.length !== 5 || season.cuntTestUsed)
             return;
+        season.cuntTestUsed = true;
         const episode = createEpisodeShell(season, {
             type: "cunt_test",
             title: `Episode ${season.episodeCounter}`,
@@ -18051,7 +18187,7 @@
         }
         if (format === "game_within_a_game") {
             html += comebackSmallGrid(eligibleIds, "");
-            html += `<article class="challenge-card lalaparuza-rules-card first-sim-gwag-comeback-card"><h3>Game Within a Game</h3><p>The first eliminated queen will face the second eliminated queen. The winner will face the third eliminated queen, then the next, until one queen wins the gauntlet and earns their spot back in the competition.</p></article>`;
+            html += `<article class="challenge-card lalaparuza-rules-card first-sim-gwag-comeback-card"><h3>Game Within a Game</h3><p>Eliminated queens enter the gauntlet in elimination order. The reigning winner faces the next elimination group; if two queens were eliminated in the same episode, they enter together for a three-way lip sync. The final winner earns their spot back in the competition.</p></article>`;
             els.comebackStack.innerHTML = html;
             return;
         }
@@ -22380,15 +22516,20 @@
                 context.strokeStyle = "#c8cdd4";
                 context.lineWidth = borderWidth;
                 context.strokeRect(x + borderWidth / 2, y + borderWidth / 2, Math.max(0, cellWidth - borderWidth), Math.max(0, cellHeight - borderWidth));
-                const luckyCowBorder = cell.classList.contains("lucky-cow-save") || cell.classList.contains("token-lc-border");
-                const badonkaBorder = cell.classList.contains("badonka-save") || cell.classList.contains("token-dunk-border");
-                const twistBorderColor = luckyCowBorder ? "#ffeb3b" : badonkaBorder ? "#ffd166" : "";
-                if (twistBorderColor) {
-                    const twistBorderWidth = 4;
-                    const inset = twistBorderWidth / 2;
-                    context.strokeStyle = twistBorderColor;
-                    context.lineWidth = twistBorderWidth;
-                    context.strokeRect(x + inset, y + inset, Math.max(0, cellWidth - twistBorderWidth), Math.max(0, cellHeight - twistBorderWidth));
+                const specialBorders = [
+                    { active: cell.classList.contains("all-winners-blocked-win"), color: "#ff0000", width: 3 },
+                    { active: cell.classList.contains("immunity-protected"), color: "#ff4fd8", width: 3 },
+                    { active: cell.classList.contains("lucky-cow-save") || cell.classList.contains("token-lc-border"), color: "#ffeb3b", width: 4 },
+                    { active: cell.classList.contains("badonka-save") || cell.classList.contains("token-dunk-border"), color: "#ffd166", width: 4 },
+                    { active: cell.classList.contains("golden-beaver-save") || cell.classList.contains("twist-gold-save") || cell.classList.contains("token-low-gold"), color: "#ffd166", width: 4 },
+                    { active: cell.classList.contains("token-slayoff-low"), color: "#ffd400", width: 3 }
+                ];
+                const specialBorder = specialBorders.find((item) => item.active);
+                if (specialBorder) {
+                    const inset = specialBorder.width / 2;
+                    context.strokeStyle = specialBorder.color;
+                    context.lineWidth = specialBorder.width;
+                    context.strokeRect(x + inset, y + inset, Math.max(0, cellWidth - specialBorder.width), Math.max(0, cellHeight - specialBorder.width));
                 }
             }
             const cellImage = cell.querySelector("img.track-contestant-photo, img.track-country-flag");
