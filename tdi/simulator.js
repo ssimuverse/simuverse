@@ -4483,6 +4483,15 @@
 
   function episodeEliminatedIds(record) {
     const ids = [];
+
+    // In the Final Four Showdown, the challenge loser leaves first (4th place),
+    // then the sole-vote elimination leaves second (3rd place). The automatic
+    // elimination is not stored in episodeOutcome.departures, so seed it first
+    // to preserve the actual chronological placement order.
+    if (record?.episodeType === 'final-four-showdown' && record?.automaticEliminatedId) {
+      ids.push(record.automaticEliminatedId);
+    }
+
     (record?.episodeOutcome?.departures || []).forEach(item => ids.push(item.id));
     if (record?.automaticEliminatedId) ids.push(record.automaticEliminatedId);
     if (!record?.voteResult?.noElimination) {
