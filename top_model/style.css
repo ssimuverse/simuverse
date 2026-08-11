@@ -4407,3 +4407,34 @@ dialog::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(3px); }
     flex: 1 1 0;
   }
 }
+
+/* Model Directory — slightly larger typography */
+.casting-sidebar .filter-label,
+.casting-sidebar .directory-search > span {
+  font-size: 11px;
+}
+
+.casting-sidebar .multi-dropdown > summary {
+  font-size: 11px;
+}
+
+.casting-sidebar .filter-check-row span,
+.casting-sidebar .filter-empty {
+  font-size: 10px;
+}
+
+.casting-sidebar .compact-directory-list .directory-name {
+  font-size: 11px;
+}
+
+.casting-sidebar .cast-tool-grid .secondary-btn {
+  font-size: 12px;
+}
+
+.casting-sidebar .panel-head h2 {
+  font-size: 20px;
+}
+
+.casting-sidebar .meta-chip {
+  font-size: 11px;
+}
