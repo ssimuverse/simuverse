@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A fashion competition simulator interface.">
+  <title>Top Model Simulator</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="../cast_data.js"></script>
+  <script src="../drag_race_data.js"></script>
+  <script src="simulator.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero-header">
+      <button class="brand-lockup" type="button" data-go="setup-screen" aria-label="Open season setup">
+        <span class="logo-main">THE TOP MODEL</span>
+        <span class="logo-kicker">SIMUVERSE</span>
+      </button>
+      <a class="secondary-btn home-link-btn" href="../index.html">Home</a>
+    </header>
+
+    <main class="page-shell">
+      
+      <section class="screen is-active" id="setup-screen" aria-labelledby="setupTitle">
+        <div class="editorial-head compact-page-head">
+          <h1 id="setupTitle">Create a Season</h1>
+          <div class="screen-action-row">
+            <button class="secondary-btn" id="resetSetupBtn" type="button">Reset</button>
+            <button class="primary-btn" type="button" data-go="participants-screen">Build the Cast</button>
+          </div>
+        </div>
+
+        <div class="setup-layout">
+          <article class="setup-sheet">
+            <div class="field-grid setup-core-grid simplified-setup-grid">
+              <label class="field field-span-2">
+                <span>Season Name</span>
+                <input type="text" id="simulationName" value="My Next Top Model" autocomplete="off">
+              </label>
+
+              <label class="field field-span-2">
+                <span>Season Format</span>
+                <select id="seasonFormat">
+                  <option value="classic">Regular</option>
+                  <option value="audience">Voting System</option>
+                  <option value="fan">Fan Voting</option>
+                </select>
+              </label>
+
+              <label class="field range-field">
+                <span>Cast Size <output class="range-pill" id="participantCountValue" for="participantCount">14</output></span>
+                <input type="range" id="participantCount" min="6" max="20" value="14" step="1">
+              </label>
+
+              <label class="field range-field">
+                <span>Finalists <output class="range-pill" id="finalistCountValue" for="finalistCount">3</output></span>
+                <input type="range" id="finalistCount" min="2" max="4" value="3" step="1">
+              </label>
+            </div>
+          </article>
+
+          <section class="advanced-settings is-always-open">
+            <div class="advanced-static-head"><strong>Advanced Options</strong></div>
+            <div class="advanced-settings-grid three-groups">
+              <section class="advanced-group">
+                <div class="check-grid">
+                  <label class="toggle-row"><input id="castingEpisode" type="checkbox"><span>Casting Episode</span></label>
+                  <label class="conditional-setting" id="castingSizeOption" hidden>
+                    <span>Casting Size <output class="range-pill" id="castingCountValue" for="castingCount">20</output></span>
+                    <input type="range" id="castingCount" min="20" max="32" value="20" step="1">
+                    <small>The number of models who enter the two-round casting episode.</small>
+                  </label>
+                  <label class="toggle-row"><input id="internationalDestination" type="checkbox"><span>International Destination</span></label>
+                  <label class="conditional-setting" id="internationalDestinationOption">
+                    <span>Destination Country</span>
+                    <select id="internationalDestinationCountry" aria-label="International destination country"></select>
+                  </label>
+                </div>
+              </section>
+
+              <section class="advanced-group">
+                <div class="advanced-group-head"><h2>Twists</h2></div>
+                <div class="check-grid">
+                  <label class="toggle-row"><input id="challengeImmunity" type="checkbox"><span>Challenge Immunity</span></label>
+                  <label class="toggle-row"><input id="comeback" type="checkbox"><span>Comeback</span></label>
+                </div>
+              </section>
+
+              <section class="advanced-group production-group">
+                <div class="advanced-group-head"><h2>Production</h2></div>
+                <div class="check-grid">
+                  <label class="toggle-row"><input id="disableRiggory" type="checkbox"><span>Disable Riggory</span></label>
+                  <label class="toggle-row"><input id="allowNonEliminations" type="checkbox"><span>Allow Non-Eliminations</span></label>
+                  <label class="toggle-row"><input id="allowDoubleEliminations" type="checkbox"><span>Allow Double Eliminations</span></label>
+                  <label class="toggle-row"><input id="allowQuits" type="checkbox"><span>Allow Quits</span></label>
+                  <label class="toggle-row"><input id="allowDisqualifications" type="checkbox"><span>Allow Disqualifications</span></label>
+                </div>
+              </section>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      
+      <section class="screen" id="participants-screen" aria-labelledby="participantsTitle">
+        <div class="editorial-head compact-page-head">
+          <h1 id="participantsTitle">Build the Cast</h1>
+          <div class="screen-action-row">
+            <button class="secondary-btn" type="button" data-go="setup-screen">Back</button>
+            <button class="primary-btn" id="startSeasonBtn" type="button">Start Season</button>
+          </div>
+        </div>
+
+        <div class="cast-layout">
+          <aside class="casting-sidebar">
+            <div class="panel-head compact-head split">
+              <h2>Model Directory</h2>
+              <span class="meta-chip"><strong id="availableCount">0</strong></span>
+            </div>
+
+            <div class="directory-filters">
+              <div class="filter-block">
+                <span class="filter-label">Choose Shows</span>
+                <details class="multi-dropdown" id="showFilterDropdown">
+                  <summary id="showFilterSummary">All Shows</summary>
+                  <div class="checklist-filter dropdown-checklist" id="showFilterChecklist"></div>
+                </details>
+              </div>
+
+              <div class="filter-block">
+                <span class="filter-label">Choose Seasons</span>
+                <details class="multi-dropdown" id="seasonFilterDropdown">
+                  <summary id="seasonFilterSummary">All Seasons</summary>
+                  <div class="checklist-filter dropdown-checklist" id="seasonFilterChecklist"></div>
+                </details>
+              </div>
+
+              <label class="field compact directory-search">
+                <span>Search</span>
+                <input type="search" id="participantSearch" placeholder="Search models...">
+              </label>
+            </div>
+
+            <div class="roster-grid compact-directory-list" id="rosterGrid"></div>
+
+            <div class="cast-tool-grid">
+              <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
+              <button class="secondary-btn" id="randomizeEvenCastBtn" type="button">Randomize Even-Gender Cast</button>
+              <button class="secondary-btn" id="randomContestantBtn" type="button">Random Contestant</button>
+              <button class="secondary-btn" id="presetCastBtn" type="button">Use Pre-Set Cast</button>
+              <button class="secondary-btn" id="customContestantBtn" type="button">Custom Contestant</button>
+              <button class="secondary-btn" id="clearParticipantsBtn" type="button">Clear Cast</button>
+            </div>
+          </aside>
+
+          <section class="casting-board">
+            <div class="casting-board-head">
+              <h2 id="contactSheetTitle">Season Contact Sheet</h2>
+              <div class="casting-board-tools">
+                <button class="secondary-btn compact-board-btn" id="randomizeAllSkillsBtn" type="button">Randomize All Skills</button>
+                <button class="secondary-btn compact-board-btn" id="randomizeAllArchetypesBtn" type="button">Randomize All Archetypes</button>
+                <button class="secondary-btn compact-board-btn" id="resetAllSkillsBtn" type="button">Reset All Skills</button>
+                <span class="meta-chip"><strong id="selectedCount">0</strong>/<span id="slotCount">14</span></span>
+              </div>
+            </div>
+            <div class="selected-grid" id="selectedGrid"></div>
+          </section>
+        </div>
+      </section>
+
+      
+      <section class="screen" id="simulation-screen" aria-labelledby="roundTitle">
+        <div class="episode-topbar">
+          <div class="episode-title-stack">
+            <h1 id="roundTitle">Episode 01</h1>
+          </div>
+          <div class="episode-controls">
+            <select id="roundSelect" class="episode-select" aria-label="Select episode"></select>
+            <button class="secondary-btn" type="button" data-go="participants-screen">Cast</button>
+            <button class="secondary-btn" id="resetSeasonBtn" type="button">Reset</button>
+            <button class="primary-btn" type="button" data-go="statistics-screen">Statistics</button>
+          </div>
+        </div>
+
+        <div id="castingEpisodeView" class="casting-episode-view" hidden></div>
+
+        <div id="regularEpisodeView">
+        <div class="section-toggle-row" role="tablist" aria-label="Episode sections">
+          <button class="section-toggle is-active" type="button" data-panel-target="status">Status</button>
+          <button class="section-toggle" type="button" data-panel-target="house-before">House</button>
+          <button class="section-toggle" type="button" data-panel-target="challenge">Challenge</button>
+          <button class="section-toggle" type="button" data-panel-target="makeover" hidden>Makeover</button>
+          <button class="section-toggle" type="button" data-panel-target="house-after">House</button>
+          <button class="section-toggle" type="button" data-panel-target="shoot">Shoot</button>
+          <button class="section-toggle" type="button" data-panel-target="judging">Judging</button>
+          <button class="section-toggle" type="button" data-panel-target="elimination">Elimination</button>
+          <button class="section-toggle" type="button" data-panel-target="comeback" hidden disabled>Comeback</button>
+        </div>
+
+        <div class="episode-panel-shell">
+          <section class="episode-panel is-active" data-panel="status">
+            <div class="status-hero">
+              <span class="episode-number" id="statusEpisodeNumber">01</span>
+              <div>
+                <h2 id="statusEpisodeTitle">First Impressions</h2>
+                <p class="status-copy" id="statusDescription"></p>
+              </div>
+            </div>
+
+            <div class="section-title with-count"><span>Remaining Models</span><strong id="currentCount">0</strong></div>
+            <div class="contestant-strip" id="currentParticipantStrip"></div>
+
+            <div id="comebackSection" hidden>
+              <div class="section-title with-count comeback-title"><span>Comeback Models</span><strong id="comebackCount">0</strong></div>
+              <div class="contestant-strip comeback-strip" id="comebackParticipantStrip"></div>
+            </div>
+
+            <div id="eliminatedSection">
+              <div class="section-title with-count eliminated-title"><span>Eliminated Models</span><strong id="eliminatedCount">0</strong></div>
+              <div class="contestant-strip eliminated-strip" id="eliminatedParticipantStrip"></div>
+            </div>
+
+            <div class="proceed-row"><button class="primary-btn" type="button" data-open-panel="house-before">Continue</button></div>
+          </section>
+
+          <section class="episode-panel" data-panel="house-before">
+            <div class="editorial-section-head"><h2>House</h2></div>
+            <div class="house-events" id="houseBeforeEvents"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="status">Back</button>
+              <button class="primary-btn" id="houseBeforeNextBtn" type="button" data-open-panel="challenge">Go to Challenge</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="challenge">
+            <div class="editorial-section-head">
+              <h2 id="challengeTitle">Signature Walk</h2>
+              <p id="challengeDescription"></p>
+            </div>
+            <div class="performance-list" id="challengePerformances"></div>
+            <div class="winner-reveal" id="challengeWinnerReveal" hidden></div>
+            <div class="reveal-row"><button class="primary-btn" id="revealChallengeWinnerBtn" type="button">Reveal Winner</button></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="house-before">Back</button>
+              <button class="primary-btn" type="button" data-open-panel="house-after">Continue</button>
+            </div>
+          </section>
+
+          <section class="episode-panel makeover-panel" data-panel="makeover">
+            <div class="editorial-section-head centered">
+              <h2>Makeovers</h2>
+              <p>It's time for a makeover! The models will receive brand-new looks designed to rebrand them and bring out their full potential as fashion models.</p>
+            </div>
+            <div class="callout-focus makeover-focus" id="makeoverFocus" hidden></div>
+            <div class="callout-list makeover-list" id="makeoverList"></div>
+            <div class="callout-action-row makeover-action-row">
+              <button class="primary-btn" id="startMakeoverBtn" type="button">Start Makeovers</button>
+            </div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="house-before">Back</button>
+              <button class="primary-btn" id="makeoverContinueBtn" type="button" data-open-panel="house-after" hidden>Continue</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="house-after">
+            <div class="editorial-section-head"><h2>House</h2></div>
+            <div class="house-events" id="houseAfterEvents"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" id="houseAfterBackBtn" type="button" data-open-panel="challenge">Back</button>
+              <button class="primary-btn" type="button" data-open-panel="shoot">Go to Shoot</button>
+            </div>
+          </section>
+
+          <section class="episode-panel" data-panel="shoot">
+            <div class="editorial-section-head">
+              <h2 id="shootTitle">Clean Beauty</h2>
+              <p id="shootDescription"></p>
+            </div>
+            <div class="performance-list" id="shootPerformances"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="house-after">Back</button>
+              <button class="primary-btn" type="button" data-open-panel="judging">Continue to Judging</button>
+            </div>
+          </section>
+
+          <section class="episode-panel judging-panel" data-panel="judging">
+            <div class="editorial-section-head"><h2>Judging</h2></div>
+            <div class="judging-list" id="judgingList"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="shoot">Back</button>
+              <button class="primary-btn" type="button" data-open-panel="elimination">Go to Elimination</button>
+            </div>
+          </section>
+
+          <section class="episode-panel elimination-panel" data-panel="elimination">
+            <div class="elimination-intro"><p id="eliminationSpeech"></p></div>
+            <div class="callout-focus" id="calloutFocus" hidden></div>
+            <div class="callout-list" id="calloutList"></div>
+            <div id="bottomTwoStage" class="bottom-two-stage" hidden></div>
+            <div class="callout-action-row">
+              <button class="primary-btn" id="startCalloutBtn" type="button">Start Call-Out</button>
+              <button class="primary-btn" id="revealFinalPhotoBtn" type="button" hidden>Reveal Final Photo</button>
+              <button class="primary-btn" id="goToComebackBtn" type="button" data-open-panel="comeback" hidden>Go to Comeback</button>
+              <button class="primary-btn" id="nextEpisodeBtn" type="button" hidden>Next Episode</button>
+            </div>
+          </section>
+
+          <section class="episode-panel voting-comeback-panel" data-panel="comeback">
+            <div id="votingComebackStage" class="voting-comeback-stage" hidden></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn" type="button" data-open-panel="elimination">Back</button>
+              <button class="primary-btn" id="comebackNextEpisodeBtn" type="button" hidden>Next Episode</button>
+            </div>
+          </section>
+        </div>
+        </div>
+
+        <div id="finaleEpisodeView" class="finale-episode-view" hidden></div>
+      </section>
+
+      
+      <section class="screen" id="statistics-screen" aria-labelledby="statisticsTitle">
+        <div class="editorial-head compact-page-head">
+          <h1 id="statisticsTitle">Statistics</h1>
+          <div class="screen-action-row">
+            <button class="secondary-btn" type="button" data-go="simulation-screen">Back to Episode</button>
+          </div>
+        </div>
+
+        <div class="stats-nav" role="tablist" aria-label="Statistics sections">
+          <button class="stats-tab is-active" type="button" data-stats-target="stats-callout">Call-Out Order</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-history">Track Record</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-bottom">Bottom Results</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-average">Average Call-Out Order</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-photoshoot-guide">Photoshoot Guide</button>
+          <button class="stats-tab" type="button" data-stats-target="stats-challenge-guide">Challenge Guide</button>
+        </div>
+
+        <section class="stats-panel is-active" id="stats-callout">
+          <div class="callout-order-sheet" id="calloutOrderSheet">
+            <div class="callout-order-tools">
+              <button class="secondary-btn stats-download-btn" id="downloadCalloutOrderBtn" type="button">Download</button>
+              <label class="picture-toggle" for="showCalloutPictures">
+                <input id="showCalloutPictures" type="checkbox" checked>
+                <span class="picture-toggle-track" aria-hidden="true"><span></span></span>
+                <strong>Show Pictures</strong>
+              </label>
+            </div>
+            <div class="callout-order-table-wrap">
+              <table class="callout-order-table" id="calloutOrderTable"></table>
+            </div>
+            <div class="callout-order-legend" aria-label="Call-out order legend">
+              <div><span class="legend-swatch legend-eliminated"></span><span><b>ELIM</b> - Eliminated</span></div>
+              <div><span class="legend-swatch legend-nonelim"></span><span><b>Non-Elimination</b> - Bottom Two, but nobody was eliminated</span></div>
+              <div><span class="legend-swatch legend-double-eliminated"></span><span><b>ELIM</b> - Double elimination</span></div>
+              <div><span class="legend-swatch legend-quit"></span><span><b>QUIT</b> - Quit the competition</span></div>
+              <div><span class="legend-swatch legend-disq"></span><span><b>DISQ</b> - Disqualified</span></div>
+              <div><span class="legend-swatch legend-immunity"></span><span><b>Immunity</b> - Challenge winner with immunity</span></div>
+              <div><span class="legend-swatch legend-comeback"></span><span><b>Return</b> - Returned to the competition</span></div>
+              <div><span class="legend-swatch legend-winner"></span><span><b>Winner</b> - Won the competition</span></div>
+              <div><span class="legend-swatch legend-runner-up"></span><span><b>Runner-up</b> - Reached the finale but did not win</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-panel" id="stats-history">
+          <div class="track-sheet track-record-sheet">
+            <div class="track-record-tools">
+              <button class="secondary-btn stats-download-btn" id="downloadTrackRecordBtn" type="button">Download</button>
+              <label class="picture-toggle" id="showScoresControl" for="showTrackScores" hidden>
+                <input id="showTrackScores" type="checkbox">
+                <span class="picture-toggle-track" aria-hidden="true"><span></span></span>
+                <strong>Show Scores</strong>
+              </label>
+            </div>
+            <div class="track-table-wrap">
+              <table class="track-table" id="trackTable"></table>
+            </div>
+            <div class="track-record-legend" id="trackRecordLegend" aria-label="Track record legend"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" id="stats-bottom">
+          <div class="bottom-results-sheet">
+            <div class="bottom-results-table-wrap">
+              <table class="bottom-results-table" id="bottomResultsTable"></table>
+            </div>
+            <div class="bottom-results-legend" id="bottomResultsLegend" aria-label="Bottom results legend"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" id="stats-average">
+          <div class="average-callout-sheet">
+            <div class="average-callout-table-wrap">
+              <table class="average-callout-table" id="averageCalloutTable"></table>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-panel" id="stats-photoshoot-guide">
+          <div class="guide-sheet">
+            <div class="guide-table-wrap">
+              <table class="guide-table" id="photoshootGuideTable"></table>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-panel" id="stats-challenge-guide">
+          <div class="guide-sheet">
+            <div class="guide-table-wrap">
+              <table class="guide-table" id="challengeGuideTable"></table>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="presetDialog">
+    <form class="modal-card" id="presetForm" method="dialog">
+      <div class="modal-head">
+        <h2>Use Pre-Set Cast</h2>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <label class="field"><span>Show</span><select id="presetShow" required></select></label>
+        <label class="field"><span>Season</span><select id="presetSeason" required></select></label>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+        <button class="primary-btn" type="submit">Load Cast</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="customContestantDialog">
+    <form class="modal-card custom-model-card" id="customContestantForm" method="dialog">
+      <div class="modal-head custom-model-head">
+        <div>
+          <span class="custom-model-kicker">CUSTOM MODELS</span>
+          <h2 id="customModelDialogTitle">Create Model</h2>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+
+      <div class="custom-model-layout">
+        <aside class="custom-model-preview-panel">
+          <div class="custom-model-image-wrap">
+            <img id="customModelPreview" class="custom-model-preview-image" alt="">
+            <span class="custom-model-badge">CUSTOM</span>
+          </div>
+
+          <div class="custom-image-actions">
+            <label class="secondary-btn custom-upload-btn" for="customModelImageFile">Upload Image</label>
+            <input id="customModelImageFile" type="file" accept="image/*" hidden>
+          </div>
+
+          <label class="field compact custom-image-url-field">
+            <span>Or Image URL</span>
+            <input id="customModelImageUrl" type="url" placeholder="https://...">
+          </label>
+
+        </aside>
+
+        <div class="custom-model-form-panel">
+          <input type="hidden" id="customModelId">
+
+          <div class="custom-identity-grid">
+            <label class="field">
+              <span>Full Name</span>
+              <input id="customModelFullName" type="text" autocomplete="off" placeholder="Brooke Mitchell" required>
+            </label>
+            <label class="field">
+              <span>Nickname</span>
+              <input id="customModelNickname" type="text" autocomplete="off" placeholder="Brooke" required>
+            </label>
+            <label class="field">
+              <span>Gender</span>
+              <select id="customModelGender">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="non-binary">Non-Binary</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Archetype</span>
+              <select id="customModelArchetype">
+                <option value="">None</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="custom-profile-tools">
+            <button class="secondary-btn" id="randomizeCustomModelBtn" type="button">Randomize</button>
+            <button class="secondary-btn" id="resetCustomModelBtn" type="button">Reset</button>
+          </div>
+
+          <div class="custom-skill-grid" id="customSkillGrid">
+            <label class="custom-skill-row"><span>Posing <output id="customPosingValue">8</output></span><input data-custom-skill="posing" id="customPosing" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Expression <output id="customExpressionValue">8</output></span><input data-custom-skill="expression" id="customExpression" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Runway <output id="customRunwayValue">8</output></span><input data-custom-skill="runway" id="customRunway" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Movement <output id="customMovementValue">8</output></span><input data-custom-skill="movement" id="customMovement" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Commercial <output id="customCommercialValue">8</output></span><input data-custom-skill="commercial" id="customCommercial" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Acting <output id="customActingValue">8</output></span><input data-custom-skill="acting" id="customActing" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Styling <output id="customStylingValue">8</output></span><input data-custom-skill="styling" id="customStyling" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Branding <output id="customBrandingValue">8</output></span><input data-custom-skill="branding" id="customBranding" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Beauty <output id="customBeautyValue">8</output></span><input data-custom-skill="beauty" id="customBeauty" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Editorial <output id="customEditorialValue">8</output></span><input data-custom-skill="editorial" id="customEditorial" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Avant-Garde <output id="customAvantGardeValue">8</output></span><input data-custom-skill="avantGarde" id="customAvantGarde" type="range" min="1" max="15" step="1" value="8"></label>
+            <label class="custom-skill-row"><span>Integration <output id="customIntegrationValue">8</output></span><input data-custom-skill="integration" id="customIntegration" type="range" min="1" max="15" step="1" value="8"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions custom-model-actions">
+        <button class="text-btn custom-delete-btn" id="deleteCustomModelBtn" type="button" hidden>Delete Model</button>
+        <div class="custom-model-save-actions">
+          <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+          <button class="primary-btn" id="saveCustomModelBtn" type="submit">Create Model</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+
+  <dialog id="modelEditDialog">
+    <form class="modal-card model-edit-card" id="modelEditForm" method="dialog">
+      <div class="modal-head">
+        <div>
+          <h2 id="editModelTitle">Edit Model</h2>
+          <p class="edit-model-name" id="editModelName"></p>
+        </div>
+        <button class="icon-close" type="button" data-close-dialog aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editModelId">
+        <label class="field archetype-field">
+          <span>Archetype</span>
+          <select id="editModelArchetype" aria-label="Model archetype">
+            <option value="">None</option>
+          </select>
+          <small>Choosing an archetype instantly applies its skill preset. You can still adjust any skill afterward.</small>
+        </label>
+        <div class="skill-edit-grid">
+          <label class="skill-edit-row"><span>Posing <output id="editPosingValue">8</output></span><input id="editPosing" data-edit-skill="posing" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Expression <output id="editExpressionValue">8</output></span><input id="editExpression" data-edit-skill="expression" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Runway <output id="editRunwayValue">8</output></span><input id="editRunway" data-edit-skill="runway" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Movement <output id="editMovementValue">8</output></span><input id="editMovement" data-edit-skill="movement" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Commercial <output id="editCommercialValue">8</output></span><input id="editCommercial" data-edit-skill="commercial" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Acting <output id="editActingValue">8</output></span><input id="editActing" data-edit-skill="acting" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Styling <output id="editStylingValue">8</output></span><input id="editStyling" data-edit-skill="styling" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Branding <output id="editBrandingValue">8</output></span><input id="editBranding" data-edit-skill="branding" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Beauty <output id="editBeautyValue">8</output></span><input id="editBeauty" data-edit-skill="beauty" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Editorial <output id="editEditorialValue">8</output></span><input id="editEditorial" data-edit-skill="editorial" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Avant-Garde <output id="editAvantGardeValue">8</output></span><input id="editAvantGarde" data-edit-skill="avantGarde" type="range" min="1" max="15" step="1" value="8"></label>
+          <label class="skill-edit-row"><span>Integration <output id="editIntegrationValue">8</output></span><input id="editIntegration" data-edit-skill="integration" type="range" min="1" max="15" step="1" value="8"></label>
+        </div>
+      </div>
+      <div class="modal-actions model-edit-actions">
+        <div class="model-edit-utility-actions">
+          <button class="secondary-btn" id="randomizeModelSkillsBtn" type="button">Randomize</button>
+          <button class="secondary-btn" id="resetModelSkillsBtn" type="button">Reset</button>
+        </div>
+        <div class="model-edit-save-actions">
+          <button class="secondary-btn" type="button" data-close-dialog>Cancel</button>
+          <button class="primary-btn" type="submit">Save</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+</body>
+</html>
