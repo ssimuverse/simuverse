@@ -1784,7 +1784,17 @@
         const pool = filteredModels();
         let selected = [];
         if (femaleOnly) {
-            selected = shuffled(pool.filter(model => model.gender === "female")).slice(0, limit);
+            selected = shuffled(pool.filter(model => {
+                const gender = String(model.gender || "").trim().toLowerCase();
+                return gender === "female"
+                    || gender === "non-binary"
+                    || gender === "nonbinary"
+                    || gender === "non binary"
+                    || gender === "nogender"
+                    || gender === "no-gender"
+                    || gender === "no gender"
+                    || !gender;
+            })).slice(0, limit);
         }
         else if (evenGender) {
             const women = shuffled(pool.filter(model => model.gender === "female"));
@@ -14465,9 +14475,605 @@
             node.setAttribute("style", cssText);
         });
     }
+    function exportRect(node, rootRect) {
+        const rect = node.getBoundingClientRect();
+        return {
+            x: rect.left - rootRect.left,
+            y: rect.top - rootRect.top,
+            width: rect.width,
+            height: rect.height
+        };
+    }
+    function exportColorVisible(color) {
+        const value = String(color || "").trim().toLowerCase();
+        return !!value && value !== "transparent" && value !== "rgba(0, 0, 0, 0)" && value !== "rgba(0,0,0,0)";
+    }
+    function drawExportBackground(ctx, node, rootRect) {
+        if (!(node instanceof Element))
+            return;
+        const computed = getComputedStyle(node);
+        if (computed.display === "none" || computed.visibility === "hidden" || Number(computed.opacity) === 0)
+            return;
+        const rect = exportRect(node, rootRect);
+        if (rect.width <= 0 || rect.height <= 0)
+            return;
+        if (exportColorVisible(computed.backgroundColor)) {
+            ctx.fillStyle = computed.backgroundColor;
+            ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+        }
+    }
+    function transformedExportText(text, computed) {
+        let value = String(text || "").replace(/\s+/g, " ");
+        const transform = computed.textTransform;
+        if (transform === "uppercase")
+            value = value.toUpperCase();
+        else if (transform === "lowercase")
+            value = value.toLowerCase();
+        else if (transform === "capitalize")
+            value = value.replace(/\b\w/g, match => match.toUpperCase());
+        return value;
+    }
+    function drawExportText(ctx, root, rootRect) {
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        let textNode;
+        while ((textNode = walker.nextNode())) {
+            const parent = textNode.parentElement;
+            if (!parent)
+                continue;
+            const computed = getComputedStyle(parent);
+            if (computed.display === "none" || computed.visibility === "hidden" || Number(computed.opacity) === 0 || !exportColorVisible(computed.color))
+                continue;
+            const text = transformedExportText(textNode.nodeValue, computed);
+            if (!text.trim())
+                continue;
+            const range = document.createRange();
+            range.selectNodeContents(textNode);
+            const rects = [...range.getClientRects()];
+            range.detach?.();
+            if (!rects.length)
+                continue;
+            const fontStyle = computed.fontStyle && computed.fontStyle !== "normal" ? `${computed.fontStyle} ` : "";
+            const fontVariant = computed.fontVariant && computed.fontVariant !== "normal" ? `${computed.fontVariant} ` : "";
+            const fontWeight = computed.fontWeight || "400";
+            const fontSize = computed.fontSize || "10px";
+            const fontFamily = computed.fontFamily || "Arial, sans-serif";
+            ctx.save();
+            const forcedTextColor = parent.closest?.(".tr-safe") ? "#000000" : null;
+            ctx.fillStyle = forcedTextColor || computed.color;
+            ctx.globalAlpha = Math.max(0, Math.min(1, Number(computed.opacity) || 1));
+            ctx.font = `${fontStyle}${fontVariant}${fontWeight} ${fontSize} ${fontFamily}`;
+            ctx.textBaseline = "middle";
+            ctx.textAlign = "left";
+            if ("letterSpacing" in ctx)
+                ctx.letterSpacing = computed.letterSpacing === "normal" ? "0px" : computed.letterSpacing;
+            rects.forEach((rect, index) => {
+                const x = rect.left - rootRect.left;
+                const y = rect.top - rootRect.top + rect.height / 2;
+                const fragmentText = index === 0 ? text.trim() : "";
+                if (fragmentText)
+                    ctx.fillText(fragmentText, x, y);
+            });
+            ctx.restore();
+        }
+    }
+    function loadExportImage(src) {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = () => reject(new Error("Export image could not be decoded."));
+            image.src = src;
+        });
+    }
+    function drawImageCover(ctx, image, rect) {
+        const sourceWidth = image.naturalWidth || image.width || 1;
+        const sourceHeight = image.naturalHeight || image.height || 1;
+        const targetRatio = rect.width / Math.max(1, rect.height);
+        const sourceRatio = sourceWidth / Math.max(1, sourceHeight);
+        let sx = 0;
+        let sy = 0;
+        let sw = sourceWidth;
+        let sh = sourceHeight;
+        if (sourceRatio > targetRatio) {
+            sw = sourceHeight * targetRatio;
+            sx = (sourceWidth - sw) / 2;
+        }
+        else if (sourceRatio < targetRatio) {
+            sh = sourceWidth / targetRatio;
+            sy = (sourceHeight - sh) / 2;
+        }
+        ctx.drawImage(image, sx, sy, sw, sh, rect.x, rect.y, rect.width, rect.height);
+    }
+    async function drawExportImages(ctx, root, rootRect) {
+        const images = [...root.querySelectorAll("img")];
+        const cache = new Map();
+        for (const img of images) {
+            const src = img.getAttribute("src") || "";
+            if (!src)
+                continue;
+            const computed = getComputedStyle(img);
+            if (computed.display === "none" || computed.visibility === "hidden" || Number(computed.opacity) === 0)
+                continue;
+            const rect = exportRect(img, rootRect);
+            if (rect.width <= 0 || rect.height <= 0)
+                continue;
+            try {
+                if (!cache.has(src))
+                    cache.set(src, loadExportImage(src));
+                const image = await cache.get(src);
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, Math.min(1, Number(computed.opacity) || 1));
+                ctx.beginPath();
+                ctx.rect(rect.x, rect.y, rect.width, rect.height);
+                ctx.clip();
+                if (computed.objectFit === "cover")
+                    drawImageCover(ctx, image, rect);
+                else
+                    ctx.drawImage(image, rect.x, rect.y, rect.width, rect.height);
+                ctx.restore();
+            }
+            catch {
+                // Omit an image if even its export-safe placeholder cannot decode.
+            }
+        }
+    }
+    function mergeExportIntervals(intervals) {
+        if (!intervals.length)
+            return [];
+        const ordered = [...intervals].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+        const merged = [ordered[0].slice()];
+        for (let index = 1; index < ordered.length; index += 1) {
+            const current = ordered[index];
+            const last = merged[merged.length - 1];
+            if (current[0] <= last[1] + 1) {
+                last[1] = Math.max(last[1], current[1]);
+            }
+            else {
+                merged.push(current.slice());
+            }
+        }
+        return merged;
+    }
+    function drawExportTableGrid(ctx, table, rootRect, color, scale) {
+        const horizontal = new Map();
+        const vertical = new Map();
+        const addInterval = (map, key, start, end) => {
+            if (!map.has(key))
+                map.set(key, []);
+            map.get(key).push([Math.min(start, end), Math.max(start, end)]);
+        };
+        [...table.querySelectorAll("th, td")].forEach(cell => {
+            const computed = getComputedStyle(cell);
+            if (computed.display === "none" || computed.visibility === "hidden")
+                return;
+            const rect = exportRect(cell, rootRect);
+            if (rect.width <= 0 || rect.height <= 0)
+                return;
+            const x1 = Math.round(rect.x * scale);
+            const x2 = Math.round((rect.x + rect.width) * scale);
+            const y1 = Math.round(rect.y * scale);
+            const y2 = Math.round((rect.y + rect.height) * scale);
+            addInterval(horizontal, y1, x1, x2);
+            addInterval(horizontal, y2, x1, x2);
+            addInterval(vertical, x1, y1, y2);
+            addInterval(vertical, x2, y1, y2);
+        });
+        ctx.save();
+        ctx.strokeStyle = color;
+        // Exactly one physical pixel after the canvas scale is applied.
+        ctx.lineWidth = 1 / scale;
+        ctx.lineCap = "butt";
+        ctx.lineJoin = "miter";
+        horizontal.forEach((intervals, yPixel) => {
+            const y = (yPixel + 0.5) / scale;
+            mergeExportIntervals(intervals).forEach(([start, end]) => {
+                ctx.beginPath();
+                ctx.moveTo(start / scale, y);
+                ctx.lineTo(end / scale, y);
+                ctx.stroke();
+            });
+        });
+        vertical.forEach((intervals, xPixel) => {
+            const x = (xPixel + 0.5) / scale;
+            mergeExportIntervals(intervals).forEach(([start, end]) => {
+                ctx.beginPath();
+                ctx.moveTo(x, start / scale);
+                ctx.lineTo(x, end / scale);
+                ctx.stroke();
+            });
+        });
+        ctx.restore();
+    }
+    async function renderExportCaptureToCanvas(root, width, height, scale, tableId) {
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(width * scale));
+        canvas.height = Math.max(1, Math.round(height * scale));
+        const ctx = canvas.getContext("2d");
+        if (!ctx)
+            throw new Error("Canvas rendering is unavailable.");
+        ctx.scale(scale, scale);
+        const rootRect = root.getBoundingClientRect();
+        const table = root.matches?.("table") ? root : root.querySelector("table");
+        const background = tableId === "trackTable" ? "#f8f9fa" : "#f8f9fa";
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, width, height);
+        if (table)
+            drawExportBackground(ctx, table, rootRect);
+        const cells = [...root.querySelectorAll("th, td")];
+        cells.forEach(cell => drawExportBackground(ctx, cell, rootRect));
+        await drawExportImages(ctx, root, rootRect);
+        if (table) {
+            const gridColor = tableId === "trackTable" ? "#B7BCC5" : "#A2A9B1";
+            drawExportTableGrid(ctx, table, rootRect, gridColor, scale);
+        }
+        cells.forEach(cell => {
+            const rect = exportRect(cell, rootRect);
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(rect.x, rect.y, rect.width, rect.height);
+            ctx.clip();
+            drawExportText(ctx, cell, rootRect);
+            ctx.restore();
+        });
+        return canvas;
+    }
+    function ordinalPlacementLabel(value) {
+        const number = Number(value);
+        if (!Number.isFinite(number) || number <= 0)
+            return "-";
+        const mod100 = number % 100;
+        if (mod100 >= 11 && mod100 <= 13)
+            return `${number}th`;
+        const mod10 = number % 10;
+        if (mod10 === 1)
+            return `${number}st`;
+        if (mod10 === 2)
+            return `${number}nd`;
+        if (mod10 === 3)
+            return `${number}rd`;
+        return `${number}th`;
+    }
+    function placementRangeLabel(start, count) {
+        return count > 1 ? `${ordinalPlacementLabel(start)}/${ordinalPlacementLabel(start + count - 1)}` : ordinalPlacementLabel(start);
+    }
+    function buildWikiTrackExportTable() {
+        const cast = competitionModels();
+        const table = document.createElement("table");
+        table.className = "track-table wiki-track-export-table";
+        if (!cast.length || !state.seasonEpisodes.length) {
+            table.innerHTML = `<tbody><tr><td class="track-empty">No simulated season yet.</td></tr></tbody>`;
+            return table;
+        }
+        const orderedCast = [...cast].sort((a, b) => {
+            const placementDelta = seasonPlacement(a.id) - seasonPlacement(b.id);
+            if (placementDelta)
+                return placementDelta;
+            return seasonName(a).localeCompare(seasonName(b), undefined, { sensitivity: "base" });
+        });
+        const ppeMap = new Map(averageCalloutRows().map(row => [row.id, row]));
+        const fanFavoriteId = getFanFavoriteId(cast);
+        const groups = [];
+        orderedCast.forEach(model => {
+            const placement = seasonPlacement(model.id);
+            const previous = groups.at(-1);
+            if (!previous || previous.placement !== placement)
+                groups.push({ placement, models: [model] });
+            else
+                previous.models.push(model);
+        });
+        const topHeader = `<tr><th class="track-rank-head" rowspan="2" scope="col">Rank</th><th class="track-contestant-head" rowspan="2" scope="col">Contestant</th><th class="track-photo-head" rowspan="2" scope="col">Photo</th><th class="track-episodes-group" colspan="${state.seasonEpisodes.length}" scope="colgroup">Episode</th><th class="track-status-head" rowspan="2" scope="col">Finale</th><th class="track-ppe-head" rowspan="2" scope="col">PPE</th></tr>`;
+        const secondHeader = `<tr>${state.seasonEpisodes.map((_, index) => `<th class="track-episode-head" scope="col">${index + 1}</th>`).join("")}</tr>`;
+        let displayRankStart = 1;
+        const rows = groups.map(group => {
+            const rankLabel = placementRangeLabel(displayRankStart, group.models.length);
+            displayRankStart += group.models.length;
+            return group.models.map((model, groupIndex) => {
+                const episodeCells = state.seasonEpisodes.map(episode => {
+                    const status = trackEpisodeStatus(episode, model.id);
+                    if (status.className === "tr-inactive")
+                        return `<td class="track-result tr-inactive" aria-label="No longer competing"></td>`;
+                    const hasImmunity = episode.challengeImmunityId === model.id;
+                    return `<td class="track-result ${status.className}${hasImmunity ? " tr-immunity-border" : ""}">${escapeHTML(status.code)}</td>`;
+                }).join("");
+                const finalStatus = trackFinalStatus(model.id, fanFavoriteId);
+                const ppe = ppeMap.get(model.id);
+                const ppeText = Number.isFinite(ppe?.average) ? ppe.average.toFixed(2) : "";
+                return `<tr>${groupIndex === 0 ? `<th class="track-rank" scope="rowgroup" rowspan="${group.models.length}">${rankLabel}</th>` : ""}<th class="track-contestant-name" scope="row">${escapeHTML(seasonName(model))}</th><td class="track-photo-cell"><img class="track-export-photo" src="${imageURL(model)}" alt=""></td>${episodeCells}<td class="track-final-status ${finalStatus.className}">${escapeHTML(finalStatus.label)}</td><td class="track-ppe-cell">${escapeHTML(ppeText)}</td></tr>`;
+            }).join("");
+        }).join("");
+        table.innerHTML = `<thead>${topHeader}${secondHeader}</thead><tbody>${rows}</tbody>`;
+        return table;
+    }
+    function setExportNodeStyles(node, styles) {
+        if (!node || !styles)
+            return;
+        Object.entries(styles).forEach(([key, value]) => {
+            node.style[key] = value;
+        });
+    }
+    function copyLiveClassColors(sourceTable, targetTable, classNames) {
+        if (!sourceTable || !targetTable)
+            return;
+        classNames.forEach(className => {
+            const source = sourceTable.querySelector(`.${className}`);
+            if (!source)
+                return;
+            const computed = getComputedStyle(source);
+            targetTable.querySelectorAll(`.${className}`).forEach(target => {
+                target.style.background = computed.backgroundColor;
+                target.style.backgroundColor = computed.backgroundColor;
+                target.style.color = computed.color;
+            });
+        });
+    }
+    function applyWikiTableBaseStyles(table) {
+        setExportNodeStyles(table, {
+            borderCollapse: "collapse",
+            tableLayout: "fixed",
+            background: "#f8f9fa",
+            color: "#202122",
+            fontFamily: "Arial, Helvetica, sans-serif",
+            fontSize: "12px",
+            lineHeight: "1.15",
+            border: "1px solid transparent"
+        });
+        table.querySelectorAll("th, td").forEach(cell => {
+            setExportNodeStyles(cell, {
+                border: "1px solid transparent",
+                background: "#f8f9fa",
+                color: "#202122",
+                padding: "4px 6px",
+                fontFamily: "Arial, Helvetica, sans-serif",
+                fontSize: "12px",
+                textTransform: "none",
+                letterSpacing: "0",
+                textAlign: "center",
+                verticalAlign: "middle"
+            });
+        });
+    }
+    function styleWikiCalloutExport(table, sourceTable) {
+        applyWikiTableBaseStyles(table);
+        table.querySelectorAll("th, td").forEach(cell => {
+            setExportNodeStyles(cell, {
+                height: "32px",
+                padding: "4px 6px",
+                borderColor: "transparent"
+            });
+        });
+        table.querySelectorAll(".coo-order-head, .coo-episodes-head, .coo-episode-number, .coo-order-number").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#eaecf0",
+                color: "#202122",
+                fontWeight: "700"
+            });
+        });
+        table.querySelectorAll(".coo-order-head, .coo-order-number").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "54px",
+                minWidth: "54px",
+                maxWidth: "54px"
+            });
+        });
+        table.querySelectorAll(".coo-active").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#f8f9fa",
+                color: "#202122",
+                fontWeight: "400"
+            });
+        });
+        table.querySelectorAll(".coo-inactive").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#A2A9B1",
+                backgroundColor: "#A2A9B1",
+                color: "transparent"
+            });
+        });
+        table.querySelectorAll(".coo-person").forEach(person => {
+            const noPicture = person.classList.contains("no-picture");
+            setExportNodeStyles(person, {
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: noPicture ? "0" : "7px",
+                width: "100%",
+                minWidth: "0"
+            });
+        });
+        table.querySelectorAll(".coo-cell-avatar").forEach(img => {
+            const noPicture = !!img.closest(".coo-person.no-picture");
+            setExportNodeStyles(img, noPicture ? {
+                display: "none"
+            } : {
+                display: "block",
+                width: "22px",
+                minWidth: "22px",
+                height: "22px",
+                objectFit: "cover",
+                border: "0",
+                margin: "0"
+            });
+        });
+        table.querySelectorAll(".coo-person > span:last-child").forEach(label => {
+            setExportNodeStyles(label, {
+                overflow: "hidden",
+                minWidth: "0",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                fontSize: "12px"
+            });
+        });
+        copyLiveClassColors(sourceTable, table, [
+            "coo-bottom", "coo-nonelim", "coo-eliminated", "coo-double-eliminated",
+            "coo-quit", "coo-disq", "coo-immunity", "coo-comeback",
+            "coo-winner", "coo-runner-up", "coo-finalist"
+        ]);
+        // Inactive cells intentionally match the exported grid color.
+        table.querySelectorAll(".coo-inactive").forEach(cell => {
+            cell.style.background = "#A2A9B1";
+            cell.style.backgroundColor = "#A2A9B1";
+        });
+    }
+    function styleWikiTrackExport(table, sourceTable) {
+        applyWikiTableBaseStyles(table);
+        const fontFamily = "Arial, Helvetica, sans-serif";
+        const fontSize = "12px";
+        table.querySelectorAll("th, td").forEach(cell => {
+            setExportNodeStyles(cell, {
+                borderColor: "transparent",
+                fontFamily,
+                fontSize,
+                letterSpacing: "0",
+                textTransform: "none"
+            });
+        });
+        table.querySelectorAll(".track-rank-head, .track-contestant-head, .track-photo-head, .track-episodes-group, .track-status-head, .track-ppe-head, .track-episode-head").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#eaecf0",
+                color: "#202122",
+                fontFamily,
+                fontSize,
+                fontWeight: "700",
+                textAlign: "center"
+            });
+        });
+        table.querySelectorAll(".track-rank-head, .track-rank").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "72px",
+                minWidth: "72px",
+                maxWidth: "72px",
+                textAlign: "center"
+            });
+        });
+        table.querySelectorAll(".track-contestant-head, .track-contestant-name").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "112px",
+                minWidth: "112px",
+                maxWidth: "112px",
+                textAlign: "center",
+                whiteSpace: "normal",
+                wordBreak: "normal",
+                lineHeight: "1.1",
+                fontWeight: "700"
+            });
+        });
+        table.querySelectorAll(".track-photo-head, .track-photo-cell").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "84px",
+                minWidth: "84px",
+                maxWidth: "84px",
+                padding: "0",
+                textAlign: "center"
+            });
+        });
+        table.querySelectorAll(".track-photo-cell").forEach(cell => {
+            setExportNodeStyles(cell, {
+                height: "84px",
+                overflow: "hidden",
+                background: "#f8f9fa"
+            });
+        });
+        table.querySelectorAll(".track-export-photo").forEach(img => {
+            setExportNodeStyles(img, {
+                display: "block",
+                width: "84px",
+                minWidth: "84px",
+                height: "84px",
+                objectFit: "cover",
+                background: "#ffffff",
+                border: "0",
+                margin: "0"
+            });
+        });
+        table.querySelectorAll(".track-episode-head, .track-result").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "84px",
+                minWidth: "84px",
+                maxWidth: "84px",
+                textAlign: "center"
+            });
+        });
+        table.querySelectorAll(".track-episode-head").forEach(cell => {
+            setExportNodeStyles(cell, {
+                height: "38px",
+                padding: "4px",
+                fontWeight: "700"
+            });
+        });
+        table.querySelectorAll(".track-result").forEach(cell => {
+            setExportNodeStyles(cell, {
+                height: "84px",
+                background: "#f9f9ff",
+                color: "#202122",
+                fontWeight: "700",
+                lineHeight: "1.05"
+            });
+        });
+        table.querySelectorAll(".track-rank, .track-contestant-name, .track-final-status, .track-ppe-cell").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#f8f9fa",
+                color: "#202122",
+                fontFamily,
+                fontSize,
+                fontWeight: "700"
+            });
+        });
+        table.querySelectorAll(".tr-inactive").forEach(cell => {
+            setExportNodeStyles(cell, {
+                background: "#B7BCC5",
+                backgroundColor: "#B7BCC5",
+                color: "transparent"
+            });
+        });
+        copyLiveClassColors(sourceTable, table, [
+            "tr-win", "tr-high", "tr-safe", "tr-low", "tr-btm", "tr-btm-nonelim",
+            "tr-elim", "tr-double-elim", "tr-comeback-out", "tr-quit", "tr-disq",
+            "tr-out", "tr-adv", "tr-season-winner", "tr-runner-up", "tr-finalist",
+            "tr-guest", "tr-quit-status", "tr-disq-status", "tr-fan-favorite"
+        ]);
+        table.querySelectorAll(".tr-safe").forEach(cell => {
+            cell.style.background = "#f9f9ff";
+            cell.style.backgroundColor = "#f9f9ff";
+            cell.style.color = "#000000";
+        });
+        table.querySelectorAll(".tr-out, .tr-comeback-out").forEach(cell => {
+            cell.style.color = "#ffffff";
+        });
+        table.querySelectorAll(".tr-inactive").forEach(cell => {
+            cell.style.background = "#B7BCC5";
+            cell.style.backgroundColor = "#B7BCC5";
+        });
+        table.querySelectorAll(".tr-immunity-border").forEach(cell => {
+            const source = sourceTable?.querySelector(".tr-immunity-border");
+            cell.style.boxShadow = source ? getComputedStyle(source).boxShadow : "inset 0 0 0 2px #ffd700";
+        });
+        table.querySelectorAll(".track-final-status").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "108px",
+                minWidth: "108px",
+                maxWidth: "108px",
+                textAlign: "center",
+                whiteSpace: "normal",
+                lineHeight: "1.1"
+            });
+        });
+        table.querySelectorAll(".track-ppe-head, .track-ppe-cell").forEach(cell => {
+            setExportNodeStyles(cell, {
+                width: "68px",
+                minWidth: "68px",
+                maxWidth: "68px",
+                textAlign: "center"
+            });
+        });
+    }
+    function applyWikiExportTheme(table, tableId, sourceTable) {
+        if (tableId === "calloutOrderTable")
+            styleWikiCalloutExport(table, sourceTable);
+        else if (tableId === "trackTable")
+            styleWikiTrackExport(table, sourceTable);
+    }
     async function downloadTableAsPng(tableId, label) {
-        const table = document.getElementById(tableId);
-        if (!table || !table.rows.length)
+        const sourceTable = document.getElementById(tableId);
+        if (!sourceTable || !sourceTable.rows.length)
             return;
         const button = tableId === "calloutOrderTable" ? $("#downloadCalloutOrderBtn") : $("#downloadTrackRecordBtn");
         if (button) {
@@ -14480,61 +15086,40 @@
         staging.style.top = "0";
         staging.style.zIndex = "-1";
         staging.style.pointerEvents = "none";
-        const capture = document.createElement("div");
-        capture.className = "stats-png-capture";
-        capture.style.display = "inline-block";
-        capture.style.width = `${Math.ceil(table.scrollWidth)}px`;
-        capture.style.maxWidth = "none";
-        capture.style.padding = "20px";
-        capture.style.background = "#0e0e10";
-        const clone = table.cloneNode(true);
-        clone.removeAttribute("id");
-        clone.style.width = `${Math.ceil(table.scrollWidth)}px`;
-        clone.style.maxWidth = "none";
-        capture.appendChild(clone);
-        staging.appendChild(capture);
+        staging.style.margin = "0";
+        staging.style.padding = "0";
+        const table = tableId === "trackTable" ? buildWikiTrackExportTable() : sourceTable.cloneNode(true);
+        table.removeAttribute("id");
+        table.style.margin = "0";
+        table.style.maxWidth = "none";
+        staging.appendChild(table);
         document.body.appendChild(staging);
         try {
-            await inlineExportImages(capture);
-            inlineExportStyles(capture);
-            const width = Math.ceil(capture.scrollWidth);
-            const height = Math.ceil(capture.scrollHeight);
+            applyWikiExportTheme(table, tableId, sourceTable);
+            await inlineExportImages(table);
+            const rect = table.getBoundingClientRect();
+            const width = Math.max(1, Math.ceil(rect.width));
+            const height = Math.max(1, Math.ceil(rect.height));
             const maxDimension = 30000;
             const scale = Math.max(1, Math.min(2, maxDimension / Math.max(width, height)));
-            const serialized = new XMLSerializer().serializeToString(capture);
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${serialized}</div></foreignObject></svg>`;
-            const svgUrl = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
-            try {
-                const image = new Image();
-                await new Promise((resolve, reject) => {
-                    image.onload = resolve;
-                    image.onerror = reject;
-                    image.src = svgUrl;
-                });
-                const canvas = document.createElement("canvas");
-                canvas.width = Math.max(1, Math.round(width * scale));
-                canvas.height = Math.max(1, Math.round(height * scale));
-                const ctx = canvas.getContext("2d");
-                ctx.scale(scale, scale);
-                ctx.fillStyle = "#0e0e10";
-                ctx.fillRect(0, 0, width, height);
-                ctx.drawImage(image, 0, 0, width, height);
-                const pngBlob = await new Promise((resolve, reject) => {
+            const canvas = await renderExportCaptureToCanvas(table, width, height, scale, tableId);
+            const pngBlob = await new Promise((resolve, reject) => {
+                try {
                     canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("PNG export failed.")), "image/png");
-                });
-                const downloadUrl = URL.createObjectURL(pngBlob);
-                const link = document.createElement("a");
-                const season = safeDownloadName($("#simulationName")?.value || "Next Top Model");
-                link.href = downloadUrl;
-                link.download = `${season}_${safeDownloadName(label)}.png`;
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
-            }
-            finally {
-                URL.revokeObjectURL(svgUrl);
-            }
+                }
+                catch (error) {
+                    reject(error);
+                }
+            });
+            const downloadUrl = URL.createObjectURL(pngBlob);
+            const link = document.createElement("a");
+            const season = safeDownloadName($("#simulationName")?.value || "Next Top Model");
+            link.href = downloadUrl;
+            link.download = `${season}_${safeDownloadName(label)}.png`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(downloadUrl), 1500);
         }
         catch (error) {
             console.error("Could not export statistics table as PNG:", error);
