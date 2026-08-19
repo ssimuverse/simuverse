@@ -1408,8 +1408,7 @@
                     };
                 }
                 catch (bitmapError) {
-                    // Some browsers expose createImageBitmap but fail on otherwise readable
-                    // images. Fall back to the regular HTMLImageElement decoder.
+
                     console.warn("createImageBitmap could not decode the image; using fallback decoder.", bitmapError);
                 }
             }
@@ -25536,8 +25535,7 @@
         const existing = (universeCache.assets || []).find((asset) => asset.kind === "contestant_image" && asset.ownerId === contestantId);
         const existingId = String(item?.universeImageAssetId || existing?.id || "");
         const source = String(item?.exportImage || item?.image || "").trim();
-        // PLACEHOLDER is a percent-encoded SVG data URL, not a contestant image
-        // that needs its own archived asset.
+
         if (!source || source === PLACEHOLDER)
             return existingId;
         if (isEmbeddedCustomImage(source)) {
@@ -25545,8 +25543,7 @@
                 return await saveUniverseAssetBlob(dataUrlToBlob(source), "contestant_image", contestantId, existingId);
             }
             catch (error) {
-                // A single malformed embedded image should never prevent the entire
-                // season from being saved. Keep any previously archived asset instead.
+
                 console.warn(`Could not archive image for contestant ${contestantId}; continuing without replacing it.`, error);
                 return existingId;
             }
@@ -26027,9 +26024,7 @@
         });
         const exitIndex = (id) => {
             let best = -1;
-            // Use the real season timeline, not the contestant's compressed track-array
-            // position. A returning contestant can have gaps while eliminated, so a later
-            // second elimination must outrank their earlier one.
+
             episodes.forEach((episode, index) => {
                 const wasEliminated = (episode?.eliminatedIds || []).includes(id);
                 const wasUnplannedExit = episode?.unplannedExit?.id === id && /^(?:QUIT|BTM2_QUIT|WIN_QUIT|DEPT|DISQ)$/i.test(String(episode.unplannedExit.token || ""));
@@ -26037,9 +26032,7 @@
                 if (wasEliminated || wasUnplannedExit || wasPorkchopped)
                     best = Math.max(best, index);
             });
-            // Track tokens are a fallback for older/special snapshots where an exit may
-            // not be mirrored in episode.eliminatedIds. Resolve their label against the
-            // global episode timeline instead of using the track entry's local index.
+
             let fallbackTrackIndex = -1;
             const track = season?.stats?.[id]?.track || [];
             track.forEach((entry, index) => {
