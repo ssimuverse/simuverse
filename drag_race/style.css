@@ -21868,3 +21868,74 @@ summary:focus-visible {
     align-self: flex-start;
   }
 }
+
+.episode-track-wrap .episode-track-table {
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  margin-inline: auto;
+}
+
+.episode-track-wrap .episode-track-table col.track-episode-col,
+.episode-track-wrap .episode-track-table .track-cell,
+.episode-track-wrap .episode-track-table thead .track-episode-row > th:not(.track-contestant-head):not(.ppe-col):not(.finale-col),
+.episode-track-wrap .episode-track-table thead .track-challenge-row > th {
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+}
+
+
+#episodeTrackWrap.episode-track-wrap {
+  text-align: center;
+}
+
+#episodeTrackWrap.episode-track-wrap .stat-table-shell {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table {
+  display: inline-table;
+  width: auto !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  table-layout: fixed;
+  margin-inline: auto;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table col.track-name-col {
+  width: 110px !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table col.track-photo-col {
+  width: 38px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table col.track-episode-col,
+#episodeTrackWrap.episode-track-wrap .episode-track-table thead .track-episode-row > th:not(.track-contestant-head):not(.ppe-col):not(.finale-col),
+#episodeTrackWrap.episode-track-wrap .episode-track-table thead .track-challenge-row > th,
+#episodeTrackWrap.episode-track-wrap .episode-track-table tbody td.track-cell {
+  width: 42px !important;
+  min-width: 42px !important;
+  max-width: 42px !important;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table col.track-ppe-col,
+#episodeTrackWrap.episode-track-wrap .episode-track-table thead th.ppe-col,
+#episodeTrackWrap.episode-track-wrap .episode-track-table tbody td.ppe-cell {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+}
+
+#episodeTrackWrap.episode-track-wrap .episode-track-table .track-contestant-head {
+  width: 148px !important;
+  min-width: 148px !important;
+  max-width: 148px !important;
+}
