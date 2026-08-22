@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=84" />
+  <link rel="stylesheet" href="style.css?v=118" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,13 +17,13 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=84" defer></script>
+  <script src="simulator.js?v=118" defer></script>
 </head>
 <body>
   <div class="app-shell">
     <header class="hero-header">
       <div class="brand-lockup" aria-label="Drag Race Simulator">
-        <span class="logo-main">Drag Race Simulator</span>
+        <span class="logo-main"><span class="logo-race-word">DRAG RACE</span><span class="logo-sim-word">SIMULATOR</span></span>
         <span class="logo-kicker">SIMUVERSE</span>
       </div>
       <div class="hero-actions">
@@ -34,7 +34,7 @@
 
     <main class="page-shell">
       <section class="screen is-active" id="setup-screen">
-        <div class="screen-head tight">
+        <div class="screen-head tight setup-screen-head">
           <div>
             <p class="eyebrow">Season Setup</p>
             <h2>Build the Season</h2>
@@ -45,257 +45,271 @@
           </div>
         </div>
 
-        <div class="setup-grid">
-          <article class="panel setup-card setup-core-card">
-            <div class="panel-head">
+        <div class="setup-v3-shell">
+          <article class="setup-v3-name-card">
+            <div class="setup-v3-card-heading">
               <div>
-                <p class="eyebrow">Core settings</p>
-                <h3>Season Format</h3>
+                <p class="eyebrow">Your season</p>
+                <h3>Season Identity</h3>
               </div>
+              <span class="setup-v3-card-index">01</span>
             </div>
-
-            <div class="field-grid setup-core-grid">
-              <label class="field season-name-field">
-                <span>Season Name</span>
-                <input type="text" id="seasonName" value="Fantasy Drag Race">
-              </label>
-
-              <label class="field">
-                <span>Franchise</span>
-                <select id="seasonFranchiseSelect">
-                  <option value="">Independent Season</option>
-                </select>
-              </label>
-
-              <label class="field">
-                <span>Season Type</span>
-                <select id="seasonTypeSelect">
-                  <option value="regular">Regular Season</option>
-                  <option value="all_stars">All Stars</option>
-                  <option value="vs_the_world">Vs The World</option>
-                  <option value="custom">Custom</option>
-                </select>
-              </label>
-
-              <label class="field game-mode-field">
-                <span>Game Mode</span>
-                <select id="modeSelect">
-                  <option value="viewer">Viewer Mode</option>
-                  <option value="rupaul">RuPaul Mode [BETA]</option>
-                </select>
-                <small class="field-help" id="modeHelp"></small>
-              </label>
-
-              <label class="field">
-                <span>Elimination Format</span>
-                <select id="eliminationFormatSelect">
-                  <option value="regular">Regular</option>
-                  <option value="thailand">Thailand Format</option>
-                  <option value="legacy">Lip Sync For Your Legacy</option>
-                  <option value="assassin">Lip Sync Assassin</option>
-                  <option value="golden_beaver">Golden Beaver</option>
-                  <option value="golden_dam">Golden Dam</option>
-                  <option value="all_winners">All Winners</option>
-                  <option value="tournament">Tournament</option>
-                  <option value="teams">Teams</option>
-                </select>
-                <small class="field-help" id="eliminationFormatHelp"></small>
-              </label>
-
-              <label class="field">
-                <span>Premiere</span>
-                <select id="premiereTypeSelect">
-                  <option value="regular">Regular</option>
-                  <option value="non_elim_top2">Non-Elimination Top 2</option>
-                  <option value="late_entry">Late Entry</option>
-                  <option value="slayers">Slayers</option>
-                  <option value="uk3">UK3 Premiere</option>
-                  <option value="split_s6">Split Premiere (S6)</option>
-                  <option value="split_s12">Split Premiere (S12)</option>
-                  <option value="split_s14">Split Premiere (S14)</option>
-                  <option value="rate_a_queen_s16">Rate-A-Queen (S16)</option>
-                  <option value="rate_a_queen_s17">Rate-A-Queen (S17)</option>
-                  <option value="porkchop">Porkchop Premiere</option>
-                </select>
-                <small class="field-help" id="premiereHelp"></small>
-              </label>
-
-              <label class="field">
-                <span>Finale</span>
-                <select id="finaleTypeSelect">
-                  <option value="regular_finale">Regular Finale</option>
-                  <option value="top2_finale">Top 2 Finale</option>
-                  <option value="lsftc">Lip Sync for The Crown</option>
-                  <option value="jury_finale">Jury</option>
-                  <option value="lsftf">Lip Sync for The Finale</option>
-                  <option value="cunt_test">The C.U.N.T.-test</option>
-                  <option value="thailand_finale">Drag Race Thailand Finale</option>
-                </select>
-                <small class="field-help" id="finaleHelp"></small>
-              </label>
-
-              <label class="field">
-                <span>Comeback</span>
-                <select id="comebackFormatSelect">
-                  <option value="none">None</option>
-                  <option value="random_return">Random Contestant Returns</option>
-                  <option value="choose_return">Choose a Contestant to Return</option>
-                  <option value="other_queens_choose">Other Contestants Choose</option>
-                  <option value="reading_is_fundamental">Reading Challenge</option>
-                  <option value="conjoined_twins">Conjoined Twins</option>
-                  <option value="reinas_de_la_comedia">Reinas de la Comedia</option>
-                  <option value="attention_girl_groups">Attention Girl Groups</option>
-                  <option value="kitty_girl_groups">Kitty Girl Groups</option>
-                  <option value="revenge_of_the_queens">Revenge of The Queens</option>
-                  <option value="lalaparuza_comeback">LaLaPaRuZa Comeback</option>
-                  <option value="game_within_a_game">Game Within a Game</option>
-                </select>
-                <small class="field-help" id="comebackHelp"></small>
-              </label>
-
-              <label class="field range-field">
-                <span>Contestants <strong class="range-pill" id="castSizeValue">14</strong></span>
-                <input type="range" id="castSize" min="6" max="24" step="1" value="14">
-              </label>
-
-              <label class="field range-field">
-                <span>Finalists <strong class="range-pill" id="finalistSizeValue">4</strong></span>
-                <input type="range" id="finalistSize" min="2" max="5" step="1" value="4">
-              </label>
-            </div>
+            <label class="field setup-v3-season-name season-name-field">
+              <span>Season Name</span>
+              <input type="text" id="seasonName" value="Fantasy Drag Race">
+            </label>
           </article>
 
-          <article class="panel setup-card tournament-settings-card" id="tournamentSettingsCard" hidden>
-            <div class="panel-head">
+          <div class="setup-v3-primary-grid">
+            <article class="setup-v3-card setup-v3-card-core">
+              <div class="setup-v3-card-heading">
+                <div>
+                  <p class="eyebrow">Basics</p>
+                  <h3>Season</h3>
+                </div>
+              </div>
+              <div class="setup-v3-fields setup-v3-fields-two">
+                <label class="field">
+                  <span>Franchise</span>
+                  <select id="seasonFranchiseSelect">
+                    <option value="">Independent Season</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Season Type</span>
+                  <select id="seasonTypeSelect">
+                    <option value="regular">Regular Season</option>
+                    <option value="all_stars">All Stars</option>
+                    <option value="vs_the_world">Vs The World</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </label>
+                <label class="field game-mode-field setup-v3-field-wide">
+                  <span>Game Mode</span>
+                  <select id="modeSelect">
+                    <option value="viewer">Viewer Mode</option>
+                    <option value="rupaul">RuPaul Mode [BETA]</option>
+                  </select>
+                  <small class="field-help" id="modeHelp"></small>
+                </label>
+              </div>
+            </article>
+
+            <article class="setup-v3-card setup-v3-card-format">
+              <div class="setup-v3-card-heading">
+                <div>
+                  <p class="eyebrow">Rules</p>
+                  <h3>Competition Format</h3>
+                </div>
+              </div>
+              <div class="setup-v3-fields">
+                <label class="field">
+                  <span>Elimination Format</span>
+                  <select id="eliminationFormatSelect">
+                    <option value="regular">Regular</option>
+                    <option value="thailand">Thailand Format</option>
+                    <option value="legacy">Lip Sync For Your Legacy</option>
+                    <option value="format_swap">Format Swap</option>
+                    <option value="assassin">Lip Sync Assassin</option>
+                    <option value="golden_beaver">Golden Beaver</option>
+                    <option value="golden_dam">Golden Dam</option>
+                    <option value="all_winners">All Winners</option>
+                    <option value="tournament">Tournament</option>
+                    <option value="teams">Teams</option>
+                  </select>
+                  <small class="field-help" id="eliminationFormatHelp"></small>
+                </label>
+                <label class="field">
+                  <span>Premiere</span>
+                  <select id="premiereTypeSelect">
+                    <option value="regular">Regular</option>
+                    <option value="non_elim_top2">Non-Elimination Top 2</option>
+                    <option value="late_entry">Late Entry</option>
+                    <option value="slayers">Slayers</option>
+                    <option value="uk3">UK3 Premiere</option>
+                    <option value="split_s6">Split Premiere (S6)</option>
+                    <option value="split_s12">Split Premiere (S12)</option>
+                    <option value="split_s14">Split Premiere (S14)</option>
+                    <option value="rate_a_queen_s16">Rate-A-Queen (S16)</option>
+                    <option value="rate_a_queen_s17">Rate-A-Queen (S17)</option>
+                    <option value="porkchop">Porkchop Premiere</option>
+                  </select>
+                  <small class="field-help" id="premiereHelp"></small>
+                </label>
+              </div>
+            </article>
+
+            <article class="setup-v3-card setup-v3-card-ending">
+              <div class="setup-v3-card-heading">
+                <div>
+                  <p class="eyebrow">Endgame</p>
+                  <h3>Finale & Comeback</h3>
+                </div>
+              </div>
+              <div class="setup-v3-fields">
+                <label class="field">
+                  <span>Finale</span>
+                  <select id="finaleTypeSelect">
+                    <option value="regular_finale">Regular Finale</option>
+                    <option value="top2_finale">Top 2 Finale</option>
+                    <option value="top4_to_top3">Top 4 to Top 3</option>
+                    <option value="lsftc">Lip Sync for The Crown</option>
+                    <option value="jury_finale">Jury</option>
+                    <option value="lsftf">Lip Sync for The Finale</option>
+                    <option value="cunt_test">The C.U.N.T.-test</option>
+                    <option value="thailand_finale">Drag Race Thailand Finale</option>
+                  </select>
+                  <small class="field-help" id="finaleHelp"></small>
+                </label>
+                <label class="field setup-comeback-field">
+                  <span>Comeback</span>
+                  <select id="comebackFormatSelect">
+                    <option value="none">None</option>
+                    <option value="random_return">Random Contestant Returns</option>
+                    <option value="choose_return">Choose a Contestant to Return</option>
+                    <option value="other_queens_choose">Other Contestants Choose</option>
+                    <option value="reading_is_fundamental">Reading Challenge</option>
+                    <option value="conjoined_twins">Conjoined Twins</option>
+                    <option value="reinas_de_la_comedia">Reinas de la Comedia</option>
+                    <option value="attention_girl_groups">Attention Girl Groups</option>
+                    <option value="kitty_girl_groups">Kitty Girl Groups</option>
+                    <option value="revenge_of_the_queens">Revenge of The Queens</option>
+                    <option value="lalaparuza_comeback">LaLaPaRuZa Comeback</option>
+                    <option value="game_within_a_game">Game Within a Game</option>
+                  </select>
+                  <small class="field-help" id="comebackHelp"></small>
+                </label>
+              </div>
+            </article>
+
+            <article class="setup-v3-card setup-v3-card-scale">
+              <div class="setup-v3-card-heading">
+                <div>
+                  <p class="eyebrow">Numbers</p>
+                  <h3>Season Size</h3>
+                </div>
+              </div>
+              <div class="setup-v3-range-stack">
+                <label class="field range-field">
+                  <span>Contestants <strong class="range-pill" id="castSizeValue">14</strong></span>
+                  <input type="range" id="castSize" min="6" max="24" step="1" value="14">
+                </label>
+                <label class="field range-field">
+                  <span>Finalists <strong class="range-pill" id="finalistSizeValue">4</strong></span>
+                  <input type="range" id="finalistSize" min="2" max="5" step="1" value="4">
+                </label>
+              </div>
+            </article>
+          </div>
+
+          <div class="setup-inline-notice" id="setupInlineNotice" hidden></div>
+
+          <article class="setup-v3-card setup-v3-tournament tournament-settings-card" id="tournamentSettingsCard" hidden>
+            <div class="setup-v3-card-heading">
               <div>
                 <p class="eyebrow">Tournament</p>
-                <h3>Tournament Settings</h3>
+                <h3>Bracket Settings</h3>
               </div>
             </div>
-            <div class="field-grid tournament-grid">
-              <label class="field range-field">
-                <span>Brackets <strong class="range-pill" id="tournamentBracketCountValue">2</strong></span>
-                <input type="range" id="tournamentBracketCount" min="2" max="4" step="1" value="2">
-              </label>
-              <label class="field range-field">
-                <span>Advancers <strong class="range-pill" id="tournamentAdvancersValue">2</strong></span>
-                <input type="range" id="tournamentAdvancers" min="2" max="4" step="1" value="2">
-              </label>
-              <label class="field range-field">
-                <span>Bracket Episodes <strong class="range-pill" id="tournamentBracketEpisodesValue">3</strong></span>
-                <input type="range" id="tournamentBracketEpisodes" min="2" max="5" step="1" value="3">
-              </label>
-              <label class="field range-field">
-                <span>Merge Episodes <strong class="range-pill" id="tournamentMergeEpisodesValue">2</strong></span>
-                <input type="range" id="tournamentMergeEpisodes" min="2" max="6" step="1" value="2">
-              </label>
-              <label class="compact-toggle">
-                <input type="checkbox" id="tournamentPreMergeWildcard">
-                <span>Pre-Merge Wildcard</span>
-              </label>
-              <label class="compact-toggle">
-                <input type="checkbox" id="tournamentPreFinaleWildcard">
-                <span>Pre-Finale Wildcard</span>
-              </label>
+            <div class="field-grid tournament-grid setup-v3-tournament-grid">
+              <label class="field range-field"><span>Brackets <strong class="range-pill" id="tournamentBracketCountValue">2</strong></span><input type="range" id="tournamentBracketCount" min="2" max="4" step="1" value="2"></label>
+              <label class="field range-field"><span>Advancers <strong class="range-pill" id="tournamentAdvancersValue">2</strong></span><input type="range" id="tournamentAdvancers" min="2" max="4" step="1" value="2"></label>
+              <label class="field range-field"><span>Bracket Episodes <strong class="range-pill" id="tournamentBracketEpisodesValue">3</strong></span><input type="range" id="tournamentBracketEpisodes" min="2" max="5" step="1" value="3"></label>
+              <label class="field range-field"><span>Merge Episodes <strong class="range-pill" id="tournamentMergeEpisodesValue">2</strong></span><input type="range" id="tournamentMergeEpisodes" min="2" max="6" step="1" value="2"></label>
+              <label class="compact-toggle"><input type="checkbox" id="tournamentPreMergeWildcard"><span>Pre-Merge Wildcard</span></label>
+              <label class="compact-toggle"><input type="checkbox" id="tournamentPreFinaleWildcard"><span>Pre-Finale Wildcard</span></label>
             </div>
           </article>
 
-          <details class="advanced-settings" open>
-            <summary>Advanced options <span>Twists, specials and production controls</span></summary>
-            <div class="advanced-settings-grid">
-              <section class="advanced-group">
-                <div class="advanced-group-head">
-                  <p class="eyebrow">Optional</p>
-                  <h3>Season Twists</h3>
-                </div>
-                <div class="check-grid compact-check-grid">
-                  <label class="toggle-row"><input type="checkbox" id="twistImmunity"><span>Immunity</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistChocolateRandom"><span>Chocolate Bar (Random)</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Chocolate Bar (Choosable)</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistLuckyCow"><span>Lucky Cow Voting</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistRosconReinas"><span>El Roscón de Reinas</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistHeartSuccessor"><span>Heart Successor</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="twistGoldenBaguette"><span>Golden Baguette</span></label>
-                </div>
-              </section>
-
-              <section class="advanced-group">
-                <div class="advanced-group-head">
-                  <p class="eyebrow">Episodes</p>
-                  <h3>Special Challenges</h3>
-                </div>
-                <div class="check-grid compact-check-grid special-challenge-grid">
-                  <label class="toggle-row"><input type="checkbox" id="specialLalaparuzaSmackdown"><span>LaLaPaRuZa Smackdown</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="specialNonElimLalaparuza"><span>Non-Elimination LaLaPaRuZa</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="specialSlayOffs"><span>Slay-Offs</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="specialReunionLalaparuza"><span>Reunion LaLaPaRuZa</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="specialMidSeasonRateAQueen"><span>Mid-Season Rate-A-Queen</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="specialFameGames"><span>Fame Games</span></label>
-                </div>
-              </section>
-
-              <section class="advanced-group advanced-group-wide finale-awards-settings">
-                <div class="advanced-group-head">
-                  <p class="eyebrow">Finale</p>
-                  <h3>Awards</h3>
-                </div>
-                <div class="check-grid finale-awards-grid">
-                  <label class="toggle-row"><input type="checkbox" id="awardMxCongeniality" checked><span>Mx. Congeniality</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardGoldenBoot"><span>Golden Boot</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardLostLook"><span>Mx. Lost Look</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardDragPopStar"><span>Drag Pop Star</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardMxMakeup"><span>Mx. Make-Up</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardMxStarving"><span>Mx. Starving</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="awardMxBitch"><span>Mx. Bitch</span></label>
-                </div>
-              </section>
-
-              <section class="advanced-group advanced-group-wide">
-                <div class="advanced-group-head">
-                  <p class="eyebrow">Control</p>
-                  <h3>Production Controls</h3>
-                </div>
-                <div class="check-grid">
-                  <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Challenge Riggory</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="disableLipSyncRiggory"><span>Disable Lip Sync Riggory</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="disableDoubleShantaysSashays"><span>Disable Double Shantays/Sashays</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="disableNonElimination"><span>Disable Non-Elimination Episodes</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="forceSlayersEpisode"><span>Force Slayers Episode</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="forceFlopsEpisode"><span>Force a Flops Episode</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="forceDoubleShantay"><span>Force a Double Shantay</span></label>
-                  <label class="toggle-row"><input type="checkbox" id="forceDoubleSashay"><span>Force a Double Sashay</span></label>
-                </div>
-              </section>
+          <div class="setup-v3-options-head">
+            <div>
+              <p class="eyebrow">Customize</p>
+              <h3>Season Options</h3>
             </div>
-          </details>
+          </div>
+
+          <div class="setup-v3-options-grid">
+            <article class="setup-v3-option-card setup-v3-option-twists">
+              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Optional</span><h3>Season Twists</h3></div></div>
+              <div class="check-grid compact-check-grid">
+                <label class="toggle-row"><input type="checkbox" id="twistImmunity"><span>Immunity</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistChocolateRandom"><span>Chocolate Bar (Random)</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Chocolate Bar (Choosable)</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistLotteria"><span>Lotería</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistLuckyCow"><span>Lucky Cow Voting</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistRosconReinas"><span>El Roscón de Reinas</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistHeartSuccessor"><span>Heart Successor</span></label>
+                <label class="toggle-row"><input type="checkbox" id="twistGoldenBaguette"><span>Golden Baguette</span></label>
+              </div>
+            </article>
+
+            <article class="setup-v3-option-card setup-v3-option-specials">
+              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Episodes</span><h3>Special Challenges</h3></div></div>
+              <div class="check-grid compact-check-grid special-challenge-grid">
+                <label class="toggle-row"><input type="checkbox" id="specialLalaparuzaSmackdown"><span>LaLaPaRuZa Smackdown</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialNonElimLalaparuza"><span>Non-Elimination LaLaPaRuZa</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialSlayOffs"><span>Slay-Offs</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialReunionLalaparuza"><span>Reunion LaLaPaRuZa</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialMidSeasonRateAQueen"><span>Mid-Season Rate-A-Queen</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialFameGames"><span>Fame Games</span></label>
+                <label class="toggle-row"><input type="checkbox" id="specialChooseYourOwnAdventure"><span>Choose Your Own Adventure</span></label>
+              </div>
+            </article>
+
+            <article class="setup-v3-option-card setup-v3-option-awards finale-awards-settings">
+              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Finale</span><h3>Awards</h3></div></div>
+              <div class="check-grid finale-awards-grid">
+                <label class="toggle-row"><input type="checkbox" id="awardMxCongeniality" checked><span>Mx. Congeniality</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardGoldenBoot"><span>Golden Boot</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardLostLook"><span>Mx. Lost Look</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardDragPopStar"><span>Drag Pop Star</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardMxMakeup"><span>Mx. Make-Up</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardMxStarving"><span>Mx. Starving</span></label>
+                <label class="toggle-row"><input type="checkbox" id="awardMxBitch"><span>Mx. Bitch</span></label>
+              </div>
+            </article>
+
+            <article class="setup-v3-option-card setup-v3-option-controls">
+              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Control</span><h3>Production Controls</h3></div></div>
+              <div class="check-grid">
+                <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Challenge Riggory</span></label>
+                <label class="toggle-row"><input type="checkbox" id="disableLipSyncRiggory"><span>Disable Lip Sync Riggory</span></label>
+                <label class="toggle-row"><input type="checkbox" id="disableDoubleShantaysSashays"><span>Disable Double Shantays/Sashays</span></label>
+                <label class="toggle-row"><input type="checkbox" id="disableNonElimination"><span>Disable Non-Elimination Episodes</span></label>
+                <label class="toggle-row"><input type="checkbox" id="forceSlayersEpisode"><span>Force Slayers Episode</span></label>
+                <label class="toggle-row"><input type="checkbox" id="forceFlopsEpisode"><span>Force a Flops Episode</span></label>
+                <label class="toggle-row"><input type="checkbox" id="forceDoubleShantay"><span>Force a Double Shantay</span></label>
+                <label class="toggle-row"><input type="checkbox" id="forceDoubleSashay"><span>Force a Double Sashay</span></label>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="screen" id="cast-screen">
-        <div class="screen-head tight">
+      <section class="screen cast-v6-screen" id="cast-screen">
+        <div class="screen-head tight cast-v6-screen-head">
           <div>
             <p class="eyebrow">Cast Selection</p>
             <h2>Select the Contestants</h2>
           </div>
-          <div class="screen-action-row">
+          <div class="screen-action-row cast-v6-screen-actions">
             <button class="secondary-btn" id="backToSetupBtn" type="button">Back</button>
             <button class="secondary-btn" id="resetSeasonBtnCast" type="button">Reset</button>
             <button class="primary-btn" id="toEpisodeBtn" type="button">Start Season</button>
           </div>
         </div>
 
-        <div class="cast-layout">
-          <aside class="panel roster-panel">
-            <div class="panel-head compact-head split">
+        <div class="cast-layout cast-v6-layout">
+          <aside class="panel roster-panel cast-v6-sidebar">
+            <div class="cast-v6-panel-head">
               <div>
                 <p class="eyebrow">Browse Contestants</p>
-                <h3>Roster</h3>
+                <h3>Cast Pool</h3>
               </div>
-              <span class="meta-chip"><strong id="availableCount">0</strong> in pool</span>
             </div>
 
-            <div class="field-grid roster-controls">
+            <div class="cast-v6-filter-stack">
               <div class="field compact filter-field">
                 <span>Shows</span>
                 <div class="dropdown-checklist" id="showFilter" data-placeholder="All Shows"></div>
@@ -312,37 +326,41 @@
               </label>
             </div>
 
-            <div class="roster-grid" id="rosterGrid"></div>
-            <div class="roster-action-row simplified-cast-tools" aria-label="Cast tools">
-              <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
-              <button class="secondary-btn" id="randomContestantBtn" type="button">Add Random Contestant</button>
-              <button class="secondary-btn" id="presetCastBtn" type="button">Use Pre-Set Cast</button>
-              <details class="cast-universe-tools">
-                <summary class="secondary-btn">Universe</summary>
-                <div class="cast-universe-menu">
-                  <button class="secondary-btn" id="saveCastBtn" type="button">Save Cast</button>
-                  <button class="secondary-btn" id="loadSavedCastBtn" type="button">Saved Casts</button>
-                  <button class="secondary-btn" id="historyCastBtn" type="button">Cast From History</button>
-                </div>
-              </details>
-              <button class="secondary-btn" id="customContestantBtn" type="button">Create Contestant</button>
-              <button class="secondary-btn" id="resetCastBtn" type="button">Clear Cast</button>
+            <div class="cast-v6-pool-block">
+              <div class="cast-v6-section-label"><span>Contestants</span><span>Click to add</span></div>
+              <div class="roster-grid" id="rosterGrid"></div>
+            </div>
+
+            <div class="cast-v6-tools-block">
+              <div class="cast-v6-section-label"><span>Cast Tools</span></div>
+              <div class="roster-action-row simplified-cast-tools cast-v6-tools" aria-label="Cast tools">
+                <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
+                <button class="secondary-btn" id="randomContestantBtn" type="button">Add Random</button>
+                <button class="secondary-btn" id="presetCastBtn" type="button">Pre-Set Cast</button>
+                <details class="cast-universe-tools">
+                  <summary class="secondary-btn">Universe</summary>
+                  <div class="cast-universe-menu">
+                    <button class="secondary-btn" id="saveCastBtn" type="button">Save Cast</button>
+                    <button class="secondary-btn" id="loadSavedCastBtn" type="button">Saved Casts</button>
+                    <button class="secondary-btn returnee-cast-btn" id="historyCastBtn" type="button">Returnees</button>
+                  </div>
+                </details>
+                <button class="secondary-btn" id="customContestantBtn" type="button">Create Contestant</button>
+                <button class="secondary-btn" id="resetCastBtn" type="button">Clear Cast</button>
+              </div>
             </div>
           </aside>
 
-          <section class="panel selected-panel">
-            <div class="panel-head compact-head split">
+          <section class="panel selected-panel cast-v6-main">
+            <div class="cast-v6-panel-head cast-v6-lineup-head">
               <div>
                 <p class="eyebrow">Selected Cast</p>
                 <h3>Season Lineup</h3>
               </div>
-              <span class="meta-chip"><strong id="selectedCount">0</strong>/<span id="slotCount">0</span> selected</span>
             </div>
 
-            <div class="team-legend" id="teamLegend"></div>
-            <div class="selected-grid" id="selectedGrid"></div>
-            <div class="lineup-action-row">
-              <button class="secondary-btn" id="viewAllSkillsBtn" type="button">View Skill Key</button>
+            <div class="cast-v6-board">
+              <div class="selected-grid" id="selectedGrid"></div>
             </div>
           </section>
         </div>
@@ -378,6 +396,7 @@
           <button class="section-toggle" data-step="awardmxmakeup">Mx. Make-Up</button>
           <button class="section-toggle" data-step="awardmxstarving">Mx. Starving</button>
           <button class="section-toggle" data-step="awardmxbitch">Mx. Bitch</button>
+          <button class="section-toggle" data-step="choice">Choice</button>
           <button class="section-toggle" data-step="maxi">Maxi Challenge</button>
           <button class="section-toggle" data-step="cuntpart1">Part #1</button>
           <button class="section-toggle" data-step="cuntpart2">Part #2</button>
@@ -522,6 +541,15 @@
             <div class="section-title">Mx. Bitch</div>
             <div class="event-stack finale-single-award-stack" id="mxBitchAwardStack"></div>
             <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
+          </section>
+
+          <section class="episode-panel" data-panel="choice">
+            <div class="section-title">Choice</div>
+            <div class="event-stack" id="choiceAdventureStack"></div>
+            <div class="proceed-row dual">
+              <button class="secondary-btn proceed-btn" type="button">Back</button>
+              <button class="primary-btn proceed-btn" type="button">Proceed</button>
+            </div>
           </section>
 
           <section class="episode-panel" data-panel="maxi">
@@ -697,6 +725,7 @@
             <div class="section-title" id="resultsSectionTitle">Lip Sync Results</div>
             <div class="reveal-board" id="revealBoard"></div>
             <div class="crowning-message" id="crowningMessage"></div>
+            <div class="lotteria-inline-stack" id="lotteriaResultsStack"></div>
             <div class="center-actions">
               <button class="primary-btn" id="revealResultsBtn" type="button">Reveal Results</button>
             </div>
@@ -737,6 +766,7 @@
             <div class="section-title">Lip Sync for Your Life Results</div>
             <div class="reveal-board" id="s17LsfylResultsBoard"></div>
             <div class="crowning-message" id="s17LsfylCrowningMessage"></div>
+            <div class="lotteria-inline-stack" id="lotteriaS17ResultsStack"></div>
             <div class="center-actions">
               <button class="primary-btn" id="revealS17LsfylResultsBtn" type="button">Reveal Results</button>
             </div>
@@ -800,7 +830,6 @@
             <h2 id="statsScreenTitle">Season Statistics</h2>
           </div>
           <div class="screen-action-row">
-            <button class="secondary-btn" id="archivedStatsBackBtn" type="button" hidden>Back to Universe</button>
             <button class="primary-btn" id="archiveSeasonBtn" type="button">Save Season</button>
             <button class="secondary-btn" id="backToEpisodeBtn" type="button">Episodes</button>
             <button class="secondary-btn" id="backToCastBtnStats" type="button">Cast</button>
@@ -808,7 +837,7 @@
           </div>
         </div>
 
-        <div class="stats-nav">
+        <div class="stats-nav" aria-label="Season statistics sections">
           <button class="stats-tab is-active" data-tab="track">Track Record</button>
           <button class="stats-tab" data-tab="lipsyncs">Lip Syncs</button>
           <button class="stats-tab" data-tab="stars">Star Count</button>
@@ -816,12 +845,14 @@
           <button class="stats-tab" data-tab="pointbracket">Point Per Bracket</button>
           <button class="stats-tab" data-tab="runways">Runways</button>
           <button class="stats-tab" data-tab="challenges">Challenges</button>
-          <button class="stats-tab" data-tab="records">Records</button>
-          <button class="stats-tab" data-tab="popularity">Popularity</button>
-          <button class="stats-tab" data-tab="edgic">EDGIC</button>
           <button class="stats-tab" data-tab="voting">Voting</button>
           <button class="stats-tab" data-tab="heartsuccessor">Heart Successor</button>
           <button class="stats-tab" data-tab="goldenbaguette">Golden Baguette</button>
+          <span class="stats-nav-divider" aria-hidden="true"></span>
+          <button class="stats-tab" data-tab="edgic">EDGIC</button>
+          <button class="stats-tab" data-tab="records">Records</button>
+          <button class="stats-tab" data-tab="popularity">Popularity</button>
+          <button class="stats-tab" data-tab="tvstats">TV Stats</button>
           <button class="stats-tab" data-tab="storylines">Storylines</button>
           <button class="stats-tab" data-tab="highlights">Highlights</button>
         </div>
@@ -835,7 +866,6 @@
               </div>
             </div>
             <div class="table-wrap" id="trackWrap"></div>
-            <div class="legend-rows" id="trackLegend"></div>
           </div>
         </section>
 
@@ -884,6 +914,12 @@
         <section class="stats-panel" data-tab-panel="popularity">
           <div class="panel stats-card">
             <div class="table-wrap" id="popularityWrap"></div>
+          </div>
+        </section>
+
+        <section class="stats-panel" data-tab-panel="tvstats">
+          <div class="panel stats-card tv-stats-card">
+            <div id="tvStatsWrap"></div>
           </div>
         </section>
 
@@ -1044,6 +1080,8 @@
       </header>
       <nav class="universe-tabs" aria-label="My Universe sections">
         <button type="button" class="universe-tab is-active" data-universe-tab="franchises">Franchises</button>
+        <button type="button" class="universe-tab" data-universe-tab="contestants">Contestants</button>
+        <button type="button" class="universe-tab" data-universe-tab="records">Records</button>
         <button type="button" class="universe-tab" data-universe-tab="casts">Casts</button>
         <button type="button" class="universe-tab" data-universe-tab="seasons">Seasons</button>
         <button type="button" class="universe-tab" data-universe-tab="storage">Storage</button>
@@ -1182,7 +1220,7 @@
     <div class="history-cast-shell">
       <header class="modal-head">
         <div>
-          <h3>Cast From History</h3>
+          <div><p class="eyebrow">Career Casting</p><h3>Returnees</h3></div>
         </div>
         <button type="button" class="icon-close" id="closeHistoryCastModal">×</button>
       </header>
@@ -1192,8 +1230,20 @@
           <select id="historyFranchiseFilter"><option value="">All Franchises</option></select>
         </label>
         <label class="field">
+          <span>Eligibility</span>
+          <select id="historyEligibilityFilter">
+            <option value="any">Any Previous Contestant</option>
+            <option value="never_won">Never Won</option>
+            <option value="finalists">Previous Finalists</option>
+            <option value="early_outs">Early Outs</option>
+            <option value="winners">Previous Winners</option>
+            <option value="one_time">One-Time Contestants</option>
+            <option value="veterans">2+ Previous Seasons</option>
+          </select>
+        </label>
+        <label class="field">
           <span>Search</span>
-          <input type="search" id="historyContestantSearch" placeholder="Search contestants...">
+          <input type="search" id="historyContestantSearch" placeholder="Search contestants or seasons...">
         </label>
       </div>
       <div class="history-cast-meta" id="historyCastMeta"></div>
