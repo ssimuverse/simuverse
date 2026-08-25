@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Drag Race Simulator</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=120" />
+  <link rel="stylesheet" href="style.css?v=134" />
 
   <script src="../drag_race_data.js" defer></script>
   <script src="maxi_challenges.js" defer></script>
@@ -17,7 +17,7 @@
   <script src="talent_show_data.js" defer></script>
   <script src="guest_judges_data.js" defer></script>
   <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=120" defer></script>
+  <script src="simulator.js?v=134" defer></script>
 </head>
 <body>
   <div class="app-shell">
@@ -88,7 +88,9 @@
                   <span>Game Mode</span>
                   <select id="modeSelect">
                     <option value="viewer">Viewer Mode</option>
+                    <option value="production">Production Mode</option>
                     <option value="rupaul">RuPaul Mode [BETA]</option>
+                    <option value="god">God Mode [BETA]</option>
                   </select>
                   <small class="field-help" id="modeHelp"></small>
                 </label>
@@ -356,6 +358,12 @@
               <div>
                 <p class="eyebrow">Selected Cast</p>
                 <h3>Season Lineup</h3>
+              </div>
+              <div class="cast-v6-lineup-count-wrap" aria-live="polite">
+                <div class="cast-v6-lineup-count">
+                  <div class="cast-v6-lineup-count-numbers"><strong id="selectedCount">0</strong><span>/</span><b id="slotCount">14</b></div>
+                  <div class="cast-v6-lineup-count-status" id="teamLegend">14 spots remaining</div>
+                </div>
               </div>
             </div>
 
