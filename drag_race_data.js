@@ -1323,7 +1323,7 @@ window.QUEENS = [
   nickname: "Brooke",
   image: "images/brooke_lynn_hytes.webp",
   skills: { acting: 8, comedy: 8, dance: 13, design: 12, improv: 8, runway: 10, lipsync: 13 },
-  shows: ["RuPaul's Drag Race"],
+  shows: ["RuPaul's Drag Race", "Host"],
   seasonsByShow: { "RuPaul's Drag Race": [11] },
   country: "USA",
 },
@@ -8208,7 +8208,8 @@ window.QUEENS = [
   nickname: "Art Arya",
   image: "images/art_arya.webp",
   skills: { acting: 8, comedy: 6, dance: 4, design: 14, improv: 7, runway: 15, lipsync: 5 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Thailand",
 },
 {
   id: "barbie_breakout",
@@ -8216,7 +8217,8 @@ window.QUEENS = [
   nickname: "Barbie Breakout",
   image: "images/barbie_breakout.webp",
   skills: { acting: 9, comedy: 9, dance: 6, design: 9, improv: 9, runway: 10, lipsync: 6 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Germany",
 },
 {
   id: "dracmorda_boulet",
@@ -8224,7 +8226,8 @@ window.QUEENS = [
   nickname: "Dracmorda",
   image: "images/dracmorda_boulet.webp",
   skills: { acting: 9, comedy: 6, dance: 5, design: 13, improv: 7, runway: 14, lipsync: 6 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "USA",
 },
 {
   id: "fred_van_leer",
@@ -8232,7 +8235,8 @@ window.QUEENS = [
   nickname: "Fred van Leer",
   image: "images/fred_van_leer.webp",
   skills: { acting: 10, comedy: 9, dance: 7, design: 6, improv: 8, runway: 8, lipsync: 6 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Netherlands",
 },
 {
   id: "michelle_visage",
@@ -8240,7 +8244,8 @@ window.QUEENS = [
   nickname: "Michelle Visage",
   image: "images/michelle_visage.webp",
   skills: { acting: 12, comedy: 10, dance: 8, design: 7, improv: 9, runway: 11, lipsync: 8 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "USA",
 },
 {
   id: "priscilla",
@@ -8248,7 +8253,8 @@ window.QUEENS = [
   nickname: "Priscilla",
   image: "images/priscilla.webp",
   skills: { acting: 9, comedy: 8, dance: 7, design: 7, improv: 8, runway: 8, lipsync: 8 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Italy",
 },
 {
   id: "paolo_ballesteros",
@@ -8256,7 +8262,8 @@ window.QUEENS = [
   nickname: "Paolo",
   image: "images/paolo_ballesteros.webp",
   skills: { acting: 11, comedy: 10, dance: 6, design: 8, improv: 9, runway: 10, lipsync: 7 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Philippines",
 },
 {
   id: "robert_fux",
@@ -8264,7 +8271,8 @@ window.QUEENS = [
   nickname: "Robert Fux",
   image: "images/robert_fux.webp",
   skills: { acting: 8, comedy: 8, dance: 5, design: 8, improv: 7, runway: 10, lipsync: 5 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Sweden",
 },
 {
   id: "rupaul",
@@ -8272,7 +8280,8 @@ window.QUEENS = [
   nickname: "RuPaul",
   image: "images/rupaul.webp",
   skills: { acting: 12, comedy: 12, dance: 7, design: 7, improv: 13, runway: 10, lipsync: 9 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "USA",
 },
 {
   id: "supremme_de_luxe",
@@ -8280,7 +8289,8 @@ window.QUEENS = [
   nickname: "Supremme",
   image: "images/supremme_de_luxe.webp",
   skills: { acting: 10, comedy: 11, dance: 7, design: 6, improv: 10, runway: 11, lipsync: 7 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "Spain",
 },
 {
   id: "swanthula_boulet",
@@ -8288,7 +8298,8 @@ window.QUEENS = [
   nickname: "Swanthula",
   image: "images/swanthula_boulet.webp",
   skills: { acting: 9, comedy: 6, dance: 5, design: 13, improv: 7, runway: 14, lipsync: 6 },
-  shows: ["Host"]
+  shows: ["Host"],
+  country: "USA",
 },
 {
   id: "barbara_durango",
