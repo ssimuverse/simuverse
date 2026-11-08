@@ -10216,7 +10216,7 @@ window.QUEENS = [
   country: "Philippines",
 },
 {
-  id: "barbie_q",
+  id: "barbie_qq",
   fullName: "Barbie-Q",
   nickname: "Barbie-Q",
   image: "images/barbie_q_ph.webp",
