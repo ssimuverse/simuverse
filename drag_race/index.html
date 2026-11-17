@@ -1,1268 +1,885 @@
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drag Race Simulator</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css?v=134" />
-
-  <script src="../drag_race_data.js" defer></script>
-  <script src="maxi_challenges.js" defer></script>
-  <script src="mini_challenges_data.js" defer></script>
-  <script src="runways_data.js" defer></script>
-  <script src="lipsync_songs_data.js" defer></script>
-  <script src="lipsync_performance.js" defer></script>
-  <script src="snatch_game_data.js" defer></script>
-  <script src="talent_show_data.js" defer></script>
-  <script src="guest_judges_data.js" defer></script>
-  <script src="untucked_events_data.js" defer></script>
-  <script src="simulator.js?v=134" defer></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Crown</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="style.css?v=20261117-setup-clean-v12" rel="stylesheet"/>
 </head>
-<body>
-  <div class="app-shell">
-    <header class="hero-header">
-      <div class="brand-lockup" aria-label="Drag Race Simulator">
-        <span class="logo-main"><span class="logo-race-word">DRAG RACE</span><span class="logo-sim-word">SIMULATOR</span></span>
-        <span class="logo-kicker">SIMUVERSE</span>
-      </div>
-      <div class="hero-actions">
-        <button class="secondary-btn universe-header-btn" id="openUniverseBtn" type="button">MY UNIVERSE</button>
-        <a class="secondary-btn home-link-btn" href="../index.html" aria-label="Return to main home page">HOME</a>
-      </div>
-    </header>
-
-    <main class="page-shell">
-      <section class="screen is-active" id="setup-screen">
-        <div class="screen-head tight setup-screen-head">
-          <div>
-            <p class="eyebrow">Season Setup</p>
-            <h2>Build the Season</h2>
-          </div>
-          <div class="screen-action-row">
-            <button class="secondary-btn" id="resetSetupBtn" type="button">Reset</button>
-            <button class="primary-btn" id="toCastBtn" type="button">Continue</button>
-          </div>
-        </div>
-
-        <div class="setup-v3-shell">
-          <article class="setup-v3-name-card">
-            <div class="setup-v3-card-heading">
-              <div>
-                <p class="eyebrow">Your season</p>
-                <h3>Season Identity</h3>
-              </div>
-              <span class="setup-v3-card-index">01</span>
-            </div>
-            <label class="field setup-v3-season-name season-name-field">
-              <span>Season Name</span>
-              <input type="text" id="seasonName" value="Fantasy Drag Race">
-            </label>
-          </article>
-
-          <div class="setup-v3-primary-grid">
-            <article class="setup-v3-card setup-v3-card-core">
-              <div class="setup-v3-card-heading">
-                <div>
-                  <p class="eyebrow">Basics</p>
-                  <h3>Season</h3>
-                </div>
-              </div>
-              <div class="setup-v3-fields setup-v3-fields-two">
-                <label class="field">
-                  <span>Franchise</span>
-                  <select id="seasonFranchiseSelect">
-                    <option value="">Independent Season</option>
-                  </select>
-                </label>
-                <label class="field">
-                  <span>Season Type</span>
-                  <select id="seasonTypeSelect">
-                    <option value="regular">Regular Season</option>
-                    <option value="all_stars">All Stars</option>
-                    <option value="vs_the_world">Vs The World</option>
-                    <option value="custom">Custom</option>
-                  </select>
-                </label>
-                <label class="field game-mode-field setup-v3-field-wide">
-                  <span>Game Mode</span>
-                  <select id="modeSelect">
-                    <option value="viewer">Viewer Mode</option>
-                    <option value="production">Production Mode</option>
-                    <option value="rupaul">RuPaul Mode [BETA]</option>
-                    <option value="god">God Mode [BETA]</option>
-                  </select>
-                  <small class="field-help" id="modeHelp"></small>
-                </label>
-              </div>
-            </article>
-
-            <article class="setup-v3-card setup-v3-card-format">
-              <div class="setup-v3-card-heading">
-                <div>
-                  <p class="eyebrow">Rules</p>
-                  <h3>Competition Format</h3>
-                </div>
-              </div>
-              <div class="setup-v3-fields">
-                <label class="field">
-                  <span>Elimination Format</span>
-                  <select id="eliminationFormatSelect">
-                    <option value="regular">Regular</option>
-                    <option value="thailand">Thailand Format</option>
-                    <option value="legacy">Lip Sync For Your Legacy</option>
-                    <option value="format_swap">Format Swap</option>
-                    <option value="assassin">Lip Sync Assassin</option>
-                    <option value="golden_beaver">Golden Beaver</option>
-                    <option value="golden_dam">Golden Dam</option>
-                    <option value="all_winners">All Winners</option>
-                    <option value="tournament">Tournament</option>
-                    <option value="teams">Teams</option>
-                  </select>
-                  <small class="field-help" id="eliminationFormatHelp"></small>
-                </label>
-                <label class="field">
-                  <span>Premiere</span>
-                  <select id="premiereTypeSelect">
-                    <option value="regular">Regular</option>
-                    <option value="non_elim_top2">Non-Elimination Top 2</option>
-                    <option value="late_entry">Late Entry</option>
-                    <option value="slayers">Slayers</option>
-                    <option value="uk3">UK3 Premiere</option>
-                    <option value="split_s6">Split Premiere (S6)</option>
-                    <option value="split_s12">Split Premiere (S12)</option>
-                    <option value="split_s14">Split Premiere (S14)</option>
-                    <option value="rate_a_queen_s16">Rate-A-Queen (S16)</option>
-                    <option value="rate_a_queen_s17">Rate-A-Queen (S17)</option>
-                    <option value="porkchop">Porkchop Premiere</option>
-                  </select>
-                  <small class="field-help" id="premiereHelp"></small>
-                </label>
-              </div>
-            </article>
-
-            <article class="setup-v3-card setup-v3-card-ending">
-              <div class="setup-v3-card-heading">
-                <div>
-                  <p class="eyebrow">Endgame</p>
-                  <h3>Finale & Comeback</h3>
-                </div>
-              </div>
-              <div class="setup-v3-fields">
-                <label class="field">
-                  <span>Finale</span>
-                  <select id="finaleTypeSelect">
-                    <option value="regular_finale">Regular Finale</option>
-                    <option value="top2_finale">Top 2 Finale</option>
-                    <option value="top4_to_top3">Top 4 to Top 3</option>
-                    <option value="lsftc">Lip Sync for The Crown</option>
-                    <option value="jury_finale">Jury</option>
-                    <option value="lsftf">Lip Sync for The Finale</option>
-                    <option value="cunt_test">The C.U.N.T.-test</option>
-                    <option value="thailand_finale">Drag Race Thailand Finale</option>
-                  </select>
-                  <small class="field-help" id="finaleHelp"></small>
-                </label>
-                <label class="field setup-comeback-field">
-                  <span>Comeback</span>
-                  <select id="comebackFormatSelect">
-                    <option value="none">None</option>
-                    <option value="random_return">Random Contestant Returns</option>
-                    <option value="choose_return">Choose a Contestant to Return</option>
-                    <option value="other_queens_choose">Other Contestants Choose</option>
-                    <option value="reading_is_fundamental">Reading Challenge</option>
-                    <option value="conjoined_twins">Conjoined Twins</option>
-                    <option value="reinas_de_la_comedia">Reinas de la Comedia</option>
-                    <option value="attention_girl_groups">Attention Girl Groups</option>
-                    <option value="kitty_girl_groups">Kitty Girl Groups</option>
-                    <option value="revenge_of_the_queens">Revenge of The Queens</option>
-                    <option value="lalaparuza_comeback">LaLaPaRuZa Comeback</option>
-                    <option value="game_within_a_game">Game Within a Game</option>
-                  </select>
-                  <small class="field-help" id="comebackHelp"></small>
-                </label>
-              </div>
-            </article>
-
-            <article class="setup-v3-card setup-v3-card-scale">
-              <div class="setup-v3-card-heading">
-                <div>
-                  <p class="eyebrow">Numbers</p>
-                  <h3>Season Size</h3>
-                </div>
-              </div>
-              <div class="setup-v3-range-stack">
-                <label class="field range-field">
-                  <span>Contestants <strong class="range-pill" id="castSizeValue">14</strong></span>
-                  <input type="range" id="castSize" min="6" max="24" step="1" value="14">
-                </label>
-                <label class="field range-field">
-                  <span>Finalists <strong class="range-pill" id="finalistSizeValue">4</strong></span>
-                  <input type="range" id="finalistSize" min="2" max="5" step="1" value="4">
-                </label>
-              </div>
-            </article>
-          </div>
-
-          <div class="setup-inline-notice" id="setupInlineNotice" hidden></div>
-
-          <article class="setup-v3-card setup-v3-tournament tournament-settings-card" id="tournamentSettingsCard" hidden>
-            <div class="setup-v3-card-heading">
-              <div>
-                <p class="eyebrow">Tournament</p>
-                <h3>Bracket Settings</h3>
-              </div>
-            </div>
-            <div class="field-grid tournament-grid setup-v3-tournament-grid">
-              <label class="field range-field"><span>Brackets <strong class="range-pill" id="tournamentBracketCountValue">2</strong></span><input type="range" id="tournamentBracketCount" min="2" max="4" step="1" value="2"></label>
-              <label class="field range-field"><span>Advancers <strong class="range-pill" id="tournamentAdvancersValue">2</strong></span><input type="range" id="tournamentAdvancers" min="2" max="4" step="1" value="2"></label>
-              <label class="field range-field"><span>Bracket Episodes <strong class="range-pill" id="tournamentBracketEpisodesValue">3</strong></span><input type="range" id="tournamentBracketEpisodes" min="2" max="5" step="1" value="3"></label>
-              <label class="field range-field"><span>Merge Episodes <strong class="range-pill" id="tournamentMergeEpisodesValue">2</strong></span><input type="range" id="tournamentMergeEpisodes" min="2" max="6" step="1" value="2"></label>
-              <label class="compact-toggle"><input type="checkbox" id="tournamentPreMergeWildcard"><span>Pre-Merge Wildcard</span></label>
-              <label class="compact-toggle"><input type="checkbox" id="tournamentPreFinaleWildcard"><span>Pre-Finale Wildcard</span></label>
-            </div>
-          </article>
-
-          <div class="setup-v3-options-head">
-            <div>
-              <p class="eyebrow">Customize</p>
-              <h3>Season Options</h3>
-            </div>
-          </div>
-
-          <div class="setup-v3-options-grid">
-            <article class="setup-v3-option-card setup-v3-option-twists">
-              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Optional</span><h3>Season Twists</h3></div></div>
-              <div class="check-grid compact-check-grid">
-                <label class="toggle-row"><input type="checkbox" id="twistImmunity"><span>Immunity</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistChocolateRandom"><span>Chocolate Bar (Random)</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistChocolateChoosable"><span>Chocolate Bar (Choosable)</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistLotteria"><span>Lotería</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistLuckyCow"><span>Lucky Cow Voting</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistBadonkaDunkTank"><span>Badonka Dunk Tank</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistRosconReinas"><span>El Roscón de Reinas</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistHeartSuccessor"><span>Heart Successor</span></label>
-                <label class="toggle-row"><input type="checkbox" id="twistGoldenBaguette"><span>Golden Baguette</span></label>
-              </div>
-            </article>
-
-            <article class="setup-v3-option-card setup-v3-option-specials">
-              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Episodes</span><h3>Special Challenges</h3></div></div>
-              <div class="check-grid compact-check-grid special-challenge-grid">
-                <label class="toggle-row"><input type="checkbox" id="specialLalaparuzaSmackdown"><span>LaLaPaRuZa Smackdown</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialNonElimLalaparuza"><span>Non-Elimination LaLaPaRuZa</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialSlayOffs"><span>Slay-Offs</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialReunionLalaparuza"><span>Reunion LaLaPaRuZa</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialMidSeasonRateAQueen"><span>Mid-Season Rate-A-Queen</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialFameGames"><span>Fame Games</span></label>
-                <label class="toggle-row"><input type="checkbox" id="specialChooseYourOwnAdventure"><span>Choose Your Own Adventure</span></label>
-              </div>
-            </article>
-
-            <article class="setup-v3-option-card setup-v3-option-awards finale-awards-settings">
-              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Finale</span><h3>Awards</h3></div></div>
-              <div class="check-grid finale-awards-grid">
-                <label class="toggle-row"><input type="checkbox" id="awardMxCongeniality" checked><span>Mx. Congeniality</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardGoldenBoot"><span>Golden Boot</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardLostLook"><span>Mx. Lost Look</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardDragPopStar"><span>Drag Pop Star</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardMxMakeup"><span>Mx. Make-Up</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardMxStarving"><span>Mx. Starving</span></label>
-                <label class="toggle-row"><input type="checkbox" id="awardMxBitch"><span>Mx. Bitch</span></label>
-              </div>
-            </article>
-
-            <article class="setup-v3-option-card setup-v3-option-controls">
-              <div class="setup-v3-option-head"><div><span class="setup-v3-option-kicker">Control</span><h3>Production Controls</h3></div></div>
-              <div class="check-grid">
-                <label class="toggle-row"><input type="checkbox" id="disableChallengeRiggory"><span>Disable Challenge Riggory</span></label>
-                <label class="toggle-row"><input type="checkbox" id="disableLipSyncRiggory"><span>Disable Lip Sync Riggory</span></label>
-                <label class="toggle-row"><input type="checkbox" id="disableDoubleShantaysSashays"><span>Disable Double Shantays/Sashays</span></label>
-                <label class="toggle-row"><input type="checkbox" id="disableNonElimination"><span>Disable Non-Elimination Episodes</span></label>
-                <label class="toggle-row"><input type="checkbox" id="forceSlayersEpisode"><span>Force Slayers Episode</span></label>
-                <label class="toggle-row"><input type="checkbox" id="forceFlopsEpisode"><span>Force a Flops Episode</span></label>
-                <label class="toggle-row"><input type="checkbox" id="forceDoubleShantay"><span>Force a Double Shantay</span></label>
-                <label class="toggle-row"><input type="checkbox" id="forceDoubleSashay"><span>Force a Double Sashay</span></label>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="screen cast-v6-screen" id="cast-screen">
-        <div class="screen-head tight cast-v6-screen-head">
-          <div>
-            <p class="eyebrow">Cast Selection</p>
-            <h2>Select the Contestants</h2>
-          </div>
-          <div class="screen-action-row cast-v6-screen-actions">
-            <button class="secondary-btn" id="backToSetupBtn" type="button">Back</button>
-            <button class="secondary-btn" id="resetSeasonBtnCast" type="button">Reset</button>
-            <button class="primary-btn" id="toEpisodeBtn" type="button">Start Season</button>
-          </div>
-        </div>
-
-        <div class="cast-layout cast-v6-layout">
-          <aside class="panel roster-panel cast-v6-sidebar">
-            <div class="cast-v6-panel-head">
-              <div>
-                <p class="eyebrow">Browse Contestants</p>
-                <h3>Cast Pool</h3>
-              </div>
-            </div>
-
-            <div class="cast-v6-filter-stack">
-              <div class="field compact filter-field">
-                <span>Shows</span>
-                <div class="dropdown-checklist" id="showFilter" data-placeholder="All Shows"></div>
-              </div>
-
-              <div class="field compact filter-field">
-                <span>Seasons</span>
-                <div class="dropdown-checklist" id="seasonFilter" data-placeholder="All Seasons"></div>
-              </div>
-
-              <label class="field compact search-field">
-                <span>Search</span>
-                <input type="text" id="searchFilter" placeholder="Search a queen...">
-              </label>
-            </div>
-
-            <div class="cast-v6-pool-block">
-              <div class="cast-v6-section-label"><span>Contestants</span><span>Click to add</span></div>
-              <div class="roster-grid" id="rosterGrid"></div>
-            </div>
-
-            <div class="cast-v6-tools-block">
-              <div class="cast-v6-section-label"><span>Cast Tools</span></div>
-              <div class="roster-action-row simplified-cast-tools cast-v6-tools" aria-label="Cast tools">
-                <button class="secondary-btn" id="randomizeCastBtn" type="button">Randomize Cast</button>
-                <button class="secondary-btn" id="randomContestantBtn" type="button">Add Random</button>
-                <button class="secondary-btn" id="presetCastBtn" type="button">Pre-Set Cast</button>
-                <details class="cast-universe-tools">
-                  <summary class="secondary-btn">Universe</summary>
-                  <div class="cast-universe-menu">
-                    <button class="secondary-btn" id="saveCastBtn" type="button">Save Cast</button>
-                    <button class="secondary-btn" id="loadSavedCastBtn" type="button">Saved Casts</button>
-                    <button class="secondary-btn returnee-cast-btn" id="historyCastBtn" type="button">Returnees</button>
-                  </div>
-                </details>
-                <button class="secondary-btn" id="customContestantBtn" type="button">Create Contestant</button>
-                <button class="secondary-btn" id="resetCastBtn" type="button">Clear Cast</button>
-              </div>
-            </div>
-          </aside>
-
-          <section class="panel selected-panel cast-v6-main">
-            <div class="cast-v6-panel-head cast-v6-lineup-head">
-              <div>
-                <p class="eyebrow">Selected Cast</p>
-                <h3>Season Lineup</h3>
-              </div>
-              <div class="cast-v6-lineup-count-wrap" aria-live="polite">
-                <div class="cast-v6-lineup-count">
-                  <div class="cast-v6-lineup-count-numbers"><strong id="selectedCount">0</strong><span>/</span><b id="slotCount">14</b></div>
-                  <div class="cast-v6-lineup-count-status" id="teamLegend">14 spots remaining</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="cast-v6-board">
-              <div class="selected-grid" id="selectedGrid"></div>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section class="screen" id="episode-screen">
-        <div class="episode-topbar">
-          <div class="episode-title-stack">
-            <h2 id="episodeTitle">Episode 1</h2>
-            <p class="episode-subline" id="episodeSubline">Status</p>
-          </div>
-          <div class="episode-controls">
-            <select id="episodeSelect" class="episode-select"></select>
-            <button class="secondary-btn" id="backToCastBtnEpisode" type="button">Cast</button>
-            <button class="secondary-btn" id="resetSeasonBtnEpisode" type="button">Reset</button>
-            <button class="primary-btn" id="toStatsBtn" type="button">Statistics</button>
-          </div>
-        </div>
-
-        <div class="section-toggle-row">
-          <button class="section-toggle" data-step="wildcard">Wildcard Lottery</button>
-          <button class="section-toggle is-active" data-step="status">Status</button>
-          <button class="section-toggle" data-step="roscon">El Roscón de Reinas</button>
-          <button class="section-toggle" data-step="comeback">Comeback</button>
-          <button class="section-toggle" data-step="guest">Guest Judge</button>
-          <button class="section-toggle" data-step="mini">Mini Challenge</button>
-          <button class="section-toggle" data-step="teams">Teams</button>
-          <button class="section-toggle" data-step="famegames">Fame Games</button>
-          <button class="section-toggle" data-step="awardmxcon">Mx. Congeniality</button>
-          <button class="section-toggle" data-step="awardgoldenboot">Golden Boot</button>
-          <button class="section-toggle" data-step="awardlostlook">Mx. Lost Look</button>
-          <button class="section-toggle" data-step="awarddragpopstar">Drag Pop Star</button>
-          <button class="section-toggle" data-step="awardmxmakeup">Mx. Make-Up</button>
-          <button class="section-toggle" data-step="awardmxstarving">Mx. Starving</button>
-          <button class="section-toggle" data-step="awardmxbitch">Mx. Bitch</button>
-          <button class="section-toggle" data-step="choice">Choice</button>
-          <button class="section-toggle" data-step="maxi">Maxi Challenge</button>
-          <button class="section-toggle" data-step="cuntpart1">Part #1</button>
-          <button class="section-toggle" data-step="cuntpart2">Part #2</button>
-          <button class="section-toggle" data-step="cuntpart3">Part #3</button>
-          <button class="section-toggle" data-step="runway">Runway</button>
-          <button class="section-toggle" data-step="judging">Judging</button>
-          <button class="section-toggle" data-step="ratequeen">Rate-A-Queen</button>
-          <button class="section-toggle" data-step="placements">Placements</button>
-          <button class="section-toggle" data-step="heartsuccessor">Heart Successor</button>
-          <button class="section-toggle" data-step="goldenbaguette">Golden Baguette</button>
-          <button class="section-toggle" data-step="luckycow">Lucky Cow</button>
-          <button class="section-toggle" data-step="goldenbeaver">Golden Beaver</button>
-          <button class="section-toggle" data-step="goldendam">Golden Dam</button>
-          <button class="section-toggle" data-step="rumocracy">RuMocracy</button>
-          <button class="section-toggle" data-step="lipsync">Lip Sync</button>
-          <button class="section-toggle" data-step="qosdadhh">QoSDADHH</button>
-          <button class="section-toggle" data-step="lsftc">Lip Sync for The Crown</button>
-          <button class="section-toggle" data-step="winner">Winner</button>
-          <button class="section-toggle" data-step="results">Results</button>
-          <button class="section-toggle" data-step="luckycowvotes">Votes</button>
-          <button class="section-toggle" data-step="badonkadunktank">Badonka Dunk Tank</button>
-          <button class="section-toggle" data-step="s17lsfyl">Lip Sync for Your Life</button>
-          <button class="section-toggle" data-step="s17lsfylresults">Lip Sync for Your Life Results</button>
-          <button class="section-toggle" data-step="untucked">Untucked</button>
-          <button class="section-toggle" data-step="heartinheritance">Heart Inheritance</button>
-          <button class="section-toggle" data-step="baguettepassing">Baguette Passing</button>
-          <button class="section-toggle" data-step="pointceremony">Point Ceremony</button>
-          <button class="section-toggle" data-step="trackrecord">Track Record</button>
-        </div>
-
-        <div class="panel episode-panel-shell">
-          <section class="episode-panel" data-panel="wildcard">
-            <div class="section-title">Wildcard Lottery</div>
-            <div class="event-stack" id="wildcardStack"></div>
-            <div class="proceed-row">
-              <button class="primary-btn proceed-btn" data-next="status">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel is-active" data-panel="status">
-            <div class="section-title">Remaining Contestants</div>
-            <div class="contestant-strip" id="remainingStrip"></div>
-            <div class="section-title section-gap" id="eliminatedTitle">Eliminated Contestants</div>
-            <div class="contestant-strip" id="eliminatedStrip"></div>
-            <div class="proceed-row">
-              <button class="primary-btn proceed-btn" data-next="comeback">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="roscon">
-            <div class="section-title">El Roscón de Reinas</div>
-            <div class="event-stack" id="rosconStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="status">Back</button>
-              <button class="primary-btn proceed-btn" data-next="heartinheritance">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="comeback">
-            <div class="section-title">Comeback</div>
-            <div class="event-stack" id="comebackStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="status">Back</button>
-              <button class="primary-btn proceed-btn" data-next="guest">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="guest">
-            <div class="section-title">Guest Judge</div>
-            <div class="event-stack" id="guestJudgeStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="status">Back</button>
-              <button class="primary-btn proceed-btn" data-next="mini">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="mini">
-            <div class="section-title">Mini Challenge</div>
-            <div class="event-stack" id="miniChallengeStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="guest">Back</button>
-              <button class="primary-btn proceed-btn" data-next="teams">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="teams">
-            <div class="section-title">Teams / Pairs</div>
-            <div class="team-selection-summary" id="teamSelectionSummary"></div>
-            <div class="event-stack" id="teamPickingStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="mini">Back</button>
-              <button class="primary-btn proceed-btn" data-next="famegames">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="famegames">
-            <div class="section-title">Fame Games</div>
-            <div class="event-stack" id="fameGamesFinaleStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="teams">Back</button>
-              <button class="primary-btn proceed-btn" data-next="awardmxcon">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardmxcon">
-            <div class="section-title">Mx. Congeniality</div>
-            <div class="event-stack finale-single-award-stack" id="mxCongenialityAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardgoldenboot">
-            <div class="section-title">Golden Boot</div>
-            <div class="event-stack finale-single-award-stack" id="goldenBootAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardlostlook">
-            <div class="section-title">Mx. Lost Look</div>
-            <div class="event-stack finale-single-award-stack" id="lostLookAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awarddragpopstar">
-            <div class="section-title">Drag Pop Star</div>
-            <div class="event-stack finale-single-award-stack" id="dragPopStarAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardmxmakeup">
-            <div class="section-title">Mx. Make-Up</div>
-            <div class="event-stack finale-single-award-stack" id="mxMakeupAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardmxstarving">
-            <div class="section-title">Mx. Starving</div>
-            <div class="event-stack finale-single-award-stack" id="mxStarvingAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="awardmxbitch">
-            <div class="section-title">Mx. Bitch</div>
-            <div class="event-stack finale-single-award-stack" id="mxBitchAwardStack"></div>
-            <div class="proceed-row dual"><button class="secondary-btn proceed-btn" type="button">Back</button><button class="primary-btn proceed-btn" type="button">Proceed</button></div>
-          </section>
-
-          <section class="episode-panel" data-panel="choice">
-            <div class="section-title">Choice</div>
-            <div class="event-stack" id="choiceAdventureStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" type="button">Back</button>
-              <button class="primary-btn proceed-btn" type="button">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="maxi">
-            <div class="section-title">Maxi Challenge</div>
-            <div class="challenge-summary" id="challengeSummary"></div>
-            <div class="challenge-grid" id="challengeGrid"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="teams">Back</button>
-              <button class="primary-btn proceed-btn" data-next="runway">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="cuntpart1">
-            <div class="section-title">Part #1</div>
-            <div class="event-stack cunt-test-part-stack" id="cuntTestPart1Stack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="maxi">Back</button>
-              <button class="primary-btn proceed-btn" data-next="cuntpart2">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="cuntpart2">
-            <div class="section-title">Part #2</div>
-            <div class="event-stack cunt-test-part-stack" id="cuntTestPart2Stack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="cuntpart1">Back</button>
-              <button class="primary-btn proceed-btn" data-next="cuntpart3">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="cuntpart3">
-            <div class="section-title">Part #3</div>
-            <div class="event-stack cunt-test-part-stack" id="cuntTestPart3Stack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="cuntpart2">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="runway">
-            <div class="section-title">Runway</div>
-            <div class="challenge-summary" id="runwaySummary"></div>
-            <div class="challenge-grid" id="runwayGrid"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="maxi">Back</button>
-              <button class="primary-btn proceed-btn" data-next="judging">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="judging">
-            <div class="section-title">Judging</div>
-            <div class="judging-stack" id="judgingStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="runway">Back</button>
-              <button class="primary-btn proceed-btn" data-next="placements">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="ratequeen">
-            <div class="section-title">Rate-A-Queen</div>
-            <div class="judging-stack" id="rateQueenStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="judging">Back</button>
-              <button class="primary-btn proceed-btn" data-next="placements">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="placements">
-            <div class="section-title">Placements</div>
-            <div class="callout-grid" id="placementsGrid"></div>
-            <div class="bottom-two-box token-btm2" id="bottomTwoBox"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="judging">Back</button>
-              <button class="primary-btn proceed-btn" data-next="goldenbeaver">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="heartsuccessor">
-            <div class="section-title">Heart Successor</div>
-            <div class="event-stack" id="heartSuccessorStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="goldenbaguette">
-            <div class="section-title">Golden Baguette</div>
-            <div class="event-stack" id="goldenBaguetteStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="luckycow">
-            <div class="section-title">Lucky Cow</div>
-            <div class="event-stack" id="luckyCowStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="goldenbeaver">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="goldenbeaver">
-            <div class="section-title">Golden Beaver</div>
-            <div class="event-stack" id="goldenBeaverStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="goldendam">
-            <div class="section-title">Golden Dam</div>
-            <div class="event-stack" id="goldenDamStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="rumocracy">
-            <div class="section-title">RuMocracy</div>
-            <div class="event-stack" id="rumocracyStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lipsync">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="lipsync">
-            <div class="section-title">Lip Sync</div>
-            <div class="reveal-board" id="lipSyncBoard"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="placements">Back</button>
-              <button class="primary-btn proceed-btn" data-next="results">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="qosdadhh">
-            <div class="section-title">Queen of She Done Already Done Had Herses</div>
-            <div class="reveal-board" id="qosdadhhBoard"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="lipsync">Back</button>
-              <button class="primary-btn proceed-btn" data-next="lsftc">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="lsftc">
-            <div class="section-title">Lip Sync for The Crown</div>
-            <div class="reveal-board" id="lsftcBoard"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="qosdadhh">Back</button>
-              <button class="primary-btn proceed-btn" data-next="winner">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="winner">
-            <div class="section-title">Winner</div>
-            <div class="reveal-board" id="winnerBoard"></div>
-            <div class="crowning-message" id="winnerCrowningMessage"></div>
-            <div class="center-actions">
-              <button class="primary-btn" id="revealCrownWinnerBtn" type="button">Reveal Winner</button>
-            </div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="lsftc">Back</button>
-              <button class="primary-btn" id="allWinnersFinalStatsBtn" type="button">Statistics</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="results">
-            <div class="section-title" id="resultsSectionTitle">Lip Sync Results</div>
-            <div class="reveal-board" id="revealBoard"></div>
-            <div class="crowning-message" id="crowningMessage"></div>
-            <div class="lotteria-inline-stack" id="lotteriaResultsStack"></div>
-            <div class="center-actions">
-              <button class="primary-btn" id="revealResultsBtn" type="button">Reveal Results</button>
-            </div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="lipsync">Back</button>
-              <button class="primary-btn" id="nextEpisodeBtn" type="button">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="luckycowvotes">
-            <div class="section-title">Votes</div>
-            <div class="event-stack" id="luckyCowVotesStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="results">Back</button>
-              <button class="primary-btn proceed-btn" data-next="badonkadunktank">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="badonkadunktank">
-            <div class="section-title">Badonka Dunk Tank</div>
-            <div class="event-stack" id="badonkaDunkTankStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="results">Back</button>
-              <button class="primary-btn proceed-btn" data-next="untucked">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="s17lsfyl">
-            <div class="section-title">Lip Sync for Your Life</div>
-            <div class="lip-sync-board" id="s17LsfylBoard"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="results">Back</button>
-              <button class="primary-btn proceed-btn" data-next="s17lsfylresults">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="s17lsfylresults">
-            <div class="section-title">Lip Sync for Your Life Results</div>
-            <div class="reveal-board" id="s17LsfylResultsBoard"></div>
-            <div class="crowning-message" id="s17LsfylCrowningMessage"></div>
-            <div class="lotteria-inline-stack" id="lotteriaS17ResultsStack"></div>
-            <div class="center-actions">
-              <button class="primary-btn" id="revealS17LsfylResultsBtn" type="button">Reveal Results</button>
-            </div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="s17lsfyl">Back</button>
-              <button class="primary-btn proceed-btn" data-next="untucked">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="untucked">
-            <div class="section-title">Untucked</div>
-            <div class="event-stack" id="untuckedStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="results">Back</button>
-              <button class="primary-btn proceed-btn" data-next="heartinheritance" type="button">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="heartinheritance">
-            <div class="section-title">Heart Inheritance</div>
-            <div class="event-stack" id="heartInheritanceStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
-              <button class="primary-btn proceed-btn" data-next="pointceremony">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="baguettepassing">
-            <div class="section-title">Baguette Passing</div>
-            <div class="event-stack" id="baguettePassingStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
-              <button class="primary-btn proceed-btn" data-next="trackrecord">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="pointceremony">
-            <div class="section-title">Point Ceremony</div>
-            <div class="event-stack" id="pointCeremonyStack"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="untucked">Back</button>
-              <button class="primary-btn" id="finishPointCeremonyBtn" type="button">Proceed</button>
-            </div>
-          </section>
-
-          <section class="episode-panel" data-panel="trackrecord">
-            <div class="section-title">Track Record</div>
-            <div class="table-wrap episode-track-wrap" id="episodeTrackWrap"></div>
-            <div class="proceed-row dual">
-              <button class="secondary-btn proceed-btn" data-next="pointceremony">Back</button>
-              <button class="primary-btn proceed-btn" data-next="__nextEpisode">Next Episode</button>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section class="screen" id="stats-screen">
-        <div class="screen-head tight">
-          <div>
-            <p class="eyebrow" id="statsScreenEyebrow">Statistics</p>
-            <h2 id="statsScreenTitle">Season Statistics</h2>
-          </div>
-          <div class="screen-action-row">
-            <button class="primary-btn" id="archiveSeasonBtn" type="button">Save Season</button>
-            <button class="secondary-btn" id="backToEpisodeBtn" type="button">Episodes</button>
-            <button class="secondary-btn" id="backToCastBtnStats" type="button">Cast</button>
-            <button class="secondary-btn" id="resetSeasonBtnStats" type="button">Reset</button>
-          </div>
-        </div>
-
-        <div class="stats-nav" aria-label="Season statistics sections">
-          <button class="stats-tab is-active" data-tab="track">Track Record</button>
-          <button class="stats-tab" data-tab="lipsyncs">Lip Syncs</button>
-          <button class="stats-tab" data-tab="stars">Star Count</button>
-          <button class="stats-tab" data-tab="points">Summary of Points</button>
-          <button class="stats-tab" data-tab="pointbracket">Point Per Bracket</button>
-          <button class="stats-tab" data-tab="runways">Runways</button>
-          <button class="stats-tab" data-tab="challenges">Challenges</button>
-          <button class="stats-tab" data-tab="voting">Voting</button>
-          <button class="stats-tab" data-tab="heartsuccessor">Heart Successor</button>
-          <button class="stats-tab" data-tab="goldenbaguette">Golden Baguette</button>
-          <span class="stats-nav-divider" aria-hidden="true"></span>
-          <button class="stats-tab" data-tab="edgic">EDGIC</button>
-          <button class="stats-tab" data-tab="records">Records</button>
-          <button class="stats-tab" data-tab="popularity">Popularity</button>
-          <button class="stats-tab" data-tab="tvstats">TV Stats</button>
-          <button class="stats-tab" data-tab="storylines">Storylines</button>
-          <button class="stats-tab" data-tab="highlights">Highlights</button>
-        </div>
-
-        <section class="stats-panel is-active" data-tab-panel="track">
-          <div class="panel stats-card">
-            <div class="stats-toolbar track-toolbar">
-              <div class="track-download-controls">
-                <button class="secondary-btn" id="downloadTrackRecordBtn" type="button">Download</button>
-                <label class="track-flag-toggle"><input type="checkbox" id="includeFlagToggle"><span>Include Country Flag</span></label>
-              </div>
-            </div>
-            <div class="table-wrap" id="trackWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="lipsyncs">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="lipSyncStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="stars">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="starCountWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="points">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="pointSummaryWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="pointbracket">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="pointBracketWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="runways">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="runwayStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="challenges">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="challengeStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="records">
-          <div class="panel stats-card">
-            <div id="recordsStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="popularity">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="popularityWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="tvstats">
-          <div class="panel stats-card tv-stats-card">
-            <div id="tvStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="edgic">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="edgicWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="voting">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="votingStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="heartsuccessor">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="heartSuccessorStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="goldenbaguette">
-          <div class="panel stats-card">
-            <div class="table-wrap" id="goldenBaguetteStatsWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="storylines">
-          <div class="panel stats-card narrative-stats-card">
-            <div class="narrative-section-head">
-              <div>
-                <p class="eyebrow">Season Narratives</p>
-                <h3>Contestant Storylines</h3>
-              </div>
-            </div>
-            <div class="storylines-grid" id="storylinesWrap"></div>
-          </div>
-        </section>
-
-        <section class="stats-panel" data-tab-panel="highlights">
-          <div class="panel stats-card highlights-stats-card">
-            <div class="narrative-section-head">
-              <div>
-                <p class="eyebrow">Season Recap</p>
-                <h3>Highlights</h3>
-              </div>
-            </div>
-            <div class="highlights-layout" id="highlightsWrap"></div>
-          </div>
-        </section>
-      </section>
-    </main>
+<body data-simulator="drag-race">
+<header class="topbar">
+<div class="topbar__inner">
+<div aria-label="The Crown" class="brand">
+<span aria-hidden="true" class="brand__mark">
+<svg focusable="false" viewbox="0 0 40 28">
+<path d="M3 8.5 10.5 15 20 3l9.5 12L37 8.5l-3.4 15H6.4L3 8.5Z"></path>
+<path d="M7.8 24.8h24.4"></path>
+</svg>
+</span>
+<span class="brand__wordmark">
+<span class="brand__the">THE</span>
+<span class="brand__name">CROWN</span>
+</span>
+</div>
+<div class="account-actions">
+<button class="account-btn" id="accountButton" type="button">LOG IN</button>
+<button class="account-btn account-btn--muted" hidden="" id="logoutButton" type="button">LOG OUT</button>
+</div>
+</div>
+</header>
+<main class="app-stage" id="appStage">
+<section aria-labelledby="castSelectionTitle" class="app-screen is-active" id="castScreen">
+<nav aria-label="Simulator sections" class="section-tabs">
+<div aria-label="Setup sections" class="section-tabs__inner" role="tablist">
+<button aria-selected="true" class="section-tab is-active" data-section-tab="cast" role="tab" type="button">CAST SELECTION</button>
+<button aria-selected="false" class="section-tab" data-protected-tab="true" data-section-tab="custom-contestants" role="tab" type="button">CUSTOM CONTESTANTS</button>
+<button aria-selected="false" class="section-tab" data-protected-tab="true" data-section-tab="universe" role="tab" type="button">MY UNIVERSE</button>
+<button aria-selected="false" class="section-tab" data-protected-tab="true" data-section-tab="attributes" role="tab" type="button">CUSTOM ATTRIBUTES</button>
+<span aria-hidden="true" class="section-tabs__indicator"></span>
+</div>
+</nav>
+<div aria-label="Simulator format" class="simulator-mode-switch" role="group">
+<button aria-pressed="true" class="simulator-mode-btn is-active" data-simulator-mode="drag-race" type="button">DRAG RACE</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="dragula" type="button">DRAGULA</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="holi-slay" type="button">HOLI-SLAY</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="call-me-mother" type="button">CALL ME MOTHER</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="big-mother" type="button">BIG MOTHER</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="track-builder" type="button">TRACK BUILDER</button>
+</div>
+<div class="page-shell">
+<section class="section-panel" data-section-panel="cast">
+<div class="section-heading section-heading--centered">
+<h1 id="castSelectionTitle">CAST SELECTION</h1>
+</div>
+<section class="cmm-parent-section" id="cmmParentSection" hidden>
+  <div class="cmm-parent-head">
+    <h2>HOUSE PARENTS</h2>
+    <label class="cmm-parent-count-label" for="cmmParentCount">NUMBER OF HOUSE PARENTS
+      <select class="setup-select" id="cmmParentCount"><option value="2">2</option><option value="3" selected>3</option></select>
+    </label>
   </div>
-  <dialog id="presetCastModal">
-    <form method="dialog" class="preset-form" id="presetCastForm">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">Pre-Set Cast</p>
-          <h3>Choose a Show & Season</h3>
-        </div>
-        <button type="button" class="icon-close" id="closePresetCastModal">×</button>
-      </div>
-      <div class="field-grid two-col">
-        <label class="field">
-          <span>Show</span>
-          <select id="presetShowSelect"></select>
-        </label>
-        <label class="field">
-          <span>Season</span>
-          <select id="presetSeasonSelect"></select>
-        </label>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="secondary-btn" id="cancelPresetCastBtn">Cancel</button>
-        <button type="submit" class="primary-btn">Load Cast</button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog class="custom-contestant-modal" id="customContestantModal">
-    <form method="dialog" class="custom-contestant-form" id="customContestantForm">
-      <header class="modal-head custom-modal-head">
-        <div class="custom-modal-title">
-          <p class="eyebrow">Custom Cast</p>
-          <h3 id="customContestantModalTitle">New Contestant</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeCustomContestantModal" aria-label="Close custom contestant editor">×</button>
-      </header>
-
-      <input type="hidden" id="customContestantId">
-
-      <div class="custom-contestant-workspace">
-        <aside class="custom-photo-card">
-          <div class="modal-profile custom-image-preview" id="customImagePreview"></div>
-
-          <div class="custom-image-source-switch" role="group" aria-label="Image source">
-            <button type="button" class="custom-source-btn is-active" data-custom-image-source="url" aria-pressed="true">Insert URL</button>
-            <button type="button" class="custom-source-btn" data-custom-image-source="upload" aria-pressed="false">Upload</button>
-          </div>
-
-          <div class="custom-source-panel" id="customUrlSourcePanel">
-            <label class="field custom-image-url-field">
-              <span>Direct image URL</span>
-              <input type="url" id="customImageUrl" placeholder="https://example.com/photo.jpg" autocomplete="off">
-            </label>
-          </div>
-
-          <div class="custom-source-panel custom-upload-panel" id="customUploadSourcePanel" hidden>
-            <input type="file" id="customImageFile" accept="image/png,image/jpeg,image/webp" hidden>
-            <button type="button" class="secondary-btn custom-upload-btn" id="customImageUploadBtn">Choose Image</button>
-            <span class="custom-upload-filename" id="customImageFileName">No file selected</span>
-          </div>
-
-          <small class="custom-image-status" id="customImageStatus" aria-live="polite"></small>
-        </aside>
-
-        <section class="custom-details-card">
-          <div class="custom-name-grid">
-            <label class="field">
-              <span>Full Name</span>
-              <input type="text" id="customFullName" placeholder="Aurora Vex" required autocomplete="off">
-            </label>
-            <label class="field">
-              <span>Nickname</span>
-              <input type="text" id="customNickname" placeholder="Aurora" autocomplete="off">
-            </label>
-          </div>
-
-          <div class="custom-skills-head">
-            <div>
-              <p class="eyebrow">Skills</p>
-              <small class="field-help">1–15</small>
-            </div>
-            <button type="button" class="secondary-btn custom-randomize-skills-btn" id="randomizeCustomSkillsBtn">Randomize</button>
-          </div>
-          <div class="skills-stack custom-skills-stack" id="customSkillsStack"></div>
-        </section>
-      </div>
-
-      <footer class="modal-actions custom-contestant-actions">
-        <button type="button" class="secondary-btn danger-lite" id="deleteCustomContestantBtn" hidden>Delete</button>
-        <div class="custom-action-group">
-          <button type="button" class="secondary-btn" id="cancelCustomContestantBtn">Cancel</button>
-          <button type="submit" class="primary-btn" id="saveCustomContestantBtn">Save Contestant</button>
-        </div>
-      </footer>
-    </form>
-  </dialog>
-
-
-  <dialog class="universe-modal" id="universeModal">
-    <div class="universe-shell">
-      <header class="modal-head universe-modal-head">
-        <div>
-          <h3>My Universe</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeUniverseModal" aria-label="Close My Universe">×</button>
-      </header>
-      <nav class="universe-tabs" aria-label="My Universe sections">
-        <button type="button" class="universe-tab is-active" data-universe-tab="franchises">Franchises</button>
-        <button type="button" class="universe-tab" data-universe-tab="contestants">Contestants</button>
-        <button type="button" class="universe-tab" data-universe-tab="records">Records</button>
-        <button type="button" class="universe-tab" data-universe-tab="casts">Casts</button>
-        <button type="button" class="universe-tab" data-universe-tab="seasons">Seasons</button>
-        <button type="button" class="universe-tab" data-universe-tab="storage">Storage</button>
-      </nav>
-      <div class="universe-content" id="universeContent"></div>
+  <div class="cast-grid cmm-parent-grid" id="cmmParentsGrid"></div>
+  <div class="cmm-select-target" role="group" aria-label="Add contestants as">
+    <button type="button" id="cmmTargetParents" class="control-btn is-selected" aria-pressed="true">ADD HOUSE PARENTS</button>
+    <button type="button" id="cmmTargetCast" class="control-btn" aria-pressed="false">ADD CONTESTANTS</button>
+  </div>
+  <h2 class="cmm-contestants-heading">CONTESTANTS</h2>
+</section>
+<div class="settings-grid settings-grid--cast">
+<div class="range-card">
+<div class="range-card__topline">
+<span>CAST SIZE</span>
+<strong id="castSizeValue">14</strong>
+</div>
+<input aria-label="Cast size" class="range-input" id="castSize" max="24" min="6" step="1" type="range" value="14"/>
+<div class="range-card__limits"><span>6</span><span>24</span></div>
+</div>
+</div>
+<div aria-label="Cast tools" class="toolbar">
+<label class="search-wrap" for="queenSearch">
+<svg aria-hidden="true" viewbox="0 0 24 24">
+<path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"></path>
+</svg>
+<input autocomplete="off" id="queenSearch" placeholder="Search contestants" type="search"/>
+</label>
+<button aria-pressed="false" class="control-btn" id="filterBtn" type="button">FILTER: OFF</button>
+<button class="control-btn" id="presetBtn" type="button">PRE-SET CAST</button>
+<button class="control-btn control-btn--accent" id="randomizeBtn" type="button">RANDOMIZE</button>
+<button class="control-btn" id="addRandomBtn" type="button">ADD RANDOM</button>
+<button class="control-btn" id="resetBtn" type="button">RESET</button>
+</div>
+<div class="cast-summary">
+<span><strong id="selectedCount">0</strong> / <span id="targetCount">14</span></span>
+</div>
+<div aria-live="polite" class="cast-grid" id="castGrid"></div>
+<div class="search-results" hidden="" id="searchResults">
+<div class="search-results__header">
+<span>SEARCH RESULTS</span>
+<span id="searchResultCount"></span>
+</div>
+<div class="search-results__grid" id="searchResultsGrid"></div>
+</div>
+<div class="proceed-wrap" hidden="" id="proceedWrap">
+<button class="proceed-btn" id="proceedBtn" type="button">
+<span>PROCEED TO SEASON SETUP</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</section>
+<section class="section-panel future-panel cloud-panel" data-section-panel="custom-contestants" hidden="" id="customContestantsPanel"></section>
+<section class="section-panel future-panel cloud-panel" data-section-panel="universe" hidden="" id="universePanel"></section>
+<section class="section-panel future-panel cloud-panel" data-section-panel="attributes" hidden="" id="customAttributesPanel"></section>
+</div>
+</section>
+<section aria-labelledby="cmmSetupTitle" class="app-screen" id="cmmSetupScreen" hidden>
+  <div class="page-shell cmm-setup-shell">
+    <div class="section-heading section-heading--centered"><h1 id="cmmSetupTitle">HOUSE SETUP</h1></div>
+    <div class="cmm-setup-content" id="cmmSetupContent"></div>
+    <div class="screen-actions">
+      <button class="screen-action screen-action--back" type="button" id="cmmSetupBackBtn">BACK TO CAST</button>
+      <button class="screen-action screen-action--primary" type="button" id="cmmStartBtn">START SEASON</button>
     </div>
-  </dialog>
+  </div>
+</section>
+<section aria-labelledby="seasonSetupTitle" class="app-screen" hidden="" id="seasonSetupScreen">
+<div class="page-shell season-setup-shell">
+<section class="setup-mode-panel">
+<div class="section-heading section-heading--centered season-heading">
+<h1 id="seasonSetupTitle">SEASON SETUP</h1>
+</div>
 
-  <dialog class="universe-editor-modal" id="franchiseEditorModal">
-    <form method="dialog" class="universe-editor-form" id="franchiseEditorForm">
-      <header class="modal-head">
-        <div>
-          <h3 id="franchiseEditorTitle">Create Franchise</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeFranchiseEditor">×</button>
-      </header>
-      <input type="hidden" id="franchiseEditorId">
-      <div class="universe-editor-grid">
-        <div class="universe-image-editor">
-          <div class="universe-logo-preview" id="franchiseLogoPreview"><span>LOGO</span></div>
-          <input type="file" id="franchiseLogoFile" accept="image/png,image/jpeg,image/webp" hidden>
-          <button type="button" class="secondary-btn" id="chooseFranchiseLogoBtn">Choose Logo</button>
-        </div>
-        <div class="universe-editor-fields">
-          <label class="field">
-            <span>Franchise Name</span>
-            <input type="text" id="franchiseNameInput" maxlength="120" required placeholder="Drag Race">
-          </label>
-          <label class="field">
-            <span>Short Name</span>
-            <input type="text" id="franchiseShortNameInput" maxlength="30" placeholder="DR">
-          </label>
-          <label class="field">
-            <span>Description</span>
-            <textarea id="franchiseDescriptionInput" maxlength="1000" rows="6" placeholder="Describe this franchise..."></textarea>
-          </label>
-        </div>
+<div class="bm-setup" id="bmSetupBlock" hidden>
+  <div class="setup-grid bm-only-setup-grid bm-main-settings">
+    <section class="setup-card"><label class="setup-card__label" for="bmPanelSize">PANEL SIZE</label><div class="select-wrap"><select id="bmPanelSize" class="setup-select"><option value="7">7 PANEL MEMBERS</option></select></div></section>
+    <section class="setup-card"><label class="setup-card__label" for="bmStrategy">STRATEGY INTENSITY</label><div class="select-wrap"><select id="bmStrategy" class="setup-select"><option value="low">LOW</option><option value="normal" selected>NORMAL</option><option value="high">HIGH</option><option value="chaotic">CHAOTIC</option></select></div></section>
+    <section class="setup-card bm-social-card"><h2>SOCIAL GAME SETTINGS</h2>
+      <label class="setup-check"><input type="checkbox" id="bmAllianceFormation" checked><span class="setup-check__box" aria-hidden="true"></span><span>ALLIANCE FORMATION</span></label>
+      <label class="setup-check"><input type="checkbox" id="bmAllianceChanges" checked><span class="setup-check__box" aria-hidden="true"></span><span>ALLIANCE CHANGES</span></label>
+    </section>
+  </div>
+  <section class="setup-card bm-twist-section">
+    <h2>TWISTS</h2>
+    <div class="bm-twist-list">
+      <div class="bm-twist-item" data-bm-twist="bmDoubleChopEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmDoubleChopEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>DOUBLE CHOP</span></label>
+        <p class="bm-twist-description">Two chops happen in the same night in a condensed version of a full Big Mother week.</p>
+        <div class="bm-twist-options" data-bm-for="bmDoubleChopEnabled" hidden><div class="select-wrap"><select id="bmDoubleEviction" class="setup-select" aria-label="Double Chop week"></select></div></div>
       </div>
-      <footer class="modal-actions">
-        <button type="button" class="secondary-btn" id="cancelFranchiseEditor">Cancel</button>
-        <button type="submit" class="primary-btn">Save Franchise</button>
-      </footer>
-    </form>
-  </dialog>
-
-  <dialog class="universe-editor-modal" id="savedCastEditorModal">
-    <form method="dialog" class="universe-editor-form compact-universe-form" id="savedCastEditorForm">
-      <header class="modal-head">
-        <div>
-          <h3 id="savedCastEditorTitle">Save Current Cast</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeSavedCastEditor">×</button>
-      </header>
-      <input type="hidden" id="savedCastEditorId">
-      <div class="field-grid">
-        <label class="field">
-          <span>Cast Name</span>
-          <input type="text" id="savedCastNameInput" maxlength="120" required placeholder="Season 1 Cast">
-        </label>
-        <label class="field">
-          <span>Franchise</span>
-          <select id="savedCastFranchiseSelect"><option value="">No Franchise</option></select>
-        </label>
-        <label class="field">
-          <span>Description</span>
-          <textarea id="savedCastDescriptionInput" maxlength="600" rows="4" placeholder="Optional notes about this cast..."></textarea>
-        </label>
+      <div class="bm-twist-item" data-bm-twist="bmChopBuster">
+        <label class="setup-check bm-twist-label"><input id="bmChopBuster" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>THE CHOP BUSTER</span></label>
+        <p class="bm-twist-description">Instead of two nominees, there are three, who compete in a secret competition right before the eviction with the winner earning safety.</p>
+        <div class="bm-twist-options" data-bm-for="bmChopBuster" hidden><div class="select-wrap"><select id="bmChopBusterType" class="setup-select"><option value="regular">REGULAR CHALLENGES</option><option value="lipsync">LIP SYNC BATTLES</option></select></div></div>
       </div>
-      <div class="universe-cast-summary" id="savedCastSummary"></div>
-      <footer class="modal-actions">
-        <button type="button" class="secondary-btn" id="cancelSavedCastEditor">Cancel</button>
-        <button type="submit" class="primary-btn">Save Cast</button>
-      </footer>
-    </form>
-  </dialog>
-
-  <dialog class="universe-editor-modal" id="archiveSeasonModal">
-    <form method="dialog" class="universe-editor-form" id="archiveSeasonForm">
-      <header class="modal-head">
-        <div>
-          <h3 id="archiveSeasonTitle">Save Season</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeArchiveSeasonModal">×</button>
-      </header>
-      <input type="hidden" id="archiveSeasonId">
-      <div class="universe-editor-grid">
-        <div class="universe-image-editor">
-          <div class="universe-logo-preview season-logo-preview" id="seasonLogoPreview"><span>SEASON LOGO</span></div>
-          <input type="file" id="seasonLogoFile" accept="image/png,image/jpeg,image/webp" hidden>
-          <button type="button" class="secondary-btn" id="chooseSeasonLogoBtn">Choose Logo</button>
-        </div>
-        <div class="universe-editor-fields">
-          <label class="field">
-            <span>Season Name</span>
-            <input type="text" id="archiveSeasonNameInput" maxlength="140" required>
-          </label>
-          <label class="field">
-            <span>Franchise</span>
-            <select id="archiveSeasonFranchiseSelect"><option value="">Independent Season</option></select>
-          </label>
-          <label class="field">
-            <span>Season Type</span>
-            <select id="archiveSeasonTypeSelect">
-              <option value="regular">Regular Season</option>
-              <option value="all_stars">All Stars</option>
-              <option value="vs_the_world">Vs The World</option>
-              <option value="custom">Custom</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>Description</span>
-            <textarea id="archiveSeasonDescriptionInput" maxlength="1200" rows="5" placeholder="Write a description for this season..."></textarea>
-          </label>
-        </div>
+      <div class="bm-twist-item" data-bm-twist="bmGoldenShieldEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmGoldenShieldEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>GOLDEN SHIELD</span></label>
+        <p class="bm-twist-description">A secret competition which grants the winner safety each week.</p>
+        <div class="bm-twist-options" data-bm-for="bmGoldenShieldEnabled" hidden><div class="select-wrap"><select id="bmGoldenShield" class="setup-select"></select></div></div>
       </div>
-      <footer class="modal-actions">
-        <button type="button" class="secondary-btn" id="cancelArchiveSeasonModal">Cancel</button>
-        <button type="submit" class="primary-btn">Save Season</button>
-      </footer>
-    </form>
-  </dialog>
-
-  <dialog class="season-viewer-modal" id="seasonViewerModal">
-    <div class="season-viewer-shell">
-      <header class="modal-head">
-        <div>
-          <h3>Season</h3>
-        </div>
-        <button type="button" class="icon-close" id="closeSeasonViewerModal">×</button>
-      </header>
-      <div id="seasonViewerContent"></div>
+      <div class="bm-twist-item" data-bm-twist="bmSmackdownEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmSmackdownEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>SUDDEN LIP SYNC SMACKDOWN</span></label>
+        <p class="bm-twist-description">A secret competition after which one contestant is eliminated. No nominations.</p>
+        <div class="bm-twist-options" data-bm-for="bmSmackdownEnabled" hidden><div class="select-wrap"><select id="bmSmackdownTop" class="setup-select"></select></div></div>
+      </div>
+      <div class="bm-twist-item" data-bm-twist="bmInstantEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmInstantEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>INSTANT CHOP</span></label>
+        <p class="bm-twist-description">A condensed version of a Big Mother week where the initial nominees are final. No Golden Lipstick competition.</p>
+        <div class="bm-twist-options" data-bm-for="bmInstantEnabled" hidden><div class="select-wrap"><select id="bmInstantWeek" class="setup-select"></select></div></div>
+      </div>
+      <div class="bm-twist-item" data-bm-twist="bmRevivalEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmRevivalEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>HAUS REVIVAL</span></label>
+        <p class="bm-twist-description">A comeback competition which allows one contestant to return to the game.</p>
+        <div class="bm-twist-options" data-bm-for="bmRevivalEnabled" hidden><div class="select-wrap"><select id="bmRevival" class="setup-select"><option value="pre">PRE-PANEL</option><option value="panel">PANEL</option><option value="both">BOTH</option></select></div><div class="select-wrap" id="bmRevivalPanelWrap"><select id="bmRevivalPanelAfter" class="setup-select"></select></div></div>
+      </div>
+      <div class="bm-twist-item" data-bm-twist="bmSplitHaus">
+        <label class="setup-check bm-twist-label"><input id="bmSplitHaus" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>SPLIT HAUS</span></label>
+        <p class="bm-twist-description">A week of Big Mother acts like two separate weeks, with two Heads of The Haus, nomination ceremonies, and evictions in one.</p>
+      </div>
+      <div class="bm-twist-item" data-bm-twist="bmRoyalChainEnabled">
+        <label class="setup-check bm-twist-label"><input id="bmRoyalChainEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>ROYAL CHAIN</span></label>
+        <p class="bm-twist-description">A special week in which it&#x27;s not just the Head of The Haus who has the power, but the entire haus.</p>
+        <div class="bm-twist-options" data-bm-for="bmRoyalChainEnabled" hidden><div class="select-wrap"><select id="bmRoyalChainWeek" class="setup-select"></select></div></div>
+      </div>
     </div>
-  </dialog>
+  </section>
 
-  <dialog class="history-cast-modal" id="historyCastModal">
-    <div class="history-cast-shell">
-      <header class="modal-head">
-        <div>
-          <div><p class="eyebrow">Career Casting</p><h3>Returnees</h3></div>
-        </div>
-        <button type="button" class="icon-close" id="closeHistoryCastModal">×</button>
-      </header>
-      <div class="history-cast-controls">
-        <label class="field">
-          <span>Franchise</span>
-          <select id="historyFranchiseFilter"><option value="">All Franchises</option></select>
-        </label>
-        <label class="field">
-          <span>Eligibility</span>
-          <select id="historyEligibilityFilter">
-            <option value="any">Any Previous Contestant</option>
-            <option value="never_won">Never Won</option>
-            <option value="finalists">Previous Finalists</option>
-            <option value="early_outs">Early Outs</option>
-            <option value="winners">Previous Winners</option>
-            <option value="one_time">One-Time Contestants</option>
-            <option value="veterans">2+ Previous Seasons</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>Search</span>
-          <input type="search" id="historyContestantSearch" placeholder="Search contestants or seasons...">
-        </label>
-      </div>
-      <div class="history-cast-meta" id="historyCastMeta"></div>
-      <div class="history-cast-grid" id="historyCastGrid"></div>
-      <footer class="modal-actions">
-        <button type="button" class="secondary-btn" id="cancelHistoryCastBtn">Cancel</button>
-        <button type="button" class="primary-btn" id="addHistoryCastBtn">Add Selected</button>
-      </footer>
+</div>
+<section class="simulation-mode-topbar" id="simulationModeCard">
+<div aria-label="Simulation mode" class="rupaul-mode-switch" role="group">
+<button aria-pressed="true" class="setup-option is-selected" data-rupaul-mode="standard" type="button">STANDARD</button>
+<button aria-pressed="false" class="setup-option" data-rupaul-mode="rupaul" type="button">RUPAUL MODE</button>
+</div>
+</section>
+<div class="setup-grid">
+<section class="setup-card" id="eliminationFormatCard">
+<label class="setup-card__label" for="eliminationFormat">ELIMINATION FORMAT</label>
+<div class="select-wrap">
+<select class="setup-select" data-setup-select="eliminationFormat" id="eliminationFormat">
+<option value="regular">REGULAR</option>
+<option data-min-cast="6" value="golden-beaver">GOLDEN BEAVER</option>
+<option data-min-cast="6" value="golden-dam">GOLDEN DAM (CANADA’S ALL STARS)</option>
+<option data-min-cast="6" value="golden-baguette">GOLDEN BAGUETTE</option>
+<option data-min-cast="6" value="heart-successor">HEART SUCCESSOR</option>
+<option data-min-cast="6" value="lucky-coin">LUCKY COIN</option>
+<option data-min-cast="6" value="all-stars-legacy">LIP SYNC FOR YOUR LEGACY</option>
+<option data-min-cast="6" value="lipsync-assassin">LIP SYNC ASSASSIN</option>
+<option data-min-cast="6" value="all-winners">ALL WINNERS</option>
+<option data-min-cast="6" value="all-stars-9">ALL STARS 9</option>
+<option data-min-cast="6" value="thailand">THAILAND FORMAT</option>
+<option data-min-cast="6" value="team">TEAMS</option>
+<option data-min-cast="6" value="tournament">TOURNAMENT</option>
+</select>
+</div>
+<div class="assassin-filter-control" hidden="" id="assassinFilterControl">
+<button class="control-btn assassin-filter-btn" id="assassinFilterBtn" type="button">FILTER ASSASSINS</button>
+<span class="assassin-filter-summary" id="assassinFilterSummary"></span>
+</div>
+</section>
+<section class="setup-card dragula-only-card" hidden="" id="resurrectionSettings">
+<h2>RESURRECTION SETTINGS</h2>
+<label class="random-return-setting" for="resurrectionEpisodes">
+<span>EPISODES</span>
+<div class="select-wrap">
+<select class="setup-select" id="resurrectionEpisodes">
+<option value="3">3 EPISODES</option>
+<option value="4">4 EPISODES</option>
+<option value="5">5 EPISODES</option>
+</select>
+</div>
+</label>
+<p class="resurrection-setup-note">The Grand Finale is added after these episodes.</p>
+</section>
+<section class="setup-card setup-card--tournament-season" hidden="" id="tournamentSeasonSettings">
+<h2>TOURNAMENT SETTINGS</h2>
+<div class="tournament-season-settings-grid">
+<label class="tournament-season-setting" for="tournamentBracketCount">
+<span>NUMBER OF BRACKETS</span>
+<input class="tournament-season-input" id="tournamentBracketCount" min="2" step="1" type="number" value="3"/>
+</label>
+<label class="tournament-season-setting" for="tournamentEpisodesPerBracket">
+<span>EPISODES PER BRACKET</span>
+<select class="setup-select" id="tournamentEpisodesPerBracket">
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</label>
+<label class="tournament-season-setting" for="tournamentAdvancers">
+<span>ADVANCERS PER BRACKET</span>
+<input class="tournament-season-input" id="tournamentAdvancers" min="2" step="1" type="number" value="2"/>
+</label>
+<label class="tournament-season-setting" for="tournamentMergeFormat">
+<span>MERGE FORMAT</span>
+<select class="setup-select" id="tournamentMergeFormat">
+<option value="traditional">TRADITIONAL</option>
+<option value="rate-a-queen">RATE-A-QUEEN</option>
+</select>
+</label>
+<label class="tournament-season-setting" for="tournamentFinaleSize">
+<span>FINALIST SIZE</span>
+<input class="tournament-season-input" id="tournamentFinaleSize" max="10" min="4" step="1" type="number" value="8"/>
+</label>
+</div>
+<div class="tournament-season-wildcards">
+<label class="setup-check">
+<input id="tournamentWildcardLottery" type="checkbox"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Wildcard Lottery</span>
+</label>
+<label class="setup-check" id="tournamentWildcardMergeRow">
+<input id="tournamentWildcardAtMerge" type="checkbox"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Wildcard at Merge</span>
+</label>
+<label class="setup-check" id="tournamentWildcardFinaleRow">
+<input id="tournamentWildcardAtFinale" type="checkbox"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Wildcard at Finale</span>
+</label>
+</div>
+<p class="tournament-season-validation" id="tournamentSeasonValidation"></p>
+</section>
+<section class="setup-card" id="premiereFormatCard">
+<label class="setup-card__label" for="premiereFormat">PREMIERE FORMAT</label>
+<div class="select-wrap">
+<select class="setup-select" data-setup-select="premiereFormat" id="premiereFormat">
+<option value="regular">REGULAR</option>
+<option data-min-cast="8" value="season6">SEASON 6 PREMIERE</option>
+<option data-min-cast="6" value="season9">SEASON 9 PREMIERE</option>
+<option data-min-cast="6" value="season12">SEASON 12 PREMIERE</option>
+<option data-min-cast="8" value="season14">SEASON 14 PREMIERE</option>
+<option data-min-cast="8" value="porkchop">PORKCHOP PREMIERE</option>
+<option data-min-cast="6" value="uk3">UK3 PREMIERE</option>
+<option value="par">DOUBLE SHANTAY PREMIERE</option>
+<option data-min-cast="6" value="nonelimtop2">NON-ELIMINATION TOP 2 PREMIERE</option>
+<option data-min-cast="6" value="nonelimrateaqueen">NON-ELIMINATION RATE-A-QUEEN</option>
+<option value="slayers">SLAYERS PREMIERE</option>
+<option data-min-cast="6" value="rateaqueen">SEASON 16 RATE-A-QUEEN</option>
+<option data-min-cast="6" value="rateaqueen17">SEASON 17 RATE-A-QUEEN</option>
+</select>
+</div>
+</section>
+<section class="setup-card setup-card--finale" id="finaleFormatCard">
+<label class="setup-card__label" for="finaleFormat">FINALE FORMAT</label>
+<div class="select-wrap">
+<select class="setup-select" data-setup-select="finaleFormat" id="finaleFormat">
+<option value="regular">REGULAR</option>
+<option value="cut-top2">CUT TO TOP 2</option>
+<option value="cut-top3">CUT TO TOP 3</option>
+<option value="lftf">LIP SYNC FOR THE FINALE</option>
+<option data-min-cast="5" value="cunt-test">THE C.U.N.T. TEST</option>
+<option value="jury">JURY FINALE</option>
+<option value="lftc">LIP SYNC FOR THE CROWN</option>
+</select>
+</div>
+<div class="range-card finale-finalists-control">
+<div class="range-card__topline">
+<span>FINALIST SIZE</span>
+<strong id="finalistsSizeValue">3</strong>
+</div>
+<input aria-label="Finalist size" class="range-input" id="finalistsSize" max="5" min="2" step="1" type="range" value="3"/>
+<div class="range-card__limits"><span>2</span><span>5</span></div>
+</div>
+</section>
+<section class="setup-card" id="comebackFormatCard">
+<label class="setup-card__label" for="comebackFormat">COMEBACK FORMAT</label>
+<div class="select-wrap">
+<select class="setup-select" data-setup-select="comebackFormat" id="comebackFormat">
+<option value="none">NONE</option>
+<option data-min-cast="8" value="random-return">RANDOM RETURN</option>
+<option value="reading-is-fundamental">READING IS FUNDAMENTAL</option>
+<option value="contestants-vote">CONTESTANTS VOTE</option>
+<option data-min-cast="10" value="conjoined-twins">CONJOINED TWINS</option>
+<option data-min-cast="10" value="queens-of-comedy">QUEENS OF COMEDY</option>
+<option data-min-cast="10" value="reinas-de-la-comedia">REINAS DE LA COMEDIA</option>
+<option data-min-cast="10" value="kitty-girl-group">KITTY GIRL GROUP</option>
+<option data-min-cast="10" value="attention-girl-group">ATTENTION GIRL GROUP</option>
+<option value="game-within-a-game">GAME WITHIN A GAME</option>
+<option data-min-cast="6" value="lalaparuza-comeback">LALAPARUZA</option>
+</select>
+</div>
+<div class="random-return-settings" hidden="" id="randomReturnSettings">
+<label class="random-return-setting" for="randomReturnAmount">
+<span>QUEENS RETURNING</span>
+<div class="select-wrap">
+<select class="setup-select" id="randomReturnAmount">
+<option value="1">1 QUEEN</option>
+</select>
+</div>
+</label>
+<label class="random-return-setting" for="randomReturnAfter">
+<span>RETURN AFTER</span>
+<div class="select-wrap">
+<select class="setup-select" id="randomReturnAfter"></select>
+</div>
+</label>
+</div>
+<div class="reading-if-settings" hidden="" id="readingIFSettings">
+<div class="reading-if-settings__title">READING IS FUNDAMENTAL</div>
+<label class="random-return-setting" for="readingIFAfter">
+<span>RETURN AFTER</span>
+<div class="select-wrap">
+<select class="setup-select" id="readingIFAfter"></select>
+</div>
+</label>
+</div>
+<div class="reading-if-settings" hidden="" id="contestantsVoteSettings">
+<div class="reading-if-settings__title">CONTESTANTS VOTE</div>
+<label class="random-return-setting" for="contestantsVoteAfter">
+<span>RETURN AFTER</span>
+<div class="select-wrap">
+<select class="setup-select" id="contestantsVoteAfter"></select>
+</div>
+</label>
+</div>
+</section>
+<section class="setup-card" id="seasonTwistsCard">
+<h2>SEASON TWISTS</h2>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="immunity"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Immunity</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="golden-chocolate"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Golden Chocolate Bar</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="golden-chocolate-choosable"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Choosable Chocolate Bar</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="badonka-dunk-tank"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Badonka Dunk Tank</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="lucky-cow"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Lucky Cow</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="loteria"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Lotería</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="el-roscon-de-reinas"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>El Roscón de Reinas</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="seasonTwist" type="checkbox" value="fame-games"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Fame Games</span>
+</label>
+</section>
+<section class="setup-card" id="specialChallengesCard">
+<h2>SPECIAL CHALLENGES</h2>
+<p class="dragula-setup-empty">NO DRAGULA SPECIAL CHALLENGES CONFIGURED</p>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="slay-off-extravaganza"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Slay-Off Extravaganza</span>
+</label>
+<label class="setup-check">
+<input data-min-cast="11" data-setup-check="specialChallenge" type="checkbox" value="midseason-rate-a-queen"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mid-Season Rate-A-Queen</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="wooden-beaver"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Wooden Beaver</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="music-video-semifinal"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Music Video Semi-Final</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="lalaparuza-smackdown"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>LaLaPaRuza Smackdown</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="reunion-lipsync-smackdown"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Reunion Lip Sync Smackdown</span>
+</label>
+</section>
+<section class="setup-card" id="awardsSetupCard">
+<h2>AWARDS</h2>
+<label class="setup-check">
+<input checked="" data-setup-check="award" type="checkbox" value="mx-congeniality"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mx. Congeniality</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="golden-boot"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Golden Boot</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="mx-lost-look"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mx. Lost Look</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="drag-pop-star"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Drag Pop Star</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="mx-make-up"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mx. Make-Up</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="mx-starving"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mx. Starving</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="award" type="checkbox" value="mx-bitch"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Mx. Bitch</span>
+</label>
+</section>
+<section class="setup-card" id="productionControlsCard">
+<h2>PRODUCTION CONTROLS</h2>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="disable-challenge-riggory"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Disable Challenge Riggory</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="disable-lipsync-riggory"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Disable Lip Sync Riggory</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="force-double-shantay"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Force a Double Shantay</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="force-double-sashay"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Force a Double Sashay</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="force-slayers"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Force a Slayers Episode</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="disable-challenge-riggory"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Disable Challenge Riggory</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="disable-extermination-riggory"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Disable Extermination Riggory</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="force-double-save"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Force a Double Save</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="force-double-elimination"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Force a Double Elimination</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="key-life-death"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Key of Life &amp; Death</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="curses"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Curses</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="sonic-transducer"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Sonic Transducer</span>
+</label>
+<label class="setup-check dragula-only">
+<input data-setup-check="productionControl" type="checkbox" value="fright-feat-immunity"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Fright Feat Immunity</span>
+</label>
+</section>
+</div>
+<div class="screen-actions season-setup-actions">
+<button class="screen-action screen-action--back" id="backToCastBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK TO CAST SELECTION</span>
+</button>
+<button class="screen-action season-setup-reset" id="seasonSetupResetBtn" type="button">
+<span>RESET</span>
+</button>
+<button class="screen-action screen-action--primary" id="relationshipsBtn" type="button">
+<span>SETUP RELATIONSHIPS</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</section>
+</div>
+</section>
+<section aria-labelledby="relationshipsTitle" class="app-screen" hidden="" id="relationshipsScreen">
+<div class="page-shell relationships-shell">
+<div class="section-heading section-heading--centered relationships-heading">
+<h1 id="relationshipsTitle">SETUP RELATIONSHIPS</h1>
+</div>
+
+<div class="bm-relationship-tabs" id="bmRelationshipTabs" hidden>
+  <button class="setup-option is-active" type="button" data-bm-tab="relationships">RELATIONSHIPS</button>
+  <button class="setup-option" type="button" data-bm-tab="alliances">ALLIANCES</button>
+</div>
+<div class="bm-alliances-panel" id="bmAlliancesPanel">
+  <div class="toolbar bm-alliance-toolbar"><button type="button" class="control-btn control-btn--accent" id="bmAllianceAdd">ADD ALLIANCE</button><button type="button" class="control-btn" id="bmAllianceRandomize">RANDOMIZE</button><button type="button" class="control-btn" id="bmAllianceReset">RESET</button></div>
+  <div id="bmAllianceList" class="bm-alliance-list"></div>
+  <div class="bm-alliance-form" id="bmAllianceForm" hidden><label class="setup-card__label" for="bmAllianceName">ALLIANCE NAME</label><div class="bm-name-picker"><input class="bm-name-input" id="bmAllianceName" maxlength="80" placeholder="Alliance Name"><button type="button" class="control-btn" id="bmAllianceRollName" title="Roll a random alliance name">RANDOM NAME ↻</button></div><label class="setup-card__label">MEMBERS</label><div class="bm-member-list" id="bmAllianceMembers"></div><label class="setup-card__label" for="bmAllianceStrength">ALLIANCE STRENGTH <strong id="bmAllianceStrengthLabel">6</strong>/10</label><input class="range-input" type="range" min="1" max="10" id="bmAllianceStrength" value="6"><div class="bm-form-actions"><button type="button" class="control-btn" id="bmAllianceCancel">CANCEL</button><button type="button" class="control-btn control-btn--accent" id="bmAllianceSave">SAVE ALLIANCE</button></div></div>
+</div>
+<div class="relationship-toolbar">
+<button class="control-btn" id="relationshipRandomizeBtn" type="button">RANDOMIZE</button>
+<button class="control-btn" id="relationshipResetBtn" type="button">RESET</button>
+</div>
+<div class="relationship-table-wrap">
+<table aria-label="Contestant relationship scores" class="relationship-table" id="relationshipTable"></table>
+</div>
+<div class="screen-actions">
+<button class="screen-action screen-action--back" id="backToSeasonBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK TO SEASON SETUP</span>
+</button>
+<button class="screen-action screen-action--primary" id="startSeasonBtn" type="button">
+<span>START SEASON</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<section aria-labelledby="tournamentSetupTitle" class="app-screen tournament-setup-screen" hidden="" id="tournamentSetupScreen">
+<div class="page-shell tournament-setup-shell">
+<div class="section-heading section-heading--centered tournament-setup-heading">
+<h1 id="tournamentSetupTitle">TOURNAMENT BRACKETS</h1>
+</div>
+<div aria-live="polite" class="tournament-setup-content" id="tournamentSetupContent"></div>
+<p aria-live="polite" class="tournament-setup-validation" id="tournamentSetupValidation"></p>
+<div class="screen-actions">
+<button class="screen-action screen-action--back" id="backToRelationshipsFromTournamentBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK TO RELATIONSHIPS</span>
+</button>
+<button class="screen-action screen-action--primary" id="continueTournamentBtn" type="button">
+<span>START SEASON</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<section aria-labelledby="premiereSetupTitle" class="app-screen" hidden="" id="premiereSetupScreen">
+<div class="page-shell premiere-setup-shell">
+<div class="section-heading section-heading--centered premiere-setup-heading">
+<h1 id="premiereSetupTitle">PREMIERES</h1>
+</div>
+<p class="premiere-setup-copy" id="premiereSetupCopy"></p>
+<div class="premiere-setup-content" id="premiereSetupContent"></div>
+<p aria-live="polite" class="premiere-setup-validation" id="premiereSetupValidation"></p>
+<div class="screen-actions">
+<button class="screen-action screen-action--back" id="backToRelationshipsFromPremiereBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK TO RELATIONSHIPS</span>
+</button>
+<button class="screen-action screen-action--primary" id="continuePremiereBtn" type="button">
+<span>START SEASON</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<section aria-labelledby="teamSetupTitle" class="app-screen" hidden="" id="teamSetupScreen">
+<div class="page-shell team-setup-shell">
+<div class="section-heading section-heading--centered team-setup-heading">
+<h1 id="teamSetupTitle">PAIR TIME!</h1>
+</div>
+<p class="team-setup-copy">After all the contestants enter the werkroom, they now have to choose their pairs!</p>
+<div aria-live="polite" class="team-setup-content" id="teamSetupContent"></div>
+<p aria-live="polite" class="team-setup-validation" id="teamSetupValidation"></p>
+<div class="screen-actions">
+<button class="screen-action screen-action--back" id="backToRelationshipsFromTeamBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK TO RELATIONSHIPS</span>
+</button>
+<button class="screen-action screen-action--primary" id="continueTeamBtn" type="button">
+<span>PROCEED</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<section aria-labelledby="chocolateSetupTitle" class="app-screen chocolate-setup-screen" hidden="" id="chocolateSetupScreen">
+<div aria-hidden="true" class="chocolate-setup-backdrop"></div>
+<div class="page-shell chocolate-setup-shell">
+<div class="section-heading section-heading--centered chocolate-setup-heading">
+<h1 id="chocolateSetupTitle">CHOCOLATE BAR SELECTION</h1>
+</div>
+<p class="chocolate-setup-copy">For this season, we're doing things a little differently, and when it comes to saving queens, I'm leaving it up to the Drag Gods.</p>
+<p class="chocolate-setup-instruction" id="chocolateSetupInstruction"></p>
+<div aria-live="polite" class="chocolate-setup-content" id="chocolateSetupContent"></div>
+<div class="screen-actions chocolate-setup-actions">
+<button class="screen-action screen-action--back" id="backFromChocolateBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+<span>BACK</span>
+</button>
+<button class="screen-action screen-action--primary" disabled="" id="continueChocolateBtn" type="button">
+<span>START SEASON</span>
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5"></path></svg>
+</button>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="holislaySetupTitle" class="app-screen holislay-setup-screen" hidden="" id="holislaySetupScreen">
+  <div class="page-shell season-setup-shell holislay-setup-shell">
+    <div class="section-heading section-heading--centered season-heading">
+      <h1 id="holislaySetupTitle">HOLI-SLAY</h1>
     </div>
-  </dialog>
-
-  <input type="file" id="universeImportFile" accept="application/json,.json,.druniverse" hidden>
+    <div class="setup-grid holislay-setup-grid">
+      <section class="setup-card">
+        <label class="setup-card__label" for="holislayMiniSelect">MINI-CHALLENGE</label>
+        <div class="select-wrap"><select class="setup-select" id="holislayMiniSelect"></select></div>
+      </section>
+      <section class="setup-card">
+        <label class="setup-card__label" for="holislayMaxiSelect">MAXI-CHALLENGE</label>
+        <div class="select-wrap"><select class="setup-select" id="holislayMaxiSelect"></select></div>
+      </section>
+    </div>
+    <div class="screen-actions">
+      <button class="screen-action screen-action--back" id="holislayBackBtn" type="button"><span>BACK TO CAST</span></button>
+      <button class="screen-action screen-action--primary" id="holislayStartBtn" type="button"><span>START HOLI-SLAY</span></button>
+    </div>
+  </div>
+</section>
+<section aria-labelledby="trackBuilderTitle" class="app-screen track-builder-screen" hidden="" id="trackBuilderScreen">
+  <div class="track-builder-shell">
+    <div class="track-builder-header">
+      <button class="track-builder-back" aria-label="Back to cast selection" title="Back to cast" id="trackBuilderBackBtn" type="button">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5m7 7-7-7 7-7"/></svg>
+      </button>
+      <h1 id="trackBuilderTitle">TRACK RECORD</h1>
+      <div class="track-builder-actions">
+        <button class="track-builder-toggle" id="trackBuilderRankToggleBtn" type="button" aria-pressed="true" title="Show or hide ranks">RANK</button>
+        <button class="track-builder-toggle" id="trackBuilderFlagToggleBtn" type="button" aria-pressed="true" title="Show or hide flags">FLAG</button>
+        <button class="track-builder-add" id="trackBuilderAddEpisodeBtn" type="button">+ EPISODE</button>
+        <button class="track-builder-add" id="trackBuilderResetBtn" type="button">RESET</button>
+        <button class="track-builder-add" id="trackBuilderDownloadBtn" type="button">DOWNLOAD</button>
+      </div>
+    </div>
+    <div class="track-record-scroll track-builder-scroll" id="trackBuilderScroll"></div>
+  </div>
+</section>
+<section aria-labelledby="runtimeSectionTitle" class="app-screen runtime-screen" hidden="" id="runtimeScreen">
+<div class="runtime-nav">
+<div class="runtime-nav__inner">
+<button aria-label="Back to relationships" class="runtime-back" id="runtimeBackBtn" type="button">
+<svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
+</button>
+<div class="runtime-episode-select-wrap">
+<select aria-label="Select episode" class="runtime-episode-select" id="episodeSelect"></select>
+</div>
+<div class="runtime-nav__actions">
+<button class="runtime-statistics-btn runtime-universe-save-btn" hidden="" id="saveUniverseBtn" type="button">SAVE SEASON</button>
+<button class="runtime-statistics-btn" id="statisticsBtn" type="button">STATISTICS</button>
+</div>
+</div>
+</div>
+<section class="runtime-stage" id="runtimeStage">
+<div aria-hidden="true" class="runtime-stage__backdrop" id="runtimeBackdrop"></div>
+<div aria-hidden="true" class="runtime-stage__shade"></div>
+<div class="runtime-stage__content">
+<nav aria-label="Episode sections" class="runtime-section-tabs" hidden="" id="runtimeSectionTabs">
+<div class="runtime-section-tabs__scroll">
+<div class="runtime-section-tabs__inner" id="runtimeSectionTabsInner" role="tablist"></div>
+</div>
+</nav>
+<div class="runtime-heading" id="runtimeHeading">
+<span class="runtime-heading__episode" id="runtimeEpisodeLabel">EPISODE 1</span>
+<h1 id="runtimeSectionTitle">INTRO</h1>
+</div>
+<div class="runtime-content" id="runtimeContent"></div>
+<div class="runtime-section-nav" id="runtimeSectionNav">
+<button class="runtime-section-btn" id="previousSectionBtn" type="button">PREVIOUS</button>
+<div class="runtime-progress" id="runtimeProgress"></div>
+<button class="runtime-section-btn runtime-section-btn--next" id="nextSectionBtn" type="button">NEXT</button>
+</div>
+</div>
+</section>
+</section>
+</main>
+<div aria-hidden="true" class="rupaul-choice-backdrop" hidden="" id="rupaulChoiceBackdrop"></div>
+<aside aria-hidden="true" aria-modal="true" class="rupaul-choice-modal" hidden="" id="rupaulChoiceModal" role="dialog">
+<h2 class="rupaul-choice-title" id="rupaulChoiceTitle"></h2>
+<div class="rupaul-choice-content" id="rupaulChoiceContent"></div>
+<div class="rupaul-choice-actions">
+<div class="rupaul-choice-actions__left">
+<button class="control-btn rupaul-simulator-btn" id="rupaulSimulatorBtn" type="button">LET SIMULATOR DECIDE</button>
+<button class="control-btn rupaul-random-btn" id="rupaulRandomBtn" type="button">RANDOM</button>
+</div>
+<button class="control-btn control-btn--accent" disabled="" id="rupaulConfirmBtn" type="button">CONFIRM</button>
+</div>
+</aside>
+<div class="popover-backdrop" hidden="" id="popoverBackdrop"></div>
+<aside aria-hidden="true" class="popover" id="filterPopover">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">FILTER</span>
+<h2>Shows &amp; Seasons</h2>
+</div>
+<button aria-label="Close filter" class="icon-btn" data-close-popover="filterPopover">×</button>
+</div>
+<div class="filter-content" id="filterContent"></div>
+<div class="popover__actions">
+<button class="text-btn" id="clearFiltersBtn" type="button">CLEAR</button>
+<button class="control-btn control-btn--accent" id="applyFiltersBtn" type="button">APPLY</button>
+</div>
+</aside>
+<aside aria-hidden="true" class="popover" id="assassinFilterPopover">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">FILTER ASSASSINS</span>
+<h2>Shows &amp; Seasons</h2>
+</div>
+<button aria-label="Close assassin filter" class="icon-btn" data-close-popover="assassinFilterPopover">×</button>
+</div>
+<div class="filter-content" id="assassinFilterContent"></div>
+<div class="popover__actions">
+<button class="text-btn" id="clearAssassinFiltersBtn" type="button">CLEAR</button>
+<button class="control-btn control-btn--accent" id="applyAssassinFiltersBtn" type="button">APPLY</button>
+</div>
+</aside>
+<aside aria-hidden="true" class="popover" id="presetPopover">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">PRE-SET CAST</span>
+<h2 id="presetTitle">Choose a Show</h2>
+</div>
+<button aria-label="Close preset cast" class="icon-btn" data-close-popover="presetPopover">×</button>
+</div>
+<div class="preset-content" id="presetContent"></div>
+<div class="popover__actions popover__actions--preset">
+<button class="text-btn" hidden="" id="presetBackBtn" type="button">BACK</button>
+</div>
+</aside>
+<aside aria-hidden="true" class="popover relationship-editor" id="relationshipEditor">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">RELATIONSHIP</span>
+<h2 id="relationshipEditorTitle">Relationship Score</h2>
+</div>
+<button aria-label="Close relationship editor" class="icon-btn" data-close-popover="relationshipEditor">×</button>
+</div>
+<div class="relationship-editor__body">
+<div class="relationship-editor__value" id="relationshipEditorValue">0</div>
+<input aria-label="Relationship score" class="relationship-range" id="relationshipScoreInput" max="10" min="-10" step="1" type="range" value="0"/>
+<div class="relationship-range__labels"><span>-10</span><span>0</span><span>+10</span></div>
+</div>
+<div class="popover__actions">
+<button class="text-btn" id="relationshipCancelBtn" type="button">CANCEL</button>
+<button class="control-btn control-btn--accent" id="relationshipSaveBtn" type="button">SAVE</button>
+</div>
+</aside>
+<aside aria-hidden="true" class="popover cloud-popover auth-popover" id="authPopover">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">THE CROWN ACCOUNT</span>
+<h2 id="authPopoverTitle">Log in</h2>
+</div>
+<button aria-label="Close account dialog" class="icon-btn" data-close-popover="authPopover">×</button>
+</div>
+<div class="cloud-popover__body" id="authContent"></div>
+</aside>
+<aside aria-hidden="true" class="popover cloud-popover season-save-popover" id="seasonSavePopover">
+<div class="popover__topline">
+<div>
+<span class="popover__kicker">MY UNIVERSE</span>
+<h2>Save Season</h2>
+</div>
+<button aria-label="Close save season dialog" class="icon-btn" data-close-popover="seasonSavePopover">×</button>
+</div>
+<div class="cloud-popover__body" id="seasonSaveContent"></div>
+</aside>
+<template id="castCardTemplate">
+<article class="queen-card">
+<img alt="" class="queen-card__image" loading="lazy"/>
+<div class="queen-card__body">
+<div class="queen-card__name"></div>
+<div class="queen-card__meta"></div>
+</div>
+<button aria-label="Remove contestant" class="queen-card__remove" type="button">×</button>
+</article>
+</template>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+window.THE_CROWN_SUPABASE = {
+  url: "https://rmliztizzvykpocptxdh.supabase.co",
+  publishableKey: "sb_publishable__W3qEY_Z0lmNX0EDYuIRhA_q6cerHBt"
+};
+</script>
+<script src="../drag_race_data.js"></script>
+<script src="exterminations_data.js"></script>
+<script src="simulator.js?v=20261117-setup-clean-v12"></script>
 </body>
 </html>
