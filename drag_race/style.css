@@ -22586,10 +22586,6 @@ body[data-simulator="dragula"] #simulationModeCard .setup-option.is-selected {
   color: #fff;
 }
 
-
-/* 2026-11-17: Two-direction touch scrolling for mobile track records.
-   Earlier desktop rules force overflow-y:hidden and hide scrollbars. Limit the
-   phone-height viewport so long tables can actually pan in BOTH directions. */
 @media (max-width: 760px) {
   .runtime-content--track-record .track-record-scroll,
   .runtime-content--statistics-track-record .track-record-scroll,
@@ -22624,7 +22620,6 @@ body[data-simulator="dragula"] #simulationModeCard .setup-option.is-selected {
   }
 }
 
-/* Haus Mother rename / universal runtime reset button */
 .runtime-nav__inner {
   grid-template-columns: 112px minmax(0, 280px) minmax(0, 1fr);
 }
@@ -22667,4 +22662,117 @@ body[data-simulator="dragula"] #simulationModeCard .setup-option.is-selected {
   .runtime-nav__inner { grid-template-columns: 94px minmax(0, 1fr) auto; }
   .runtime-nav__left { gap: 4px; }
   .runtime-reset-btn { min-width: 58px; padding: 0 4px; font-size: 7.5px; }
+}
+
+@media (max-width: 760px) {
+  .track-record-statistics-controls,
+  body[data-simulator="haus-mother"] .bm6-download-row,
+  body[data-simulator="haus-mother"] .bm-track-stat-controls {
+    width: min(100%, calc(100vw - 20px)) !important;
+    max-width: min(100%, calc(100vw - 20px)) !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 10px !important;
+    margin: 0 auto 12px !important;
+  }
+
+  .track-record-flags-toggle,
+  .track-record-download,
+  body[data-simulator="haus-mother"] .bm6-download-row .track-record-download {
+    flex: 0 0 auto !important;
+  }
+
+  .runtime-content--track-record,
+  .runtime-content--statistics-track-record {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-items: stretch !important;
+    align-items: start !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll,
+  .runtime-content--statistics-track-record .track-record-scroll,
+  .track-builder-scroll,
+  .runtime-stage.is-statistics .statistics-table-wrap,
+  body[data-simulator="haus-mother"] .bm6-scroll,
+  body[data-simulator="haus-mother"] .bm-wiki-wrap {
+    display: block !important;
+    box-sizing: border-box !important;
+    width: min(100%, calc(100vw - 20px)) !important;
+    max-width: min(100%, calc(100vw - 20px)) !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    max-height: 68vh !important;
+    max-height: 68dvh !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    touch-action: pan-x pan-y pinch-zoom !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    scrollbar-width: thin !important;
+    scrollbar-gutter: stable both-edges !important;
+  }
+
+  .runtime-content--track-record .track-record,
+  .runtime-content--statistics-track-record .track-record,
+  .runtime-stage.is-statistics .statistics-table,
+  .track-builder-scroll .track-record,
+  body[data-simulator="haus-mother"] .bm6-sheet,
+  body[data-simulator="haus-mother"] .bm-wiki {
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll::-webkit-scrollbar,
+  .runtime-content--statistics-track-record .track-record-scroll::-webkit-scrollbar,
+  .track-builder-scroll::-webkit-scrollbar,
+  .runtime-stage.is-statistics .statistics-table-wrap::-webkit-scrollbar,
+  body[data-simulator="haus-mother"] .bm6-scroll::-webkit-scrollbar,
+  body[data-simulator="haus-mother"] .bm-wiki-wrap::-webkit-scrollbar {
+    display: block !important;
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll::-webkit-scrollbar-track,
+  .runtime-content--statistics-track-record .track-record-scroll::-webkit-scrollbar-track,
+  .track-builder-scroll::-webkit-scrollbar-track,
+  .runtime-stage.is-statistics .statistics-table-wrap::-webkit-scrollbar-track,
+  body[data-simulator="haus-mother"] .bm6-scroll::-webkit-scrollbar-track,
+  body[data-simulator="haus-mother"] .bm-wiki-wrap::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.05) !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll::-webkit-scrollbar-thumb,
+  .runtime-content--statistics-track-record .track-record-scroll::-webkit-scrollbar-thumb,
+  .track-builder-scroll::-webkit-scrollbar-thumb,
+  .runtime-stage.is-statistics .statistics-table-wrap::-webkit-scrollbar-thumb,
+  body[data-simulator="haus-mother"] .bm6-scroll::-webkit-scrollbar-thumb,
+  body[data-simulator="haus-mother"] .bm-wiki-wrap::-webkit-scrollbar-thumb {
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.28) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .track-record-statistics-controls,
+  body[data-simulator="haus-mother"] .bm6-download-row,
+  body[data-simulator="haus-mother"] .bm-track-stat-controls {
+    gap: 8px !important;
+  }
+
+  .track-record-flags-toggle {
+    padding: 0 10px !important;
+  }
+
+  .track-record-download {
+    padding-inline: 12px !important;
+    font-size: 8px !important;
+  }
 }

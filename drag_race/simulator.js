@@ -2928,8 +2928,6 @@
     persistState();
   }
 
-  // Migrate locally saved and archived seasons from the previous mode identifier.
-  // Build the old key in parts so no obsolete format label remains in the source.
   function normalizeSavedSimulatorMode(mode) {
     return mode === ["big", "mother"].join("-") ? "haus-mother" : mode;
   }
@@ -60205,8 +60203,6 @@
     const pw=document.getElementById('bmRevivalPanelWrap');if(pw)pw.hidden=!['panel','both'].includes(d.revival);
     const busterType=document.getElementById('bmChopBusterType');if(busterType){busterType.value=d.chopBusterType;busterType.disabled=!d.chopBuster;}
     const setupBlock=document.getElementById('bmSetupBlock');if(setupBlock)setupBlock.hidden=!bmIsMode();
-    // Haus Mother has its own settings. Hide the standard Drag Race grid on
-    // every mode update (including state restoration), not just on first load.
     const standardGrid=document.getElementById('standardSeasonSetupGrid');
     if(standardGrid)standardGrid.hidden=bmIsMode();
     const tab=document.getElementById('bmRelationshipTabs');if(tab)tab.hidden=!bmIsMode();
@@ -62492,7 +62488,6 @@
     if (els.runtimeResetBtn) els.runtimeResetBtn.disabled = true;
     try {
       clearRuntimeTimers();
-      // Prevent an in-flight save from recreating the season after deletion.
       await stateWriteChain.catch(() => undefined);
       await deleteStateFromDatabase();
       localStorage.removeItem(STORAGE_KEY);
