@@ -5,10 +5,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>The Crown</title>
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=20261117-setup-clean-v12" rel="stylesheet"/>
+<link href="style.css?v=20261117-haus-rename-full-reset-v14" rel="stylesheet"/>
 </head>
 <body data-simulator="drag-race">
 <header class="topbar">
@@ -47,7 +48,7 @@
 <button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="dragula" type="button">DRAGULA</button>
 <button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="holi-slay" type="button">HOLI-SLAY</button>
 <button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="call-me-mother" type="button">CALL ME MOTHER</button>
-<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="big-mother" type="button">BIG MOTHER</button>
+<button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="haus-mother" type="button">HAUS MOTHER</button>
 <button aria-pressed="false" class="simulator-mode-btn" data-simulator-mode="track-builder" type="button">TRACK BUILDER</button>
 </div>
 <div class="page-shell">
@@ -146,7 +147,7 @@
     <div class="bm-twist-list">
       <div class="bm-twist-item" data-bm-twist="bmDoubleChopEnabled">
         <label class="setup-check bm-twist-label"><input id="bmDoubleChopEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>DOUBLE CHOP</span></label>
-        <p class="bm-twist-description">Two chops happen in the same night in a condensed version of a full Big Mother week.</p>
+        <p class="bm-twist-description">Two chops happen in the same night in a condensed version of a full Haus Mother week.</p>
         <div class="bm-twist-options" data-bm-for="bmDoubleChopEnabled" hidden><div class="select-wrap"><select id="bmDoubleEviction" class="setup-select" aria-label="Double Chop week"></select></div></div>
       </div>
       <div class="bm-twist-item" data-bm-twist="bmChopBuster">
@@ -166,7 +167,7 @@
       </div>
       <div class="bm-twist-item" data-bm-twist="bmInstantEnabled">
         <label class="setup-check bm-twist-label"><input id="bmInstantEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>INSTANT CHOP</span></label>
-        <p class="bm-twist-description">A condensed version of a Big Mother week where the initial nominees are final. No Golden Lipstick competition.</p>
+        <p class="bm-twist-description">A condensed version of a Haus Mother week where the initial nominees are final. No Golden Lipstick competition.</p>
         <div class="bm-twist-options" data-bm-for="bmInstantEnabled" hidden><div class="select-wrap"><select id="bmInstantWeek" class="setup-select"></select></div></div>
       </div>
       <div class="bm-twist-item" data-bm-twist="bmRevivalEnabled">
@@ -176,7 +177,7 @@
       </div>
       <div class="bm-twist-item" data-bm-twist="bmSplitHaus">
         <label class="setup-check bm-twist-label"><input id="bmSplitHaus" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>SPLIT HAUS</span></label>
-        <p class="bm-twist-description">A week of Big Mother acts like two separate weeks, with two Heads of The Haus, nomination ceremonies, and evictions in one.</p>
+        <p class="bm-twist-description">A week of Haus Mother acts like two separate weeks, with two Heads of The Haus, nomination ceremonies, and evictions in one.</p>
       </div>
       <div class="bm-twist-item" data-bm-twist="bmRoyalChainEnabled">
         <label class="setup-check bm-twist-label"><input id="bmRoyalChainEnabled" type="checkbox"><span class="setup-check__box" aria-hidden="true"></span><span>ROYAL CHAIN</span></label>
@@ -193,7 +194,7 @@
 <button aria-pressed="false" class="setup-option" data-rupaul-mode="rupaul" type="button">RUPAUL MODE</button>
 </div>
 </section>
-<div class="setup-grid">
+<div class="setup-grid" id="standardSeasonSetupGrid">
 <section class="setup-card" id="eliminationFormatCard">
 <label class="setup-card__label" for="eliminationFormat">ELIMINATION FORMAT</label>
 <div class="select-wrap">
@@ -734,9 +735,12 @@
 <section aria-labelledby="runtimeSectionTitle" class="app-screen runtime-screen" hidden="" id="runtimeScreen">
 <div class="runtime-nav">
 <div class="runtime-nav__inner">
+<div class="runtime-nav__left">
 <button aria-label="Back to relationships" class="runtime-back" id="runtimeBackBtn" type="button">
 <svg aria-hidden="true" viewbox="0 0 24 24"><path d="M19 12H6m5 5-5-5 5-5"></path></svg>
 </button>
+<button class="runtime-reset-btn" id="runtimeResetBtn" type="button" title="Reset the simulator and return to Cast Selection">RESET</button>
+</div>
 <div class="runtime-episode-select-wrap">
 <select aria-label="Select episode" class="runtime-episode-select" id="episodeSelect"></select>
 </div>
@@ -880,6 +884,6 @@ window.THE_CROWN_SUPABASE = {
 </script>
 <script src="../drag_race_data.js"></script>
 <script src="exterminations_data.js"></script>
-<script src="simulator.js?v=20261117-setup-clean-v12"></script>
+<script src="simulator.js?v=20261117-haus-rename-full-reset-v14"></script>
 </body>
 </html>

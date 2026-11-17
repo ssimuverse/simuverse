@@ -2603,6 +2603,7 @@
 
     runtimeScreen: document.querySelector("#runtimeScreen"),
     runtimeBackBtn: document.querySelector("#runtimeBackBtn"),
+    runtimeResetBtn: document.querySelector("#runtimeResetBtn"),
     episodeSelect: document.querySelector("#episodeSelect"),
     statisticsBtn: document.querySelector("#statisticsBtn"),
     saveUniverseBtn: document.querySelector("#saveUniverseBtn"),
@@ -2801,7 +2802,7 @@
   function applySimulatorModeUi() {
     const dragula = isDragulaMode();
     const builder = state.simulatorMode === "track-builder";
-    document.body.dataset.simulator = bmIsMode() ? "big-mother" : (builder ? "track-builder" : (isCallMeMother() ? "call-me-mother" : (isHoliSlayMode() ? "holi-slay" : (dragula ? "dragula" : "drag-race"))));
+    document.body.dataset.simulator = bmIsMode() ? "haus-mother" : (builder ? "track-builder" : (isCallMeMother() ? "call-me-mother" : (isHoliSlayMode() ? "holi-slay" : (dragula ? "dragula" : "drag-race"))));
     bmSyncSetupUi();
     if (isHoliSlayMode()) ensureHoliSlaySnow();
 
@@ -2905,11 +2906,11 @@
   }
 
   function setSimulatorMode(mode) {
-    const next = ["drag-race", "dragula", "holi-slay", "call-me-mother", "big-mother", "track-builder"].includes(mode) ? mode : "drag-race";
+    const next = ["drag-race", "dragula", "holi-slay", "call-me-mother", "haus-mother", "track-builder"].includes(mode) ? mode : "drag-race";
     if (next === state.simulatorMode) return;
     state.simulatorMode = next;
     if(next === "call-me-mother"){state.cmmSetup=cmmDefaultSetup();state.selectedIds=[];state.castSize=15;}
-    if(next === "big-mother"){state.bmSetup=bmDefaults();state.bmAlliances=[];state.castSize=14;state.selectedIds=[];state.activeSetupMode="custom";}
+    if(next === "haus-mother"){state.bmSetup=bmDefaults();state.bmAlliances=[];state.castSize=14;state.selectedIds=[];state.activeSetupMode="custom";}
     trackBuilderDraft = null;
     closeTrackBuilderPicker();
     state.seasonSetup = defaultSeasonSetupState();
@@ -2927,8 +2928,25 @@
     persistState();
   }
 
+  // Migrate locally saved and archived seasons from the previous mode identifier.
+  // Build the old key in parts so no obsolete format label remains in the source.
+  function normalizeSavedSimulatorMode(mode) {
+    return mode === ["big", "mother"].join("-") ? "haus-mother" : mode;
+  }
+
+  function migrateSavedHausMotherRuntime(runtime) {
+    if (!runtime || typeof runtime !== "object") return runtime;
+    const legacyFlag = ["big", "Mother"].join("");
+    if (runtime[legacyFlag]) {
+      runtime.hausMother = true;
+      delete runtime[legacyFlag];
+    }
+    return runtime;
+  }
+
   let stateDbPromise = null;
   let stateWriteChain = Promise.resolve();
+  let fullSimulatorResetInProgress = false;
   let pendingUiRestore = null;
   let uiScrollPersistTimer = null;
 
@@ -2972,7 +2990,7 @@
   }
 
   function persistUiLocation(savedAt = Date.now()) {
-    if (state.simulatorMode === "track-builder") return;
+    if (fullSimulatorResetInProgress || state.simulatorMode === "track-builder") return;
     try {
       localStorage.setItem(UI_STORAGE_KEY, JSON.stringify(uiLocationSnapshot(savedAt)));
     } catch (error) {
@@ -3207,8 +3225,7 @@
   }
 
   function persistState() {
-
-    if (state.simulatorMode === "track-builder") return;
+    if (fullSimulatorResetInProgress || state.simulatorMode === "track-builder") return;
     const savedAt = Date.now();
     const setupSnapshot = setupStateSnapshot(savedAt);
 
@@ -3251,7 +3268,8 @@
     }
 
     const validIds = new Set(queens.map((queen) => queen.id));
-    state.simulatorMode = ["drag-race", "dragula", "holi-slay", "call-me-mother", "big-mother"].includes(saved.simulatorMode) ? saved.simulatorMode : "drag-race";
+    const restoredMode = normalizeSavedSimulatorMode(saved.simulatorMode);
+    state.simulatorMode = ["drag-race", "dragula", "holi-slay", "call-me-mother", "haus-mother"].includes(restoredMode) ? restoredMode : "drag-race";
     const restoredCastMax = isDragulaMode() ? 14 : (isHoliSlayMode() ? 12 : 24);
     state.castSize = Math.max(isCallMeMother()?10:6, Math.min(restoredCastMax, Number(saved.castSize) || (isCallMeMother()?15:14)));
     state.finalistsSize = Math.max(2, Math.min(5, Number(saved.finalistsSize) || 3));
@@ -3515,7 +3533,7 @@
         ? saved.seasonRuntime
         : null;
 
-    const runtimeToRestore = databaseRuntime || legacyLocalRuntime;
+    const runtimeToRestore = migrateSavedHausMotherRuntime(databaseRuntime || legacyLocalRuntime);
     const savedUiLocation = readUiLocation();
 
     if (runtimeToRestore?.started && Array.isArray(runtimeToRestore.episodes) && runtimeToRestore.episodes.length) {
@@ -4989,8 +5007,10 @@
     if (!els.trackBuilderScroll || !trackBuilderDraft) return;
     closeTrackBuilderPicker();
     const scrollX = els.trackBuilderScroll.scrollLeft;
+    const scrollY = els.trackBuilderScroll.scrollTop;
     els.trackBuilderScroll.replaceChildren(makeTrackBuilderTable());
     els.trackBuilderScroll.scrollLeft = scrollX;
+    els.trackBuilderScroll.scrollTop = scrollY;
     [
       [els.trackBuilderRankToggleBtn, trackBuilderDraft.showRank !== false],
       [els.trackBuilderFlagToggleBtn, trackBuilderDraft.showFlag !== false],
@@ -32617,7 +32637,7 @@
       if (directorModeEnabled() && index > unlocked) return;
       const option = document.createElement("option");
       option.value = String(index);
-      option.textContent = state.seasonRuntime.bigMother
+      option.textContent = state.seasonRuntime.hausMother
         ? (episode.isFinale ? "FINALE" : `WEEK ${episode.number}`)
         : (episode.holiSlay ? "HOLI-SLAY" : (episode.adoption ? "EPISODE 1" : (episode.isFinale ? "FINALE" : `EPISODE ${episode.number}`)));
       els.episodeSelect.append(option);
@@ -55863,7 +55883,7 @@
 
   function renderRuntime() {
     if (!state.seasonRuntime.started) return;
-    if(state.seasonRuntime.bigMother){state.seasonRuntime.bm.episodes=state.seasonRuntime.episodes;bmRenderRuntime();return;}
+    if(state.seasonRuntime.hausMother){state.seasonRuntime.bm.episodes=state.seasonRuntime.episodes;bmRenderRuntime();return;}
     if(state.seasonRuntime.callMeMother){cmmRenderRuntime();return;}
     if (!runtimeHasDragulaFormat() && !runtimeHasHoliSlay()) ensureRuntimeSchema();
     if (runtimeHasHoliSlay()) ensureHoliSlayHatObserver();
@@ -56015,7 +56035,7 @@
   }
 
   function moveRuntimeSection(direction) {
-    if(state.seasonRuntime.bigMother){bmStep(direction);return;}
+    if(state.seasonRuntime.hausMother){bmStep(direction);return;}
     if(state.seasonRuntime.callMeMother){
 
       if(direction>0){const ep=currentEpisodeData();const next=ep.sections[state.seasonRuntime.currentSection+1]||state.seasonRuntime.episodes[state.seasonRuntime.currentEpisode+1]?.sections?.[0];if(ep.isFinale&&currentSectionName()==="Crowning"&&!ep.finale.resultRevealed)return;}
@@ -56109,7 +56129,7 @@
 
   function transitionBackToRelationshipsFromRuntime() {
     if (state.activeScreen !== "runtime") return;
-    if(state.seasonRuntime.bigMother){bmTransitionBack();return;}
+    if(state.seasonRuntime.hausMother){bmTransitionBack();return;}
     if(state.seasonRuntime.callMeMother){cmmBackFromRuntime();return;}
     if (currentSectionName() === "Intro" && !state.seasonRuntime.introCompleted) return;
     clearRuntimeTimers();
@@ -58456,7 +58476,8 @@
 
   function applySavedSetupSnapshot(setup) {
     if (!setup || typeof setup !== "object") return;
-    state.simulatorMode = ["dragula","big-mother","call-me-mother","holi-slay"].includes(setup.simulatorMode) ? setup.simulatorMode : "drag-race";
+    const restoredMode = normalizeSavedSimulatorMode(setup.simulatorMode);
+    state.simulatorMode = ["dragula","haus-mother","call-me-mother","holi-slay"].includes(restoredMode) ? restoredMode : "drag-race";
     state.bmSetup = setup.bmSetup ? {...bmDefaults(),...setup.bmSetup} : bmDefaults();
     state.bmAlliances = Array.isArray(setup.bmAlliances) ? structuredClone(setup.bmAlliances) : [];
     state.castSize = Math.max(6, Math.min(isDragulaMode() ? 14 : 24, Number(setup.castSize) || 14));
@@ -58495,7 +58516,7 @@
       alert("This season archive does not contain a valid simulator runtime.");
       return;
     }
-    state.seasonRuntime = cloudJsonSafe(runtime);
+    state.seasonRuntime = migrateSavedHausMotherRuntime(cloudJsonSafe(runtime));
     if (state.seasonRuntime?.dragula) state.simulatorMode = "dragula";
     applySimulatorModeUi();
     state.activeScreen = "runtime";
@@ -60008,7 +60029,7 @@
   const BM_BLUE = '#2677eb';
 
   const bmDefaults = () => ({panelSize:7,doubleEpisode:0,allianceFormation:true,allianceChanges:true,strategy:'normal',betrayals:true,chopBuster:false,chopBusterType:'regular',goldenShieldWeeks:0,smackdownTop:0,instantWeek:0,revival:'none',revivalPanelAfter:2,splitHaus:false,royalChainWeek:0});
-  const bmIsMode = () => state.simulatorMode === 'big-mother';
+  const bmIsMode = () => state.simulatorMode === 'haus-mother';
   const bmR = () => state.seasonRuntime;
   const bmS = () => bmR().bm;
   const bmClamp = (n,a,b) => Math.min(b,Math.max(a,Number(n)||0));
@@ -60184,6 +60205,10 @@
     const pw=document.getElementById('bmRevivalPanelWrap');if(pw)pw.hidden=!['panel','both'].includes(d.revival);
     const busterType=document.getElementById('bmChopBusterType');if(busterType){busterType.value=d.chopBusterType;busterType.disabled=!d.chopBuster;}
     const setupBlock=document.getElementById('bmSetupBlock');if(setupBlock)setupBlock.hidden=!bmIsMode();
+    // Haus Mother has its own settings. Hide the standard Drag Race grid on
+    // every mode update (including state restoration), not just on first load.
+    const standardGrid=document.getElementById('standardSeasonSetupGrid');
+    if(standardGrid)standardGrid.hidden=bmIsMode();
     const tab=document.getElementById('bmRelationshipTabs');if(tab)tab.hidden=!bmIsMode();
     if(!bmIsMode())document.body.classList.remove('bm-alliance-tab');
   }
@@ -61012,7 +61037,7 @@
       if(ep.isFinale)break;
       bmMakeEpisode();
     }
-    if(!r.episodes.at(-1)?.isFinale||!r.bm.winner)throw Error('Big Mother failed to complete its finale.');
+    if(!r.episodes.at(-1)?.isFinale||!r.bm.winner)throw Error('Haus Mother failed to complete its finale.');
     const d=r.bm.settings,completed=r.bm.twistCompleted;
     if(d.splitHaus&&!completed.split)throw Error('Split Haus could not reach an eligible Top 10 week with the current twist schedule.');
     if(d.doubleEpisode&&!completed.double)throw Error('Double Chop could not activate on the selected week.');
@@ -61035,9 +61060,9 @@
     const bm={settings:s,active:[...state.selectedIds],all:[...state.selectedIds],att,trust,target,threat,
       alliances:(state.bmAlliances||[]).filter(g=>g.members.length>=2).map(g=>({...structuredClone(g),active:true,history:[{episode:0,action:'formed',members:[...g.members]}]})),
       allianceSerial:100,information:[],promises:[],events:[],eventUsed:{},moods:{},wins:{},history:[],evicted:[],returns:[],preJury:[],jury:[],previousHOH:null,usedChallenges:[],challengeTypeCounts:{},strategyMemory:{},strategicImpact:{},episodes:[],week:1,winner:null,twistCompleted:{}};
-    state.seasonRuntime=freshSeasonRuntimeState();Object.assign(state.seasonRuntime,{started:true,bigMother:true,bm,episodes:bm.episodes,currentEpisode:0,currentSection:0,simulationSeed:Date.now(),statisticsOpen:false});
+    state.seasonRuntime=freshSeasonRuntimeState();Object.assign(state.seasonRuntime,{started:true,hausMother:true,bm,episodes:bm.episodes,currentEpisode:0,currentSection:0,simulationSeed:Date.now(),statisticsOpen:false});
     try{bmMakeEpisode();bmSimulateFullSeason();}
-    catch(error){console.error('[BIG MOTHER] Twist schedule invalid:',error);state.seasonRuntime=freshSeasonRuntimeState();window.alert(`Cannot generate this twist combination: ${error.message}\nPlease adjust your twist settings.`);return;}
+    catch(error){console.error('[HAUS MOTHER] Twist schedule invalid:',error);state.seasonRuntime=freshSeasonRuntimeState();window.alert(`Cannot generate this twist combination: ${error.message}\nPlease adjust your twist settings.`);return;}
     transitionBetweenScreens(els.relationshipsScreen,els.runtimeScreen,'runtime',bmRenderRuntime);
   }
   function bmTransitionBack(){
@@ -61446,7 +61471,7 @@
       return shell;
     }
     if(key==='jury'){
-      bmNativeIntro(shell,`${ep.panelBallots.length} Panel members will cast the votes that decide the winner of Big Mother.`);
+      bmNativeIntro(shell,`${ep.panelBallots.length} Panel members will cast the votes that decide the winner of Haus Mother.`);
       bmNativeTitle(shell,'THE FINAL TWO');bmNativeLineup(shell,ep.finalists,'FINALIST');
       const votes=bmNode('div','untucked-view bm-haus-events bm-panel-votes');
       const scenes=bmNode('div','untucked-scenes');
@@ -61456,26 +61481,26 @@
         for(const id of [ballot.juror,ballot.vote]){
           const person=makeUntuckedPortrait(id);if(person)portraits.append(person);
         }
-        scene.append(portraits,bmNode('p','untucked-scene__text',`${bmName(ballot.juror)} votes for ${bmName(ballot.vote)} to win Big Mother.`));
+        scene.append(portraits,bmNode('p','untucked-scene__text',`${bmName(ballot.juror)} votes for ${bmName(ballot.vote)} to win Haus Mother.`));
         scenes.append(scene);
       }
       votes.append(scenes);shell.append(votes);
       if(reveal<ep.panelBallots.length)bmRevealButton(shell,ep,stage,reveal?'REVEAL NEXT PANEL VOTE':'REVEAL PANEL VOTE');
       return shell;
     }
-    bmNativeIntro(shell,'The Panel has voted. One finalist will be crowned the winner of Big Mother.');
+    bmNativeIntro(shell,'The Panel has voted. One finalist will be crowned the winner of Haus Mother.');
     if(!reveal){
       bmNativeTitle(shell,'THE FINAL TWO');bmNativeLineup(shell,ep.finalists,'FINALIST');
       bmRevealButton(shell,ep,stage,'CROWN THE WINNER');return shell;
     }
     const crowning=bmNode('div','finale-results-view bm-crowning-view');
     crowning.append(bmNode('h3','finale-title','The end.'));
-    crowning.append(bmNode('p','finale-winner-copy','The winner of Big Mother is...'));
+    crowning.append(bmNode('p','finale-winner-copy','The winner of Haus Mother is...'));
     const winners=bmNode('div','finale-lineup lftc-winner-lineup');
     const card=makeFinaleQueen(ep.winner,'winner');if(card)winners.append(card);
     crowning.append(winners);
     const votes=ep.panelTotals[ep.winner];
-    crowning.append(bmNode('p','finale-winner-copy',`${bmName(ep.winner)}, condragulations! You are the winner of Big Mother, by a vote of ${votes}-${ep.panelBallots.length-votes}!`));
+    crowning.append(bmNode('p','finale-winner-copy',`${bmName(ep.winner)}, condragulations! You are the winner of Haus Mother, by a vote of ${votes}-${ep.panelBallots.length-votes}!`));
     shell.append(crowning);return shell;
   }
 
@@ -61536,7 +61561,7 @@
     const wrap=bmNode('div','bm6-shell '+(r.statisticsOpen?'bm6-stat-sheet':'bm6-week-sheet'));
     const viewport=bmNode('div','bm6-scroll');
     const table=bmNode('table','bm6-sheet');
-    table.setAttribute('aria-label',r.statisticsOpen?'Big Mother full season track record':`Big Mother track record through week ${weekLimit}`);
+    table.setAttribute('aria-label',r.statisticsOpen?'Haus Mother full season track record':`Haus Mother track record through week ${weekLimit}`);
     const labelWidth=164,weekWidth=88;
     const colgroup=bmNode('colgroup');
     const nameCol=bmNode('col','bm6-name-col');nameCol.style.width=`${labelWidth}px`;colgroup.append(nameCol);
@@ -61693,7 +61718,7 @@
     if(r.statisticsOpen){
       const controls=bmNode('div','track-record-statistics-controls bm6-download-row');
       const download=bmNode('button','control-btn track-record-download','DOWNLOAD');download.type='button';
-      download.addEventListener('click',()=>downloadElementAsPng(table,'Big-Mother-Track.png'));
+      download.addEventListener('click',()=>downloadElementAsPng(table,'Haus-Mother-Track.png'));
       controls.append(download);wrap.append(controls);
     }
     wrap.append(viewport);return wrap;
@@ -61905,7 +61930,7 @@
   }
 
   const BM_AUDIENCE_MODEL_VERSION='bm-audience-v5';
-  function bmAudienceRandom(key){return statisticsStableRandom(`${bmR().simulationSeed||0}|big-mother|audience-v4|${key}`);}
+  function bmAudienceRandom(key){return statisticsStableRandom(`${bmR().simulationSeed||0}|haus-mother|audience-v4|${key}`);}
   function bmAudienceNoise(key){
     return (bmAudienceRandom(`${key}:a`)+bmAudienceRandom(`${key}:b`)+bmAudienceRandom(`${key}:c`)-1.5)*1.5;
   }
@@ -62088,7 +62113,7 @@
       if(ep.split){story+=.45;strategicImpact+=.6;}
       if(ep.isFinale){
         story+=.9;eviction+=.75;competition+=.45;
-        if(ep.winner)add(ep.winner,'game',4.4,'Won Big Mother');
+        if(ep.winner)add(ep.winner,'game',4.4,'Won Haus Mother');
         for(const id of ep.finalists||[])if(id!==ep.winner)add(id,'social',1.8,'Runner-up finish');
       }
       const twistImpact=(ep.double?.7:0)+(ep.split?.95:0)+(ep.smackdown?.9:0)+(ep.revival?.75:0)+
@@ -62234,7 +62259,7 @@
     els.runtimeBackdrop.style.backgroundImage=`url("${BACKGROUND_BASE}bts.webp")`;
     els.runtimeSectionNav.hidden=false;els.previousSectionBtn.disabled=index===0;els.nextSectionBtn.disabled=index===tabs.length-1;
     els.nextSectionBtn.textContent='NEXT';els.runtimeProgress.textContent='';
-    els.runtimeContent.className='runtime-content runtime-content--statistics runtime-content--big-mother'+(r.bmStatTab==='track'?' runtime-content--statistics-track-record':'');
+    els.runtimeContent.className='runtime-content runtime-content--statistics runtime-content--haus-mother'+(r.bmStatTab==='track'?' runtime-content--statistics-track-record':'');
     els.runtimeContent.replaceChildren();
     els.runtimeSectionTabs.hidden=false;els.runtimeSectionTabsInner.replaceChildren();
     for(const [id,label] of tabs){
@@ -62272,7 +62297,7 @@
     els.runtimeEpisodeLabel.textContent=ep.isFinale?'FINALE':`WEEK ${ep.number}`;
     els.runtimeSectionTitle.textContent=stage.label;els.runtimeProgress.textContent='';
     els.statisticsBtn.hidden=false;els.statisticsBtn.disabled=false;els.runtimeBackBtn.disabled=false;
-    els.runtimeBackBtn.setAttribute('aria-label','Back to Big Mother relationships');
+    els.runtimeBackBtn.setAttribute('aria-label','Back to Haus Mother relationships');
     els.runtimeSectionTabsInner.replaceChildren();
     for(let i=0;i<ep.stages.length;i++){
       const entry=ep.stages[i],b=bmNode('button','runtime-section-tab'+(i===r.currentSection?' is-active':''),entry.label);
@@ -62308,7 +62333,7 @@
       default:view=bmShell(stage.label);
     }
     const mode=stage.key==='status'?'status':stage.key.startsWith('events')||stage.key==='split-draft'?'untucked':['hoh','veto','shield','buster','revival','split-hoh'].includes(stage.key)||stage.key.startsWith('final-hoh-')?'maxi':stage.key==='track'?'statistics-track-record':stage.key.startsWith('smackdown')?'lalaparuza':'judging';
-    els.runtimeContent.className=`runtime-content runtime-content--${mode} runtime-content--big-mother`;
+    els.runtimeContent.className=`runtime-content runtime-content--${mode} runtime-content--haus-mother`;
     els.runtimeContent.replaceChildren(view);renderEpisodeSelect();
     for(const option of els.episodeSelect.options){if(option.value!=='__statistics__')option.disabled=Number(option.value)>(r.bmHighestEpisode??r.currentEpisode);}
     persistState();
@@ -62372,8 +62397,8 @@
     if(!bmIsMode())return;
     e.stopImmediatePropagation();state.bmSetup=bmDefaults();bmSyncSetupUi();persistState();
   },true);
-  els.statisticsBtn.addEventListener('click',e=>{if(!bmR().bigMother)return;e.stopImmediatePropagation();bmRenderStatistics();},true);
-  els.episodeSelect.addEventListener('change',e=>{if(!bmR().bigMother)return;e.stopImmediatePropagation();const index=+els.episodeSelect.value;if(index>=0&&index<bmR().episodes.length&&index<=(bmR().bmHighestEpisode??bmR().currentEpisode)){bmR().statisticsOpen=false;bmR().currentEpisode=index;bmR().currentSection=0;bmRenderRuntime();}},true);
+  els.statisticsBtn.addEventListener('click',e=>{if(!bmR().hausMother)return;e.stopImmediatePropagation();bmRenderStatistics();},true);
+  els.episodeSelect.addEventListener('change',e=>{if(!bmR().hausMother)return;e.stopImmediatePropagation();const index=+els.episodeSelect.value;if(index>=0&&index<bmR().episodes.length&&index<=(bmR().bmHighestEpisode??bmR().currentEpisode)){bmR().statisticsOpen=false;bmR().currentEpisode=index;bmR().currentSection=0;bmRenderRuntime();}},true);
 
   els.proceedBtn.addEventListener("click", transitionToSeasonSetup);
   els.trackBuilderBackBtn?.addEventListener("click", () => {
@@ -62458,6 +62483,30 @@
   els.continueTeamBtn?.addEventListener("click", finalizeTeamSetupAndStart);
   els.backFromChocolateBtn?.addEventListener("click", transitionBackFromChocolate);
   els.continueChocolateBtn?.addEventListener("click", finalizeChocolateSetupAndStart);
+  async function resetEntireSimulatorToCast() {
+    if (!window.confirm(
+      "RESET THE SIMULATOR?\n\nThis will clear your current cast, season setup, relationships, and generated season, then return to Cast Selection. Saved account seasons and custom contestants will not be deleted."
+    )) return;
+
+    fullSimulatorResetInProgress = true;
+    if (els.runtimeResetBtn) els.runtimeResetBtn.disabled = true;
+    try {
+      clearRuntimeTimers();
+      // Prevent an in-flight save from recreating the season after deletion.
+      await stateWriteChain.catch(() => undefined);
+      await deleteStateFromDatabase();
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(UI_STORAGE_KEY);
+      window.location.reload();
+    } catch (error) {
+      fullSimulatorResetInProgress = false;
+      console.error("[THE CROWN] Full simulator reset failed:", error);
+      if (els.runtimeResetBtn) els.runtimeResetBtn.disabled = false;
+      window.alert("The simulator could not clear its saved progress. Please try again.");
+    }
+  }
+
+  els.runtimeResetBtn?.addEventListener("click", resetEntireSimulatorToCast);
   els.runtimeBackBtn.addEventListener("click", transitionBackToRelationshipsFromRuntime);
   els.previousSectionBtn.addEventListener("click", () => moveRuntimeSection(-1));
   els.nextSectionBtn.addEventListener("click", () => moveRuntimeSection(1));

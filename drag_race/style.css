@@ -21705,18 +21705,18 @@ body[data-simulator="call-me-mother"] .cmm-scores-plus {
   body[data-simulator="call-me-mother"] .runtime-stage.is-statistics .cmm-episode-scores-table td {font-size: 10px !important;}
 }
 
-body[data-simulator="big-mother"]{--pink:#2677eb;--pink-hover:#4092ff;--accent-rgb:38,119,235;--pink-soft:rgba(38,119,235,.12);}
-body[data-simulator="big-mother"] .brand__mark{color:var(--pink);}
-body[data-simulator="big-mother"] .setup-mode-tabs,body[data-simulator="big-mother"] #simulationModeCard,body[data-simulator="big-mother"] .setup-mode-panel[data-setup-panel="premade"]{display:none!important;}
-body[data-simulator="big-mother"] .setup-mode-panel[data-setup-panel="custom"]>.setup-grid{display:none!important;}
-body[data-simulator="big-mother"] #bmSetupBlock{display:block!important;}
-body[data-simulator="big-mother"] #bmSetupBlock .bm-only-setup-grid{display:grid!important;}
-body:not([data-simulator="big-mother"]) #bmSetupBlock,body:not([data-simulator="big-mother"]) #bmRelationshipTabs,body:not([data-simulator="big-mother"]) #bmAlliancesPanel{display:none!important;}
+body[data-simulator="haus-mother"]{--pink:#2677eb;--pink-hover:#4092ff;--accent-rgb:38,119,235;--pink-soft:rgba(38,119,235,.12);}
+body[data-simulator="haus-mother"] .brand__mark{color:var(--pink);}
+body[data-simulator="haus-mother"] .setup-mode-tabs,body[data-simulator="haus-mother"] #simulationModeCard,body[data-simulator="haus-mother"] .setup-mode-panel[data-setup-panel="premade"]{display:none!important;}
+body[data-simulator="haus-mother"] #standardSeasonSetupGrid {display:none!important;}
+body[data-simulator="haus-mother"] #bmSetupBlock{display:block!important;}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-only-setup-grid{display:grid!important;}
+body:not([data-simulator="haus-mother"]) #bmSetupBlock,body:not([data-simulator="haus-mother"]) #bmRelationshipTabs,body:not([data-simulator="haus-mother"]) #bmAlliancesPanel{display:none!important;}
 .bm-setup{width:100%;margin:0 auto 24px;}.bm-setup .range-card{background:transparent;}.bm-social-card{grid-column:span 2;display:flex;flex-direction:column;gap:12px;}.bm-social-card h2{font-size:11px;letter-spacing:.1em;margin:0 0 3px;}
 .bm-relationship-tabs{display:flex;justify-content:center;gap:10px;margin:0 auto 22px;}.bm-relationship-tabs .setup-option{min-width:145px;}
 .bm-alliances-panel{display:none;width:min(920px,100%);margin:0 auto 22px;}
-body.bm-alliance-tab[data-simulator="big-mother"] .relationship-toolbar,body.bm-alliance-tab[data-simulator="big-mother"] .relationship-table-wrap{display:none!important;}
-body.bm-alliance-tab[data-simulator="big-mother"] .bm-alliances-panel{display:block;}
+body.bm-alliance-tab[data-simulator="haus-mother"] .relationship-toolbar,body.bm-alliance-tab[data-simulator="haus-mother"] .relationship-table-wrap{display:none!important;}
+body.bm-alliance-tab[data-simulator="haus-mother"] .bm-alliances-panel{display:block;}
 .bm-alliance-toolbar{display:flex;grid-template-columns:none;justify-content:center;flex-wrap:wrap;}
 .bm-alliance-list{display:grid;gap:10px;}.bm-alliance-entry{border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);padding:14px;display:flex;justify-content:space-between;align-items:center;gap:15px;}.bm-alliance-entry strong{font-size:12px;}.bm-alliance-entry p{color:var(--text-soft);font-size:11px;margin:5px 0;}.bm-alliance-entry small{font-size:10px;color:var(--pink);font-weight:800;}.bm-alliance-actions{display:flex;gap:6px;}
 .bm-alliance-form{margin-top:17px;padding:18px;border:1px solid var(--line-strong);border-radius:12px;background:var(--surface-2);display:grid;gap:14px;}.bm-alliance-form[hidden]{display:none;}.bm-name-input{width:100%;background:var(--bg-elevated);border:1px solid var(--line-strong);border-radius:7px;padding:12px;color:var(--text);outline:none;}.bm-member-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:300px;overflow:auto;}.bm-member-choice{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px;font-size:11px;cursor:pointer;}.bm-member-choice img{width:34px;height:34px;object-fit:cover;border-radius:5px;}.bm-member-choice input{accent-color:var(--pink);}.bm-form-actions{display:flex;justify-content:flex-end;gap:8px;}
@@ -21726,159 +21726,159 @@ body.bm-alliance-tab[data-simulator="big-mother"] .bm-alliances-panel{display:bl
 
 .bm-performance-person{display:flex;align-items:center;gap:11px;min-width:0;}.bm-performance-person img{height:38px;width:38px;flex:0 0 38px;object-fit:cover;object-position:top center;border-radius:6px;background:var(--surface-2);}.bm-performance-row{align-items:center;}
 
-body[data-simulator="big-mother"]{--pink:#2677eb;--pink-hover:#4092ff;--pink-soft:rgba(38,119,235,.13);--accent-rgb:38,119,235;}
-body[data-simulator="big-mother"] .mini-winner-reveal__image,
-body[data-simulator="big-mother"] .status-contestant__image,
-body[data-simulator="big-mother"] .entrance-entry__image{
+body[data-simulator="haus-mother"]{--pink:#2677eb;--pink-hover:#4092ff;--pink-soft:rgba(38,119,235,.13);--accent-rgb:38,119,235;}
+body[data-simulator="haus-mother"] .mini-winner-reveal__image,
+body[data-simulator="haus-mother"] .status-contestant__image,
+body[data-simulator="haus-mother"] .entrance-entry__image{
   box-shadow:0 0 0 3px rgba(38,119,235,.22),0 16px 42px rgba(0,0,0,.42);
 }
-body[data-simulator="big-mother"] .simulator-mode-btn.is-active,
-body[data-simulator="big-mother"] .bm-relationship-tabs .setup-option.is-active{border-color:rgba(38,119,235,.65);color:#fff;background:rgba(38,119,235,.18);}
-body[data-simulator="big-mother"] #bmSetupBlock{display:block!important;width:100%;margin:0 auto 28px;}
-body[data-simulator="big-mother"] #bmSetupBlock .bm-only-setup-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-body[data-simulator="big-mother"] #bmSetupBlock .setup-card{min-width:0;display:flex;flex-direction:column;justify-content:flex-start;}
-body[data-simulator="big-mother"] .bm-social-card{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:13px;}
-body[data-simulator="big-mother"] .bm-social-card h2{grid-column:1/-1;font-family:Manrope,sans-serif!important;margin:0 0 3px;}
-body[data-simulator="big-mother"] .bm-social-card .setup-check{display:flex;align-items:center;min-width:0;white-space:normal;}
-body[data-simulator="big-mother"] .season-setup-shell{max-width:1050px;}
-body[data-simulator="big-mother"] .bm-relationship-tabs{width:min(440px,100%);margin:0 auto 25px;}
-body[data-simulator="big-mother"] .bm-relationship-tabs .setup-option{flex:1;min-height:38px;font-family:Manrope,sans-serif!important;font-size:10px;letter-spacing:.08em;}
-body[data-simulator="big-mother"] .bm-alliances-panel{width:min(1050px,100%);margin:0 auto 25px;}
-body[data-simulator="big-mother"] .bm-alliance-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
-body[data-simulator="big-mother"] .bm-alliance-entry{min-width:0;padding:15px 17px;background:rgba(255,255,255,.018);border:1px solid var(--line);border-radius:var(--radius);}
-body[data-simulator="big-mother"] .bm-alliance-entry > div:first-child{min-width:0;}
-body[data-simulator="big-mother"] .bm-alliance-entry strong{font-size:11px;font-weight:800;}
-body[data-simulator="big-mother"] .bm-alliance-entry p{font-size:10px;line-height:1.5;overflow-wrap:anywhere;}
-body[data-simulator="big-mother"] .bm-alliance-form{width:100%;max-width:840px;margin:17px auto 0;box-shadow:0 12px 40px rgba(0,0,0,.18);}
-body[data-simulator="big-mother"] .bm-member-list{grid-template-columns:repeat(4,minmax(0,1fr));max-height:400px;}
-body[data-simulator="big-mother"] .bm-member-choice{font-family:Manrope,sans-serif!important;font-size:9px;font-weight:750;min-width:0;}
-body[data-simulator="big-mother"] .bm-member-choice span{overflow:hidden;text-overflow:ellipsis;}
-body[data-simulator="big-mother"] .bm-member-choice:has(input:checked){border-color:rgba(38,119,235,.7);background:rgba(38,119,235,.10);}
-body[data-simulator="big-mother"] .bm-form-actions{flex-wrap:wrap;}
-body[data-simulator="big-mother"] .runtime-content--big-mother{font-family:Manrope,sans-serif;}
-body[data-simulator="big-mother"] .runtime-content--big-mother :is(button,h2,h3,p,div,span,strong){font-family:Manrope,sans-serif;}
-body[data-simulator="big-mother"] .bm-native-competition{width:min(960px,100%);}
-body[data-simulator="big-mother"] .bm-native-competition .performance-groups{margin-bottom:0;}
-body[data-simulator="big-mother"] .bm-native-competition .mini-winner-area{margin:26px auto 15px;}
-body[data-simulator="big-mother"] .bm-native-ceremony{width:min(940px,100%);margin:0 auto;justify-items:center;text-align:center;gap:25px;padding:20px 0 35px;}
-body[data-simulator="big-mother"] .bm-native-ceremony .mini-winner-area{margin:15px auto 0;max-width:900px;}
-body[data-simulator="big-mother"] .bm-native-caption{margin:6px auto 15px;font-size:10px;font-weight:800;letter-spacing:.13em;color:rgba(255,255,255,.65);text-align:center;}
-body[data-simulator="big-mother"] .bm-native-intro{max-width:780px;text-align:center;margin:0 auto;font-size:12px;line-height:1.6;}
-body[data-simulator="big-mother"] .bm-event-kicker{margin:0 0 12px;font-size:9px;font-weight:800;letter-spacing:.13em;color:#80aefb;text-shadow:0 2px 10px #000;}
-body[data-simulator="big-mother"] .bm-native-effects{max-width:780px;margin:11px auto 0;font-size:9px;line-height:1.5;color:#c3cada;}
-body[data-simulator="big-mother"] .bm-native-effects strong{display:block;font-size:8px;letter-spacing:.13em;color:#82b0ff;margin:0 0 6px;}
-body[data-simulator="big-mother"] .bm-native-effects p{margin:3px auto;}
-body[data-simulator="big-mother"] .bm-haus-events .untucked-scenes{gap:40px;}
-body[data-simulator="big-mother"] .bm-haus-events .untucked-scene{padding-bottom:13px;}
-body[data-simulator="big-mother"] .bm-haus-events .untucked-scene:not(:last-child){border-bottom:1px solid rgba(255,255,255,.09);}
-body[data-simulator="big-mother"] .mini-winner-area>.mini-winner-area{margin:20px auto;}
-body[data-simulator="big-mother"] .bm-ceremony-decision{margin:20px auto 9px;}
-body[data-simulator="big-mother"] .bm-native-votes{width:min(620px,100%);margin:14px auto 22px;text-align:center;}
-body[data-simulator="big-mother"] .bm-native-votes h3{color:rgba(255,255,255,.75);font-size:10px;letter-spacing:.12em;}
-body[data-simulator="big-mother"] .bm-vote-counts{display:flex;justify-content:center;gap:26px;margin:20px auto 10px;}
-body[data-simulator="big-mother"] .bm-vote-count{display:grid;justify-items:center;gap:5px;min-width:105px;}
-body[data-simulator="big-mother"] .bm-vote-count strong{font-size:30px;font-weight:800;}
-body[data-simulator="big-mother"] .bm-vote-count span{font-size:10px;font-weight:700;}
-body[data-simulator="big-mother"] .bm-native-ballots{text-align:left;margin:18px auto;max-width:520px;padding:12px 16px;border:1px solid rgba(255,255,255,.12);border-radius:8px;font-size:10px;}
-body[data-simulator="big-mother"] .bm-native-ballots summary{cursor:pointer;font-weight:800;color:#9abfff;}
-body[data-simulator="big-mother"] .bm-native-ballots p{font-size:10px;line-height:1.5;}
-body[data-simulator="big-mother"] .bm-final-part{margin:24px auto 40px;text-align:center;width:min(800px,100%);}
-body[data-simulator="big-mother"] .bm-native-finale .mini-show-winner{margin:25px auto 0;}
-body[data-simulator="big-mother"] .bm-panel-ballots{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:26px;}
-body[data-simulator="big-mother"] .bm-panel-ballot{display:flex;align-items:center;gap:18px;width:min(420px,100%);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.10);}
-body[data-simulator="big-mother"] .bm-panel-ballot .untucked-scene__text{margin:0;text-align:left;}
-body[data-simulator="big-mother"] .bm-track-native{width:100%;padding:10px 0 35px;}
-body[data-simulator="big-mother"] .bm-track-native .track-record-scroll{margin:0 auto;}
-body[data-simulator="big-mother"] .bm-native-track{white-space:normal;}
-body[data-simulator="big-mother"] .bm-native-track .track-record__challenge-type{white-space:pre-line;}
-body[data-simulator="big-mother"] .bm-native-track .track-record__placement-main{line-height:1.13;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-hoh{background:#a7c7f7!important;color:#12305b!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-veto{background:#f5dfa1!important;color:#483715!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-nom{background:#ffcbcb!important;color:#6a1a1a!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-chop{background:#404148!important;color:#fff!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-panel{background:#ded6f1!important;color:#342350!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-winner{background:#7cbbff!important;color:#09284b!important;}
-body[data-simulator="big-mother"] .bm-native-track .bm-rec-inactive{background:#d5d5d8!important;color:#777!important;}
-body[data-simulator="big-mother"] .bm-round-note{font-size:7px;color:#50515a;display:block;font-weight:700;}
-body[data-simulator="big-mother"] .bm-track-actions{display:flex;justify-content:center;margin:18px auto 4px;}
-body[data-simulator="big-mother"] .bm-native-track .track-record__photo{object-position:center 18%;}
-body[data-simulator="big-mother"] .bm-stat-tabs{margin:0 auto 25px;}
-body[data-simulator="big-mother"] .bm-runtime-view{font-family:Manrope,sans-serif!important;}
+body[data-simulator="haus-mother"] .simulator-mode-btn.is-active,
+body[data-simulator="haus-mother"] .bm-relationship-tabs .setup-option.is-active{border-color:rgba(38,119,235,.65);color:#fff;background:rgba(38,119,235,.18);}
+body[data-simulator="haus-mother"] #bmSetupBlock{display:block!important;width:100%;margin:0 auto 28px;}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-only-setup-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+body[data-simulator="haus-mother"] #bmSetupBlock .setup-card{min-width:0;display:flex;flex-direction:column;justify-content:flex-start;}
+body[data-simulator="haus-mother"] .bm-social-card{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:13px;}
+body[data-simulator="haus-mother"] .bm-social-card h2{grid-column:1/-1;font-family:Manrope,sans-serif!important;margin:0 0 3px;}
+body[data-simulator="haus-mother"] .bm-social-card .setup-check{display:flex;align-items:center;min-width:0;white-space:normal;}
+body[data-simulator="haus-mother"] .season-setup-shell{max-width:1050px;}
+body[data-simulator="haus-mother"] .bm-relationship-tabs{width:min(440px,100%);margin:0 auto 25px;}
+body[data-simulator="haus-mother"] .bm-relationship-tabs .setup-option{flex:1;min-height:38px;font-family:Manrope,sans-serif!important;font-size:10px;letter-spacing:.08em;}
+body[data-simulator="haus-mother"] .bm-alliances-panel{width:min(1050px,100%);margin:0 auto 25px;}
+body[data-simulator="haus-mother"] .bm-alliance-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+body[data-simulator="haus-mother"] .bm-alliance-entry{min-width:0;padding:15px 17px;background:rgba(255,255,255,.018);border:1px solid var(--line);border-radius:var(--radius);}
+body[data-simulator="haus-mother"] .bm-alliance-entry > div:first-child{min-width:0;}
+body[data-simulator="haus-mother"] .bm-alliance-entry strong{font-size:11px;font-weight:800;}
+body[data-simulator="haus-mother"] .bm-alliance-entry p{font-size:10px;line-height:1.5;overflow-wrap:anywhere;}
+body[data-simulator="haus-mother"] .bm-alliance-form{width:100%;max-width:840px;margin:17px auto 0;box-shadow:0 12px 40px rgba(0,0,0,.18);}
+body[data-simulator="haus-mother"] .bm-member-list{grid-template-columns:repeat(4,minmax(0,1fr));max-height:400px;}
+body[data-simulator="haus-mother"] .bm-member-choice{font-family:Manrope,sans-serif!important;font-size:9px;font-weight:750;min-width:0;}
+body[data-simulator="haus-mother"] .bm-member-choice span{overflow:hidden;text-overflow:ellipsis;}
+body[data-simulator="haus-mother"] .bm-member-choice:has(input:checked){border-color:rgba(38,119,235,.7);background:rgba(38,119,235,.10);}
+body[data-simulator="haus-mother"] .bm-form-actions{flex-wrap:wrap;}
+body[data-simulator="haus-mother"] .runtime-content--haus-mother{font-family:Manrope,sans-serif;}
+body[data-simulator="haus-mother"] .runtime-content--haus-mother :is(button,h2,h3,p,div,span,strong){font-family:Manrope,sans-serif;}
+body[data-simulator="haus-mother"] .bm-native-competition{width:min(960px,100%);}
+body[data-simulator="haus-mother"] .bm-native-competition .performance-groups{margin-bottom:0;}
+body[data-simulator="haus-mother"] .bm-native-competition .mini-winner-area{margin:26px auto 15px;}
+body[data-simulator="haus-mother"] .bm-native-ceremony{width:min(940px,100%);margin:0 auto;justify-items:center;text-align:center;gap:25px;padding:20px 0 35px;}
+body[data-simulator="haus-mother"] .bm-native-ceremony .mini-winner-area{margin:15px auto 0;max-width:900px;}
+body[data-simulator="haus-mother"] .bm-native-caption{margin:6px auto 15px;font-size:10px;font-weight:800;letter-spacing:.13em;color:rgba(255,255,255,.65);text-align:center;}
+body[data-simulator="haus-mother"] .bm-native-intro{max-width:780px;text-align:center;margin:0 auto;font-size:12px;line-height:1.6;}
+body[data-simulator="haus-mother"] .bm-event-kicker{margin:0 0 12px;font-size:9px;font-weight:800;letter-spacing:.13em;color:#80aefb;text-shadow:0 2px 10px #000;}
+body[data-simulator="haus-mother"] .bm-native-effects{max-width:780px;margin:11px auto 0;font-size:9px;line-height:1.5;color:#c3cada;}
+body[data-simulator="haus-mother"] .bm-native-effects strong{display:block;font-size:8px;letter-spacing:.13em;color:#82b0ff;margin:0 0 6px;}
+body[data-simulator="haus-mother"] .bm-native-effects p{margin:3px auto;}
+body[data-simulator="haus-mother"] .bm-haus-events .untucked-scenes{gap:40px;}
+body[data-simulator="haus-mother"] .bm-haus-events .untucked-scene{padding-bottom:13px;}
+body[data-simulator="haus-mother"] .bm-haus-events .untucked-scene:not(:last-child){border-bottom:1px solid rgba(255,255,255,.09);}
+body[data-simulator="haus-mother"] .mini-winner-area>.mini-winner-area{margin:20px auto;}
+body[data-simulator="haus-mother"] .bm-ceremony-decision{margin:20px auto 9px;}
+body[data-simulator="haus-mother"] .bm-native-votes{width:min(620px,100%);margin:14px auto 22px;text-align:center;}
+body[data-simulator="haus-mother"] .bm-native-votes h3{color:rgba(255,255,255,.75);font-size:10px;letter-spacing:.12em;}
+body[data-simulator="haus-mother"] .bm-vote-counts{display:flex;justify-content:center;gap:26px;margin:20px auto 10px;}
+body[data-simulator="haus-mother"] .bm-vote-count{display:grid;justify-items:center;gap:5px;min-width:105px;}
+body[data-simulator="haus-mother"] .bm-vote-count strong{font-size:30px;font-weight:800;}
+body[data-simulator="haus-mother"] .bm-vote-count span{font-size:10px;font-weight:700;}
+body[data-simulator="haus-mother"] .bm-native-ballots{text-align:left;margin:18px auto;max-width:520px;padding:12px 16px;border:1px solid rgba(255,255,255,.12);border-radius:8px;font-size:10px;}
+body[data-simulator="haus-mother"] .bm-native-ballots summary{cursor:pointer;font-weight:800;color:#9abfff;}
+body[data-simulator="haus-mother"] .bm-native-ballots p{font-size:10px;line-height:1.5;}
+body[data-simulator="haus-mother"] .bm-final-part{margin:24px auto 40px;text-align:center;width:min(800px,100%);}
+body[data-simulator="haus-mother"] .bm-native-finale .mini-show-winner{margin:25px auto 0;}
+body[data-simulator="haus-mother"] .bm-panel-ballots{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:26px;}
+body[data-simulator="haus-mother"] .bm-panel-ballot{display:flex;align-items:center;gap:18px;width:min(420px,100%);padding:9px 0;border-bottom:1px solid rgba(255,255,255,.10);}
+body[data-simulator="haus-mother"] .bm-panel-ballot .untucked-scene__text{margin:0;text-align:left;}
+body[data-simulator="haus-mother"] .bm-track-native{width:100%;padding:10px 0 35px;}
+body[data-simulator="haus-mother"] .bm-track-native .track-record-scroll{margin:0 auto;}
+body[data-simulator="haus-mother"] .bm-native-track{white-space:normal;}
+body[data-simulator="haus-mother"] .bm-native-track .track-record__challenge-type{white-space:pre-line;}
+body[data-simulator="haus-mother"] .bm-native-track .track-record__placement-main{line-height:1.13;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-hoh{background:#a7c7f7!important;color:#12305b!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-veto{background:#f5dfa1!important;color:#483715!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-nom{background:#ffcbcb!important;color:#6a1a1a!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-chop{background:#404148!important;color:#fff!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-panel{background:#ded6f1!important;color:#342350!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-winner{background:#7cbbff!important;color:#09284b!important;}
+body[data-simulator="haus-mother"] .bm-native-track .bm-rec-inactive{background:#d5d5d8!important;color:#777!important;}
+body[data-simulator="haus-mother"] .bm-round-note{font-size:7px;color:#50515a;display:block;font-weight:700;}
+body[data-simulator="haus-mother"] .bm-track-actions{display:flex;justify-content:center;margin:18px auto 4px;}
+body[data-simulator="haus-mother"] .bm-native-track .track-record__photo{object-position:center 18%;}
+body[data-simulator="haus-mother"] .bm-stat-tabs{margin:0 auto 25px;}
+body[data-simulator="haus-mother"] .bm-runtime-view{font-family:Manrope,sans-serif!important;}
 @media(max-width:720px){
-  body[data-simulator="big-mother"] #bmSetupBlock .bm-only-setup-grid{grid-template-columns:1fr;}
-  body[data-simulator="big-mother"] .bm-social-card{grid-column:1;grid-template-columns:1fr;}
-  body[data-simulator="big-mother"] .bm-member-list,body[data-simulator="big-mother"] .bm-alliance-list{grid-template-columns:repeat(2,minmax(0,1fr));}
-  body[data-simulator="big-mother"] .bm-relationship-tabs .setup-option{min-width:0;}
-  body[data-simulator="big-mother"] .bm-native-ceremony{padding-top:8px;gap:13px;}
+  body[data-simulator="haus-mother"] #bmSetupBlock .bm-only-setup-grid{grid-template-columns:1fr;}
+  body[data-simulator="haus-mother"] .bm-social-card{grid-column:1;grid-template-columns:1fr;}
+  body[data-simulator="haus-mother"] .bm-member-list,body[data-simulator="haus-mother"] .bm-alliance-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+  body[data-simulator="haus-mother"] .bm-relationship-tabs .setup-option{min-width:0;}
+  body[data-simulator="haus-mother"] .bm-native-ceremony{padding-top:8px;gap:13px;}
 }
-@media(max-width:450px){body[data-simulator="big-mother"] .bm-member-list,body[data-simulator="big-mother"] .bm-alliance-list{grid-template-columns:1fr;}}
+@media(max-width:450px){body[data-simulator="haus-mother"] .bm-member-list,body[data-simulator="haus-mother"] .bm-alliance-list{grid-template-columns:1fr;}}
 
-body[data-simulator="big-mother"] #bmSetupBlock .bm-social-card{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:center;gap:13px!important;}
-body[data-simulator="big-mother"] #bmSetupBlock .bm-social-card h2{grid-column:1/-1;}
-body[data-simulator="big-mother"] .bm-alliance-list{width:min(820px,100%);margin:0 auto;grid-template-columns:minmax(0,1fr)!important;}
-body[data-simulator="big-mother"] .bm-alliance-entry{width:100%;}
-body[data-simulator="big-mother"] .bm-native-track{font-family:Manrope,sans-serif!important;}
-@media(max-width:720px){body[data-simulator="big-mother"] #bmSetupBlock .bm-social-card{grid-template-columns:1fr!important;}}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-social-card{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:center;gap:13px!important;}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-social-card h2{grid-column:1/-1;}
+body[data-simulator="haus-mother"] .bm-alliance-list{width:min(820px,100%);margin:0 auto;grid-template-columns:minmax(0,1fr)!important;}
+body[data-simulator="haus-mother"] .bm-alliance-entry{width:100%;}
+body[data-simulator="haus-mother"] .bm-native-track{font-family:Manrope,sans-serif!important;}
+@media(max-width:720px){body[data-simulator="haus-mother"] #bmSetupBlock .bm-social-card{grid-template-columns:1fr!important;}}
 
-body[data-simulator="big-mother"] .bm-name-picker{display:flex;align-items:stretch;gap:8px;min-width:0;}
-body[data-simulator="big-mother"] .bm-name-picker .bm-name-input{flex:1;min-width:0;}
-body[data-simulator="big-mother"] .bm-name-picker .control-btn{height:auto;white-space:nowrap;}
-body[data-simulator="big-mother"] .bm-alliance-entry{display:flex;align-items:stretch;flex-direction:column;gap:13px;}
-body[data-simulator="big-mother"] .bm-alliance-details{width:100%;min-width:0;}
-body[data-simulator="big-mother"] .bm-alliance-name{margin:0 0 13px;color:var(--text);font-size:14px;font-weight:800;letter-spacing:.015em;}
-body[data-simulator="big-mother"] .bm-alliance-members{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;}
-body[data-simulator="big-mother"] .bm-member-name{padding:6px 9px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;color:var(--text-soft);font-size:10px;font-weight:700;}
-body[data-simulator="big-mother"] .bm-strength-label{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.07em;}
-body[data-simulator="big-mother"] .bm-strength-label strong{color:var(--text-soft);font-size:10px;}
-body[data-simulator="big-mother"] .bm-strength-meter{height:8px;background:#37373e;border:1px solid rgba(255,255,255,.08);border-radius:100px;overflow:hidden;}
-body[data-simulator="big-mother"] .bm-strength-meter-fill{height:100%;border-radius:100px;transition:width .2s ease,background .2s ease;}
-body[data-simulator="big-mother"] .bm-alliance-actions{justify-content:flex-end;}
-body[data-simulator="big-mother"] .bm-haus-events .bm-event-kicker{display:none!important;}
-body[data-simulator="big-mother"] .bm-haus-events .untucked-scenes{gap:34px;}
-body[data-simulator="big-mother"] .bm-haus-events .bm-native-effects{width:min(720px,100%);margin:10px auto 0;padding:6px 12px;color:rgba(255,255,255,.75);font-size:10px;line-height:1.55;}
-body[data-simulator="big-mother"] .bm-haus-events .bm-native-effects p{margin:3px 0;}
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-nomination-reveal,
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-chop-reveal{min-height:160px;}
-body[data-simulator="big-mother"] .bm-native-ceremony .judging-lineup{min-height:175px;}
-body[data-simulator="big-mother"] .bm-native-competition .mini-winner-area{min-height:100px;}
-body[data-simulator="big-mother"] .bm-native-ceremony,
-body[data-simulator="big-mother"] .bm-native-competition,
-body[data-simulator="big-mother"] .bm-haus-events{overflow-anchor:none;}
-body[data-simulator="big-mother"] .bm-veto-player-selection{width:min(800px,100%);margin:10px auto 32px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;}
-body[data-simulator="big-mother"] .bm-veto-explanation{font-size:11px;color:var(--text-soft);line-height:1.6;max-width:680px;margin:6px auto 8px;}
-body[data-simulator="big-mother"] .bm-veto-draws{width:min(700px,100%);display:grid;gap:8px;margin:4px auto 0;}
-body[data-simulator="big-mother"] .bm-veto-draw{display:flex;align-items:center;gap:15px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);padding:8px 12px;text-align:left;}
-body[data-simulator="big-mother"] .bm-veto-draw .mini-winner-reveal__winner{width:94px;flex:0 0 94px;}
-body[data-simulator="big-mother"] .bm-veto-draw .mini-winner-reveal__image{width:64px;height:64px;}
-body[data-simulator="big-mother"] .bm-veto-draw .mini-winner-reveal__name{font-size:10px;}
-body[data-simulator="big-mother"] .bm-veto-draw-result{display:flex;flex-direction:column;gap:6px;min-width:0;}
-body[data-simulator="big-mother"] .bm-veto-draw-result span{font-size:9px;font-weight:800;letter-spacing:.1em;color:#8ab9ff;}
-body[data-simulator="big-mother"] .bm-veto-draw-result strong{font-size:12px;line-height:1.45;}
-body[data-simulator="big-mother"] .bm-veto-draw-result small{color:var(--muted);font-size:10px;}
-body[data-simulator="big-mother"] .bm-vote-reveals{width:min(650px,100%);margin:22px auto 18px;display:grid;gap:14px;}
-body[data-simulator="big-mother"] .bm-vote-reveal{display:flex;gap:20px;align-items:center;padding:10px 4px 14px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;}
-body[data-simulator="big-mother"] .bm-vote-reveal .untucked-portrait{flex:0 0 auto;}
-body[data-simulator="big-mother"] .bm-vote-reveal-copy{display:flex;flex-direction:column;gap:7px;}
-body[data-simulator="big-mother"] .bm-vote-question{font-size:9px;font-weight:800;color:#86b5ff;letter-spacing:.11em;margin:0;}
-body[data-simulator="big-mother"] .bm-vote-answer{font-size:13px;font-weight:700;color:var(--text);line-height:1.5;margin:0;}
-body[data-simulator="big-mother"] .bm-chop-evicted{margin:24px auto 10px;display:flex;align-items:center;flex-direction:column;gap:14px;}
-body[data-simulator="big-mother"] .bm-evicted-portrait .mini-winner-reveal__image{filter:grayscale(1);}
+body[data-simulator="haus-mother"] .bm-name-picker{display:flex;align-items:stretch;gap:8px;min-width:0;}
+body[data-simulator="haus-mother"] .bm-name-picker .bm-name-input{flex:1;min-width:0;}
+body[data-simulator="haus-mother"] .bm-name-picker .control-btn{height:auto;white-space:nowrap;}
+body[data-simulator="haus-mother"] .bm-alliance-entry{display:flex;align-items:stretch;flex-direction:column;gap:13px;}
+body[data-simulator="haus-mother"] .bm-alliance-details{width:100%;min-width:0;}
+body[data-simulator="haus-mother"] .bm-alliance-name{margin:0 0 13px;color:var(--text);font-size:14px;font-weight:800;letter-spacing:.015em;}
+body[data-simulator="haus-mother"] .bm-alliance-members{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;}
+body[data-simulator="haus-mother"] .bm-member-name{padding:6px 9px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;color:var(--text-soft);font-size:10px;font-weight:700;}
+body[data-simulator="haus-mother"] .bm-strength-label{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;color:var(--muted);font-size:9px;font-weight:800;letter-spacing:.07em;}
+body[data-simulator="haus-mother"] .bm-strength-label strong{color:var(--text-soft);font-size:10px;}
+body[data-simulator="haus-mother"] .bm-strength-meter{height:8px;background:#37373e;border:1px solid rgba(255,255,255,.08);border-radius:100px;overflow:hidden;}
+body[data-simulator="haus-mother"] .bm-strength-meter-fill{height:100%;border-radius:100px;transition:width .2s ease,background .2s ease;}
+body[data-simulator="haus-mother"] .bm-alliance-actions{justify-content:flex-end;}
+body[data-simulator="haus-mother"] .bm-haus-events .bm-event-kicker{display:none!important;}
+body[data-simulator="haus-mother"] .bm-haus-events .untucked-scenes{gap:34px;}
+body[data-simulator="haus-mother"] .bm-haus-events .bm-native-effects{width:min(720px,100%);margin:10px auto 0;padding:6px 12px;color:rgba(255,255,255,.75);font-size:10px;line-height:1.55;}
+body[data-simulator="haus-mother"] .bm-haus-events .bm-native-effects p{margin:3px 0;}
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-nomination-reveal,
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-chop-reveal{min-height:160px;}
+body[data-simulator="haus-mother"] .bm-native-ceremony .judging-lineup{min-height:175px;}
+body[data-simulator="haus-mother"] .bm-native-competition .mini-winner-area{min-height:100px;}
+body[data-simulator="haus-mother"] .bm-native-ceremony,
+body[data-simulator="haus-mother"] .bm-native-competition,
+body[data-simulator="haus-mother"] .bm-haus-events{overflow-anchor:none;}
+body[data-simulator="haus-mother"] .bm-veto-player-selection{width:min(800px,100%);margin:10px auto 32px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;}
+body[data-simulator="haus-mother"] .bm-veto-explanation{font-size:11px;color:var(--text-soft);line-height:1.6;max-width:680px;margin:6px auto 8px;}
+body[data-simulator="haus-mother"] .bm-veto-draws{width:min(700px,100%);display:grid;gap:8px;margin:4px auto 0;}
+body[data-simulator="haus-mother"] .bm-veto-draw{display:flex;align-items:center;gap:15px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);padding:8px 12px;text-align:left;}
+body[data-simulator="haus-mother"] .bm-veto-draw .mini-winner-reveal__winner{width:94px;flex:0 0 94px;}
+body[data-simulator="haus-mother"] .bm-veto-draw .mini-winner-reveal__image{width:64px;height:64px;}
+body[data-simulator="haus-mother"] .bm-veto-draw .mini-winner-reveal__name{font-size:10px;}
+body[data-simulator="haus-mother"] .bm-veto-draw-result{display:flex;flex-direction:column;gap:6px;min-width:0;}
+body[data-simulator="haus-mother"] .bm-veto-draw-result span{font-size:9px;font-weight:800;letter-spacing:.1em;color:#8ab9ff;}
+body[data-simulator="haus-mother"] .bm-veto-draw-result strong{font-size:12px;line-height:1.45;}
+body[data-simulator="haus-mother"] .bm-veto-draw-result small{color:var(--muted);font-size:10px;}
+body[data-simulator="haus-mother"] .bm-vote-reveals{width:min(650px,100%);margin:22px auto 18px;display:grid;gap:14px;}
+body[data-simulator="haus-mother"] .bm-vote-reveal{display:flex;gap:20px;align-items:center;padding:10px 4px 14px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left;}
+body[data-simulator="haus-mother"] .bm-vote-reveal .untucked-portrait{flex:0 0 auto;}
+body[data-simulator="haus-mother"] .bm-vote-reveal-copy{display:flex;flex-direction:column;gap:7px;}
+body[data-simulator="haus-mother"] .bm-vote-question{font-size:9px;font-weight:800;color:#86b5ff;letter-spacing:.11em;margin:0;}
+body[data-simulator="haus-mother"] .bm-vote-answer{font-size:13px;font-weight:700;color:var(--text);line-height:1.5;margin:0;}
+body[data-simulator="haus-mother"] .bm-chop-evicted{margin:24px auto 10px;display:flex;align-items:center;flex-direction:column;gap:14px;}
+body[data-simulator="haus-mother"] .bm-evicted-portrait .mini-winner-reveal__image{filter:grayscale(1);}
 
-body[data-simulator="big-mother"] .bm-wiki-track{
+body[data-simulator="haus-mother"] .bm-wiki-track{
   width:100%;max-width:100%;margin:0 auto;padding:0 0 20px;
 }
-body[data-simulator="big-mother"] .bm-wiki-scroll{
+body[data-simulator="haus-mother"] .bm-wiki-scroll{
   display:block;box-sizing:border-box;width:max-content;max-width:100%;
   overflow-x:auto;overflow-y:hidden;margin:0 auto;
   background:#f2f3f6;scrollbar-width:thin;
 }
-body[data-simulator="big-mother"] .bm-wiki-record{
+body[data-simulator="haus-mother"] .bm-wiki-record{
   --bm-label-width:158px;--bm-week-width:82px;
   width:max-content!important;min-width:0!important;max-width:none!important;
   table-layout:fixed;border-collapse:collapse;background:#f3f4f7;
   font-family:Arial,Helvetica,sans-serif!important;font-size:9px!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record :is(th,td){
+body[data-simulator="haus-mother"] .bm-wiki-record :is(th,td){
   box-sizing:border-box;width:82px!important;min-width:82px!important;max-width:82px!important;
   padding:5px 4px!important;text-align:center!important;vertical-align:middle!important;
   font-family:Arial,Helvetica,sans-serif!important;font-size:9px!important;
@@ -21886,124 +21886,124 @@ body[data-simulator="big-mother"] .bm-wiki-record :is(th,td){
   white-space:normal;overflow-wrap:break-word;word-break:normal;
   border:1px solid #c7cad0!important;color:#17191d;
 }
-body[data-simulator="big-mother"] .bm-wiki-record :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
+body[data-simulator="haus-mother"] .bm-wiki-record :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
   position:static;left:auto;width:158px!important;min-width:158px!important;max-width:158px!important;
   padding:6px 7px!important;text-align:center!important;background:#eff0f4;
   font-size:9px!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-week{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-week{
   height:29px!important;min-height:29px!important;max-height:none!important;
   background:#eff0f4;font-size:10px!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-round{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-round{
   height:27px!important;min-height:27px!important;max-height:none!important;
   background:#eff0f4;font-size:8px!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-summary-cell{background:#f5f6f8;color:#17191d;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-empty{background:#c2c5c9!important;color:#555!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-yes{background:#b4e5b8!important;color:#143b19!important;font-weight:700!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-no{background:#efb5b9!important;color:#5b1b1b!important;font-weight:700!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-summary-cell{background:#f5f6f8;color:#17191d;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-empty{background:#c2c5c9!important;color:#555!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-yes{background:#b4e5b8!important;color:#143b19!important;font-weight:700!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-no{background:#efb5b9!important;color:#5b1b1b!important;font-weight:700!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell{
   height:75px!important;min-height:75px!important;max-height:none!important;
   padding:0 2px 3px!important;background:#df969d!important;color:#17191d!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell.bm-wiki-winner{background:#bbdaa1!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell strong{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell.bm-wiki-winner{background:#bbdaa1!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell strong{
   display:block;font-size:8px!important;font-weight:700!important;line-height:1.12!important;
   padding:2px 0 0;text-align:center;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell small{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell small{
   display:block;font-size:7px!important;font-weight:400!important;line-height:1.15!important;
   margin-top:1px;text-align:center;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-evicted-photo{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-evicted-photo{
   display:block;object-fit:cover;object-position:center 18%;
   width:48px!important;height:48px!important;max-width:48px!important;min-width:0!important;
   margin:3px auto 1px!important;background:#999;
 }
-body[data-simulator="big-mother"] .bm-wiki-bw{filter:grayscale(1);}
-body[data-simulator="big-mother"] .bm-wiki-divider td{
+body[data-simulator="haus-mother"] .bm-wiki-bw{filter:grayscale(1);}
+body[data-simulator="haus-mother"] .bm-wiki-divider td{
   width:auto!important;max-width:none!important;min-width:0!important;
   padding:0!important;height:5px!important;min-height:5px!important;
   background:#45474b!important;border-color:#45474b!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-player-name{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-player-name{
   background:#f5f6f8;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-player-row{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-player-row{
   height:42px!important;min-height:42px!important;max-height:none!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-player-cell{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-player-cell{
   height:42px!important;min-height:42px!important;max-height:none!important;
   background:#fff;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-player-cell .track-record__placement-main{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-player-cell .track-record__placement-main{
   font-family:Arial,Helvetica,sans-serif!important;font-size:9px!important;
   line-height:1.1!important;font-weight:700!important;font-style:normal!important;
   text-align:center!important;overflow-wrap:anywhere;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-inactive{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-inactive{
   background:#b8bbc0!important;color:transparent!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-hoh{background:#a6eab0!important;color:#173d1f!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-nominated{background:#aebdf7!important;color:#172b62!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eliminated{background:#df828b!important;color:#361820!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-juror{background:#d4cbea!important;color:#493a5a!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-finalist{background:#c3dfa6!important;color:#26391c!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-lipstick{font-size:11px!important;white-space:nowrap;}
-body[data-simulator="big-mother"] .bm-track-stat-controls{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-hoh{background:#a6eab0!important;color:#173d1f!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-nominated{background:#aebdf7!important;color:#172b62!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eliminated{background:#df828b!important;color:#361820!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-juror{background:#d4cbea!important;color:#493a5a!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-finalist{background:#c3dfa6!important;color:#26391c!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-lipstick{font-size:11px!important;white-space:nowrap;}
+body[data-simulator="haus-mother"] .bm-track-stat-controls{
   width:min(1120px,100%);margin:0 auto 18px!important;
   display:flex!important;justify-content:flex-end!important;
 }
-body[data-simulator="big-mother"] .bm-track-stat-controls .track-record-download{
+body[data-simulator="haus-mother"] .bm-track-stat-controls .track-record-download{
   height:36px;min-height:36px;font-family:Manrope,sans-serif;
 }
 @media(max-width:650px){
-  body[data-simulator="big-mother"] .bm-wiki-record{--bm-label-width:128px;--bm-week-width:76px;}
-  body[data-simulator="big-mother"] .bm-wiki-record :is(th,td){
+  body[data-simulator="haus-mother"] .bm-wiki-record{--bm-label-width:128px;--bm-week-width:76px;}
+  body[data-simulator="haus-mother"] .bm-wiki-record :is(th,td){
     width:76px!important;min-width:76px!important;max-width:76px!important;
     font-size:8px!important;padding:4px 3px!important;
   }
-  body[data-simulator="big-mother"] .bm-wiki-record :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
+  body[data-simulator="haus-mother"] .bm-wiki-record :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
     width:128px!important;min-width:128px!important;max-width:128px!important;
     font-size:8px!important;
   }
 }
 
-body[data-simulator="big-mother"] .bm-wiki-record.bm-wiki-export{
+body[data-simulator="haus-mother"] .bm-wiki-record.bm-wiki-export{
   margin:0!important;table-layout:fixed!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record.bm-wiki-export :is(th,td){
+body[data-simulator="haus-mother"] .bm-wiki-record.bm-wiki-export :is(th,td){
   width:86px!important;min-width:86px!important;max-width:86px!important;
   font-size:10px!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record.bm-wiki-export :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
+body[data-simulator="haus-mother"] .bm-wiki-record.bm-wiki-export :is(.bm-wiki-corner,.bm-wiki-row-head,.bm-wiki-player-name){
   width:166px!important;min-width:166px!important;max-width:166px!important;
   font-size:10px!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record.bm-wiki-export .bm-wiki-evicted-photo{
+body[data-simulator="haus-mother"] .bm-wiki-record.bm-wiki-export .bm-wiki-evicted-photo{
   width:52px!important;max-width:52px!important;height:52px!important;
 }
 
-body[data-simulator="big-mother"] .runtime-content--big-mother{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother{
   align-content:start!important;
   align-items:start!important;
   justify-items:center!important;
   overflow-anchor:none;
 }
-body[data-simulator="big-mother"] .runtime-stage__content{
+body[data-simulator="haus-mother"] .runtime-stage__content{
   grid-template-rows:auto auto minmax(430px,1fr) auto;
 }
 
-body[data-simulator="big-mother"] .bm-track-native{
+body[data-simulator="haus-mother"] .bm-track-native{
   display:block!important;
   box-sizing:border-box!important;
   width:100%!important;
   min-width:0!important;
   max-width:100%!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-scroll,
-body[data-simulator="big-mother"] .runtime-content--statistics-track-record .bm-wiki-scroll{
+body[data-simulator="haus-mother"] .bm-wiki-scroll,
+body[data-simulator="haus-mother"] .runtime-content--statistics-track-record .bm-wiki-scroll{
   display:block!important;
   box-sizing:border-box!important;
   width:100%!important;
@@ -22013,164 +22013,164 @@ body[data-simulator="big-mother"] .runtime-content--statistics-track-record .bm-
   overflow-y:hidden!important;
   -webkit-overflow-scrolling:touch;
 }
-body[data-simulator="big-mother"] .bm-wiki-record{margin:0 auto;}
+body[data-simulator="haus-mother"] .bm-wiki-record{margin:0 auto;}
 @media(max-width:650px){
-  body[data-simulator="big-mother"] .bm-stat-tabs{width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;}
-  body[data-simulator="big-mother"] .bm-stat-tabs .control-btn{width:100%!important;min-width:0!important;max-width:none!important;min-height:38px!important;height:38px!important;font-size:8px!important;color:var(--text)!important;letter-spacing:.07em!important;}
-  body[data-simulator="big-mother"] .bm-stat-tabs .control-btn.bm-selected{color:#fff!important;}
+  body[data-simulator="haus-mother"] .bm-stat-tabs{width:100%!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;}
+  body[data-simulator="haus-mother"] .bm-stat-tabs .control-btn{width:100%!important;min-width:0!important;max-width:none!important;min-height:38px!important;height:38px!important;font-size:8px!important;color:var(--text)!important;letter-spacing:.07em!important;}
+  body[data-simulator="haus-mother"] .bm-stat-tabs .control-btn.bm-selected{color:#fff!important;}
 }
 
-body[data-simulator="big-mother"] .runtime-stage__content{
+body[data-simulator="haus-mother"] .runtime-stage__content{
   grid-template-rows:auto auto auto auto!important;
   min-height:calc(100vh - 136px);
   align-content:start!important;
 }
-body[data-simulator="big-mother"] .runtime-content--big-mother{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother{
   min-height:0!important;align-content:start!important;justify-content:start!important;
   padding-top:8px!important;padding-bottom:8px!important;
 }
-body[data-simulator="big-mother"] .bm-native-ceremony{
+body[data-simulator="haus-mother"] .bm-native-ceremony{
   display:flex!important;flex-direction:column!important;align-items:center!important;
   gap:9px!important;padding:7px 0 11px!important;
 }
-body[data-simulator="big-mother"] .bm-native-ceremony .judging-lineup{
+body[data-simulator="haus-mother"] .bm-native-ceremony .judging-lineup{
   min-height:0!important;margin:1px auto 4px!important;
 }
-body[data-simulator="big-mother"] .bm-native-ceremony .mini-winner-area,
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-nomination-reveal,
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-chop-reveal{
+body[data-simulator="haus-mother"] .bm-native-ceremony .mini-winner-area,
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-nomination-reveal,
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-chop-reveal{
   min-height:0!important;margin:5px auto!important;padding:0!important;
 }
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-native-caption{
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-native-caption{
   margin:3px auto 7px!important;
 }
-body[data-simulator="big-mother"] .bm-native-ceremony .bm-reveal-button{
+body[data-simulator="haus-mother"] .bm-native-ceremony .bm-reveal-button{
   margin:11px auto!important;
 }
-body[data-simulator="big-mother"] .runtime-section-nav{
+body[data-simulator="haus-mother"] .runtime-section-nav{
   margin-top:16px!important;
 }
-body[data-simulator="big-mother"] .bm-draw-scenes{width:min(780px,100%);margin:12px auto 0;}
-body[data-simulator="big-mother"] .bm-draw-scenes .untucked-scene{
+body[data-simulator="haus-mother"] .bm-draw-scenes{width:min(780px,100%);margin:12px auto 0;}
+body[data-simulator="haus-mother"] .bm-draw-scenes .untucked-scene{
   padding:4px 0 17px;margin:0 auto 10px;
 }
-body[data-simulator="big-mother"] .bm-veto-player-selection{margin:8px auto 16px!important;gap:8px!important;}
-body[data-simulator="big-mother"] .bm-chop-votes,
-body[data-simulator="big-mother"] .bm-panel-votes{width:min(800px,100%);margin:12px auto 14px;}
-body[data-simulator="big-mother"] .bm-chop-votes .untucked-scenes,
-body[data-simulator="big-mother"] .bm-panel-votes .untucked-scenes{gap:13px!important;}
-body[data-simulator="big-mother"] .bm-chop-votes .untucked-scene,
-body[data-simulator="big-mother"] .bm-panel-votes .untucked-scene{padding:5px 0 12px!important;}
-body[data-simulator="big-mother"] .bm-chop-tie{max-width:760px;margin:18px auto 12px;}
-body[data-simulator="big-mother"] .bm-chop-tie > p{font-weight:800;font-size:12px;line-height:1.7;}
-body[data-simulator="big-mother"] .bm-chop-tie .untucked-scene{margin:14px auto 4px;}
-body[data-simulator="big-mother"] .bm-chop-evicted{margin:18px auto 12px;}
-body[data-simulator="big-mother"] .bm-double-chop-announcement{
+body[data-simulator="haus-mother"] .bm-veto-player-selection{margin:8px auto 16px!important;gap:8px!important;}
+body[data-simulator="haus-mother"] .bm-chop-votes,
+body[data-simulator="haus-mother"] .bm-panel-votes{width:min(800px,100%);margin:12px auto 14px;}
+body[data-simulator="haus-mother"] .bm-chop-votes .untucked-scenes,
+body[data-simulator="haus-mother"] .bm-panel-votes .untucked-scenes{gap:13px!important;}
+body[data-simulator="haus-mother"] .bm-chop-votes .untucked-scene,
+body[data-simulator="haus-mother"] .bm-panel-votes .untucked-scene{padding:5px 0 12px!important;}
+body[data-simulator="haus-mother"] .bm-chop-tie{max-width:760px;margin:18px auto 12px;}
+body[data-simulator="haus-mother"] .bm-chop-tie > p{font-weight:800;font-size:12px;line-height:1.7;}
+body[data-simulator="haus-mother"] .bm-chop-tie .untucked-scene{margin:14px auto 4px;}
+body[data-simulator="haus-mother"] .bm-chop-evicted{margin:18px auto 12px;}
+body[data-simulator="haus-mother"] .bm-double-chop-announcement{
   margin:24px auto 12px;max-width:720px;text-align:center;font-size:16px;
   line-height:1.65;font-weight:800;color:var(--text);
 }
-body[data-simulator="big-mother"] .bm-native-finale{width:min(960px,100%);}
-body[data-simulator="big-mother"] .bm-crowning-view{
+body[data-simulator="haus-mother"] .bm-native-finale{width:min(960px,100%);}
+body[data-simulator="haus-mother"] .bm-crowning-view{
   width:min(900px,100%);margin:12px auto 24px;display:grid;justify-items:center;gap:15px;
 }
-body[data-simulator="big-mother"] .bm-crowning-view .finale-lineup{justify-content:center;}
+body[data-simulator="haus-mother"] .bm-crowning-view .finale-lineup{justify-content:center;}
 
-body[data-simulator="big-mother"] .runtime-content .bm-wiki-record,
-body[data-simulator="big-mother"] .runtime-content .bm-wiki-record :is(th,td,span,strong,small),
-body[data-simulator="big-mother"] .bm-wiki-record,
-body[data-simulator="big-mother"] .bm-wiki-record :is(th,td,span,strong,small){
+body[data-simulator="haus-mother"] .runtime-content .bm-wiki-record,
+body[data-simulator="haus-mother"] .runtime-content .bm-wiki-record :is(th,td,span,strong,small),
+body[data-simulator="haus-mother"] .bm-wiki-record,
+body[data-simulator="haus-mother"] .bm-wiki-record :is(th,td,span,strong,small){
   font-family:Arial,Helvetica,sans-serif!important;font-style:normal!important;letter-spacing:0!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record th,
-body[data-simulator="big-mother"] .bm-wiki-record td{
+body[data-simulator="haus-mother"] .bm-wiki-record th,
+body[data-simulator="haus-mother"] .bm-wiki-record td{
   border-color:#c7cad0!important;font-size:10px!important;line-height:1.15!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-week{background:#eff0f4!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-round{background:#e7e9ee!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-summary-cell{background:#f1f2f5;color:#1b1d22;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell{background:#e5a0a6!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-evicted-photo{
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-week{background:#eff0f4!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-round{background:#e7e9ee!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-summary-cell{background:#f1f2f5;color:#1b1d22;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell{background:#e5a0a6!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-evicted-photo{
   width:100%;height:53px!important;max-width:65px!important;object-fit:cover;
   margin:5px auto 3px;
 }
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-eviction-cell strong{font-size:9px!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-player-cell{height:38px!important;min-height:38px!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-eviction-cell strong{font-size:9px!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-player-cell{height:38px!important;min-height:38px!important;}
 @media(max-width:720px){
-  body[data-simulator="big-mother"] .runtime-stage__content{min-height:calc(100vh - 110px);}
-  body[data-simulator="big-mother"] .bm-chop-votes .untucked-scene__lineup,
-  body[data-simulator="big-mother"] .bm-panel-votes .untucked-scene__lineup{gap:8px;}
+  body[data-simulator="haus-mother"] .runtime-stage__content{min-height:calc(100vh - 110px);}
+  body[data-simulator="haus-mother"] .bm-chop-votes .untucked-scene__lineup,
+  body[data-simulator="haus-mother"] .bm-panel-votes .untucked-scene__lineup{gap:8px;}
 }
 
-body[data-simulator="big-mother"] .runtime-content--big-mother{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother{
   grid-template-columns:minmax(0,1fr)!important;
   justify-content:stretch!important;
   justify-items:center!important;
 }
-body[data-simulator="big-mother"] .runtime-content--big-mother > *{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother > *{
   width:min(940px,100%)!important;
   margin-inline:auto!important;
 }
-body[data-simulator="big-mother"] .runtime-content--big-mother > .bm-track-native{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother > .bm-track-native{
   width:100%!important;
 }
 
-body[data-simulator="big-mother"] .bm-wiki-record{
+body[data-simulator="haus-mother"] .bm-wiki-record{
   min-width:100%!important;
 }
 
-body[data-simulator="big-mother"] .bm-double-setting{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;}
-body[data-simulator="big-mother"] .bm-double-setting .setup-card__label{margin:0;}
-body[data-simulator="big-mother"] .bm-double-setting .setup-check{font-size:9px;}
-body[data-simulator="big-mother"] #bmDoubleEviction:disabled{opacity:.4;cursor:not-allowed;}
-body[data-simulator="big-mother"] .runtime-content--big-mother .bm-wiki-track{width:100%!important;}
-body[data-simulator="big-mother"] .runtime-content--big-mother .bm-wiki-record{margin:0 auto!important;}
-body[data-simulator="big-mother"] .bm-wiki-record .bm-wiki-empty{vertical-align:middle!important;}
+body[data-simulator="haus-mother"] .bm-double-setting{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;}
+body[data-simulator="haus-mother"] .bm-double-setting .setup-card__label{margin:0;}
+body[data-simulator="haus-mother"] .bm-double-setting .setup-check{font-size:9px;}
+body[data-simulator="haus-mother"] #bmDoubleEviction:disabled{opacity:.4;cursor:not-allowed;}
+body[data-simulator="haus-mother"] .runtime-content--haus-mother .bm-wiki-track{width:100%!important;}
+body[data-simulator="haus-mother"] .runtime-content--haus-mother .bm-wiki-record{margin:0 auto!important;}
+body[data-simulator="haus-mother"] .bm-wiki-record .bm-wiki-empty{vertical-align:middle!important;}
 
-body[data-simulator="big-mother"] .bm-track-episode .bm-wiki-scroll{
+body[data-simulator="haus-mother"] .bm-track-episode .bm-wiki-scroll{
   width:max-content!important;max-width:100%!important;
   min-width:0!important;overflow-x:auto!important;margin:0 auto!important;
 }
-body[data-simulator="big-mother"] .bm-track-episode .bm-wiki-record{
+body[data-simulator="haus-mother"] .bm-track-episode .bm-wiki-record{
   margin:0!important;
 }
 
-body[data-simulator="big-mother"] #bmSetupBlock .bm-social-card{
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-social-card{
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
 }
 @media(max-width:720px){
-  body[data-simulator="big-mother"] #bmSetupBlock .bm-social-card{grid-template-columns:1fr!important;}
+  body[data-simulator="haus-mother"] #bmSetupBlock .bm-social-card{grid-template-columns:1fr!important;}
 }
 
-body[data-simulator="big-mother"] .runtime-stage.bm-track-view .runtime-stage__content{
+body[data-simulator="haus-mother"] .runtime-stage.bm-track-view .runtime-stage__content{
   width:min(1580px,calc(100% - 34px));
 }
-body[data-simulator="big-mother"] .runtime-content--big-mother > .bm6-shell{
+body[data-simulator="haus-mother"] .runtime-content--haus-mother > .bm6-shell{
   display:block!important;width:100%!important;max-width:none!important;
   min-width:0!important;margin:0 auto!important;
 }
-body[data-simulator="big-mother"] .bm6-shell{
+body[data-simulator="haus-mother"] .bm6-shell{
   display:block;min-width:0;max-width:100%;padding:4px 0 32px;
 }
-body[data-simulator="big-mother"] .bm6-scroll{
+body[data-simulator="haus-mother"] .bm6-scroll{
   width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;
   margin:0 auto;scrollbar-width:thin;-webkit-overflow-scrolling:touch;
   background:transparent;
 }
-body[data-simulator="big-mother"] .bm6-sheet{
+body[data-simulator="haus-mother"] .bm6-sheet{
   border-collapse:collapse;border-spacing:0;table-layout:fixed;
   min-width:0;max-width:none;margin:0 auto;
   background:#f3f4f7;color:#17191d;
 }
-body[data-simulator="big-mother"] .bm6-sheet,
-body[data-simulator="big-mother"] .bm6-sheet *{
+body[data-simulator="haus-mother"] .bm6-sheet,
+body[data-simulator="haus-mother"] .bm6-sheet *{
   font-family:Arial,Helvetica,sans-serif!important;
   font-style:normal!important;
   letter-spacing:0!important;
   box-sizing:border-box!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet tr{border:0!important;}
-body[data-simulator="big-mother"] .bm6-sheet th,
-body[data-simulator="big-mother"] .bm6-sheet td{
+body[data-simulator="haus-mother"] .bm6-sheet tr{border:0!important;}
+body[data-simulator="haus-mother"] .bm6-sheet th,
+body[data-simulator="haus-mother"] .bm6-sheet td{
   position:static!important;
   border:1px solid #bfc3cb!important;
   padding:4px 5px!important;
@@ -22183,145 +22183,145 @@ body[data-simulator="big-mother"] .bm6-sheet td{
   min-width:0!important;max-width:none!important;
   width:auto!important;min-height:0!important;max-height:none!important;
 }
-body[data-simulator="big-mother"] .bm6-header-top,
-body[data-simulator="big-mother"] .bm6-header-bottom{height:28px;}
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-corner,
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-week-heading,
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-subheading{
+body[data-simulator="haus-mother"] .bm6-header-top,
+body[data-simulator="haus-mother"] .bm6-header-bottom{height:28px;}
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-corner,
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-week-heading,
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-subheading{
   background:#edf0f4!important;color:#17191d!important;font-weight:700!important;
   font-size:10px!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-subheading{font-size:9px!important;}
-body[data-simulator="big-mother"] .bm6-summary-row{height:36px;}
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-row-label{
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-subheading{font-size:9px!important;}
+body[data-simulator="haus-mother"] .bm6-summary-row{height:36px;}
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-row-label{
   background:#edf0f4!important;font-weight:700!important;font-size:9px!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-summary-value{background:#f6f7f9;}
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-blank{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-summary-value{background:#f6f7f9;}
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-blank{
   background:#b8bbc0!important;color:transparent!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-yes{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-yes{
   background:#a3e6b0!important;color:#163e21!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-no{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-no{
   background:#efbbc0!important;color:#4d2024!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm6-eviction-row{height:90px;}
-body[data-simulator="big-mother"] .bm6-sheet .bm6-eviction-cell{
+body[data-simulator="haus-mother"] .bm6-eviction-row{height:90px;}
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-eviction-cell{
   height:90px!important;padding:4px 2px!important;background:#e8a3a9!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-eviction-cell.bm6-crowned{
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-eviction-cell.bm6-crowned{
   background:#d9e7b3!important;
 }
-body[data-simulator="big-mother"] .bm6-photo{
+body[data-simulator="haus-mother"] .bm6-photo{
   width:46px!important;height:46px!important;max-width:46px!important;
   display:block;object-fit:cover;object-position:center 20%;
   margin:0 auto 3px!important;border:0;background:#999;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-eviction-cell strong{
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-eviction-cell strong{
   display:block;font-size:9px!important;line-height:1.05!important;font-weight:700!important;
   text-align:center!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-eviction-cell small{
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-eviction-cell small{
   display:block;font-size:8px!important;line-height:1.05!important;font-weight:400!important;
   text-align:center!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-divider td{
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-divider td{
   background:#52555a!important;border-color:#52555a!important;
   height:6px!important;min-height:6px!important;padding:0!important;
 }
-body[data-simulator="big-mother"] .bm6-person-row{height:39px;}
-body[data-simulator="big-mother"] .bm6-sheet th.bm6-contestant{
+body[data-simulator="haus-mother"] .bm6-person-row{height:39px;}
+body[data-simulator="haus-mother"] .bm6-sheet th.bm6-contestant{
   background:#eff0f4!important;font-weight:700!important;font-size:10px!important;
   padding:5px 6px!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-person-cell{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-person-cell{
   height:39px!important;font-weight:600!important;
   padding:3px 3px!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .track-record__placement-main{
+body[data-simulator="haus-mother"] .bm6-sheet .track-record__placement-main{
   display:block!important;margin:0!important;padding:0!important;
   font:700 9px/1.12 Arial,Helvetica,sans-serif!important;
   letter-spacing:0!important;text-align:center!important;white-space:normal!important;
   overflow-wrap:break-word!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-vote{background:#fff!important;}
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-hoh{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-vote{background:#fff!important;}
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-hoh{
   background:#a8e9b4!important;color:#174427!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-nominee{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-nominee{
   background:#b7c6f5!important;color:#233963!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-out{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-out{
   background:#df848b!important;color:#351a20!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-juror{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-juror{
   background:#ddd2f0!important;color:#3f3058!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-finalist{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-finalist{
   background:#e6eca4!important;color:#2d3419!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-inactive{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-inactive{
   background:#b8bbc0!important;color:transparent!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-lipstick{
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-lipstick{
   display:block!important;font-size:9px!important;line-height:1!important;margin-top:1px!important;
 }
-body[data-simulator="big-mother"] .bm6-download-row{
+body[data-simulator="haus-mother"] .bm6-download-row{
   width:100%!important;display:flex!important;justify-content:flex-end!important;
   margin:0 auto 12px!important;gap:8px!important;
 }
-body[data-simulator="big-mother"] .bm6-download-row .track-record-download{
+body[data-simulator="haus-mother"] .bm6-download-row .track-record-download{
   height:36px!important;min-height:36px!important;font-family:Manrope,sans-serif!important;
 }
-body[data-simulator="big-mother"] .bm6-stats-view{width:100%;max-width:1300px;margin:0 auto;}
-body[data-simulator="big-mother"] .bm6-stats-table-wrap{width:100%;overflow-x:auto;}
-body[data-simulator="big-mother"] .bm6-other-statistics{
+body[data-simulator="haus-mother"] .bm6-stats-view{width:100%;max-width:1300px;margin:0 auto;}
+body[data-simulator="haus-mother"] .bm6-stats-table-wrap{width:100%;overflow-x:auto;}
+body[data-simulator="haus-mother"] .bm6-other-statistics{
   min-width:520px;width:100%;font-family:Manrope,sans-serif;
 }
-body[data-simulator="big-mother"] .bm6-other-statistics th,
-body[data-simulator="big-mother"] .bm6-other-statistics td{
+body[data-simulator="haus-mother"] .bm6-other-statistics th,
+body[data-simulator="haus-mother"] .bm6-other-statistics td{
   text-align:center!important;vertical-align:middle!important;
   padding:10px 12px!important;
 }
-body[data-simulator="big-mother"] .bm6-other-statistics td:nth-child(3){min-width:175px;}
+body[data-simulator="haus-mother"] .bm6-other-statistics td:nth-child(3){min-width:175px;}
 @media(max-width:650px){
-  body[data-simulator="big-mother"] .bm6-sheet th,
-  body[data-simulator="big-mother"] .bm6-sheet td{font-size:9px!important;}
-  body[data-simulator="big-mother"] .bm6-sheet th.bm6-row-label,
-  body[data-simulator="big-mother"] .bm6-sheet th.bm6-contestant{font-size:9px!important;}
+  body[data-simulator="haus-mother"] .bm6-sheet th,
+  body[data-simulator="haus-mother"] .bm6-sheet td{font-size:9px!important;}
+  body[data-simulator="haus-mother"] .bm6-sheet th.bm6-row-label,
+  body[data-simulator="haus-mother"] .bm6-sheet th.bm6-contestant{font-size:9px!important;}
 }
 
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-blank,
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-inactive{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-blank,
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-inactive{
   background:#bfc3cb!important;
   border-color:#bfc3cb!important;
   color:transparent!important;
 }
 
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-finalist.bm6-winner{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-finalist.bm6-winner{
   background:yellow!important;color:#17191d!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-finalist.bm6-runner-up{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-finalist.bm6-runner-up{
   background:silver!important;color:#17191d!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-finalist.bm6-winner .track-record__placement-main,
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-finalist.bm6-runner-up .track-record__placement-main{
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-finalist.bm6-winner .track-record__placement-main,
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-finalist.bm6-runner-up .track-record__placement-main{
   font-weight:700!important;color:#17191d!important;
 }
 
-body[data-simulator="big-mother"] .bm6-download-row{
+body[data-simulator="haus-mother"] .bm6-download-row{
   width:min(1120px,calc(100vw - 72px))!important;
   max-width:100%!important;
   justify-content:flex-end!important;
   margin:0 auto 12px!important;
   gap:10px!important;
 }
-body[data-simulator="big-mother"] .bm6-download-row .track-record-download{
+body[data-simulator="haus-mother"] .bm6-download-row .track-record-download{
   height:42px!important;min-height:42px!important;
 }
 
-body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline {
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-placement-inline {
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -22332,7 +22332,7 @@ body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline {
   white-space:nowrap!important;
   line-height:1!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline .track-record__placement-main {
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-placement-inline .track-record__placement-main {
   display:inline-block!important;
   min-width:0!important;
   max-width:100%!important;
@@ -22344,7 +22344,7 @@ body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline .track-record
   overflow-wrap:normal!important;
   vertical-align:middle!important;
 }
-body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline .bm6-lipstick {
+body[data-simulator="haus-mother"] .bm6-sheet .bm6-placement-inline .bm6-lipstick {
   display:inline-block!important;
   flex:0 0 auto!important;
   margin:0!important;
@@ -22354,219 +22354,219 @@ body[data-simulator="big-mother"] .bm6-sheet .bm6-placement-inline .bm6-lipstick
   vertical-align:middle!important;
 }
 
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-peach,
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-peach .track-record__placement-main {
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-peach,
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-peach .track-record__placement-main {
   background: #fdd5b1 !important;
   color: #17191d !important;
 }
-body[data-simulator="big-mother"] .bm6-sheet td.bm6-return {
+body[data-simulator="haus-mother"] .bm6-sheet td.bm6-return {
   background: #b4d6b1 !important;
   color: #17191d !important;
   font-weight: 700 !important;
 }
-body[data-simulator="big-mother"] .runtime-content--lalaparuza .lalaparuza-view {
+body[data-simulator="haus-mother"] .runtime-content--lalaparuza .lalaparuza-view {
   width: min(760px,100%);
   margin-inline:auto;
 }
-body[data-simulator="big-mother"] .runtime-content--lalaparuza .lalaparuza-matchup {
+body[data-simulator="haus-mother"] .runtime-content--lalaparuza .lalaparuza-matchup {
   padding: 18px 0 30px;
 }
-body[data-simulator="big-mother"] .bm-twists-grid { margin-top: 14px; }
-body[data-simulator="big-mother"] .bm-twists-grid .setup-card h2 { margin-bottom: 14px; }
-body[data-simulator="big-mother"] .bm-twists-grid .setup-card .setup-card__label { display:block;margin-top:10px; }
+body[data-simulator="haus-mother"] .bm-twists-grid { margin-top: 14px; }
+body[data-simulator="haus-mother"] .bm-twists-grid .setup-card h2 { margin-bottom: 14px; }
+body[data-simulator="haus-mother"] .bm-twists-grid .setup-card .setup-card__label { display:block;margin-top:10px; }
 
-body[data-simulator="big-mother"] #bmSetupBlock .bm-main-settings{margin-bottom:14px;}
-body[data-simulator="big-mother"] #bmSetupBlock .bm-twist-section{margin:0;min-height:0;display:block;}
-body[data-simulator="big-mother"] .bm-twist-section>h2{margin-bottom:7px;}
-body[data-simulator="big-mother"] .bm-twist-list{display:grid;gap:0;}
-body[data-simulator="big-mother"] .bm-twist-item{padding:12px 0 13px;border-bottom:1px solid var(--line);min-width:0;}
-body[data-simulator="big-mother"] .bm-twist-item:last-child{border-bottom:0;padding-bottom:3px;}
-body[data-simulator="big-mother"] .bm-twist-label{width:100%;min-height:24px;}
-body[data-simulator="big-mother"] .bm-twist-description{margin:3px 0 0 27px;font-size:10px;line-height:1.55;color:var(--muted);font-weight:500;letter-spacing:0;}
-body[data-simulator="big-mother"] .bm-twist-options{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 0 27px;}
-body[data-simulator="big-mother"] .bm-twist-options[hidden]{display:none!important;}
-body[data-simulator="big-mother"] .bm-twist-options .select-wrap{max-width:275px;}
-body[data-simulator="big-mother"] .bm-twist-item:has(.bm-twist-label input:disabled) .bm-twist-description{opacity:.42;}
-@media(max-width:560px){body[data-simulator="big-mother"] .bm-twist-options .select-wrap{width:100%;max-width:100%;}}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-main-settings{margin-bottom:14px;}
+body[data-simulator="haus-mother"] #bmSetupBlock .bm-twist-section{margin:0;min-height:0;display:block;}
+body[data-simulator="haus-mother"] .bm-twist-section>h2{margin-bottom:7px;}
+body[data-simulator="haus-mother"] .bm-twist-list{display:grid;gap:0;}
+body[data-simulator="haus-mother"] .bm-twist-item{padding:12px 0 13px;border-bottom:1px solid var(--line);min-width:0;}
+body[data-simulator="haus-mother"] .bm-twist-item:last-child{border-bottom:0;padding-bottom:3px;}
+body[data-simulator="haus-mother"] .bm-twist-label{width:100%;min-height:24px;}
+body[data-simulator="haus-mother"] .bm-twist-description{margin:3px 0 0 27px;font-size:10px;line-height:1.55;color:var(--muted);font-weight:500;letter-spacing:0;}
+body[data-simulator="haus-mother"] .bm-twist-options{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:9px 0 0 27px;}
+body[data-simulator="haus-mother"] .bm-twist-options[hidden]{display:none!important;}
+body[data-simulator="haus-mother"] .bm-twist-options .select-wrap{max-width:275px;}
+body[data-simulator="haus-mother"] .bm-twist-item:has(.bm-twist-label input:disabled) .bm-twist-description{opacity:.42;}
+@media(max-width:560px){body[data-simulator="haus-mother"] .bm-twist-options .select-wrap{width:100%;max-width:100%;}}
 
-body[data-simulator="big-mother"] .bm-wiki-view{
+body[data-simulator="haus-mother"] .bm-wiki-view{
   width:100%;max-width:1320px;margin:0 auto;display:block;
 }
-body[data-simulator="big-mother"] .bm-wiki-wrap{
+body[data-simulator="haus-mother"] .bm-wiki-wrap{
   max-width:100%;width:100%;overflow-x:auto;overflow-y:hidden;
   border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;
   scrollbar-width:thin;-webkit-overflow-scrolling:touch;
 }
-body[data-simulator="big-mother"] .bm-wiki-table{
+body[data-simulator="haus-mother"] .bm-wiki-table{
   border-collapse:collapse;border-spacing:0;table-layout:auto;width:100%;
   font-family:Arial,Helvetica,sans-serif;background:#fff;color:#17191d;
   border:1px solid #bfc3cb;
 }
-body[data-simulator="big-mother"] .bm-wiki-table *,
-body[data-simulator="big-mother"] .bm-wiki-table{
+body[data-simulator="haus-mother"] .bm-wiki-table *,
+body[data-simulator="haus-mother"] .bm-wiki-table{
   font-family:Arial,Helvetica,sans-serif!important;letter-spacing:0!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-table th,
-body[data-simulator="big-mother"] .bm-wiki-table td{
+body[data-simulator="haus-mother"] .bm-wiki-table th,
+body[data-simulator="haus-mother"] .bm-wiki-table td{
   border:1px solid #c7cbd1!important;padding:5px 7px!important;
   background:#fff;color:#17191d;font-size:10px!important;line-height:1.25!important;
   vertical-align:middle!important;text-align:center!important;
   font-weight:400;white-space:normal;word-break:normal;
 }
-body[data-simulator="big-mother"] .bm-wiki-table thead th{
+body[data-simulator="haus-mother"] .bm-wiki-table thead th{
   background:#e9ebef!important;font-size:10px!important;font-weight:700!important;color:#17191d!important;
   text-transform:none!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-week,
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-rank{
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-week,
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-rank{
   width:47px;min-width:47px;background:#e9ebef!important;
   color:#17191d!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-empty{background:#bfc3cb!important;color:transparent!important;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-veto{background:#fffca9!important;min-width:98px;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-hoh{background:#e8d1f3!important;min-width:98px;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-noms{min-width:128px;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-evicted{background:#f5d3d6!important;min-width:100px;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-use{min-width:53px;font-size:14px!important;font-weight:700!important;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-use.is-yes{color:#1d9b46!important;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-use.is-no{color:#ca3948!important;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-vote{min-width:58px;font-weight:700!important;}
-body[data-simulator="big-mother"] .bm-wiki-table .bm-wiki-finish{min-width:113px;font-size:9px!important;}
-body[data-simulator="big-mother"] .bm-wiki-people{
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-empty{background:#bfc3cb!important;color:transparent!important;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-veto{background:#fffca9!important;min-width:98px;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-hoh{background:#e8d1f3!important;min-width:98px;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-noms{min-width:128px;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-evicted{background:#f5d3d6!important;min-width:100px;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-use{min-width:53px;font-size:14px!important;font-weight:700!important;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-use.is-yes{color:#1d9b46!important;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-use.is-no{color:#ca3948!important;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-vote{min-width:58px;font-weight:700!important;}
+body[data-simulator="haus-mother"] .bm-wiki-table .bm-wiki-finish{min-width:113px;font-size:9px!important;}
+body[data-simulator="haus-mother"] .bm-wiki-people{
   display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;
   gap:3px;width:100%;min-width:0;
 }
-body[data-simulator="big-mother"] .bm-wiki-person{
+body[data-simulator="haus-mother"] .bm-wiki-person{
   display:inline-flex;align-items:center;justify-content:flex-start;flex-direction:column;
   padding:3px 3px 4px;min-width:46px;max-width:100px;flex:0 1 auto;
   color:#17191d!important;background:#f0f0f3;
 }
-body[data-simulator="big-mother"] .bm-wiki-person.is-hoh{background:#a777d3;}
-body[data-simulator="big-mother"] .bm-wiki-person.is-nominee{background:#d6848a;}
-body[data-simulator="big-mother"] .bm-wiki-person.is-veto{background:#fff88a;}
-body[data-simulator="big-mother"] .bm-wiki-person.is-evicted{background:#dca1a6;}
-body[data-simulator="big-mother"] .bm-wiki-person.is-winner{background:#faec83;}
-body[data-simulator="big-mother"] .bm-wiki-person.is-return{background:#b6e5be;}
-body[data-simulator="big-mother"] .bm-wiki-face{
+body[data-simulator="haus-mother"] .bm-wiki-person.is-hoh{background:#a777d3;}
+body[data-simulator="haus-mother"] .bm-wiki-person.is-nominee{background:#d6848a;}
+body[data-simulator="haus-mother"] .bm-wiki-person.is-veto{background:#fff88a;}
+body[data-simulator="haus-mother"] .bm-wiki-person.is-evicted{background:#dca1a6;}
+body[data-simulator="haus-mother"] .bm-wiki-person.is-winner{background:#faec83;}
+body[data-simulator="haus-mother"] .bm-wiki-person.is-return{background:#b6e5be;}
+body[data-simulator="haus-mother"] .bm-wiki-face{
   display:block;width:43px;height:45px;object-fit:cover;object-position:center 25%;
   background:#d1d1d1;border:0;max-width:none;flex:0 0 auto;
 }
-body[data-simulator="big-mother"] .bm-wiki-person.is-evicted .bm-wiki-face{filter:grayscale(1);}
-body[data-simulator="big-mother"] .bm-wiki-person-name{
+body[data-simulator="haus-mother"] .bm-wiki-person.is-evicted .bm-wiki-face{filter:grayscale(1);}
+body[data-simulator="haus-mother"] .bm-wiki-person-name{
   display:block;width:100%;font-size:9px!important;font-weight:700!important;
   line-height:1.1;overflow-wrap:anywhere;color:#17191d!important;text-align:center;
 }
-body[data-simulator="big-mother"] .bm-wiki-person-caption{
+body[data-simulator="haus-mother"] .bm-wiki-person-caption{
   display:block;font-size:8px!important;font-weight:600;line-height:1.1;
 }
-body[data-simulator="big-mother"] .bm-wiki-house-name{display:block;margin-top:3px;font-size:9px;font-weight:700;}
-body[data-simulator="big-mother"] .bm-game-history{min-width:1040px;}
-body[data-simulator="big-mother"] .bm-game-history .bm-wiki-noms .bm-wiki-person{min-width:42px;}
-body[data-simulator="big-mother"] .bm-competition-history{min-width:850px;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category{min-width:126px;font-weight:700!important;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-hoh{background:#a777d3;color:#19111f;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-veto{background:#fff88a;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-buster{background:#22bec8;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-shield{background:#fdd5b1;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-smackdown{background:#e4abc7;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-revival{background:#b6e5be;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-category.is-final{background:#f5d46b;}
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-challenge-cell{width:190px;min-width:154px;}
-body[data-simulator="big-mother"] .bm-wiki-challenge{
+body[data-simulator="haus-mother"] .bm-wiki-house-name{display:block;margin-top:3px;font-size:9px;font-weight:700;}
+body[data-simulator="haus-mother"] .bm-game-history{min-width:1040px;}
+body[data-simulator="haus-mother"] .bm-game-history .bm-wiki-noms .bm-wiki-person{min-width:42px;}
+body[data-simulator="haus-mother"] .bm-competition-history{min-width:850px;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category{min-width:126px;font-weight:700!important;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-hoh{background:#a777d3;color:#19111f;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-veto{background:#fff88a;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-buster{background:#22bec8;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-shield{background:#fdd5b1;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-smackdown{background:#e4abc7;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-revival{background:#b6e5be;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-category.is-final{background:#f5d46b;}
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-challenge-cell{width:190px;min-width:154px;}
+body[data-simulator="haus-mother"] .bm-wiki-challenge{
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2px;
 }
-body[data-simulator="big-mother"] .bm-wiki-challenge strong{font-weight:700;font-size:10px;}
-body[data-simulator="big-mother"] .bm-wiki-challenge small{font-size:9px;color:#484b51;}
-body[data-simulator="big-mother"] .bm-wiki-challenge-image{
+body[data-simulator="haus-mother"] .bm-wiki-challenge strong{font-weight:700;font-size:10px;}
+body[data-simulator="haus-mother"] .bm-wiki-challenge small{font-size:9px;color:#484b51;}
+body[data-simulator="haus-mother"] .bm-wiki-challenge-image{
   display:block;width:110px;height:67px;object-fit:cover;margin-bottom:2px;
 }
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-description{
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-description{
   min-width:290px;max-width:500px;font-size:10px!important;line-height:1.42!important;
 }
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-winner{min-width:105px;}
-body[data-simulator="big-mother"] .bm-competition-wins{min-width:780px;}
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-wins-person{min-width:153px;}
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-number{min-width:64px;}
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-total{
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-winner{min-width:105px;}
+body[data-simulator="haus-mother"] .bm-competition-wins{min-width:780px;}
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-wins-person{min-width:153px;}
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-number{min-width:64px;}
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-total{
   min-width:70px;background:#dce8fc!important;font-weight:700!important;
 }
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-person{
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-person{
   background:transparent;flex-direction:row;gap:8px;min-width:136px;max-width:none;
 }
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-face{width:42px;height:42px;}
-body[data-simulator="big-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-person-name{text-align:left;}
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-face{width:42px;height:42px;}
+body[data-simulator="haus-mother"] .bm-competition-wins .bm-wiki-wins-person .bm-wiki-person-name{text-align:left;}
 @media(max-width:680px){
-  body[data-simulator="big-mother"] .bm-wiki-view{width:100%;}
-  body[data-simulator="big-mother"] .bm-wiki-table td,
-  body[data-simulator="big-mother"] .bm-wiki-table th{padding:4px 5px!important;}
+  body[data-simulator="haus-mother"] .bm-wiki-view{width:100%;}
+  body[data-simulator="haus-mother"] .bm-wiki-table td,
+  body[data-simulator="haus-mother"] .bm-wiki-table th{padding:4px 5px!important;}
 }
 
-body[data-simulator="big-mother"] .bm-wins-view{max-width:1220px;}
-body[data-simulator="big-mother"] .bm-wins-grid{
+body[data-simulator="haus-mother"] .bm-wins-view{max-width:1220px;}
+body[data-simulator="haus-mother"] .bm-wins-grid{
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
   gap:10px;width:100%;
 }
-body[data-simulator="big-mother"] .bm-wins-card{
+body[data-simulator="haus-mother"] .bm-wins-card{
   min-width:0;background:#fff;color:#17191d;border:1px solid #bfc3cb;
   font-family:Arial,Helvetica,sans-serif;
 }
-body[data-simulator="big-mother"] .bm-wins-card-head{
+body[data-simulator="haus-mother"] .bm-wins-card-head{
   padding:7px 10px;display:flex;align-items:center;justify-content:space-between;
   background:#e9ebef;border-bottom:1px solid #bfc3cb;
 }
-body[data-simulator="big-mother"] .bm-wins-card-head *{
+body[data-simulator="haus-mother"] .bm-wins-card-head *{
   font-family:Arial,Helvetica,sans-serif;color:#17191d;
   font-size:11px;line-height:1.2;
 }
-body[data-simulator="big-mother"] .bm-wins-rank{font-weight:700;}
-body[data-simulator="big-mother"] .bm-wins-total{font-weight:700;}
-body[data-simulator="big-mother"] .bm-wins-identity{
+body[data-simulator="haus-mother"] .bm-wins-rank{font-weight:700;}
+body[data-simulator="haus-mother"] .bm-wins-total{font-weight:700;}
+body[data-simulator="haus-mother"] .bm-wins-identity{
   display:flex;align-items:center;gap:10px;padding:10px;
   min-height:76px;text-align:left;
 }
-body[data-simulator="big-mother"] .bm-wins-avatar{
+body[data-simulator="haus-mother"] .bm-wins-avatar{
   display:block;flex:0 0 auto;width:55px;height:55px;object-fit:cover;object-position:center 25%;background:#ced2da;
 }
-body[data-simulator="big-mother"] .bm-wins-name{
+body[data-simulator="haus-mother"] .bm-wins-name{
   font-family:Arial,Helvetica,sans-serif;color:#17191d;
   font-size:13px;font-weight:700;line-height:1.25;overflow-wrap:anywhere;
 }
-body[data-simulator="big-mother"] .bm-wins-breakdown{
+body[data-simulator="haus-mother"] .bm-wins-breakdown{
   display:flex;align-content:flex-start;justify-content:center;flex-wrap:wrap;
   gap:6px;padding:9px;border-top:1px solid #bfc3cb;
   min-height:44px;
 }
-body[data-simulator="big-mother"] .bm-wins-type{
+body[data-simulator="haus-mother"] .bm-wins-type{
   padding:4px 6px;background:#edf0f4;border:1px solid #c7cbd1;
   font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:700;color:#17191d;
   line-height:1.2;
 }
-@media(max-width:900px){body[data-simulator="big-mother"] .bm-wins-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:560px){body[data-simulator="big-mother"] .bm-wins-grid{grid-template-columns:minmax(0,1fr);}}
+@media(max-width:900px){body[data-simulator="haus-mother"] .bm-wins-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:560px){body[data-simulator="haus-mother"] .bm-wins-grid{grid-template-columns:minmax(0,1fr);}}
 
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-hoh{background:#a777d3!important;}
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-nominee-cell{background:#d6848a!important;}
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-veto{background:#fff88a!important;}
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-evicted{background:#dca1a6!important;}
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-return-cell{background:#b6e5be!important;}
-body[data-simulator="big-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-winner-cell{background:#faec83!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-hoh{background:#a777d3!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-veto{background:#fff88a!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-buster{background:#22bec8!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-shield{background:#fdd5b1!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-smackdown{background:#e4abc7!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-revival{background:#b6e5be!important;}
-body[data-simulator="big-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-final{background:#f5d46b!important;}
-body[data-simulator="big-mother"] .bm-game-history .bm-wiki-person,
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-winner .bm-wiki-person{
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-hoh{background:#a777d3!important;}
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-nominee-cell{background:#d6848a!important;}
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-veto{background:#fff88a!important;}
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-evicted{background:#dca1a6!important;}
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-return-cell{background:#b6e5be!important;}
+body[data-simulator="haus-mother"] .bm-game-history td.bm-wiki-colored.bm-wiki-winner-cell{background:#faec83!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-hoh{background:#a777d3!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-veto{background:#fff88a!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-buster{background:#22bec8!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-shield{background:#fdd5b1!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-smackdown{background:#e4abc7!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-revival{background:#b6e5be!important;}
+body[data-simulator="haus-mother"] .bm-competition-history td.bm-wiki-winner.bm-wiki-colored.is-final{background:#f5d46b!important;}
+body[data-simulator="haus-mother"] .bm-game-history .bm-wiki-person,
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-winner .bm-wiki-person{
   background:transparent!important;padding:1px 2px!important;
   border:0!important;box-shadow:none!important;border-radius:0!important;
 }
-body[data-simulator="big-mother"] .bm-game-history .bm-wiki-people,
-body[data-simulator="big-mother"] .bm-competition-history .bm-wiki-winner .bm-wiki-people{
+body[data-simulator="haus-mother"] .bm-game-history .bm-wiki-people,
+body[data-simulator="haus-mother"] .bm-competition-history .bm-wiki-winner .bm-wiki-people{
   gap:3px;align-items:center;
 }
-body[data-simulator="big-mother"] .bm-wiki-result-lines>span{display:block;white-space:nowrap;line-height:1.45;}
+body[data-simulator="haus-mother"] .bm-wiki-result-lines>span{display:block;white-space:nowrap;line-height:1.45;}
 
 body[data-simulator="dragula"] #simulationModeCard .setup-option {
   border-color: rgba(178, 28, 60, .45);
@@ -22584,4 +22584,87 @@ body[data-simulator="dragula"] #simulationModeCard .setup-option.is-selected {
   border-color: #ce274a;
   background: #a51b39;
   color: #fff;
+}
+
+
+/* 2026-11-17: Two-direction touch scrolling for mobile track records.
+   Earlier desktop rules force overflow-y:hidden and hide scrollbars. Limit the
+   phone-height viewport so long tables can actually pan in BOTH directions. */
+@media (max-width: 760px) {
+  .runtime-content--track-record .track-record-scroll,
+  .runtime-content--statistics-track-record .track-record-scroll,
+  .track-builder-scroll,
+  .runtime-stage.is-statistics .statistics-table-wrap,
+  body[data-simulator="haus-mother"] .bm6-scroll,
+  body[data-simulator="haus-mother"] .bm-wiki-wrap {
+    box-sizing: border-box !important;
+    max-width: min(100%, calc(100vw - 20px)) !important;
+    max-height: 65vh !important;
+    max-height: 65dvh !important;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    touch-action: pan-x pan-y pinch-zoom !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto;
+    scrollbar-width: thin !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll,
+  .runtime-content--statistics-track-record .track-record-scroll,
+  .track-builder-scroll {
+    width: fit-content !important;
+  }
+
+  .runtime-content--track-record .track-record-scroll::-webkit-scrollbar,
+  .runtime-content--statistics-track-record .track-record-scroll::-webkit-scrollbar {
+    display: block !important;
+    width: 6px !important;
+    height: 6px !important;
+  }
+}
+
+/* Haus Mother rename / universal runtime reset button */
+.runtime-nav__inner {
+  grid-template-columns: 112px minmax(0, 280px) minmax(0, 1fr);
+}
+.runtime-nav__left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.runtime-reset-btn {
+  appearance: none;
+  height: 34px;
+  min-width: 69px;
+  padding: 0 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  background: rgba(255,255,255,.025);
+  color: #b9b7bc;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  cursor: pointer;
+  transition: border-color .16s ease, background .16s ease, color .16s ease;
+}
+.runtime-reset-btn:hover {
+  border-color: rgba(255,255,255,.2);
+  background: rgba(255,255,255,.055);
+  color: #fff;
+}
+.runtime-reset-btn:disabled { opacity: .34; cursor: default; }
+@media (max-width: 760px) {
+  .runtime-nav__inner {
+    grid-template-columns: 99px minmax(0, 1fr) auto;
+  }
+  .runtime-nav__left { gap: 5px; }
+  .runtime-reset-btn { min-width: 62px; height: 32px; padding: 0 6px; font-size: 8px; }
+}
+@media (max-width: 420px) {
+  .runtime-nav__inner { grid-template-columns: 94px minmax(0, 1fr) auto; }
+  .runtime-nav__left { gap: 4px; }
+  .runtime-reset-btn { min-width: 58px; padding: 0 4px; font-size: 7.5px; }
 }
