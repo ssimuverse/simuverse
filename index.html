@@ -1,443 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIMUVERSE</title>  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#120c09">
+  <meta name="description" content="SIMUVERSE; Explore The Crown, The Island, and The Top Model simulators.">
+  <title>SIMUVERSE</title>
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="soft-bg" aria-hidden="true">
-    <div class="blur-spot spot-one"></div>
-    <div class="blur-spot spot-two"></div>
-    <div class="blur-spot spot-three"></div>
-    <div class="grain"></div>
-  </div>
-
-  <div class="page-overlay" id="pageOverlay"></div>
-
-  <section
-    class="community-modal"
-    id="communitySeasonsModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="communitySeasonsTitle"
-    aria-hidden="true"
-    style="--accent-rgb: 214, 42, 119; --accent-deep-rgb: 122, 12, 69; --light-a-dur: 7s; --light-b-dur: 8.6s; --light-a-delay: 0s; --light-b-delay: -1s;"
-  >
-    <div class="card-bg" aria-hidden="true"></div>
-    <div class="box-lights" aria-hidden="true">
-      <span class="box-light light-one"></span>
-      <span class="box-light light-two"></span>
-      <span class="box-light light-three"></span>
-    </div>
-
-    <button class="close-btn community-modal-close" type="button" aria-label="Close Community Seasons">×</button>
-
-    <div class="community-modal-content">
-      <div class="community-modal-copy">
-        <h2 id="communitySeasonsTitle">THE CROWN</h2>
-      </div>
-
-      <div class="community-season-panel">
-        <div class="community-season-list-head">AVAILABLE SEASONS</div>
-
-        <div class="community-season-list">
-          <a class="community-season-item" href="drag_race/sdr-01.html">
-            <span class="community-season-number">01</span>
-            <span class="community-season-details">
-              <strong>Simuverse's Drag Race: Season 01</strong>
-            </span>
-            <span class="community-season-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="community-season-item" href="drag_race/sdr-02.html">
-            <span class="community-season-number">02</span>
-            <span class="community-season-details">
-              <strong>Simuverse's Drag Race: Season 02</strong>
-            </span>
-            <span class="community-season-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="community-season-item" href="drag_race/sdr-03.html">
-            <span class="community-season-number">03</span>
-            <span class="community-season-details">
-              <strong>Simuverse's Drag Race: Season 03</strong>
-            </span>
-            <span class="community-season-arrow" aria-hidden="true">→</span>
-          </a>
-          <a class="community-season-item" href="drag_race/sdr-all-stars-01.html">
-            <span class="community-season-number">AS01</span>
-            <span class="community-season-details">
-              <strong>Simuverse's Drag Race: All Stars 01</strong>
-            </span>
-            <span class="community-season-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <main class="main-page">
-    <header class="main-header">
-      <div class="brand-row" aria-label="SIMUVERSE home">
-        <span class="brand-mark">S</span>
+  <div class="background-glow" aria-hidden="true"></div>
+  <div class="site-shell" id="top">
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="SIMUVERSE home">
+        <span class="brand-symbol" aria-hidden="true">S</span>
         <span class="brand-name">SIMUVERSE</span>
-      </div>
-
-      <div class="hero-copy">
-        <h1>SIMUVERSE</h1>
-        <p class="main-subtitle">Choose The Simulator</p>
-
-        <nav class="main-actions" aria-label="SIMUVERSE links">
-          <a class="main-action-btn" href="https://discord.gg/U6E6BJ2hsV">DISCORD</a>
-          <button
-            class="main-action-btn"
-            id="communitySeasonsBtn"
-            type="button"
-            aria-haspopup="dialog"
-            aria-controls="communitySeasonsModal"
-            aria-expanded="false"
-          >COMMUNITY SEASONS</button>
-          <a class="main-action-btn" href="https://forms.gle/TvVrg3ENdn3gE9Cg6">SUGGESTIONS</a>
-        </nav>
-      </div>
+      </a>
+      <nav class="nav-actions" aria-label="External links">
+        <a class="pill pill--outline" href="https://discord.gg/U6E6BJ2hsV" target="_blank" rel="noopener noreferrer">DISCORD <span aria-hidden="true">↗</span></a>
+        <a class="pill pill--lime" href="https://forms.gle/TvVrg3ENdn3gE9Cg6" target="_blank" rel="noopener noreferrer">SUGGESTIONS <span aria-hidden="true">↗</span></a>
+      </nav>
     </header>
 
-    <section class="shows-grid" id="showsGrid" aria-label="Simulator list"></section>
-  </main>
+    <main>
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <h1 id="heroTitle">SIMU<span>VERSE</span><i>.</i></h1>
+          <p>Choose The Simulator</p>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <span class="orbit orbit--one"></span>
+          <span class="orbit orbit--two"></span>
+          <span class="orbit orbit--three"></span>
+          <span class="orbit-dot orbit-dot--one"></span>
+          <span class="orbit-dot orbit-dot--two"></span>
+          <span class="orbit-center">✳</span>
+          <span class="orbit-star orbit-star--one">✦</span>
+          <span class="orbit-star orbit-star--two">✧</span>
+        </div>
+      </section>
+
+      <section class="simulators" aria-label="Choose a simulator">
+        <button class="sim-card sim-card--crown" type="button" data-simulator="crown" aria-haspopup="dialog" aria-controls="simulatorDialog" aria-label="Explore The Crown">
+          <span class="card-pattern" aria-hidden="true"><span class="pattern-ring"></span><span class="pattern-sparkle">✦</span><span class="pattern-dot"></span></span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+          <span class="card-content">
+            <span class="card-title">THE CROWN</span>
+            <span class="card-description">All your drag simulators in one place.</span>
+            <span class="card-action">EXPLORE <span aria-hidden="true">↗</span></span>
+          </span>
+        </button>
+
+        <button class="sim-card sim-card--island" type="button" data-simulator="island" aria-haspopup="dialog" aria-controls="simulatorDialog" aria-label="Explore The Island">
+          <span class="card-pattern" aria-hidden="true"><span class="pattern-ring"></span><span class="pattern-sparkle">✳</span><span class="pattern-dot"></span></span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+          <span class="card-content">
+            <span class="card-title">THE ISLAND</span>
+            <span class="card-description">Challenges, alliances, and chaos.</span>
+            <span class="card-action">EXPLORE <span aria-hidden="true">↗</span></span>
+          </span>
+        </button>
+
+        <button class="sim-card sim-card--model" type="button" data-simulator="model" aria-haspopup="dialog" aria-controls="simulatorDialog" aria-label="Explore The Top Model">
+          <span class="card-pattern" aria-hidden="true"><span class="pattern-ring"></span><span class="pattern-sparkle">✧</span><span class="pattern-dot"></span></span>
+          <span class="card-arrow" aria-hidden="true">↗</span>
+          <span class="card-content">
+            <span class="card-title">THE TOP MODEL</span>
+            <span class="card-description">Photoshoots, runways, and fierce judging.</span>
+            <span class="card-action">EXPLORE <span aria-hidden="true">↗</span></span>
+          </span>
+        </button>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="sim-dialog" id="simulatorDialog" aria-labelledby="dialogTitle" aria-describedby="dialogDescription">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="Close simulator details">×</button>
+    <div class="dialog-layout">
+      <div class="dialog-art" aria-hidden="true">
+        <span class="dialog-ring"></span>
+        <span class="dialog-art-sparkle">✦</span>
+        <img id="dialogPreview" class="dialog-preview" alt="" hidden>
+      </div>
+      <div class="dialog-copy">
+        <h2 id="dialogTitle">THE CROWN</h2>
+        <p id="dialogDescription"></p>
+        <a id="dialogStart" class="pill pill--lime dialog-start" href="drag_race/index.html">START SIMULATOR <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </dialog>
 
   <script>
-    const shows = [
-      {
-        name: "THE CROWN",
-        slug: "drag_race",
-        folder: "drag_race",
-        accent: "214, 42, 119",
-        accentDeep: "122, 12, 69",
-        titleColor: "#ff1493",
-        description:
-          "Queens enter the werkroom ready to serve looks, shade, comedy, and charisma as they battle through challenges, runways, and lip-syncs."
-      },
-      {
-        name: "THE MONSTERS",
-        slug: "dragula",
-        folder: "dragula",
-        accent: "132, 28, 43",
-        accentDeep: "76, 10, 21",
-        titleColor: "#9b1024",
-        description:
-          "Drag monsters compete in horror, filth, glamour, and extreme performance to prove they are the ultimate alternative drag icon."
-      },
-      {
-        name: "THE ISLAND",
-        slug: "tdi",
-        folder: "tdi",
-        accent: "115, 166, 73",
-        accentDeep: "43, 82, 48",
-        titleColor: "#b9d95c",
-        description:
-          "Campers arrive on a chaotic island to face ridiculous challenges, messy alliances, rivalries, and eliminations as they fight to be the last contestant standing."
-      },
-      {
-        name: "THE TOP MODEL",
-        slug: "top_model",
-        folder: "top_model",
-        accent: "240, 75, 98",
-        accentDeep: "139, 35, 52",
-        titleColor: "#F04B62",
-        description:
-          "Aspiring models face high-fashion photoshoots, runway challenges, makeovers, castings, and judging as they build their portfolios and compete to become the next top model."
-      }
-    ];
-
-    const showsGrid = document.getElementById("showsGrid");
-    const pageOverlay = document.getElementById("pageOverlay");
-    const communitySeasonsBtn = document.getElementById("communitySeasonsBtn");
-    const communitySeasonsModal = document.getElementById("communitySeasonsModal");
-    const communityModalClose = communitySeasonsModal.querySelector(".community-modal-close");
-
-    function buildCard(show, index) {
-      const aDur = 7 + (index % 4) * 0.7;
-      const bDur = 8.6 + (index % 5) * 0.55;
-      const aDelay = -index * 0.55;
-      const bDelay = -index * 0.8;
-
-      return `
-        <article
-          class="show-card"
-          tabindex="0"
-          role="button"
-          aria-label="Open ${show.name}"
-          aria-expanded="false"
-          data-index="${index}"
-          style="
-            --accent-rgb: ${show.accent};
-            --accent-deep-rgb: ${show.accentDeep};
-            --title-color: ${show.titleColor};
-            --light-a-dur: ${aDur}s;
-            --light-b-dur: ${bDur}s;
-            --light-a-delay: ${aDelay}s;
-            --light-b-delay: ${bDelay}s;
-          "
-        >
-          <div class="card-bg" aria-hidden="true"></div>
-          <div class="box-lights" aria-hidden="true">
-            <span class="box-light light-one"></span>
-            <span class="box-light light-two"></span>
-            <span class="box-light light-three"></span>
-          </div>
-
-          <div class="compact-face">
-            <div class="title-wrap">
-              <span class="show-title">${show.name}</span>
-            </div>
-
-            <span class="open-dot" aria-hidden="true">+</span>
-          </div>
-
-          <div class="expanded-layer" aria-hidden="true">
-            <button class="close-btn" type="button" aria-label="Close ${show.name}">×</button>
-
-            <div class="expanded-copy">
-              <h2>${show.name}</h2>
-              <p>${show.description}</p>
-              <a class="start-btn" href="${show.folder}/index.html" tabindex="-1">Start</a>
-            </div>
-
-            <div class="preview-panel" aria-hidden="true">
-              <img
-                class="show-preview"
-                src="logos/${show.slug}_2.png"
-                alt=""
-                loading="lazy"
-              />
-              <div class="preview-fade"></div>
-            </div>
-          </div>
-        </article>
-      `;
-    }
-
-    showsGrid.innerHTML = shows.map(buildCard).join("");
-
-    const cards = [...document.querySelectorAll(".show-card")];
-    let activeCard = null;
-    let activePlaceholder = null;
-    let isAnimating = false;
-    let communityModalOpen = false;
-
-    function getPopupRect() {
-      const isSmall = window.innerWidth <= 680;
-      const marginX = isSmall ? 18 : 42;
-      const marginY = isSmall ? 34 : 72;
-
-      const width = Math.min(isSmall ? 560 : 920, window.innerWidth - marginX * 2);
-      const height = Math.min(isSmall ? 560 : 440, window.innerHeight - marginY * 2);
-
-      return {
-        left: (window.innerWidth - width) / 2,
-        top: (window.innerHeight - height) / 2,
-        width,
-        height
+    (() => {
+      const simulators = {
+        crown: {
+          title: 'THE CROWN', route: 'drag_race/index.html', image: 'logos/drag_race_2.png',
+          description: 'All your drag simulators in one place; from Drag Race and All Stars to Call Me Mother, Big Mother, and more. Create your cast, shape the rules, and play out every twist.'
+        },
+        island: {
+          title: 'THE ISLAND', route: 'tdi/index.html', image: 'logos/tdi_2.png',
+          description: 'Campers battle through chaotic challenges, unlikely alliances, rivalries, and unexpected eliminations. See who makes it all the way to the end.'
+        },
+        model: {
+          title: 'THE TOP MODEL', route: 'top_model/index.html', image: 'logos/top_model_2.png',
+          description: 'Aspiring models compete in high-fashion photoshoots, runway challenges, makeovers, and judging to become the next top model.'
+        }
       };
-    }
 
-    function setFloatingRect(card, rect) {
-      card.style.left = `${rect.left}px`;
-      card.style.top = `${rect.top}px`;
-      card.style.width = `${rect.width}px`;
-      card.style.height = `${rect.height}px`;
-    }
+      const dialog = document.getElementById('simulatorDialog');
+      const dialogTitle = document.getElementById('dialogTitle');
+      const dialogDescription = document.getElementById('dialogDescription');
+      const dialogPreview = document.getElementById('dialogPreview');
+      const dialogStart = document.getElementById('dialogStart');
+      let opener = null;
+      let previewRequest = 0;
 
-    function clearFloatingStyles(card) {
-      ["position", "left", "top", "width", "height", "margin", "z-index", "transform"].forEach(prop => {
-        card.style.removeProperty(prop);
-      });
-    }
+      document.querySelectorAll('.sim-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const simulator = simulators[card.dataset.simulator];
+          opener = card;
+          dialog.dataset.simulator = card.dataset.simulator;
+          dialogTitle.textContent = simulator.title;
+          dialogDescription.textContent = simulator.description;
+          dialogStart.href = simulator.route;
 
-    function setExpandedState(card, active) {
-      const layer = card.querySelector(".expanded-layer");
-      const start = card.querySelector(".start-btn");
-      const close = card.querySelector(".close-btn");
+          const request = ++previewRequest;
+          dialogPreview.hidden = true;
+          dialogPreview.removeAttribute('src');
+          const probe = new Image();
+          probe.onload = () => {
+            if (request !== previewRequest) return;
+            dialogPreview.src = simulator.image;
+            dialogPreview.hidden = false;
+          };
+          probe.onerror = () => { if (request === previewRequest) dialogPreview.hidden = true; };
+          probe.src = simulator.image;
 
-      card.setAttribute("aria-expanded", active ? "true" : "false");
-      layer.setAttribute("aria-hidden", active ? "false" : "true");
-      start.tabIndex = active ? 0 : -1;
-      close.tabIndex = active ? 0 : -1;
-    }
-
-    function openCard(card) {
-      if (isAnimating || activeCard) return;
-
-      isAnimating = true;
-      activeCard = card;
-
-      const cardRect = card.getBoundingClientRect();
-
-      activePlaceholder = document.createElement("div");
-      activePlaceholder.className = "show-placeholder";
-      activePlaceholder.style.height = `${cardRect.height}px`;
-
-      card.parentNode.insertBefore(activePlaceholder, card);
-
-      card.classList.add("is-transitioning");
-      card.style.position = "fixed";
-      card.style.margin = "0";
-      card.style.zIndex = "70";
-      card.style.transform = "none";
-
-      setFloatingRect(card, {
-        left: cardRect.left,
-        top: cardRect.top,
-        width: cardRect.width,
-        height: cardRect.height
+          dialog.showModal();
+        });
       });
 
-      card.offsetHeight;
-
-      pageOverlay.classList.add("is-active");
-      card.classList.add("is-active");
-      setExpandedState(card, true);
-
-      requestAnimationFrame(() => {
-        setFloatingRect(card, getPopupRect());
+      document.getElementById('dialogClose').addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', event => {
+        if (event.target === dialog) dialog.close();
       });
-
-      window.setTimeout(() => {
-        isAnimating = false;
-      }, 480);
-    }
-
-    function finishClose(card, placeholder) {
-      card.classList.remove("is-transitioning");
-      clearFloatingStyles(card);
-      setExpandedState(card, false);
-
-      if (placeholder && placeholder.parentNode) {
-        placeholder.parentNode.removeChild(placeholder);
-      }
-
-      activeCard = null;
-      activePlaceholder = null;
-      isAnimating = false;
-    }
-
-    function closeCard(immediate = false) {
-      if (!activeCard) return;
-
-      const card = activeCard;
-      const placeholder = activePlaceholder;
-      const targetRect = placeholder.getBoundingClientRect();
-
-      isAnimating = true;
-      pageOverlay.classList.remove("is-active");
-      card.classList.remove("is-active");
-      setExpandedState(card, false);
-
-      if (immediate) {
-        finishClose(card, placeholder);
-        return;
-      }
-
-      setFloatingRect(card, {
-        left: targetRect.left,
-        top: targetRect.top,
-        width: targetRect.width,
-        height: targetRect.height
-      });
-
-      window.setTimeout(() => {
-        finishClose(card, placeholder);
-      }, 450);
-    }
-
-    function openCommunityModal() {
-      if (isAnimating || activeCard || communityModalOpen) return;
-
-      communityModalOpen = true;
-      communitySeasonsBtn.setAttribute("aria-expanded", "true");
-      communitySeasonsModal.setAttribute("aria-hidden", "false");
-      pageOverlay.classList.add("is-active");
-      communitySeasonsModal.classList.add("is-active");
-      document.body.classList.add("modal-open");
-
-      window.setTimeout(() => communityModalClose.focus(), 180);
-    }
-
-    function closeCommunityModal() {
-      if (!communityModalOpen) return;
-
-      communityModalOpen = false;
-      communitySeasonsBtn.setAttribute("aria-expanded", "false");
-      communitySeasonsModal.setAttribute("aria-hidden", "true");
-      pageOverlay.classList.remove("is-active");
-      communitySeasonsModal.classList.remove("is-active");
-      document.body.classList.remove("modal-open");
-      communitySeasonsBtn.focus();
-    }
-
-    communitySeasonsBtn.addEventListener("click", openCommunityModal);
-    communityModalClose.addEventListener("click", closeCommunityModal);
-
-    cards.forEach(card => {
-      setExpandedState(card, false);
-
-      card.addEventListener("click", event => {
-        const start = event.target.closest(".start-btn");
-        const close = event.target.closest(".close-btn");
-
-        if (start) {
-          if (!card.classList.contains("is-active")) event.preventDefault();
-          return;
-        }
-
-        if (close) {
-          event.stopPropagation();
-          closeCard();
-          return;
-        }
-
-        if (!card.classList.contains("is-active")) {
-          openCard(card);
-        }
-      });
-
-      card.addEventListener("keydown", event => {
-        if ((event.key === "Enter" || event.key === " ") && !card.classList.contains("is-active")) {
-          event.preventDefault();
-          openCard(card);
-        }
-
-        if (event.key === "Escape") {
-          closeCard();
-        }
-      });
-    });
-
-    pageOverlay.addEventListener("click", () => {
-      if (communityModalOpen) {
-        closeCommunityModal();
-        return;
-      }
-
-      closeCard();
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key !== "Escape") return;
-
-      if (communityModalOpen) {
-        closeCommunityModal();
-        return;
-      }
-
-      closeCard();
-    });
-
-    window.addEventListener("resize", () => {
-      if (!activeCard || isAnimating) return;
-      setFloatingRect(activeCard, getPopupRect());
-    });
+      dialog.addEventListener('close', () => { previewRequest++; opener?.focus(); });
+    })();
   </script>
 </body>
 </html>
