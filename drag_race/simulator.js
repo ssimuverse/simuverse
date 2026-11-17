@@ -7962,6 +7962,7 @@
   let entranceTimer = null;
   let runtimeTransitionTimer = null;
   let rupaulModalContext = null;
+  let skipDirectorPopupOnce = false;
   let introPersistTimer = 0;
   let teamDraftTimers = [];
   let contestantsVoteRevealTimer = null;
@@ -8942,7 +8943,7 @@
       episode.lalaparuzaWinnerId = Object.entries(placements).find(([, value]) => value === "WIN")?.[0] || null;
       episode.lalaparuzaBottomIds = Object.entries(placements).filter(([, value]) => value === "BTM").map(([id]) => id);
     }
-    if (TOP2_PREMIERE_MODES.has(episode.premiereMode)) {
+    if (TOP2_PREMIERE_MODES.has(episode.premiereMode) || episode.premiereMode === "uk3") {
       episode.premiereTop2Ids = Object.entries(placements).filter(([, value]) => value === "TOP2").map(([id]) => id);
     }
     syncRuPaulSpecialFormatPlacementState(episode, participants, seasonState);
@@ -30155,7 +30156,7 @@
         if (episode.premiereMode === "par") forcePremiereDoubleShantay(episode.lipSync);
       }
 
-      const splitRateAQueenLipSync = episode.premiereMode === "rateaqueen17" && episode.premiereGroup === 2 && episode.topLipSync?.occurs;
+      const splitRateAQueenLipSync = (episode.premiereMode === "rateaqueen17" && episode.premiereGroup === 2 || episode.premiereMode === "uk3") && episode.topLipSync?.occurs;
       const rupaulSongChoice = rupaulPlayerDecision(rupaulOverrides, episode.number, "lipSyncSong");
       const rupaulOutcomeChoice = rupaulPlayerDecision(rupaulOverrides, episode.number, "lipSyncOutcome");
       const rupaulPrimaryLipSync = episode.topLipSync?.occurs ? episode.topLipSync : episode.lipSync;
@@ -53022,7 +53023,15 @@
   }
 
   function maybeOpenDirectorDecisionForCurrentSection() {
+    if (skipDirectorPopupOnce) { skipDirectorPopupOnce = false; return false; }
     return bouletsModeEnabled() ? maybeOpenBouletsDecisionForCurrentSection() : maybeOpenRuPaulDecisionForCurrentSection();
+  }
+
+  function exitRuPaulModalToPreviousSection() {
+    if (!rupaulModalContext) return;
+    closeRuPaulModal();
+    skipDirectorPopupOnce = true;
+    moveRuntimeSection(-1);
   }
 
   function closeRuPaulModal() {
@@ -53401,6 +53410,7 @@
     if (kind === "floppers") return ["SAFE", "LOW", "BTM2"];
     if (kind === "bottom6") return ["WIN", "HIGH", "SAFE", "BTM6"];
     if (kind === "lalaparuza") return ["WIN", "BTM"];
+    if (episode?.premiereMode === "uk3") return ["TOP2", "HIGH", "SAFE", "LOW", "BTM2"];
     if (TOP2_PREMIERE_MODES.has(episode?.premiereMode)) return ["TOP2", "HIGH", "SAFE", "LOW"];
     return ["WIN", "HIGH", "SAFE", "LOW", "BTM2"];
   }
@@ -53514,9 +53524,11 @@
         if (custom && custom.valid === false) return { valid: false, invalid: Array.isArray(custom.invalid) ? custom.invalid : [] };
       }
       if (options.relaxedValidation) return { valid: true, invalid: [] };
+      if ((episode.premiereMode === "uk3" || episode.allStarsLegacy) && categories.includes("TOP2") && Number(c.TOP2 || 0) > 2) return { valid: false, invalid: ["TOP2"] };
+      if (episode.premiereMode === "uk3" && categories.includes("BTM2") && Number(c.BTM2 || 0) > 2) return { valid: false, invalid: ["BTM2"] };
       const kind = episode?.specialJudgingEvent?.kind || "";
-      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || TOP2_PREMIERE_MODES.has(episode?.premiereMode)) && categories.includes("TOP2") && Number(c.TOP2 || 0) < 2) return { valid: false, invalid: ["TOP2"] };
-      if ((kind === "floppers" || kind === "") && categories.includes("BTM2") && Number(c.BTM2 || 0) < 2) return { valid: false, invalid: ["BTM2"] };
+      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || (TOP2_PREMIERE_MODES.has(episode?.premiereMode) || episode?.premiereMode === "uk3")) && categories.includes("TOP2") && Number(c.TOP2 || 0) < 2) return { valid: false, invalid: ["TOP2"] };
+      if ((kind === "floppers" || kind === "" || episode.premiereMode === "uk3") && categories.includes("BTM2") && Number(c.BTM2 || 0) < 2) return { valid: false, invalid: ["BTM2"] };
       if ((episode.allStarsLegacy || episode.allStarsAssassin) && categories.includes("BTM") && Number(c.BTM || 0) < 1) return { valid: false, invalid: ["BTM"] };
       if (episode.allStarsAssassin && categories.includes("WIN") && Number(c.WIN || 0) < 1) return { valid: false, invalid: ["WIN"] };
       if ((episode.goldenBeaverFormat || episode.goldenDamFormat || episode.goldenBaguetteFormat || episode.heartSuccessorFormat || episode.luckyCoinFormat) && categories.includes("BTM3") && Number(c.BTM3 || 0) < 3) return { valid: false, invalid: ["BTM3"] };
@@ -53671,8 +53683,8 @@
         return map;
       }, {});
       const kind = episode?.specialJudgingEvent?.kind || "";
-      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || TOP2_PREMIERE_MODES.has(episode?.premiereMode)) && categories.includes("TOP2") && Number(counts.TOP2 || 0) < 2) return { valid: false, invalid: ["TOP2"] };
-      if ((kind === "floppers" || kind === "") && categories.includes("BTM2") && Number(counts.BTM2 || 0) < 2) return { valid: false, invalid: ["BTM2"] };
+      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || (TOP2_PREMIERE_MODES.has(episode?.premiereMode) || episode?.premiereMode === "uk3")) && categories.includes("TOP2") && Number(counts.TOP2 || 0) < 2) return { valid: false, invalid: ["TOP2"] };
+      if ((kind === "floppers" || kind === "" || episode.premiereMode === "uk3") && categories.includes("BTM2") && Number(counts.BTM2 || 0) < 2) return { valid: false, invalid: ["BTM2"] };
       if ((episode.allStarsLegacy || episode.allStarsAssassin) && categories.includes("BTM") && Number(counts.BTM || 0) < 1) return { valid: false, invalid: ["BTM"] };
       if (episode.allStarsAssassin && categories.includes("WIN") && Number(counts.WIN || 0) < 1) return { valid: false, invalid: ["WIN"] };
       return { valid: true, invalid: [] };
@@ -53885,6 +53897,7 @@
     const bottom = global.filter((value) => /^BTM/.test(value));
     const teamJudged = Boolean(episode?.maxiChallenge?.judgedAsTeams);
     if (tier === "WINNING") {
+      if (teamJudged && global.includes("TOP2")) return ["TOP2", "HIGH TEAM"];
       if (teamJudged) return ["WIN", "HIGH TEAM"];
       const top = global.filter((value) => ["WIN", "TOP2", "HIGH"].includes(value));
       if (global.includes("SAFE")) top.push("SAFE");
@@ -53893,7 +53906,7 @@
     if (tier === "LOSING") {
       return [...new Set([...(global.includes("SAFE") ? ["SAFE"] : []), ...(global.includes("LOW") ? ["LOW"] : []), ...bottom])];
     }
-    return [...new Set([...(global.includes("HIGH") && !teamJudged ? ["HIGH"] : []), ...(global.includes("HIGH") && teamJudged ? ["HIGH TEAM"] : []), ...(global.includes("SAFE") ? ["SAFE"] : []), ...(global.includes("LOW") ? ["LOW"] : [])])];
+    return [...new Set([...(global.includes("HIGH") && !teamJudged ? ["HIGH"] : []), ...(global.includes("HIGH") && teamJudged ? ["HIGH TEAM"] : []), ...(global.includes("SAFE") ? ["SAFE"] : []), ...(global.includes("LOW") && episode.specialJudgingEvent?.kind !== "slayers" ? ["LOW"] : [])])];
   }
 
   function rupaulAutomaticGroupTier(episode, group, contestants) {
@@ -53949,11 +53962,11 @@
       }
       const kind = episode?.specialJudgingEvent?.kind || "";
       const specs = [];
-      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || TOP2_PREMIERE_MODES.has(episode?.premiereMode)) && categories.includes("TOP2")) {
-        specs.push({ category: "TOP2", min: 2, tier: "WINNING" });
+      if ((kind === "slayers" || episode.allWinners || episode.allStars9 || episode.allStarsLegacy || (episode.tournamentFormat && episode.tournamentPhase === "groups") || (TOP2_PREMIERE_MODES.has(episode?.premiereMode) || episode?.premiereMode === "uk3")) && categories.includes("TOP2")) {
+        specs.push({ category: "TOP2", min: 2, exact: episode.allStarsLegacy || episode.premiereMode === "uk3", tier: "WINNING" });
       }
       if (episode.allStarsAssassin && categories.includes("WIN")) specs.push({ category: "WIN", min: 1, tier: "WINNING" });
-      if ((kind === "floppers" || kind === "") && categories.includes("BTM2")) specs.push({ category: "BTM2", min: 2, tier: "LOSING" });
+      if ((kind === "floppers" || kind === "" || episode.premiereMode === "uk3") && categories.includes("BTM2")) specs.push({ category: "BTM2", min: 2, tier: "LOSING" });
       if ((episode.allStarsLegacy || episode.allStarsAssassin) && categories.includes("BTM")) specs.push({ category: "BTM", min: 2, tier: "LOSING" });
       if ((episode.goldenBeaverFormat || episode.goldenDamFormat || episode.goldenBaguetteFormat || episode.heartSuccessorFormat || episode.luckyCoinFormat) && categories.includes("BTM3")) {
         specs.push({ category: "BTM3", min: 3, tier: "LOSING" });
@@ -54012,7 +54025,7 @@
       els.rupaulChoiceContent.replaceChildren();
       const wrap = document.createElement("div");
       wrap.className = "rupaul-team-tier-board";
-      const tiers = ["WINNING", "SAFE", "LOSING"];
+      const tiers = !isBoulets && episode.specialJudgingEvent?.kind === "slayers" ? ["WINNING", "SAFE"] : ["WINNING", "SAFE", "LOSING"];
       let selected = "";
       let dragging = "";
       const render = () => {
@@ -54175,8 +54188,9 @@
         const available = memberCategories(tier);
         const automatic = {};
         if (teamJudged && tier === "WINNING") {
-          const chosenWinner = pickRandom(members)?.id;
-          members.forEach((queen) => { automatic[queen.id] = queen.id === chosenWinner ? "WIN" : "HIGH TEAM"; });
+          const topCategory = available.includes("TOP2") ? "TOP2" : "WIN";
+          const chosenIds = shuffled(members).slice(0, topCategory === "TOP2" ? 2 : 1).map((queen) => queen.id);
+          members.forEach((queen) => { automatic[queen.id] = chosenIds.includes(queen.id) ? topCategory : "HIGH TEAM"; });
         } else {
           shuffled(members).forEach((queen) => {
             const pool = available.includes("SAFE") ? ["SAFE", "SAFE", ...available] : available;
@@ -54195,6 +54209,15 @@
           else if (/^BTM/.test(raw) && allowed.some((value) => /^BTM/.test(value))) automatic[queen.id] = allowed.find((value) => /^BTM/.test(value));
           else automatic[queen.id] = allowed.includes("SAFE") ? "SAFE" : allowed[0];
         });
+        if (!isBoulets && teamJudged && tier === "WINNING" && memberCategories(tier).includes("TOP2")) {
+          const preferred = [...members].sort((a, b) => {
+            const aTop = automatic[a.id] === "TOP2" ? 1 : 0;
+            const bTop = automatic[b.id] === "TOP2" ? 1 : 0;
+            return bTop - aTop;
+          });
+          const chosenIds = new Set(preferred.slice(0, 2).map((queen) => normalizeContestantId(queen.id)));
+          members.forEach((queen) => { automatic[queen.id] = chosenIds.has(normalizeContestantId(queen.id)) ? "TOP2" : "HIGH TEAM"; });
+        }
         if (isBoulets && tier === "LOSING" && allowsBouletsBottom && !members.some((queen) => automatic[queen.id] === "BTM")) {
           const candidate = members.find((queen) => !protectedKeys.has(normalizeContestantId(queen.id)));
           if (candidate) automatic[candidate.id] = "BTM";
@@ -54676,7 +54699,7 @@
     const used = new Set(prior.map((item) => item?.specialJudgingEvent?.kind).filter(Boolean));
 
     const options = [{ value: "regular", label: "REGULAR" }];
-    if (count >= 4 && count <= 9) options.push({ value: "slayers", label: "SLAYERS" });
+    if (count >= 4) options.push({ value: "slayers", label: "SLAYERS" });
     if (count >= 8) options.push({ value: "floppers", label: "FLOPPERS" });
     if (count >= 10) options.push({ value: "bottom6", label: "BOTTOM 6" });
     if ((count === 8 || count === 9) && !used.has("lalaparuza") && !state.seasonSetup?.specialChallenges?.has?.("lalaparuza-smackdown")) {
@@ -54915,12 +54938,12 @@
   }
 
   function hasDualRateAQueenLipSyncs(episode) {
-    return episode?.premiereMode === "rateaqueen17" && Boolean(episode?.topLipSync?.occurs && episode?.lipSync?.occurs);
+    return ["rateaqueen17", "uk3"].includes(episode?.premiereMode) && Boolean(episode?.topLipSync?.occurs && episode?.lipSync?.occurs);
   }
 
   function rupaulLipSyncDecisionKeys(episode, section) {
     if (!hasDualRateAQueenLipSyncs(episode)) return { song: "lipSyncSong", outcome: "lipSyncOutcome" };
-    const topSection = section === "Lip Sync for the Win" || section === "Top Results" || section === "Results";
+    const topSection = section === "Lip Sync for the Win" || section === "Top Results" || (section === "Results" && episode.premiereMode === "rateaqueen17");
     return topSection
       ? { song: "topLipSyncSong", outcome: "topLipSyncOutcome" }
       : { song: "lipSyncSong", outcome: "lipSyncOutcome" };
@@ -55736,7 +55759,7 @@
         openRuPaulJudgingUnitDecision(episode);
         return true;
       }
-      const canChooseJudgingType = episode.premiereMode === "normal" && !episode.forcedProductionControl && !episode.allWinners && !episode.allStars9 && !episode.allStarsLegacy && !episode.allStarsAssassin && !episode.thailandFormat && !episode.tournamentFormat && !episode.goldenBeaverFormat && !episode.goldenDamFormat && !episode.goldenBaguetteFormat && !episode.heartSuccessorFormat && !episode.luckyCoinFormat;
+      const canChooseJudgingType = episode.premiereMode === "normal" && (!episode.forcedProductionControl || episode.forcedProductionControl === "force-slayers") && !episode.allWinners && !episode.allStars9 && !episode.allStarsLegacy && !episode.allStarsAssassin && !episode.thailandFormat && !episode.tournamentFormat && !episode.goldenBeaverFormat && !episode.goldenDamFormat && !episode.goldenBaguetteFormat && !episode.heartSuccessorFormat && !episode.luckyCoinFormat;
       if (canChooseJudgingType && !rupaulDecisionExists(episode, "judgingType")) {
         openRuPaulJudgingDecision(episode, contestants);
         return true;
@@ -62503,6 +62526,7 @@
 
   els.runtimeResetBtn?.addEventListener("click", resetEntireSimulatorToCast);
   els.runtimeBackBtn.addEventListener("click", transitionBackToRelationshipsFromRuntime);
+  document.querySelector("#rupaulChoiceCloseBtn")?.addEventListener("click", exitRuPaulModalToPreviousSection);
   els.previousSectionBtn.addEventListener("click", () => moveRuntimeSection(-1));
   els.nextSectionBtn.addEventListener("click", () => moveRuntimeSection(1));
   els.episodeSelect.addEventListener("change", () => {

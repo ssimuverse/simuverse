@@ -22776,3 +22776,20 @@ body[data-simulator="dragula"] #simulationModeCard .setup-option.is-selected {
     font-size: 8px !important;
   }
 }
+
+.rupaul-choice-title { padding-left: 55px; padding-right: 55px; }
+.rupaul-choice-close {
+  position: absolute; top: 13px; right: 13px; z-index: 2;
+  width: 32px; height: 32px; display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.15); border-radius: 8px;
+  background: rgba(255,255,255,.04); color: #eee;
+  font: 600 22px/1 Manrope,sans-serif; cursor: pointer;
+}
+.rupaul-choice-close:hover, .rupaul-choice-close:focus-visible {
+  color: white; border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.12);
+}
+@media (max-width: 760px) {
+  .rupaul-choice-title { padding-left: 45px; padding-right: 45px; }
+  .rupaul-choice-close { top: 11px; right: 10px; width: 30px; height: 30px; }
+}
