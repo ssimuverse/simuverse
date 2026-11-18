@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=20261118-rupaul-judging-uk3-v16" rel="stylesheet"/>
+<link href="style.css?v=20261118-slayers-premiere-v19" rel="stylesheet"/>
 </head>
 <body data-simulator="drag-race">
 <header class="topbar">
@@ -60,7 +60,7 @@
   <div class="cmm-parent-head">
     <h2>HOUSE PARENTS</h2>
     <label class="cmm-parent-count-label" for="cmmParentCount">NUMBER OF HOUSE PARENTS
-      <select class="setup-select" id="cmmParentCount"><option value="2">2</option><option value="3" selected>3</option></select>
+      <select class="setup-select" id="cmmParentCount"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select>
     </label>
   </div>
   <div class="cast-grid cmm-parent-grid" id="cmmParentsGrid"></div>
@@ -191,6 +191,7 @@
 <section class="simulation-mode-topbar" id="simulationModeCard">
 <div aria-label="Simulation mode" class="rupaul-mode-switch" role="group">
 <button aria-pressed="true" class="setup-option is-selected" data-rupaul-mode="standard" type="button">STANDARD</button>
+<button aria-pressed="false" class="setup-option" data-rupaul-mode="production" type="button">PRODUCTION</button>
 <button aria-pressed="false" class="setup-option" data-rupaul-mode="rupaul" type="button">RUPAUL MODE</button>
 </div>
 </section>
@@ -302,7 +303,7 @@
 <option data-min-cast="6" value="rateaqueen">SEASON 16 RATE-A-QUEEN</option>
 <option data-min-cast="6" value="rateaqueen17">SEASON 17 RATE-A-QUEEN</option>
 </select>
-</div>
+</div><p id="premiereFormatWarning" class="premiere-format-warning" hidden></p>
 </section>
 <section class="setup-card setup-card--finale" id="finaleFormatCard">
 <label class="setup-card__label" for="finaleFormat">FINALE FORMAT</label>
@@ -885,6 +886,6 @@ window.THE_CROWN_SUPABASE = {
 </script>
 <script src="../drag_race_data.js"></script>
 <script src="exterminations_data.js"></script>
-<script src="simulator.js?v=20261118-rupaul-judging-uk3-v16"></script>
+<script src="simulator.js?v=20261118-slayers-premiere-v19"></script>
 </body>
 </html>

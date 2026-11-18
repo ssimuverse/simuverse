@@ -2427,6 +2427,11 @@
       productionControls: new Set(),
       rupaulMode: false,
       bouletsMode: false,
+      productionMode: false,
+      productionLineup: [],
+      productionConfirmed: false,
+      premiereChallengeCategories: [],
+      premiereChallengeFormat: "",
       disableChallengeRiggory: false,
       disableLipSyncRiggory: false,
       disableExterminationRiggory: false,
@@ -2763,30 +2768,283 @@
     if (dragula) state.seasonSetup.rupaulMode = false;
     else state.seasonSetup.bouletsMode = false;
     const enabled = dragula ? Boolean(state.seasonSetup.bouletsMode) : Boolean(state.seasonSetup.rupaulMode);
+    const activeMode = enabled ? "rupaul" : (state.seasonSetup.productionMode ? "production" : "standard");
     (els.rupaulModeButtons || []).forEach((button) => {
-      const active = button.dataset.rupaulMode === (enabled ? "rupaul" : "standard");
+      const active = button.dataset.rupaulMode === activeMode;
       button.classList.toggle("is-selected", active);
       button.setAttribute("aria-pressed", active ? "true" : "false");
       if (button.dataset.rupaulMode === "rupaul") button.textContent = dragula ? "BOULETS MODE" : "RUPAUL MODE";
-      else button.textContent = "STANDARD";
-      button.closest('[role="group"]')?.setAttribute("aria-label", dragula ? "Boulets mode" : "RuPaul mode");
+      button.closest('[role="group"]')?.setAttribute("aria-label", dragula ? "Boulets/Production mode" : "RuPaul/Production mode");
     });
   }
 
   function setRuPaulMode(mode) {
-    const enabled = mode === "rupaul";
+    const next = ["standard", "production", "rupaul"].includes(mode) ? mode : "standard";
+    const enabled = next === "rupaul";
+    const production = next === "production";
+    if (Boolean(state.seasonSetup.productionMode) === production &&
+        Boolean(isDragulaMode() ? state.seasonSetup.bouletsMode : state.seasonSetup.rupaulMode) === enabled) return;
+    state.seasonSetup.productionMode = production;
     if (isDragulaMode()) {
-      if (Boolean(state.seasonSetup.bouletsMode) === enabled) return;
       state.seasonSetup.bouletsMode = enabled;
       state.seasonSetup.rupaulMode = false;
     } else {
-      if (Boolean(state.seasonSetup.rupaulMode) === enabled) return;
       state.seasonSetup.rupaulMode = enabled;
       state.seasonSetup.bouletsMode = false;
     }
+    if (production) state.seasonSetup.productionConfirmed = false;
     invalidateSeasonRuntime();
     syncRuPaulModeUi();
+    renderPremiereChallengeControls();
     persistState();
+  }
+
+  let productionPlanCursor = 0;
+  let productionPlannerOpen = false;
+
+  function productionCatalog() {
+    if (isDragulaMode()) return DRAGULA_FLOOR_SHOWS.map((show) => ({
+      id: String(show.id), type: String(show.type), name: String(show.name), formats: [...(show.formats || [show.format || "solo"])], source: show,
+    }));
+    const rows = MAXI_CHALLENGES.map((challenge) => ({
+      id: String(challenge.id || `${challenge.type}:${challenge.name}`), type: String(challenge.type), name: String(challenge.name), formats: [...(challenge.formats || ["solo"])], source: challenge,
+    }));
+    rows.push({ id: "production-talent-show", type: "talent_show", name: "Talent Show", formats: ["solo"], source: null });
+    return rows;
+  }
+
+  function productionEpisodeCount() {
+    const format = String(state.seasonSetup?.premiereFormat || "regular");
+    const bonus = ["season12", "rateaqueen", "porkchop"].includes(format) ? 2
+      : ["season9", "nonelimtop2", "nonelimrateaqueen", "rateaqueen17", "slayers", "par"].includes(format) ? 1 : 0;
+    const regular = Math.max(1, Number(state.castSize || 12) - Number(state.finalistsSize || 3));
+    if (isDragulaMode() && String(state.seasonSetup?.eliminationFormat) === "resurrection") return Math.max(3, Math.min(5, Number(state.seasonSetup.resurrectionEpisodes) || 3));
+    return Math.max(3, Math.min(25, regular + bonus));
+  }
+
+  function productionFormatAllowed(format, count, challenge) {
+    if (isDragulaMode()) {
+      const source = challenge.source;
+      if (!source) return false;
+      if (format !== String(source.format || "solo") && !(source.formats || []).includes(format)) return false;
+      return dragulaFloorShowEligible({ ...source, format }, count);
+    }
+    return Boolean(challenge.source ? validMaxiFormats(challenge.source, count).includes(format) : format === "solo");
+  }
+
+  function productionRandomLineup() {
+    const catalog = productionCatalog();
+    const count = productionEpisodeCount() + 3;
+    const used = new Set();
+    const entries = [];
+    for (let index = 0; index < count; index++) {
+      const expected = Math.max(6, Number(state.castSize) - Math.max(0, index - 1));
+      const options = catalog.filter((challenge) => challenge.formats.some((format) => productionFormatAllowed(format, expected, challenge)) &&
+        (index !== 0 || !isDragulaMode() || ["design", "runway"].includes(challenge.type)));
+      const fresh = options.filter((challenge) => !used.has(challenge.id) && challenge.type !== entries.at(-1)?.type);
+      const pool = fresh.length ? fresh : options.filter((challenge) => challenge.type !== entries.at(-1)?.type);
+      const choice = pickRandom(pool.length ? pool : options) || catalog[0];
+      const format = choice?.formats.find((candidate) => productionFormatAllowed(candidate, expected, choice)) || choice?.formats[0] || "solo";
+      entries.push({ id: choice?.id || "", type: choice?.type || "", name: choice?.name || "", format });
+      if (choice) used.add(choice.id);
+    }
+    return entries;
+  }
+
+  function productionSelectedEntry() {
+    if (!state.seasonSetup?.productionMode || !state.seasonSetup?.productionConfirmed) return null;
+    const index = productionPlanCursor++;
+    const entry = state.seasonSetup.productionLineup?.[index];
+    if (!entry) return null;
+    const challenge = productionCatalog().find((row) => row.id === entry.id && row.type === entry.type) ||
+      productionCatalog().find((row) => row.name === entry.name && row.type === entry.type);
+    return challenge ? { ...entry, challenge } : null;
+  }
+
+  function productionFormatForChallenge(entry, count) {
+    if (!entry?.challenge) return "";
+    if (productionFormatAllowed(entry.format, count, entry.challenge)) return entry.format;
+    return entry.challenge.formats.find((format) => productionFormatAllowed(format, count, entry.challenge)) || "";
+  }
+
+  function openProductionPlanner() {
+    if (productionPlannerOpen) return;
+    productionPlannerOpen = true;
+    const catalog = productionCatalog();
+    const count = productionEpisodeCount();
+    let entries = Array.isArray(state.seasonSetup.productionLineup) && state.seasonSetup.productionLineup.length === count + 3
+      ? structuredClone(state.seasonSetup.productionLineup)
+      : productionRandomLineup();
+    let expanded = -1;
+    const backdrop = document.createElement("div");
+    backdrop.className = "production-backdrop";
+    const dialog = document.createElement("section");
+    dialog.className = "production-modal";
+    dialog.setAttribute("role", "dialog");
+    dialog.setAttribute("aria-modal", "true");
+    dialog.setAttribute("aria-label", "Season Production");
+    const header = document.createElement("header");
+    header.className = "production-header";
+    const heading = document.createElement("h2");
+    heading.textContent = "SEASON PRODUCTION";
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "production-close";
+    close.setAttribute("aria-label", "Close production planner");
+    close.textContent = "×";
+    const dismiss = () => { backdrop.remove(); productionPlannerOpen = false; };
+    close.onclick = dismiss;
+    header.append(heading, close);
+    const content = document.createElement("div");
+    content.className = "production-content";
+    const footer = document.createElement("footer");
+    footer.className = "production-footer";
+    const randomize = document.createElement("button");
+    randomize.type = "button";
+    randomize.className = "control-btn";
+    randomize.textContent = "RANDOMIZE LINEUP";
+    randomize.onclick = () => { entries = productionRandomLineup(); expanded = -1; draw(); };
+    const confirm = document.createElement("button");
+    confirm.type = "button";
+    confirm.className = "control-btn control-btn--accent";
+    confirm.textContent = "CONFIRM LINEUP";
+    confirm.onclick = () => {
+      state.seasonSetup.productionLineup = structuredClone(entries);
+      state.seasonSetup.productionConfirmed = true;
+      persistState();
+      dismiss();
+      transitionToRuntime();
+    };
+    footer.append(randomize, confirm);
+    dialog.append(header, content, footer);
+    backdrop.append(dialog);
+    document.body.append(backdrop);
+
+    const draw = () => {
+      content.replaceChildren();
+      const subtitle = document.createElement("p");
+      subtitle.className = "production-help";
+      subtitle.textContent = "Choose your challenges before the season begins. Results remain automatic.";
+      content.append(subtitle);
+      entries.forEach((entry, index) => {
+        if (index === count) {
+          const extraTitle = document.createElement("h3");
+          extraTitle.className = "production-section-heading";
+          extraTitle.textContent = "EXTRA CHALLENGES";
+          content.append(extraTitle);
+        }
+        const group = document.createElement("section");
+        group.className = `production-episode${expanded === index ? " is-expanded" : ""}`;
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "production-episode-row";
+        const number = document.createElement("span");
+        number.className = "production-episode-number";
+        number.textContent = index < count ? String(index + 1).padStart(2, "0") : `+${index - count + 1}`;
+        const summary = document.createElement("span");
+        summary.className = "production-episode-summary";
+        const category = document.createElement("small");
+        category.textContent = String((isDragulaMode() ? entry.type : MAXI_CATEGORY_LABELS[entry.type]) || entry.type || "CHALLENGE").replaceAll("_", " ").toUpperCase();
+        const name = document.createElement("strong");
+        name.textContent = entry.name || "CHOOSE CHALLENGE";
+        summary.append(category, name);
+        const format = document.createElement("span");
+        format.className = "production-episode-format";
+        format.textContent = formatDisplayName(entry.format);
+        const arrow = document.createElement("span");
+        arrow.className = "production-episode-arrow";
+        arrow.textContent = expanded === index ? "−" : "+";
+        row.append(number, summary, format, arrow);
+        row.onclick = () => { expanded = expanded === index ? -1 : index; draw(); };
+        group.append(row);
+        if (expanded === index) {
+          const editor = document.createElement("div");
+          editor.className = "production-editor";
+          const typeLabel = document.createElement("label");
+          typeLabel.className = "production-field";
+          const typeText = document.createElement("span");
+          typeText.textContent = "CHALLENGE TYPE";
+          const typeSelect = document.createElement("select");
+          typeSelect.className = "setup-select";
+          const availableTypes = [...new Set(catalog.filter((item) => index !== 0 || !isDragulaMode() || ["runway", "design"].includes(item.type)).map((item) => item.type))].sort();
+          availableTypes.forEach((type) => {
+            const option = document.createElement("option");
+            option.value = type;
+            option.textContent = String(isDragulaMode() ? type : (MAXI_CATEGORY_LABELS[type] || type)).replaceAll("_", " ").toUpperCase();
+            typeSelect.append(option);
+          });
+          typeSelect.value = entry.type;
+          typeLabel.append(typeText, typeSelect);
+          const searchLabel = document.createElement("label");
+          searchLabel.className = "production-field";
+          searchLabel.textContent = "CHALLENGE";
+          const search = document.createElement("input");
+          search.type = "search";
+          search.className = "production-search";
+          search.placeholder = "Search challenges...";
+          const results = document.createElement("div");
+          results.className = "production-search-results";
+          const formatField = document.createElement("label");
+          formatField.className = "production-field";
+          const formatText = document.createElement("span");
+          formatText.textContent = "FORMAT";
+          const formatSelect = document.createElement("select");
+          formatSelect.className = "setup-select";
+          const updateFormat = () => {
+            const item = catalog.find((candidate) => candidate.id === entry.id && candidate.type === entry.type);
+            const formats = item?.formats || ["solo"];
+            formatSelect.replaceChildren();
+            formats.forEach((value) => {
+              const option = document.createElement("option");
+              option.value = value;
+              option.textContent = formatDisplayName(value);
+              formatSelect.append(option);
+            });
+            if (!formats.includes(entry.format)) entry.format = formats[0];
+            formatSelect.value = entry.format;
+            formatSelect.disabled = formats.length < 2;
+          };
+          const drawResults = () => {
+            const matches = catalog.filter((item) => item.type === typeSelect.value &&
+              (index !== 0 || !isDragulaMode() || ["runway", "design"].includes(item.type)) &&
+              item.name.toLowerCase().includes(search.value.toLowerCase().trim())).slice(0, 80);
+            results.replaceChildren();
+            matches.forEach((item) => {
+              const button = document.createElement("button");
+              button.type = "button";
+              button.className = `production-result${item.id === entry.id ? " is-selected" : ""}`;
+              button.textContent = item.name;
+              button.onclick = () => {
+                entries[index] = { id: item.id, type: item.type, name: item.name, format: item.formats.includes(entry.format) ? entry.format : item.formats[0] };
+                draw();
+              };
+              results.append(button);
+            });
+            if (!matches.length) {
+              const empty = document.createElement("p");
+              empty.className = "production-empty";
+              empty.textContent = "NO MATCHING CHALLENGES";
+              results.append(empty);
+            }
+          };
+          typeSelect.onchange = () => {
+            const first = catalog.find((item) => item.type === typeSelect.value);
+            if (first) entries[index] = { id: first.id, type: first.type, name: first.name, format: first.formats[0] };
+            draw();
+          };
+          search.addEventListener("input", drawResults);
+          formatSelect.onchange = () => { entries[index].format = formatSelect.value; format.textContent = formatDisplayName(formatSelect.value); };
+          formatField.append(formatText, formatSelect);
+          editor.append(typeLabel, searchLabel, search, results, formatField);
+          group.append(editor);
+          updateFormat();
+          drawResults();
+        }
+        content.append(group);
+      });
+    };
+    draw();
+    requestAnimationFrame(() => close.focus());
   }
 
   const HOLISLAY_MINIS = [{"id":"mini1","name":"Dancing with the Elves","description":"Contestants must perform a hilarious Christmas dance routine alongside a group of sexy elves.","weights":{"dance":1.0},"comments":["{name} {performance} while dancing the Charleston with the elves.","{name} {performance} while performing a salsa routine with the elves.","{name} {performance} while dancing the tango with the elves.","{name} {performance} while doing the cha-cha with the elves.","{name} {performance} while performing a disco routine with the elves.","{name} {performance} while dancing the samba with the elves.","{name} {performance} while doing hip-hop choreography with the elves.","{name} {performance} while performing a ballet routine with the elves.","{name} {performance} while dancing the waltz with the elves.","{name} {performance} while doing the can-can with the elves.","{name} {performance} while performing a jazz routine with the elves.","{name} {performance} while dancing the rumba with the elves.","{name} {performance} while doing the jive with the elves.","{name} {performance} while performing a contemporary dance with the elves.","{name} {performance} while dancing the foxtrot with the elves.","{name} {performance} while doing the Macarena with the elves.","{name} {performance} while performing a tap dance with the elves.","{name} {performance} while dancing the mambo with the elves.","{name} {performance} while doing the YMCA with the elves.","{name} {performance} while performing a breakdancing routine with the elves.","{name} {performance} while dancing the polka with the elves.","{name} {performance} while doing the Electric Slide with the elves.","{name} {performance} while performing a flamenco routine with the elves.","{name} {performance} while dancing the bachata with the elves.","{name} {performance} while doing the chicken dance with the elves.","{name} {performance} while performing a burlesque routine with the elves.","{name} {performance} while dancing the merengue with the elves.","{name} {performance} while doing the Hustle with the elves.","{name} {performance} while performing a Bollywood routine with the elves.","{name} {performance} while dancing the quickstep with the elves.","{name} {performance} while doing Irish step dancing with the elves.","{name} {performance} while performing a country line dance with the elves.","{name} {performance} while dancing the Lindy Hop with the elves.","{name} {performance} while doing the robot with the elves.","{name} {performance} while performing a voguing routine with the elves.","{name} {performance} while dancing the paso doble with the elves.","{name} {performance} while doing the Dougie with the elves.","{name} {performance} while performing a cheerleading routine with the elves.","{name} {performance} while dancing the twist with the elves.","{name} {performance} while doing the Gangnam Style dance with the elves.","{name} {performance} while performing a high-energy dancehall routine with the elves.","{name} {performance} while dancing the swing with the elves.","{name} {performance} while doing the Cotton Eye Joe with the elves.","{name} {performance} while performing a K-pop dance routine with the elves.","{name} {performance} while dancing the hula with the elves.","{name} {performance} while doing the running man with the elves.","{name} {performance} while performing an acrobatic dance routine with the elves.","{name} {performance} while dancing the jitterbug with the elves.","{name} {performance} while doing the bunny hop with the elves.","{name} {performance} while performing a majorette routine with the elves."],"random":false},{"id":"mini2","name":"Christmas Cookie Battle","description":"Contestants must decorate Christmas cookies in the most creative, outrageous, and festive ways possible.","weights":{"design":0.7,"comedy":0.3},"comments":["{name} {performance} the challenge after decorating a cookie that looks exactly like RuPaul.","{name} {performance} the challenge after making a naughty joke about the Pit Crew with a sausage-shaped cookie.","{name} {performance} the challenge after creating a gingerbread version of Michelle Visage with enormous breasts.","{name} {performance} the challenge after decorating a cookie to look like a glamorous drag queen.","{name} {performance} the challenge after making a cookie shaped like Santa Claus wearing a thong.","{name} {performance} the challenge after recreating RuPaul's iconic runway entrance using frosting and sprinkles.","{name} {performance} the challenge after decorating a cookie that looks like a Christmas tree covered in rhinestones.","{name} {performance} the challenge after making a gingerbread man with suspiciously large candy underwear.","{name} {performance} the challenge after creating a cookie inspired by the infamous Snatch Game.","{name} {performance} the challenge after decorating a cookie to look like a glamorous reindeer with fake eyelashes.","{name} {performance} the challenge after making a cookie shaped like a high-heeled Christmas stocking.","{name} {performance} the challenge after creating a gingerbread Pit Crew member wearing nothing but a candy cane.","{name} {performance} the challenge after decorating a cookie to look like a melted snowman.","{name} {performance} the challenge after making a cookie shaped like a Christmas ornament with RuPaul's face on it.","{name} {performance} the challenge after creating a gingerbread house designed to look like a gay nightclub.","{name} {performance} the challenge after decorating a cookie to resemble a queen having a wardrobe malfunction.","{name} {performance} the challenge after making a cookie shaped like a giant pair of lips covered in red glitter.","{name} {performance} the challenge after creating a cookie of Santa Claus getting his beard snatched off.","{name} {performance} the challenge after decorating a cookie to look like a drag queen's wig.","{name} {performance} the challenge after making a gingerbread version of the Werk Room.","{name} {performance} the challenge after creating a cookie shaped like a Christmas present with a naughty surprise inside.","{name} {performance} the challenge after decorating a cookie to look like a queen crying after being eliminated.","{name} {performance} the challenge after making a gingerbread man with a very questionable bulge.","{name} {performance} the challenge after creating a cookie inspired by the legendary Drag Race crown and scepter.","{name} {performance} the challenge after decorating a cookie to resemble a snowman wearing a blonde lace-front wig.","{name} {performance} the challenge after making a cookie shaped like Santa's sleigh filled with drag queens.","{name} {performance} the challenge after creating a gingerbread version of Ross Mathews with an exaggerated smile.","{name} {performance} the challenge after decorating a cookie to look like a Christmas-themed lip sync assassin.","{name} {performance} the challenge after making a cookie shaped like a candy cane being used as a stripper pole.","{name} {performance} the challenge after creating a gingerbread house with a runway instead of a front door.","{name} {performance} the challenge after decorating a cookie to resemble a drag queen doing the splits.","{name} {performance} the challenge after making a cookie shaped like a reindeer with giant glittery butt cheeks.","{name} {performance} the challenge after creating a cookie inspired by Michelle Visage's iconic black hair streak.","{name} {performance} the challenge after decorating a cookie to look like Santa Claus in full drag.","{name} {performance} the challenge after making a gingerbread man wearing a tiny bikini made of frosting.","{name} {performance} the challenge after creating a cookie that looks like RuPaul giving the middle finger.","{name} {performance} the challenge after decorating a cookie to resemble a queen's disastrous sewing challenge outfit.","{name} {performance} the challenge after making a cookie shaped like a Christmas wreath with a pair of boobs in the middle.","{name} {performance} the challenge after creating a gingerbread version of the main stage with edible spotlights.","{name} {performance} the challenge after decorating a cookie to look like a drag queen getting tangled in Christmas lights.","{name} {performance} the challenge after making a cookie shaped like a snowflake with tiny wigs on every point.","{name} {performance} the challenge after creating a cookie of the Grinch stealing a drag queen's makeup.","{name} {performance} the challenge after decorating a cookie to resemble a lip sync battle between Santa and Mrs. Claus.","{name} {performance} the challenge after making a gingerbread man with frosting that looks suspiciously like a six-pack.","{name} {performance} the challenge after creating a cookie shaped like a pair of Christmas-themed platform heels.","{name} {performance} the challenge after decorating a cookie to resemble a queen falling off the runway.","{name} {performance} the challenge after making a cookie shaped like a mistletoe hanging above two shirtless elves.","{name} {performance} the challenge after creating a gingerbread version of a drag queen riding a reindeer.","{name} {performance} the challenge after decorating a cookie to look like a Christmas tree with a giant wig as the topper.","{name} {performance} the challenge after making a cookie shaped like a Santa hat with the words \"Ho Ho Ho\" written in icing."],"random":false},{"id":"mini3","name":"Reading Is a Gift","description":"Contestants exchange Christmas presents containing shady messages and read each other to filth.","weights":{"comedy":0.5,"improv":0.5},"comments":["{name} {performance} after giving {name2} a makeup gift bag, saying they desperately need to learn how to paint their face.","{name} {performance} after presenting {name2} with a literal brick, saying it matches their face.","{name} {performance} after gifting {name2} a cheap wig, saying it's still better than anything they've worn on the runway.","{name} {performance} after giving {name2} a mirror, saying it's time they finally saw what everyone else has to look at.","{name} {performance} after gifting {name2} a dictionary, telling them to look up the word \"talent.\"","{name} {performance} after presenting {name2} with a trash bag, saying it's the perfect outfit for their next runway.","{name} {performance} after giving {name2} a calendar, telling them their drag expired years ago.","{name} {performance} after gifting {name2} a participation trophy, saying it's the closest they'll ever get to a crown.","{name} {performance} after presenting {name2} with a clown nose, saying their makeup is finally complete.","{name} {performance} after giving {name2} a pair of training wheels, saying their runway walk needs some extra support.","{name} {performance} after gifting {name2} a bottle of mouthwash, saying their breath isn't the only thing that stinks.","{name} {performance} after presenting {name2} with a flashlight, saying their personality is too dim to see.","{name} {performance} after giving {name2} a calculator, telling them to count how many challenges they've lost.","{name} {performance} after gifting {name2} a broom, saying they can finally sweep up the competition they've been losing to.","{name} {performance} after presenting {name2} with a roll of toilet paper, saying it's the only fabric their drag deserves.","{name} {performance} after giving {name2} a bottle of glue, saying it's the only thing holding their drag career together.","{name} {performance} after gifting {name2} a pair of binoculars, saying they'll need them to see the winner's circle.","{name} {performance} after presenting {name2} with an empty picture frame, saying it's a portrait of their future success.","{name} {performance} after giving {name2} a sewing kit, saying their outfits look like they were made during an earthquake.","{name} {performance} after gifting {name2} a bag of coal, saying even Santa thinks their drag is a crime.","{name} {performance} after presenting {name2} with a Christmas ornament shaped like a potato, saying it's their celebrity lookalike.","{name} {performance} after giving {name2} a gift card for plastic surgery, saying it's the only way to save their runway looks.","{name} {performance} after gifting {name2} a pair of earplugs, saying they're for everyone forced to listen to their singing.","{name} {performance} after presenting {name2} with a map, saying they seem completely lost every time they step onto the runway.","{name} {performance} after giving {name2} a magnifying glass, saying it's the only way anyone will notice their talent.","{name} {performance} after gifting {name2} a Christmas sweater covered in garbage, saying it was inspired by their runway package.","{name} {performance} after presenting {name2} with a pack of crayons, saying it's time they graduated from finger painting their makeup.","{name} {performance} after giving {name2} a bottle of wrinkle cream, saying Santa wasn't even born when they started doing drag.","{name} {performance} after gifting {name2} a fake crown from a dollar store, saying it's the only crown they'll ever wear.","{name} {performance} after presenting {name2} with a plunger, saying their entire drag aesthetic belongs in the toilet.","{name} {performance} after giving {name2} a Christmas card containing a photo of the exit door, saying it's their future on the show.","{name} {performance} after gifting {name2} a set of dentures, saying their jokes are as old as their teeth.","{name} {performance} after presenting {name2} with a can of air freshener, saying their performances have been stinking up the competition.","{name} {performance} after giving {name2} a book titled \"Drag for Dummies,\" saying they clearly skipped the first chapter.","{name} {performance} after gifting {name2} a pair of oven mitts, saying their runway looks are so bad they should never touch fabric again.","{name} {performance} after presenting {name2} with a snow globe containing nothing but dirt, saying it represents their glamorous hometown.","{name} {performance} after giving {name2} a Christmas stocking filled with fake eyelashes, saying they might finally manage to glue two on evenly.","{name} {performance} after gifting {name2} a bottle of hot sauce, saying it's the only way to add some spice to their boring personality.","{name} {performance} after presenting {name2} with a rubber chicken, saying it's their long-lost twin.","{name} {performance} after giving {name2} a pair of sunglasses, saying the judges need them to survive looking at their outfits.","{name} {performance} after gifting {name2} a fake microphone, saying they should stick to pretending they can sing.","{name} {performance} after presenting {name2} with a Christmas tree missing all its branches, saying it's as full of life as their performances.","{name} {performance} after giving {name2} a pack of diapers, saying their drag is still in its infancy despite their age.","{name} {performance} after gifting {name2} a bottle of superglue, saying their wigs need more support than their drag career.","{name} {performance} after presenting {name2} with a toy shovel, saying it's time to bury their drag career.","{name} {performance} after giving {name2} a bag of frozen vegetables, saying they have more stage presence than them.","{name} {performance} after gifting {name2} a Christmas present containing absolutely nothing, saying it represents their contribution to the competition.","{name} {performance} after presenting {name2} with a broken clock, saying their time in the competition ran out before it even began.","{name} {performance} after giving {name2} a roll of duct tape, saying it's the only way to keep their outfits from falling apart.","{name} {performance} after gifting {name2} a pair of clown shoes, saying they're finally getting footwear that matches their performances.","{name} {performance} after presenting {name2} with a DVD of a beginner's dance tutorial, saying even Santa's reindeer have better rhythm.","{name} {performance} after giving {name2} a Christmas present wrapped in caution tape, saying their face should come with a warning label.","{name} {performance} after gifting {name2} a bottle of baby powder, saying their makeup looks like it was applied with a cement mixer.","{name} {performance} after presenting {name2} with a box of instant noodles, saying their wigs have the exact same texture.","{name} {performance} after giving {name2} a gift certificate for singing lessons, saying the judges deserve compensation for hearing their voice.","{name} {performance} after gifting {name2} a tiny Christmas tree, saying it's still taller than their chances of winning.","{name} {performance} after presenting {name2} with a bag of expired candy, saying it's just like their drag: old, cheap, and hard to swallow.","{name} {performance} after giving {name2} a pair of fake butt pads, saying their personality isn't the only thing that's flat.","{name} {performance} after gifting {name2} a dustpan, saying they should clean up the mess they leave on the runway every week.","{name} {performance} after presenting {name2} with a cheap plastic tiara, saying they should get used to wearing second place.","{name} {performance} after giving {name2} a Christmas cracker that reveals a lipstick, saying they'll be needing it sooner rather than later.","{name} {performance} after gifting {name2} a framed photo of RuPaul looking disappointed, saying it's the face she makes every time they perform.","{name} {performance} after presenting {name2} with a bag of dog treats, saying their runway looks have been serving more kennel than couture.","{name} {performance} after giving {name2} a pair of knee pads, saying they'll need them after spending the entire season in the bottom.","{name} {performance} after gifting {name2} a Christmas ornament labeled \"Filler Queen,\" saying they finally have something named after them.","{name} {performance} after presenting {name2} with a cardboard box, saying it's more expensive than their entire drag wardrobe.","{name} {performance} after giving {name2} a toy train, saying their drag career has officially gone off the rails.","{name} {performance} after gifting {name2} a bag of glitter, saying it's the only sparkle their personality will ever have.","{name} {performance} after presenting {name2} with a packet of seeds, saying they might finally grow some talent.","{name} {performance} after giving {name2} a Christmas card reading \"Better Luck Next Season,\" saying even Santa knows they're going home."],"random":false},{"id":"mini4","name":"Sleigh the Runway","description":"Contestants have 15 minutes to create a Christmas-inspired quick-drag look using holiday decorations.","weights":{"runway":0.5,"design":0.5},"comments":["{name} {performance} the challenge after creating a glamorous Christmas tree gown covered in ornaments and tinsel.","{name} {performance} the challenge after transforming into a sexy Mrs. Claus using red wrapping paper and cotton balls.","{name} {performance} the challenge after making a dress entirely out of Christmas gift bows.","{name} {performance} the challenge after creating a sparkling snow queen look using silver tinsel and fake snow.","{name} {performance} the challenge after wrapping themselves in Christmas lights and turning into a walking disco ball.","{name} {performance} the challenge after creating a candy cane-inspired bodysuit using red and white ribbons.","{name} {performance} the challenge after making a giant Christmas present costume with a bow on their head.","{name} {performance} the challenge after transforming into a glamorous reindeer with oversized antlers and glitter.","{name} {performance} the challenge after creating an elegant angel look using white garlands and golden ornaments.","{name} {performance} the challenge after making a Christmas wreath into an oversized skirt.","{name} {performance} the challenge after creating a naughty elf look using green wrapping paper and striped stockings.","{name} {performance} the challenge after turning themselves into a giant Christmas stocking with fur trim.","{name} {performance} the challenge after creating a high-fashion Grinch look using green tinsel and red ribbons.","{name} {performance} the challenge after making a dramatic cape out of Christmas wrapping paper.","{name} {performance} the challenge after creating a glamorous gingerbread woman outfit using brown paper and candy decorations.","{name} {performance} the challenge after turning a Christmas tree skirt into a luxurious ball gown.","{name} {performance} the challenge after creating a revealing Santa Claus look with a tiny red skirt and oversized white beard.","{name} {performance} the challenge after making a dress entirely out of shiny Christmas ornaments.","{name} {performance} the challenge after creating a sparkling icicle-inspired look using silver ribbons and dangling decorations.","{name} {performance} the challenge after transforming into a Christmas fairy with wings made from gift wrap.","{name} {performance} the challenge after creating a Christmas pudding costume with a giant holly headpiece.","{name} {performance} the challenge after making a festive corset out of cardboard gift boxes.","{name} {performance} the challenge after creating a snowman-inspired look using white cotton and a carrot nose.","{name} {performance} the challenge after transforming into a glamorous nutcracker soldier using ribbons and Christmas bows.","{name} {performance} the challenge after making a giant skirt out of inflatable Christmas decorations.","{name} {performance} the challenge after creating a sexy Krampus look using black garlands and oversized horns.","{name} {performance} the challenge after turning Christmas crackers into a sparkling mini dress.","{name} {performance} the challenge after creating a peppermint princess look using candy cane decorations.","{name} {performance} the challenge after making an enormous headpiece out of Christmas baubles and stars.","{name} {performance} the challenge after transforming into a Christmas gift bag with tissue paper spilling out of their wig.","{name} {performance} the challenge after creating a dramatic red-and-gold gown using Christmas table runners.","{name} {performance} the challenge after making a dress entirely out of green and red tinsel.","{name} {performance} the challenge after turning themselves into a glamorous Christmas star with a giant golden headpiece.","{name} {performance} the challenge after creating a festive showgirl look using Christmas ornaments as pasties.","{name} {performance} the challenge after making an oversized wig entirely out of Christmas garlands.","{name} {performance} the challenge after creating a holiday-themed superhero look using wrapping paper and bows.","{name} {performance} the challenge after transforming into a sexy Christmas elf with pointy shoes made from gift boxes.","{name} {performance} the challenge after making a dramatic winter cape using fake snow blankets.","{name} {performance} the challenge after creating a Christmas tree-inspired wig covered in tiny ornaments.","{name} {performance} the challenge after turning several Santa hats into a revealing mini dress.","{name} {performance} the challenge after creating a glamorous ice princess look using blue and silver gift wrap.","{name} {performance} the challenge after making a giant candy cane into a fashionable accessory for their runway walk.","{name} {performance} the challenge after creating a festive flapper dress using dangling Christmas tinsel.","{name} {performance} the challenge after transforming into a giant Christmas ornament using metallic wrapping paper.","{name} {performance} the challenge after making a revealing bodysuit decorated with miniature Christmas presents.","{name} {performance} the challenge after creating an elaborate sleigh-inspired costume using cardboard and holiday ribbons.","{name} {performance} the challenge after turning a pile of Christmas bows into a glamorous feather-like boa.","{name} {performance} the challenge after creating a Christmas-themed mermaid look using green garlands and red ornaments.","{name} {performance} the challenge after making a giant snowflake headpiece using white decorations and silver glitter.","{name} {performance} the challenge after transforming into a glamorous holiday candle using golden wrapping paper and a flame-shaped crown.","{name} {performance} the challenge after creating a Christmas village-inspired dress covered in miniature houses.","{name} {performance} the challenge after making a revealing Mrs. Claus look using a tree skirt and fluffy stockings.","{name} {performance} the challenge after creating a golden Christmas angel look using shiny gift wrap and halo decorations.","{name} {performance} the challenge after turning a pile of Christmas stockings into a patchwork dress.","{name} {performance} the challenge after creating a festive disco queen look using mirrored ornaments and silver garlands.","{name} {performance} the challenge after making a giant mistletoe headpiece with dangling red berries.","{name} {performance} the challenge after transforming into an oversized Christmas bell using golden cardboard and ribbons.","{name} {performance} the challenge after creating a gothic Christmas queen look using black tinsel and blood-red ornaments.","{name} {performance} the challenge after making a glamorous red-carpet gown out of metallic Christmas wrapping paper.","{name} {performance} the challenge after creating a Christmas wreath-inspired halo using green garlands and red bows.","{name} {performance} the challenge after turning a pile of gift ribbons into an extravagant fringe dress.","{name} {performance} the challenge after creating a festive ballerina look using layers of Christmas tree mesh.","{name} {performance} the challenge after making a giant bow-shaped dress out of red wrapping paper.","{name} {performance} the challenge after transforming into a frosty winter witch using white tinsel and crystal ornaments.","{name} {performance} the challenge after creating a glamorous Christmas peacock look using fan-shaped garlands and ornaments.","{name} {performance} the challenge after making a dramatic train entirely out of Christmas wrapping paper.","{name} {performance} the challenge after creating a naughty gingerbread look with strategically placed candy decorations.","{name} {performance} the challenge after transforming into Santa's sleigh using a cardboard box and decorative reins.","{name} {performance} the challenge after creating an extravagant Christmas pageant look using oversized bows and gold garlands.","{name} {performance} the challenge after making a chaotic Christmas tree outfit with decorations falling off during the runway.","{name} {performance} the challenge after creating a snow angel look using cotton, white ribbons, and a crooked halo.","{name} {performance} the challenge after wrapping themselves in so much tinsel that the judges could barely see their face.","{name} {performance} the challenge after making a dress out of Christmas gift bags that kept ripping during the presentation.","{name} {performance} the challenge after creating a Santa-inspired bodysuit with an enormous padded belly.","{name} {performance} the challenge after transforming into a Christmas turkey using brown wrapping paper and festive ribbons.","{name} {performance} the challenge after creating a Christmas tree outfit topped with a giant star that kept falling sideways.","{name} {performance} the challenge after making a glittering holiday showgirl costume out of ornaments, bells, and ribbons."],"random":false},{"id":"mini5","name":"The Gift That Keeps on GIVINGGG!","description":"Contestants must wrap themselves as Christmas presents and pose for a glamorous holiday photoshoot.","weights":{"dance":0.5,"runway":0.5},"comments":["{name} {performance} the challenge after wrapping themselves in red gift paper and posing like a glamorous Christmas present.","{name} {performance} the challenge after emerging from a giant gift box with a seductive pose.","{name} {performance} the challenge after covering themselves in golden wrapping paper and posing like an expensive luxury gift.","{name} {performance} the challenge after tying an enormous red bow around their waist and serving a fierce fashion pose.","{name} {performance} the challenge after posing inside a giant Christmas stocking with only their legs sticking out.","{name} {performance} the challenge after wrapping themselves in silver foil and pretending to be a gift from a billionaire.","{name} {performance} the challenge after creating a giant bow headpiece and posing like a Christmas fashion model.","{name} {performance} the challenge after tearing through their wrapping paper to reveal a sexy holiday outfit.","{name} {performance} the challenge after posing on top of a mountain of Christmas presents like a spoiled princess.","{name} {performance} the challenge after wrapping themselves in pink gift paper and serving a glamorous Barbie-inspired pose.","{name} {performance} the challenge after covering themselves in ribbons and pretending to be Santa's favorite present.","{name} {performance} the challenge after posing with a giant gift tag reading \"Too Expensive for You.\"","{name} {performance} the challenge after wrapping themselves in green paper and pretending to be a gift stolen by the Grinch.","{name} {performance} the challenge after striking a dramatic pose while being carried by two shirtless elves.","{name} {performance} the challenge after posing inside a giant gift box with their legs hanging over the edge.","{name} {performance} the challenge after wrapping themselves in candy cane paper and giving the camera a seductive wink.","{name} {performance} the challenge after covering themselves in glittery gift wrap and posing like a Christmas pageant queen.","{name} {performance} the challenge after pretending to be a luxury handbag being unwrapped on Christmas morning.","{name} {performance} the challenge after wrapping themselves in black and gold paper and serving a mysterious high-fashion pose.","{name} {performance} the challenge after creating a giant ribbon train and dramatically throwing it into the air for the camera.","{name} {performance} the challenge after posing with a gift tag reading \"Return to Sender\" attached to their chest.","{name} {performance} the challenge after wrapping themselves in transparent cellophane and pretending to be an expensive perfume bottle.","{name} {performance} the challenge after posing like a glamorous doll trapped inside its Christmas packaging.","{name} {performance} the challenge after ripping open their gift box and pretending to be shocked by their own beauty.","{name} {performance} the challenge after posing on Santa's lap while wrapped in a giant pink ribbon.","{name} {performance} the challenge after covering themselves in Christmas bows and giving the camera a dramatic over-the-shoulder look.","{name} {performance} the challenge after pretending to be a naughty present that Santa accidentally delivered to the wrong house.","{name} {performance} the challenge after wrapping themselves in newspaper and posing like a cheap last-minute Christmas gift.","{name} {performance} the challenge after creating an oversized present costume and striking a ridiculous superhero pose.","{name} {performance} the challenge after posing with their head sticking out of a gift box while blowing kisses at the camera.","{name} {performance} the challenge after wrapping themselves in metallic pink paper and posing like a glamorous pop star.","{name} {performance} the challenge after pretending to be a Christmas present rejected by the entire Pit Crew.","{name} {performance} the challenge after covering themselves in tiny gift bows and performing a dramatic hair flip.","{name} {performance} the challenge after posing inside a giant present with a seductive leg reveal.","{name} {performance} the challenge after wrapping themselves in white and silver paper and pretending to be a gift from the Snow Queen.","{name} {performance} the challenge after posing with a giant bow covering their chest and giving the camera a mischievous smile.","{name} {performance} the challenge after pretending to be an expensive Christmas gift that nobody could afford to unwrap.","{name} {performance} the challenge after wrapping themselves in rainbow gift paper and serving a fabulous holiday pride pose.","{name} {performance} the challenge after posing with a gift tag reading \"Fragile\" while dramatically falling onto the floor.","{name} {performance} the challenge after pretending to be a life-sized Christmas doll with exaggerated plastic poses.","{name} {performance} the challenge after wrapping themselves in red velvet ribbons and posing like a glamorous Hollywood diva.","{name} {performance} the challenge after climbing out of a giant Christmas present and striking a fierce runway pose.","{name} {performance} the challenge after posing with their entire body wrapped in gift paper except for their face.","{name} {performance} the challenge after pretending to be a Christmas present that Santa had accidentally sat on.","{name} {performance} the challenge after wrapping themselves in leopard-print gift paper and posing like a wealthy cougar.","{name} {performance} the challenge after posing with a giant gift tag reading \"Handle With Care\" attached to their backside.","{name} {performance} the challenge after creating a Christmas present look inspired by a Victoria's Secret fashion show.","{name} {performance} the challenge after pretending to be a surprise gift for RuPaul and dramatically reaching toward the camera.","{name} {performance} the challenge after wrapping themselves in gold foil and striking a dramatic goddess pose.","{name} {performance} the challenge after posing inside a gift box surrounded by fake snow and Christmas lights.","{name} {performance} the challenge after pretending to be a broken Christmas present with ribbons hanging off their body.","{name} {performance} the challenge after covering themselves in enormous Christmas bows and posing like a high-fashion editorial model.","{name} {performance} the challenge after wrapping themselves in cheap plastic gift wrap and pretending to be a dollar-store Christmas present.","{name} {performance} the challenge after posing on their knees while holding a giant ribbon above their head.","{name} {performance} the challenge after pretending to be a gift that had been returned to Santa five times.","{name} {performance} the challenge after wrapping themselves in sparkly purple paper and serving an extravagant diva pose.","{name} {performance} the challenge after posing with a giant Christmas bow on their butt and giving the camera a cheeky wink.","{name} {performance} the challenge after dramatically bursting out of a gift box and showering the set with confetti.","{name} {performance} the challenge after pretending to be a Christmas present from an ex-boyfriend that nobody wanted.","{name} {performance} the challenge after creating a giant gift box costume and posing like a glamorous jack-in-the-box.","{name} {performance} the challenge after covering themselves in Christmas ribbons and striking a dramatic ballet pose.","{name} {performance} the challenge after wrapping themselves in red and white paper and pretending to be a present from Mrs. Claus.","{name} {performance} the challenge after posing with a gift tag reading \"Open Me First\" while giving the camera bedroom eyes.","{name} {performance} the challenge after pretending to be an expensive designer gift with a completely fake luxury label.","{name} {performance} the challenge after wrapping themselves in silver ribbons and posing like a glamorous Christmas ornament.","{name} {performance} the challenge after posing with their legs sticking out of a present while pretending to be stuck inside.","{name} {performance} the challenge after pretending to be a Christmas gift that had been violently unwrapped by a spoiled child.","{name} {performance} the challenge after creating a revealing outfit entirely out of oversized Christmas bows.","{name} {performance} the challenge after posing inside a giant gift box while pretending to be a seductive surprise for Santa.","{name} {performance} the challenge after wrapping themselves in shiny blue paper and posing like an icy winter princess.","{name} {performance} the challenge after pretending to be an unwanted Christmas present left underneath the tree.","{name} {performance} the challenge after posing with an enormous ribbon wrapped around their body like a beauty pageant sash.","{name} {performance} the challenge after dramatically tearing away their wrapping paper to reveal a glittery bodysuit.","{name} {performance} the challenge after posing like a Christmas present being delivered by a team of muscular elves.","{name} {performance} the challenge after wrapping themselves in mismatched gift paper and striking a deliberately chaotic fashion pose.","{name} {performance} the challenge after pretending to be a glamorous Christmas gift that was too fabulous to fit inside its box."],"random":false},{"id":"mini6","name":"Santa's Little Helpers","description":"Contestants race to wrap Christmas presents while wearing ridiculously oversized elf gloves.","weights":{},"comments":["{name} {performance} the challenge after struggling to pick up the wrapping paper with their giant elf gloves.","{name} {performance} the challenge after accidentally wrapping their own hands inside a Christmas present.","{name} {performance} the challenge after using their teeth to tear the wrapping paper when their gloves got in the way.","{name} {performance} the challenge after managing to wrap five presents before anyone else finished their first.","{name} {performance} the challenge after accidentally crushing a present while trying to wrap it.","{name} {performance} the challenge after wrapping a Christmas present that looked more like a giant burrito.","{name} {performance} the challenge after spending half the time trying to peel a piece of tape off their glove.","{name} {performance} the challenge after creating a beautifully wrapped present with a giant bow on top.","{name} {performance} the challenge after accidentally gluing their oversized elf gloves together.","{name} {performance} the challenge after wrapping a present completely upside down without noticing.","{name} {performance} the challenge after tearing through three sheets of wrapping paper with their oversized gloves.","{name} {performance} the challenge after using their elbows to fold the wrapping paper instead of their hands.","{name} {performance} the challenge after accidentally wrapping a pair of scissors inside one of their presents.","{name} {performance} the challenge after creating a Christmas present that looked like it had survived a tornado.","{name} {performance} the challenge after managing to tie a perfect ribbon using only their oversized elf gloves.","{name} {performance} the challenge after getting tangled in Christmas ribbon and falling onto the wrapping table.","{name} {performance} the challenge after wrapping an entire present in tape because they couldn't fold the paper properly.","{name} {performance} the challenge after finishing their presents with seconds to spare and striking a fabulous victory pose.","{name} {performance} the challenge after accidentally knocking over an entire stack of Christmas presents.","{name} {performance} the challenge after trying to use their giant elf gloves to pick up tiny gift bows.","{name} {performance} the challenge after wrapping a present so tightly that the box completely collapsed.","{name} {performance} the challenge after creating an elegant Christmas gift wrapped in shiny gold paper.","{name} {performance} the challenge after accidentally taping their glove to the wrapping table.","{name} {performance} the challenge after wrapping a present that looked suspiciously like a pile of garbage.","{name} {performance} the challenge after using their giant elf gloves to slap the wrapping paper into place.","{name} {performance} the challenge after spending the entire challenge fighting with a roll of sticky tape.","{name} {performance} the challenge after successfully wrapping a giant teddy bear despite the ridiculous gloves.","{name} {performance} the challenge after accidentally throwing a present across the room while trying to grab it.","{name} {performance} the challenge after creating a perfectly wrapped Christmas gift using an excessive amount of ribbon.","{name} {performance} the challenge after wrapping a present without realizing the box was still open.","{name} {performance} the challenge after struggling to cut a straight line through the wrapping paper.","{name} {performance} the challenge after completing the challenge with wrapping paper stuck all over their outfit.","{name} {performance} the challenge after accidentally wrapping their wig into one of the presents.","{name} {performance} the challenge after making a Christmas present that looked like it had been wrapped by a toddler.","{name} {performance} the challenge after finishing their gifts faster than the other queens with surprisingly neat results.","{name} {performance} the challenge after trying to pick up a tiny gift tag for an entire minute.","{name} {performance} the challenge after decorating their presents with an outrageous number of Christmas bows.","{name} {performance} the challenge after using their oversized gloves to smash a gift box into shape.","{name} {performance} the challenge after accidentally wrapping two separate presents together.","{name} {performance} the challenge after getting one of their giant elf gloves stuck inside a gift box.","{name} {performance} the challenge after making a beautifully wrapped present that immediately fell apart when picked up.","{name} {performance} the challenge after covering their entire wrapping station in tape and glitter.","{name} {performance} the challenge after successfully wrapping a tiny jewelry box using the enormous elf gloves.","{name} {performance} the challenge after accidentally covering their face in tape while trying to tear off a piece.","{name} {performance} the challenge after using their oversized gloves to fold wrapping paper with surprising precision.","{name} {performance} the challenge after creating a present with so many layers of paper that it doubled in size.","{name} {performance} the challenge after getting distracted by the Pit Crew and forgetting to finish wrapping their presents.","{name} {performance} the challenge after accidentally ripping their wrapping paper every time they tried to fold it.","{name} {performance} the challenge after successfully wrapping an awkwardly shaped Christmas present without leaving any gaps.","{name} {performance} the challenge after using their giant elf gloves to violently stuff a present into a gift bag.","{name} {performance} the challenge after accidentally wrapping the entire roll of tape into their present.","{name} {performance} the challenge after creating a Christmas gift that looked like an oversized candy wrapper.","{name} {performance} the challenge after finishing with a pile of half-wrapped presents and a completely destroyed workstation.","{name} {performance} the challenge after managing to wrap a Christmas present while doing a dramatic dance routine.","{name} {performance} the challenge after accidentally punching a hole through a gift box with their oversized gloves.","{name} {performance} the challenge after struggling to tie a bow and eventually giving up and throwing the ribbon away.","{name} {performance} the challenge after creating a perfectly symmetrical Christmas present with neatly folded corners.","{name} {performance} the challenge after accidentally wrapping their sleeve into a present.","{name} {performance} the challenge after trying to use their giant elf gloves to untangle a massive knot of Christmas ribbon.","{name} {performance} the challenge after finishing a beautifully wrapped present only to realize they forgot to put the gift inside.","{name} {performance} the challenge after wrapping an entire stack of presents together as one giant package.","{name} {performance} the challenge after creating a Christmas present that resembled a badly wrapped Christmas ham.","{name} {performance} the challenge after accidentally pulling the tablecloth off the wrapping station while reaching for tape.","{name} {performance} the challenge after using an entire roll of wrapping paper on a single tiny present.","{name} {performance} the challenge after completing three beautifully wrapped presents and celebrating with an exaggerated elf dance.","{name} {performance} the challenge after accidentally knocking their finished presents onto the floor with their giant gloves.","{name} {performance} the challenge after trying to wrap a Christmas present using nothing but ribbons and tape.","{name} {performance} the challenge after managing to wrap the most presents but leaving every single one looking like a disaster.","{name} {performance} the challenge after spending more time fighting with their oversized elf gloves than actually wrapping presents.","{name} {performance} the challenge after successfully wrapping a present in record time and adding a glamorous finishing bow.","{name} {performance} the challenge after accidentally trapping their fingers between two gift boxes.","{name} {performance} the challenge after wrapping a present so badly that the judges couldn't tell which side was the top.","{name} {performance} the challenge after finishing their presents with a perfect Christmas bow despite barely being able to move their fingers.","{name} {performance} the challenge after dramatically throwing their oversized gloves into the air when the timer ran out."],"random":true},{"id":"mini7","name":"Jingle Bell Rockstars","description":"Contestants must perform an over-the-top air guitar performance to a Christmas rock song.","weights":{"dance":0.5,"lipsync":0.5},"comments":["{name} {performance} the challenge after dropping to their knees and shredding an imaginary guitar during the chorus.","{name} {performance} the challenge after attempting a dramatic stage dive into the arms of the Pit Crew.","{name} {performance} the challenge after headbanging so aggressively that their Christmas wig flew across the stage.","{name} {performance} the challenge after performing an impressive air guitar solo while doing the splits.","{name} {performance} the challenge after pretending to smash their imaginary guitar against a giant Christmas present.","{name} {performance} the challenge after performing a seductive rock routine while dressed as a naughty Christmas elf.","{name} {performance} the challenge after trying to play an imaginary guitar behind their back.","{name} {performance} the challenge after sliding across the stage on their knees while shredding an imaginary guitar.","{name} {performance} the challenge after getting tangled in Christmas lights during their air guitar solo.","{name} {performance} the challenge after performing a dramatic guitar battle against an imaginary heavy metal Santa Claus.","{name} {performance} the challenge after pretending to set their imaginary guitar on fire during the final chorus.","{name} {performance} the challenge after performing an entire air guitar routine while riding an inflatable reindeer.","{name} {performance} the challenge after using a giant candy cane as an imaginary electric guitar.","{name} {performance} the challenge after attempting a backflip during their air guitar solo and landing flat on their back.","{name} {performance} the challenge after performing a flawless heavy metal routine while wearing enormous platform boots.","{name} {performance} the challenge after dramatically ripping off their Santa jacket to reveal a rockstar bodysuit.","{name} {performance} the challenge after pretending to play an imaginary guitar with their teeth.","{name} {performance} the challenge after performing a Christmas punk rock routine while aggressively headbanging.","{name} {performance} the challenge after losing their balance while attempting a dramatic rockstar knee slide.","{name} {performance} the challenge after performing an exaggerated guitar solo while making ridiculous rockstar facial expressions.","{name} {performance} the challenge after pretending to play an imaginary guitar on top of a giant Christmas gift box.","{name} {performance} the challenge after turning their air guitar performance into a full-blown heavy metal Christmas concert.","{name} {performance} the challenge after accidentally kicking over a Christmas tree during their guitar solo.","{name} {performance} the challenge after performing an energetic punk rock routine while dressed as a rebellious Mrs. Claus.","{name} {performance} the challenge after dramatically throwing their imaginary guitar into the audience.","{name} {performance} the challenge after attempting a seductive air guitar performance that looked more like a striptease.","{name} {performance} the challenge after performing a guitar solo while spinning around on the floor.","{name} {performance} the challenge after pretending to battle the Pit Crew in an intense Christmas rock showdown.","{name} {performance} the challenge after performing an impressive air guitar routine while balancing on one leg.","{name} {performance} the challenge after headbanging so hard that their fake eyelashes fell off.","{name} {performance} the challenge after using a Christmas stocking as an imaginary guitar and pretending to shred it.","{name} {performance} the challenge after performing a dramatic rockstar death drop during the guitar solo.","{name} {performance} the challenge after pretending to crowd-surf across a group of shirtless Christmas elves.","{name} {performance} the challenge after performing a ridiculous air guitar solo while wearing a giant inflatable Santa suit.","{name} {performance} the challenge after attempting to spin their imaginary guitar around their body and accidentally hitting themselves.","{name} {performance} the challenge after turning a traditional Christmas carol into an aggressive heavy metal performance.","{name} {performance} the challenge after performing a glamorous glam-rock routine with exaggerated hair flips.","{name} {performance} the challenge after pretending to play an imaginary guitar while riding Santa's sleigh.","{name} {performance} the challenge after performing an over-the-top guitar solo with their tongue sticking out like a rock legend.","{name} {performance} the challenge after accidentally slipping on fake snow during a dramatic rockstar pose.","{name} {performance} the challenge after using a giant Christmas ornament as an imaginary guitar pick.","{name} {performance} the challenge after performing a synchronized air guitar routine alongside the Pit Crew.","{name} {performance} the challenge after attempting to play two imaginary guitars at the same time.","{name} {performance} the challenge after pretending to destroy the stage with an explosive Christmas guitar solo.","{name} {performance} the challenge after performing a chaotic rock routine while dressed as an evil Christmas reindeer.","{name} {performance} the challenge after dramatically crawling across the stage while shredding their imaginary guitar.","{name} {performance} the challenge after performing a perfect guitar solo while maintaining a fierce runway expression.","{name} {performance} the challenge after pretending to play an imaginary guitar using their butt.","{name} {performance} the challenge after getting their oversized Santa beard caught in their imaginary guitar strings.","{name} {performance} the challenge after performing an aggressive air guitar routine while throwing fake snow into the audience.","{name} {performance} the challenge after attempting a dramatic jump off a Christmas present and landing on their knees.","{name} {performance} the challenge after performing a hilarious rockstar tantrum when their imaginary guitar stopped working.","{name} {performance} the challenge after using a giant inflatable candy cane as a microphone stand during their guitar solo.","{name} {performance} the challenge after performing a glam metal routine inspired by an outrageous 1980s rock concert.","{name} {performance} the challenge after pretending to perform a romantic guitar serenade for Santa Claus.","{name} {performance} the challenge after performing an intense air guitar solo while whipping their Christmas wig back and forth.","{name} {performance} the challenge after attempting to jump into the splits while playing their imaginary guitar.","{name} {performance} the challenge after pretending to play an imaginary guitar with their high heel.","{name} {performance} the challenge after performing a chaotic rock concert while dressed as a gingerbread punk princess.","{name} {performance} the challenge after dramatically falling to the floor and continuing their guitar solo on their back.","{name} {performance} the challenge after using a Christmas wreath as an imaginary electric guitar.","{name} {performance} the challenge after performing a heavy metal version of Santa's workshop with exaggerated rockstar moves.","{name} {performance} the challenge after pretending to battle a giant inflatable snowman in an air guitar duel.","{name} {performance} the challenge after performing an impressive guitar solo while doing a series of high kicks.","{name} {performance} the challenge after accidentally tearing their Christmas costume during an enthusiastic headbang.","{name} {performance} the challenge after turning their air guitar solo into a ridiculous one-person rock opera.","{name} {performance} the challenge after performing a fierce punk rock routine while wearing a Christmas tree as a skirt.","{name} {performance} the challenge after pretending to play their imaginary guitar upside down while lying on the stage.","{name} {performance} the challenge after performing an air guitar solo with such dramatic facial expressions that the judges burst into laughter.","{name} {performance} the challenge after attempting to climb a Christmas tree during their rockstar performance.","{name} {performance} the challenge after performing a dramatic guitar solo while surrounded by fake smoke and falling snow.","{name} {performance} the challenge after pretending to smash their imaginary guitar over Santa's head.","{name} {performance} the challenge after transforming into a glam-rock Christmas diva and striking a fierce final pose.","{name} {performance} the challenge after performing a completely offbeat air guitar solo that didn't match the Christmas rock song.","{name} {performance} the challenge after pretending to play an imaginary guitar so intensely that they fell off the stage."],"random":false},{"id":"mini8","name":"Kiss Me Under the Mistletoe","description":"Contestants must deliver their sexiest and funniest pickup lines to a member of the Pit Crew.","weights":{"improv":1.0},"comments":["{name} {performance} the challenge after asking a Pit Crew member, \"Are you Santa? Because I want to sit on your lap all night.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Forget the North Pole, I've got a pole you can dance on.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Is that a candy cane in your pocket, or are you just happy to see me?\"","{name} {performance} the challenge after telling a Pit Crew member, \"Call me a Christmas stocking, because I want you to stuff me with presents.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a snowstorm? Because you've got me snowed in and ready to cuddle.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Santa only comes once a year, but I was hoping you'd visit more often.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you Christmas lights? Because you turn me on.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I've been naughty all year, and I'm ready for my punishment.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you Rudolph? Because I'd follow that red flag anywhere.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You must be a Christmas miracle, because I haven't seen a package that big in years.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you believe in love at frost sight?\"","{name} {performance} the challenge after telling a Pit Crew member, \"If kisses were snowflakes, I'd send you a whole blizzard.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you made of gingerbread? Because you're looking like a whole snack.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I don't need a Christmas tree when I've already found the perfect decoration for my bedroom.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Can I call you Santa? Because I've got a very long wish list.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You can jingle my bells whenever you want.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas cookie? Because I'd love to take a bite.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I don't need mistletoe to give you a reason to kiss me.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a reindeer? Because you've got me feeling a little horny.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You must work at Santa's workshop, because you're giving me everything I've ever wanted.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Would you like to come over and help me deck my halls?\"","{name} {performance} the challenge after telling a Pit Crew member, \"The weather outside is frightful, but what's under your shirt looks delightful.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you Christmas morning? Because I want to wake up next to you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Honey, you can put your milk and cookies on my nightstand anytime.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you the Grinch? Because you've stolen my heart and probably my underwear.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I've already hung my stockings, but there's still room for yours.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you come with a gift receipt? Because I might need to keep you forever.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Baby, I don't need a fireplace when you're already making me hot.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas ornament? Because I'd love to hang around with you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Santa told me to be good, but then you walked into the room.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Can you help me with my Christmas decorations? I need someone tall, handsome, and preferably shirtless.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You're the only thing I want under my tree this Christmas.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a snowman? Because you're making me melt.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I must be a Christmas turkey, because I'm ready to get stuffed with compliments.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Is your name Frosty? Because you make my heart melt every time you smile.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Forget the twelve days of Christmas, I only need one night with you.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you Santa's sleigh? Because I'd love to go for a ride.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You must be on the naughty list, because looking that good should be illegal.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas wreath? Because I want to put a ring on it.\"","{name} {performance} the challenge after telling a Pit Crew member, \"All I want for Christmas is you, preferably without the wrapping.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you know how to roast chestnuts? Because things are getting hot over here.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I've got a candy cane, two stockings, and absolutely no plans tonight.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you Santa's favorite elf? Because you're making my workshop very busy.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I've been waiting all year for a man with a sack like yours.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Is it Christmas already? Because you're making all my wishes come true.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You can call me Mrs. Claus, because I'm looking for a big man in a red suit.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas cracker? Because I'm dying to pull you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I've got plenty of holiday spirit, but I could use a little Christmas cheer from you.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you work in Santa's delivery department? Because you've got one impressive package.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Baby, you don't need to climb down my chimney. The front door is wide open.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas candle? Because you've got me burning with desire.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I'd let you put me on the naughty list every single year.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Can I be your Christmas angel? I promise I'll look good on top.\"","{name} {performance} the challenge after telling a Pit Crew member, \"My Christmas wish is six feet tall, muscular, and standing right in front of me.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas sale? Because everything about you is making me lose control.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Santa can keep his reindeer. I'd rather ride shotgun with you.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Have you been working out at the North Pole? Because those arms could carry my entire Christmas shopping.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I'd kiss you under the mistletoe, but I'd rather skip straight to New Year's.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas tree? Because you're tall, gorgeous, and I want to put my balls on you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I don't know whether you've been naughty or nice, but I'd love to find out.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Is your name Noel? Because you've been running through my Christmas fantasies.\"","{name} {performance} the challenge after telling a Pit Crew member, \"You're hotter than Santa in a leather jumpsuit.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Would you like to be my little drummer boy? Because you've already got my heart beating.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I'm like a Christmas present, expensive, fragile, and absolutely worth opening.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a holiday bonus? Because I wasn't expecting you, but I definitely deserve you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I'm dreaming of a white Christmas, but I'd settle for a shirtless one.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you believe in Santa Claus, or should I sit on your lap and explain?\"","{name} {performance} the challenge after telling a Pit Crew member, \"You're the reason Santa put me on the naughty list this year.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a Christmas pudding? Because you're thick, sweet, and I want another serving.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Forget the Christmas ham, you're the only piece of meat I'm interested in tonight.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you my Secret Santa? Because I really hope you're coming home with me.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Honey, the only thing getting lit this Christmas is me when you walk into the room.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Can you help me untangle my Christmas lights? I promise that's not the only thing that's a mess.\"","{name} {performance} the challenge after telling a Pit Crew member, \"I asked Santa for a six-pack, but I didn't expect him to deliver the whole man.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you the North Pole? Because I'd travel a thousand miles just to see you.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Santa checks his list twice, but I'd check you out at least three times.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Do you have a name, or can I just call you my Christmas miracle?\"","{name} {performance} the challenge after telling a Pit Crew member, \"I don't need a Christmas bonus. Just give me your number.\"","{name} {performance} the challenge after asking a Pit Crew member, \"Are you a gingerbread house? Because I want to move right in.\"","{name} {performance} the challenge after telling a Pit Crew member, \"Baby, you're so fine I'd let you eat my Christmas cookie.\""],"random":false},{"id":"mini9","name":"Christmas Carol-oke","description":"Contestants must perform classic Christmas carols with ridiculous lyrics and dramatic performances.","weights":{"dance":0.5,"lipsync":0.5},"comments":["{name} {performance} the challenge after performing a dramatic operatic version of \"Silent Night\" while pretending to faint onstage.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a raunchy anthem about decorating the Pit Crew.","{name} {performance} the challenge after performing \"O Christmas Tree\" while dressed as a Christmas tree with enormous breasts.","{name} {performance} the challenge after turning \"Joy to the World\" into a gospel anthem about RuPaul being the true queen of Christmas.","{name} {performance} the challenge after performing a ridiculous version of \"The Twelve Days of Christmas\" about twelve different drag queen disasters.","{name} {performance} the challenge after rewriting \"We Wish You a Merry Christmas\" into a desperate plea for the judges to give them a win.","{name} {performance} the challenge after turning \"O Holy Night\" into an emotional ballad about getting eliminated before the finale.","{name} {performance} the challenge after performing \"Jingle Bells\" with lyrics about their terrible dating history.","{name} {performance} the challenge after singing \"Silent Night\" as a drunken Mrs. Claus who has just discovered Santa cheating.","{name} {performance} the challenge after turning \"Deck the Halls\" into a hilarious rap about stealing other queens' wigs.","{name} {performance} the challenge after performing \"O Christmas Tree\" as a seductive burlesque number dedicated to the Pit Crew.","{name} {performance} the challenge after rewriting \"The First Noel\" into a dramatic song about their first time doing drag.","{name} {performance} the challenge after turning \"Hark! The Herald Angels Sing\" into a shady anthem about Michelle Visage's critiques.","{name} {performance} the challenge after performing \"Away in a Manger\" as a soap opera about being abandoned by their drag mother.","{name} {performance} the challenge after rewriting \"God Rest Ye Merry, Gentlemen\" into a song about all the men who have ghosted them.","{name} {performance} the challenge after turning \"The Twelve Days of Christmas\" into a countdown of their twelve worst runway outfits.","{name} {performance} the challenge after singing \"Jingle Bells\" in an exaggerated death metal voice while violently headbanging.","{name} {performance} the challenge after performing \"Silent Night\" as a dramatic diva whose Christmas dinner has been completely ruined.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a song about decorating their house with stolen drag costumes.","{name} {performance} the challenge after turning \"Joy to the World\" into a ridiculous celebration of their own beauty and talent.","{name} {performance} the challenge after performing \"O Holy Night\" with so many unnecessary vocal runs that they completely lost the melody.","{name} {performance} the challenge after rewriting \"We Three Kings\" into a song about three shirtless men fighting for their affection.","{name} {performance} the challenge after singing \"O Christmas Tree\" while dramatically flirting with a member of the Pit Crew.","{name} {performance} the challenge after turning \"We Wish You a Merry Christmas\" into a shady roast of every other contestant.","{name} {performance} the challenge after performing \"Carol of the Bells\" with ridiculous lyrics about their Christmas shopping addiction.","{name} {performance} the challenge after rewriting \"Jingle Bells\" into a song about Santa getting arrested for breaking into people's houses.","{name} {performance} the challenge after turning \"Silent Night\" into a dramatic breakup ballad about being dumped on Christmas Eve.","{name} {performance} the challenge after performing \"Deck the Halls\" as a chaotic cheerleading routine with excessive high kicks.","{name} {performance} the challenge after rewriting \"The Twelve Days of Christmas\" into a list of increasingly inappropriate gifts from Santa.","{name} {performance} the challenge after singing \"O Holy Night\" while crawling across the stage and dramatically reaching toward the ceiling.","{name} {performance} the challenge after turning \"Joy to the World\" into a gospel performance about finally getting their makeup right.","{name} {performance} the challenge after rewriting \"The First Noel\" into a ridiculous story about Santa accidentally entering a gay nightclub.","{name} {performance} the challenge after performing \"Jingle Bells\" with fake opera vocals while wearing an enormous Victorian gown.","{name} {performance} the challenge after turning \"Deck the Halls\" into a country song about catching their boyfriend kissing Santa.","{name} {performance} the challenge after rewriting \"O Christmas Tree\" into a song about their wig being taller than the Christmas tree.","{name} {performance} the challenge after performing \"Silent Night\" as an angry mother screaming at her children for ruining Christmas.","{name} {performance} the challenge after turning \"We Wish You a Merry Christmas\" into a dramatic Broadway number about wanting expensive presents.","{name} {performance} the challenge after rewriting \"The Twelve Days of Christmas\" into a series of complaints about the judges' critiques.","{name} {performance} the challenge after singing \"Hark! The Herald Angels Sing\" while pretending to be an angel who got kicked out of heaven.","{name} {performance} the challenge after turning \"Jingle Bells\" into a hilarious disco anthem about Santa partying with drag queens.","{name} {performance} the challenge after performing \"O Holy Night\" as a ridiculously dramatic funeral for their broken Christmas ornament.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a song about covering their ex-boyfriend's house in toilet paper.","{name} {performance} the challenge after turning \"Away in a Manger\" into a dramatic soap opera about a missing Christmas ham.","{name} {performance} the challenge after singing \"Silent Night\" in a deliberately terrible Mariah Carey impression.","{name} {performance} the challenge after rewriting \"Joy to the World\" into a song about winning the crown before the competition even started.","{name} {performance} the challenge after turning \"O Christmas Tree\" into a hilarious anthem about their obsession with expensive wigs.","{name} {performance} the challenge after performing \"The Twelve Days of Christmas\" while dramatically throwing fake presents into the audience.","{name} {performance} the challenge after rewriting \"Jingle Bells\" into a song about Rudolph having a scandalous affair with Mrs. Claus.","{name} {performance} the challenge after performing \"We Wish You a Merry Christmas\" as a desperate diva begging Santa for a rich husband.","{name} {performance} the challenge after turning \"Carol of the Bells\" into a chaotic rap about running away from Christmas family dinners.","{name} {performance} the challenge after singing \"O Holy Night\" while pretending to give birth to a giant Christmas ornament.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a song about their terrible experiences on dating apps.","{name} {performance} the challenge after performing \"Jingle Bells\" as a seductive jazz number with exaggerated hip movements.","{name} {performance} the challenge after turning \"Silent Night\" into a horror-themed performance about a murderous Christmas elf.","{name} {performance} the challenge after rewriting \"The First Noel\" into a ridiculous song about the first time they got drunk at a Christmas party.","{name} {performance} the challenge after performing \"Joy to the World\" with exaggerated gospel vocals and a dramatic death drop.","{name} {performance} the challenge after turning \"The Twelve Days of Christmas\" into a song about twelve different men they dated in December.","{name} {performance} the challenge after rewriting \"O Christmas Tree\" into a song about getting tangled in Christmas lights while doing drag.","{name} {performance} the challenge after singing \"We Three Kings\" while pretending to be three different celebrities arguing over Christmas presents.","{name} {performance} the challenge after performing \"Silent Night\" as a drunk aunt who keeps interrupting Christmas dinner with family secrets.","{name} {performance} the challenge after turning \"Jingle Bells\" into a ridiculous heavy metal song about Santa's reindeer going on strike.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a shady anthem about every queen's questionable fashion choices.","{name} {performance} the challenge after performing \"O Holy Night\" while dramatically removing layers of clothing to reveal a sparkly bodysuit.","{name} {performance} the challenge after turning \"Joy to the World\" into a hilarious song about finally finding a man with a job.","{name} {performance} the challenge after rewriting \"The Twelve Days of Christmas\" into a list of twelve reasons why Michelle Visage hates their outfits.","{name} {performance} the challenge after singing \"O Christmas Tree\" as a dramatic diva mourning the death of her favorite houseplant.","{name} {performance} the challenge after turning \"We Wish You a Merry Christmas\" into a punk rock song about refusing to visit their in-laws.","{name} {performance} the challenge after performing \"Jingle Bells\" while attempting a tap dance routine and forgetting half the lyrics.","{name} {performance} the challenge after rewriting \"Silent Night\" into a song about their boyfriend snoring so loudly that nobody can sleep.","{name} {performance} the challenge after turning \"Hark! The Herald Angels Sing\" into a song about the angels gossiping about Santa's love life.","{name} {performance} the challenge after performing \"Deck the Halls\" while pretending to fight an imaginary Christmas tree.","{name} {performance} the challenge after rewriting \"The First Noel\" into a song about their first disastrous lip sync performance.","{name} {performance} the challenge after singing \"O Holy Night\" as a melodramatic diva who has just discovered that Christmas has been canceled.","{name} {performance} the challenge after turning \"Jingle Bells\" into a raunchy cabaret number about finding Santa under the mistletoe.","{name} {performance} the challenge after rewriting \"The Twelve Days of Christmas\" into a hilarious list of twelve cosmetic procedures they want for Christmas.","{name} {performance} the challenge after performing \"Joy to the World\" as an overexcited televangelist preaching about the power of drag.","{name} {performance} the challenge after turning \"Silent Night\" into a ridiculous lullaby for a misbehaving Pit Crew member.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a song about throwing a wild Christmas party in the Werk Room.","{name} {performance} the challenge after singing \"Carol of the Bells\" in an exaggerated robotic voice while doing awkward mechanical dance moves.","{name} {performance} the challenge after performing \"O Christmas Tree\" as a glamorous Christmas tree demanding to be worshipped.","{name} {performance} the challenge after turning \"We Wish You a Merry Christmas\" into a dramatic plea for Santa to pay their overdue rent.","{name} {performance} the challenge after rewriting \"Jingle Bells\" into a hilarious song about the Pit Crew wearing nothing but Santa hats.","{name} {performance} the challenge after singing \"O Holy Night\" while dramatically collapsing into the arms of two Christmas elves.","{name} {performance} the challenge after turning \"The Twelve Days of Christmas\" into a chaotic countdown of twelve different drag transformations.","{name} {performance} the challenge after performing \"Silent Night\" as a furious Mrs. Claus threatening to divorce Santa on Christmas morning.","{name} {performance} the challenge after rewriting \"Joy to the World\" into a song about RuPaul finally remembering their name.","{name} {performance} the challenge after turning \"Deck the Halls\" into a disco anthem about decorating Santa's sleigh with rhinestones.","{name} {performance} the challenge after performing \"Jingle Bells\" as a terrible lounge singer who keeps flirting with the judges.","{name} {performance} the challenge after rewriting \"The First Noel\" into a hilarious song about accidentally setting their Christmas wig on fire.","{name} {performance} the challenge after singing \"We Wish You a Merry Christmas\" while dramatically begging the judges not to send them home.","{name} {performance} the challenge after turning \"O Christmas Tree\" into a ridiculous ballad about falling in love with a handsome Christmas elf.","{name} {performance} the challenge after performing \"Silent Night\" with an unnecessarily long whistle note that made the judges cover their ears.","{name} {performance} the challenge after rewriting \"The Twelve Days of Christmas\" into a song about receiving increasingly useless gifts from their ex.","{name} {performance} the challenge after turning \"Jingle Bells\" into a high-energy salsa number about Santa vacationing in Miami.","{name} {performance} the challenge after performing \"O Holy Night\" as a glamorous opera singer who keeps interrupting herself to fix her wig.","{name} {performance} the challenge after rewriting \"Deck the Halls\" into a hilarious song about the judges getting coal in their stockings.","{name} {performance} the challenge after turning \"Joy to the World\" into a triumphant anthem about stealing Christmas from the Grinch.","{name} {performance} the challenge after performing \"We Wish You a Merry Christmas\" as a seductive burlesque number dedicated to the Pit Crew.","{name} {performance} the challenge after rewriting \"Jingle Bells\" into a song about Santa discovering the wonders of online dating.","{name} {performance} the challenge after singing \"Silent Night\" while sobbing uncontrollably over a missing Christmas cookie.","{name} {performance} the challenge after turning \"The Twelve Days of Christmas\" into a rapid-fire roast of twelve imaginary drag queens.","{name} {performance} the challenge after performing \"O Christmas Tree\" with ridiculous lyrics about their enormous Christmas shopping debt."],"random":false},{"id":"mini10","name":"The Nutcracker","description":"Contestants must crack as many nuts as possible using their thighs while dressed in Christmas drag.","weights":{},"comments":["{name} {performance} the challenge after struggling to crack a single nut despite squeezing their thighs with all their strength.","{name} {performance} the challenge after crushing several nuts in a row while maintaining a glamorous Christmas pose.","{name} {performance} the challenge after accidentally launching a walnut across the Werk Room while squeezing their thighs.","{name} {performance} the challenge after cracking a dozen nuts while dressed as a sexy Mrs. Claus.","{name} {performance} the challenge after spending more time adjusting their Christmas outfit than actually cracking nuts.","{name} {performance} the challenge after crushing a walnut so dramatically that the judges burst into laughter.","{name} {performance} the challenge after getting a nut stuck between their thighs and struggling to shake it loose.","{name} {performance} the challenge after cracking nuts while performing an outrageous Christmas striptease.","{name} {performance} the challenge after squeezing their thighs so hard that their Christmas wig fell off.","{name} {performance} the challenge after cracking nuts in perfect rhythm to a Christmas song.","{name} {performance} the challenge after attempting to crack a giant walnut and dramatically falling onto the floor.","{name} {performance} the challenge after crushing an entire pile of nuts while wearing enormous platform heels.","{name} {performance} the challenge after repeatedly dropping their nuts before they could even attempt to crack them.","{name} {performance} the challenge after turning their nutcracking technique into a ridiculous twerking routine.","{name} {performance} the challenge after cracking several nuts while dressed as a glamorous Christmas reindeer.","{name} {performance} the challenge after trying to crack a nut with their thighs and accidentally ripping their Christmas tights.","{name} {performance} the challenge after performing a dramatic death drop immediately after cracking their first nut.","{name} {performance} the challenge after cracking nuts so quickly that the Pit Crew could barely keep count.","{name} {performance} the challenge after squeezing a walnut between their thighs for an entire minute without making a dent.","{name} {performance} the challenge after using their powerful thighs to crack the largest nut in the competition.","{name} {performance} the challenge after getting distracted by a shirtless Pit Crew member and forgetting about their nuts.","{name} {performance} the challenge after cracking a walnut while performing a dramatic hair flip.","{name} {performance} the challenge after attempting to crack nuts while balancing on one leg.","{name} {performance} the challenge after creating a hilarious comedy routine about how nobody has ever handled their nuts properly.","{name} {performance} the challenge after crushing several nuts while dressed as a naughty Christmas elf.","{name} {performance} the challenge after accidentally crushing their Christmas ornament instead of the walnut between their thighs.","{name} {performance} the challenge after cracking nuts with surprising ease while wearing an enormous Santa belly.","{name} {performance} the challenge after struggling to keep the nuts between their slippery satin stockings.","{name} {performance} the challenge after dramatically screaming every time a nut cracked between their thighs.","{name} {performance} the challenge after performing a seductive chair dance while cracking walnuts between their legs.","{name} {performance} the challenge after crushing an impressive number of nuts without breaking a sweat.","{name} {performance} the challenge after accidentally sending a walnut flying into the judges' table.","{name} {performance} the challenge after cracking nuts while pretending to be an angry Mrs. Claus punishing Santa.","{name} {performance} the challenge after attempting to crack nuts in a full Christmas tree costume that barely allowed them to move.","{name} {performance} the challenge after cracking several nuts while doing exaggerated squats.","{name} {performance} the challenge after getting their Christmas skirt tangled around their legs and losing precious time.","{name} {performance} the challenge after crushing a walnut and celebrating like they had just won the crown.","{name} {performance} the challenge after attempting to crack a coconut between their thighs instead of a walnut.","{name} {performance} the challenge after accidentally knocking over their entire bowl of nuts with their giant Christmas boots.","{name} {performance} the challenge after cracking nuts while performing an exaggerated ballet routine inspired by The Nutcracker.","{name} {performance} the challenge after spending the entire challenge making dirty jokes instead of cracking nuts.","{name} {performance} the challenge after breaking their own personal record for the most nuts cracked in thirty seconds.","{name} {performance} the challenge after cracking a walnut so forcefully that pieces of the shell flew into their wig.","{name} {performance} the challenge after attempting to crush two walnuts at once and failing spectacularly.","{name} {performance} the challenge after cracking nuts while singing a ridiculous version of \"Jingle Bells.\"","{name} {performance} the challenge after pretending their thighs were a professional nutcracking machine.","{name} {performance} the challenge after repeatedly squeezing the same walnut without realizing it was already cracked.","{name} {performance} the challenge after cracking nuts while wearing a ridiculous inflatable reindeer costume.","{name} {performance} the challenge after managing to crush three walnuts simultaneously between their thighs.","{name} {performance} the challenge after accidentally snapping their Christmas garter belt during an enthusiastic squeeze.","{name} {performance} the challenge after turning every successful crack into an over-the-top victory dance.","{name} {performance} the challenge after attempting to crack nuts while doing the splits.","{name} {performance} the challenge after crushing a walnut and immediately pretending to faint from exhaustion.","{name} {performance} the challenge after accidentally sitting on their bowl of nuts and scattering them everywhere.","{name} {performance} the challenge after cracking nuts while delivering a dramatic monologue about Santa's missing sack.","{name} {performance} the challenge after using their thick thigh pads to squeeze walnuts without any success.","{name} {performance} the challenge after cracking nuts in rapid succession while dressed as a glamorous snow queen.","{name} {performance} the challenge after struggling to position a single walnut between their heavily padded thighs.","{name} {performance} the challenge after cracking a nut and shouting that their thighs deserved their own Christmas special.","{name} {performance} the challenge after performing an impressive series of thigh squeezes without dropping a single walnut.","{name} {performance} the challenge after accidentally crushing a Christmas bauble that had fallen into their lap.","{name} {performance} the challenge after cracking nuts while pretending to seduce a shirtless Christmas elf.","{name} {performance} the challenge after making a ridiculous face every time they attempted to squeeze their thighs together.","{name} {performance} the challenge after crushing several walnuts while maintaining a perfect runway smile.","{name} {performance} the challenge after accidentally breaking a heel during an overly enthusiastic nutcracking attempt.","{name} {performance} the challenge after performing a chaotic nutcracking routine while dressed as the Sugar Plum Fairy.","{name} {performance} the challenge after squeezing their thighs so dramatically that they fell backward off their chair.","{name} {performance} the challenge after cracking an entire row of walnuts without stopping for a break.","{name} {performance} the challenge after accidentally launching a nut into another contestant's Christmas wig.","{name} {performance} the challenge after cracking nuts while pretending to be a professional Christmas fitness instructor.","{name} {performance} the challenge after trying to crack a walnut with their thighs and accidentally tearing their Santa shorts.","{name} {performance} the challenge after crushing their final walnut with a dramatic death drop.","{name} {performance} the challenge after struggling to crack nuts because their enormous Christmas bow kept getting in the way.","{name} {performance} the challenge after performing a ridiculous thigh workout before attempting their first walnut.","{name} {performance} the challenge after cracking several nuts while making exaggerated moaning noises.","{name} {performance} the challenge after squeezing their thighs so hard that their Santa hat flew off.","{name} {performance} the challenge after accidentally cracking a plastic ornament instead of an actual nut.","{name} {performance} the challenge after using their thighs to crack a walnut while balancing a Christmas present on their head.","{name} {performance} the challenge after attempting to crack nuts in an enormous ball gown and getting completely tangled in the fabric.","{name} {performance} the challenge after cracking nuts while doing a synchronized dance routine with the Pit Crew.","{name} {performance} the challenge after desperately trying to crack one final walnut before the timer ran out.","{name} {performance} the challenge after crushing several nuts while repeatedly shouting \"Ho, Ho, Ho!\"","{name} {performance} the challenge after turning their nutcracking attempts into a hilarious imitation of a malfunctioning robot.","{name} {performance} the challenge after accidentally dropping a walnut into their boot and spending half the challenge searching for it.","{name} {performance} the challenge after cracking nuts while giving the judges seductive looks and exaggerated winks.","{name} {performance} the challenge after squeezing their thighs so hard that the seams of their Christmas costume started splitting.","{name} {performance} the challenge after crushing their final walnut and striking a fierce pose like a victorious Christmas warrior.","{name} {performance} the challenge after cracking nuts so aggressively that their entire chair started shaking.","{name} {performance} the challenge after trying to crack a walnut while wearing an oversized gingerbread costume.","{name} {performance} the challenge after accidentally launching a walnut into a pile of Christmas presents.","{name} {performance} the challenge after using a ridiculous series of squats to crush walnuts between their thighs.","{name} {performance} the challenge after spending several seconds trying to crack a nut that had already fallen onto the floor.","{name} {performance} the challenge after cracking nuts while impersonating a dramatic opera singer.","{name} {performance} the challenge after crushing an impressive number of walnuts despite wearing restrictive Christmas corsetry.","{name} {performance} the challenge after getting so excited about cracking their first nut that they completely forgot to continue.","{name} {performance} the challenge after attempting to crack nuts while riding an inflatable Christmas reindeer.","{name} {performance} the challenge after crushing a walnut and dramatically announcing that Santa wasn't the only one with a powerful sack."],"random":true},{"id":"mini11","name":"What's in Santa's Sack?","description":"Blindfolded contestants must identify mysterious Christmas objects by touch alone.","weights":{},"comments":["{name} {performance} the challenge after correctly identifying a candy cane by its curved shape.","{name} {performance} the challenge after mistaking a Christmas ornament for a giant egg.","{name} {performance} the challenge after identifying a miniature Christmas tree despite getting poked by its plastic branches.","{name} {performance} the challenge after screaming when they touched a cold, slimy piece of Christmas pudding.","{name} {performance} the challenge after mistaking Santa's fake beard for a dead animal.","{name} {performance} the challenge after correctly identifying a Christmas stocking by feeling its fluffy trim.","{name} {performance} the challenge after confusing a gingerbread man with a suspiciously shaped body part.","{name} {performance} the challenge after identifying a Christmas wreath by its prickly branches and decorative berries.","{name} {performance} the challenge after mistaking a rubber reindeer nose for a clown's nose.","{name} {performance} the challenge after refusing to touch a mysterious furry object that turned out to be a Santa hat.","{name} {performance} the challenge after correctly identifying a pinecone without hesitation.","{name} {performance} the challenge after mistaking a Christmas cracker for a rolled-up pair of underwear.","{name} {performance} the challenge after identifying a jingle bell by shaking it and listening to the sound.","{name} {performance} the challenge after screaming when their fingers touched a cold, wet Christmas turkey.","{name} {performance} the challenge after mistaking a miniature sleigh for a toy bathtub.","{name} {performance} the challenge after correctly identifying a gingerbread cookie by feeling its arms and legs.","{name} {performance} the challenge after confusing a Christmas bow with a giant plastic spider.","{name} {performance} the challenge after identifying a snow globe by its round glass surface and heavy base.","{name} {performance} the challenge after mistaking a Christmas tree topper for a medieval weapon.","{name} {performance} the challenge after accidentally crushing a fragile Christmas ornament while trying to identify it.","{name} {performance} the challenge after correctly identifying a nutcracker doll by feeling its large teeth.","{name} {performance} the challenge after mistaking a bundle of tinsel for a cheap synthetic wig.","{name} {performance} the challenge after identifying a wrapped Christmas present without being able to guess what was inside.","{name} {performance} the challenge after confusing a rubber Christmas elf with a garden gnome.","{name} {performance} the challenge after correctly identifying a Christmas candle by its waxy texture.","{name} {performance} the challenge after mistaking a candy cane for a tiny walking stick.","{name} {performance} the challenge after screaming when they touched a bowl of cold cranberry sauce.","{name} {performance} the challenge after identifying a Christmas bauble by feeling its delicate hanging hook.","{name} {performance} the challenge after mistaking a Santa figurine for a garden decoration.","{name} {performance} the challenge after correctly identifying a Christmas gift bow in only a few seconds.","{name} {performance} the challenge after confusing a rubber snowman with a strange children's toy.","{name} {performance} the challenge after identifying a Christmas stocking filled with mysterious lumpy objects.","{name} {performance} the challenge after mistaking a bag of chestnuts for a collection of tiny rocks.","{name} {performance} the challenge after correctly identifying a Christmas tree ornament shaped like an angel.","{name} {performance} the challenge after screaming when a mechanical Christmas reindeer suddenly started moving.","{name} {performance} the challenge after confusing a Christmas garland with a furry snake.","{name} {performance} the challenge after identifying a small wrapped gift by feeling the ribbon tied around it.","{name} {performance} the challenge after mistaking a gingerbread house for a miniature cardboard building.","{name} {performance} the challenge after correctly identifying a Christmas bell by its metal clapper.","{name} {performance} the challenge after confusing a Santa boot decoration with an oversized drinking cup.","{name} {performance} the challenge after mistaking a plush Christmas reindeer for a stuffed dog.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a snowflake.","{name} {performance} the challenge after screaming when they touched a bowl of sticky marshmallow fluff.","{name} {performance} the challenge after confusing a Christmas tree skirt with an enormous tablecloth.","{name} {performance} the challenge after correctly identifying a pair of reindeer antlers by their distinctive shape.","{name} {performance} the challenge after mistaking a Christmas pudding for a wet sponge.","{name} {performance} the challenge after identifying a Santa hat by feeling its fluffy pom-pom.","{name} {performance} the challenge after confusing a Christmas wreath with a bird's nest.","{name} {performance} the challenge after mistaking a toy Christmas train for a miniature vacuum cleaner.","{name} {performance} the challenge after correctly identifying a peppermint candy by its distinctive spiral shape.","{name} {performance} the challenge after screaming when they discovered a mysterious object was a rubber chicken wearing a Santa hat.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a star for a throwing weapon.","{name} {performance} the challenge after identifying a Christmas gift bag by feeling its handles and tissue paper.","{name} {performance} the challenge after confusing a pair of elf shoes with oversized clown slippers.","{name} {performance} the challenge after correctly identifying a miniature Christmas village house by feeling its tiny chimney.","{name} {performance} the challenge after mistaking a Christmas bauble covered in glitter for a disco ball.","{name} {performance} the challenge after screaming when they touched a bowl of cold, slippery cranberry jelly.","{name} {performance} the challenge after identifying a Christmas tree light by feeling its small plastic bulb.","{name} {performance} the challenge after confusing a gingerbread cookie shaped like Santa with a miniature teddy bear.","{name} {performance} the challenge after correctly identifying a Christmas ribbon by its smooth, silky texture.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a pickle for an actual pickle.","{name} {performance} the challenge after identifying a plush snowman by feeling its carrot-shaped nose.","{name} {performance} the challenge after screaming when they touched a rubber rat hidden inside a Christmas stocking.","{name} {performance} the challenge after confusing a Christmas candleholder with a tiny trophy.","{name} {performance} the challenge after correctly identifying a Christmas cracker by feeling its twisted ends.","{name} {performance} the challenge after mistaking a bundle of Christmas lights for a tangled necklace.","{name} {performance} the challenge after identifying a miniature Santa sleigh by feeling its curved runners.","{name} {performance} the challenge after confusing a fluffy Christmas ornament with a powder puff.","{name} {performance} the challenge after correctly identifying a Christmas cookie cutter shaped like a reindeer.","{name} {performance} the challenge after screaming when they felt a rubber spider hidden inside a Christmas gift box.","{name} {performance} the challenge after mistaking a Christmas stocking filled with candy for a bag of loose change.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a high heel.","{name} {performance} the challenge after confusing a snow globe with an expensive perfume bottle.","{name} {performance} the challenge after correctly identifying a wooden nutcracker by moving its jaw.","{name} {performance} the challenge after mistaking a Christmas tree topper shaped like an angel for a Barbie doll.","{name} {performance} the challenge after screaming when a vibrating Christmas toy suddenly activated in their hands.","{name} {performance} the challenge after identifying a fake snowball by its soft, fluffy texture.","{name} {performance} the challenge after confusing a candy cane with a miniature shepherd's hook.","{name} {performance} the challenge after mistaking a Christmas pudding covered in sauce for a bowl of wet mud.","{name} {performance} the challenge after correctly identifying a Christmas wreath decorated with tiny bells.","{name} {performance} the challenge after identifying a Christmas ornament shaped like RuPaul's head.","{name} {performance} the challenge after mistaking a fake Santa belly for a giant cushion.","{name} {performance} the challenge after screaming when they touched a cold, slippery rubber fish wrapped in Christmas ribbon.","{name} {performance} the challenge after confusing a Christmas angel figurine with a miniature drag queen.","{name} {performance} the challenge after correctly identifying a pair of Christmas-themed novelty glasses.","{name} {performance} the challenge after mistaking a fuzzy Christmas stocking for an animal's tail.","{name} {performance} the challenge after identifying a Christmas music box by feeling its winding key.","{name} {performance} the challenge after confusing a Christmas tree ornament shaped like lips with a pair of fake butt cheeks.","{name} {performance} the challenge after screaming when they reached into Santa's sack and touched a rubber hand.","{name} {performance} the challenge after correctly identifying a miniature Christmas drum by feeling its drumsticks.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a sausage for a very inappropriate present.","{name} {performance} the challenge after identifying a fake Christmas poinsettia by feeling its large decorative petals.","{name} {performance} the challenge after confusing a stuffed Christmas turkey with a plush reindeer.","{name} {performance} the challenge after correctly identifying a pair of fluffy Christmas earmuffs.","{name} {performance} the challenge after screaming when they touched a bowl full of cold, wet spaghetti disguised as reindeer guts.","{name} {performance} the challenge after mistaking a Christmas-themed dog toy for an expensive designer accessory.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a lipstick.","{name} {performance} the challenge after confusing a miniature Christmas chimney with a cardboard tissue box.","{name} {performance} the challenge after correctly identifying Santa's toy sack by feeling the drawstring and fabric.","{name} {performance} the challenge after mistaking a Christmas tree decoration shaped like a mushroom for a tiny umbrella.","{name} {performance} the challenge after screaming when they accidentally touched the hand of a Pit Crew member hiding behind the table.","{name} {performance} the challenge after identifying a Christmas-themed rubber duck by squeezing it.","{name} {performance} the challenge after confusing a fluffy reindeer tail with a Christmas pom-pom.","{name} {performance} the challenge after correctly identifying a gingerbread house decoration by its roof and chimney.","{name} {performance} the challenge after mistaking a giant Christmas bow for an oversized bra.","{name} {performance} the challenge after screaming when a motion-activated Santa doll started laughing in their hands.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a drag queen's wig.","{name} {performance} the challenge after confusing a plastic mistletoe decoration with a bunch of fake grapes.","{name} {performance} the challenge after correctly identifying a miniature Christmas sleigh loaded with tiny presents.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a hot dog for a suspiciously intimate object.","{name} {performance} the challenge after identifying a fake Christmas fireplace decoration by feeling its plastic flames.","{name} {performance} the challenge after screaming when they reached into a stocking filled with cold, squishy peeled grapes.","{name} {performance} the challenge after confusing a Christmas tree topper with a beauty pageant crown.","{name} {performance} the challenge after correctly identifying a glitter-covered Christmas ornament despite complaining about the mess.","{name} {performance} the challenge after mistaking a miniature reindeer figurine for a tiny horse with an unfortunate hairstyle.","{name} {performance} the challenge after identifying a Christmas stocking shaped like Santa's boot.","{name} {performance} the challenge after screaming when they touched an unexpected rubber tongue hidden inside Santa's sack.","{name} {performance} the challenge after confusing a Christmas ornament shaped like a microphone with a tiny flashlight.","{name} {performance} the challenge after correctly identifying a Christmas wreath made entirely of candy canes.","{name} {performance} the challenge after mistaking a plush Christmas elf for a newborn baby.","{name} {performance} the challenge after identifying a Christmas tree ornament shaped like a disco ball.","{name} {performance} the challenge after confusing a giant Christmas present bow with a tangled hair extension.","{name} {performance} the challenge after screaming when a shirtless Pit Crew member placed his muscular arm into the mystery box.","{name} {performance} the challenge after correctly identifying a Christmas-themed cookie cutter shaped like a snowman.","{name} {performance} the challenge after mistaking a rubber Christmas turkey for a deflated football.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a champagne bottle.","{name} {performance} the challenge after confusing a Santa beard with a pile of synthetic hair extensions.","{name} {performance} the challenge after correctly identifying a Christmas tree topper shaped like a star.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a butt for a pair of Christmas baubles.","{name} {performance} the challenge after screaming when they grabbed a slimy toy slug hidden among the Christmas decorations.","{name} {performance} the challenge after identifying a giant candy cane despite repeatedly dropping it.","{name} {performance} the challenge after confusing a Christmas bell with a miniature metal helmet.","{name} {performance} the challenge after correctly identifying a plush Rudolph toy by feeling its oversized nose.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a corset for a tiny chair.","{name} {performance} the challenge after screaming when they touched a cold, wet rubber octopus wearing a Santa hat.","{name} {performance} the challenge after identifying a Christmas gift box containing a pair of fluffy slippers.","{name} {performance} the challenge after confusing a Christmas star decoration with a giant plastic snowflake.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a pair of high heels.","{name} {performance} the challenge after mistaking a fake Christmas ham for a giant rubber butt cheek.","{name} {performance} the challenge after identifying Santa's belt by feeling its enormous buckle.","{name} {performance} the challenge after screaming when they accidentally squeezed a rubber squeaky toy that sounded like a fart.","{name} {performance} the challenge after confusing a Christmas tree decoration shaped like a flamingo with a reindeer.","{name} {performance} the challenge after correctly identifying a miniature Christmas present wrapped in textured paper.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a banana for a very questionable gift.","{name} {performance} the challenge after identifying a Christmas angel's wings by feeling their feathered texture.","{name} {performance} the challenge after screaming when they discovered the mysterious object was a fake severed hand wearing a Christmas glove.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a tiny drag queen.","{name} {performance} the challenge after confusing a pinecone with a miniature hedgehog.","{name} {performance} the challenge after mistaking a Christmas tree topper for a giant hair accessory.","{name} {performance} the challenge after identifying a Christmas wreath made from oversized gift bows.","{name} {performance} the challenge after screaming when their hands landed on a pile of cold jelly disguised as melted snowman remains.","{name} {performance} the challenge after correctly identifying a Santa figurine by feeling its beard and pointed hat.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a pickle for a tiny cucumber.","{name} {performance} the challenge after identifying a Christmas stocking stuffed with miniature presents.","{name} {performance} the challenge after confusing a Christmas ornament shaped like a snowman with a rubber bowling pin.","{name} {performance} the challenge after screaming when they touched a rubber snake hidden inside a Christmas gift bag.","{name} {performance} the challenge after correctly identifying a candy cane-shaped Christmas decoration.","{name} {performance} the challenge after mistaking a miniature Christmas tree for a plastic toilet brush.","{name} {performance} the challenge after identifying a pair of elf ears by their exaggerated pointed tips.","{name} {performance} the challenge after confusing a Christmas ornament shaped like Santa's face with an elderly man's mask.","{name} {performance} the challenge after correctly identifying a Christmas gift tag shaped like a snowflake.","{name} {performance} the challenge after screaming when they touched a giant inflatable Christmas ornament that suddenly deflated.","{name} {performance} the challenge after mistaking a plush gingerbread man for a stuffed teddy bear.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a pair of lips.","{name} {performance} the challenge after confusing a decorative Christmas icicle with a plastic dagger.","{name} {performance} the challenge after correctly identifying a Christmas snow globe without dropping it.","{name} {performance} the challenge after mistaking a Christmas-themed rubber duck for a miniature Santa Claus.","{name} {performance} the challenge after screaming when they reached into a Christmas stocking and felt a rubber foot.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a glittery crown.","{name} {performance} the challenge after confusing a miniature Christmas tree with a fake cactus.","{name} {performance} the challenge after correctly identifying a wooden nutcracker soldier by feeling its hat and movable jaw.","{name} {performance} the challenge after mistaking Santa's fake beard for a cheap drag wig.","{name} {performance} the challenge after identifying a Christmas ornament shaped like a candy cane.","{name} {performance} the challenge after screaming when they touched a wet sponge shaped like a Christmas turkey.","{name} {performance} the challenge after confusing a miniature Christmas sleigh with a doll's bed.","{name} {performance} the challenge after correctly identifying a Christmas stocking despite being convinced it was someone's sock.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a peach for a pair of butt cheeks.","{name} {performance} the challenge after identifying a Christmas bell by ringing it repeatedly.","{name} {performance} the challenge after screaming when they touched a rubber eyeball hidden inside a Christmas pudding.","{name} {performance} the challenge after confusing a Christmas angel decoration with a tiny fairy.","{name} {performance} the challenge after correctly identifying a Christmas tree ornament shaped like a reindeer.","{name} {performance} the challenge after mistaking a fluffy Santa hat for a dead rabbit.","{name} {performance} the challenge after identifying a miniature Christmas present by feeling its perfectly tied bow.","{name} {performance} the challenge after screaming when a Christmas toy suddenly started singing and vibrating in their hands.","{name} {performance} the challenge after confusing a Christmas wreath made of plastic holly with a crown of thorns.","{name} {performance} the challenge after correctly identifying a star-shaped Christmas cookie cutter.","{name} {performance} the challenge after mistaking a rubber snowman nose for a tiny carrot-shaped toy.","{name} {performance} the challenge after identifying a decorative Christmas lantern by feeling its handle and glass panels.","{name} {performance} the challenge after screaming when they touched a hairy coconut disguised as Santa's missing head.","{name} {performance} the challenge after confusing a Christmas ornament shaped like a lipstick with a tiny candle.","{name} {performance} the challenge after correctly identifying a miniature Christmas train by feeling its wheels.","{name} {performance} the challenge after mistaking a Christmas tree ornament shaped like a sausage for a rubber finger.","{name} {performance} the challenge after identifying a Christmas wreath covered in jingle bells.","{name} {performance} the challenge after screaming when a fake Christmas rat jumped out of the mystery box.","{name} {performance} the challenge after correctly identifying a wrapped Christmas candy by feeling its twisted ends.","{name} {performance} the challenge after confusing a Christmas decoration shaped like a snowflake with a plastic spiderweb.","{name} {performance} the challenge after mistaking a Christmas stocking full of marbles for Santa's missing balls.","{name} {performance} the challenge after identifying a miniature Christmas tree made of bottle brushes.","{name} {performance} the challenge after screaming when they touched a rubber turkey leg hidden inside Santa's sack.","{name} {performance} the challenge after correctly identifying an oversized Christmas ornament shaped like a gift box.","{name} {performance} the challenge after confusing a Christmas pudding decoration with a tiny birthday cake.","{name} {performance} the challenge after mistaking a Christmas garland for a furry boa belonging to Michelle Visage.","{name} {performance} the challenge after identifying a Santa Claus figurine by feeling its miniature gift sack.","{name} {performance} the challenge after screaming when a Pit Crew member secretly tickled their hand with a feather.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a snowman.","{name} {performance} the challenge after confusing a glittery Christmas star with an oversized earring.","{name} {performance} the challenge after mistaking a Christmas tree decoration shaped like a mushroom for a very suspicious object.","{name} {performance} the challenge after identifying a Christmas cracker by shaking it and feeling its cardboard shape.","{name} {performance} the challenge after screaming when they touched a bowl of cold, squishy marshmallows disguised as snowman brains.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like Santa's sleigh.","{name} {performance} the challenge after confusing a plush Christmas reindeer with a stuffed llama.","{name} {performance} the challenge after mistaking a giant Christmas bow for an elaborate drag headpiece.","{name} {performance} the challenge after identifying a Christmas angel figurine by feeling its wings and halo.","{name} {performance} the challenge after screaming when they grabbed a cold rubber frog wearing a tiny Santa hat.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a gingerbread man.","{name} {performance} the challenge after confusing a Santa boot decoration with a miniature flowerpot.","{name} {performance} the challenge after mistaking a Christmas stocking full of candy canes for a bag of tiny weapons.","{name} {performance} the challenge after identifying a Christmas tree skirt by feeling its embroidered snowflake pattern.","{name} {performance} the challenge after screaming when their fingers touched a fake hairy spider hidden beneath Christmas tinsel.","{name} {performance} the challenge after correctly identifying a Christmas wreath made from shiny red ornaments.","{name} {performance} the challenge after confusing a Christmas tree topper shaped like a star with a giant plastic earring.","{name} {performance} the challenge after mistaking a Christmas ornament shaped like a hot dog for a very inappropriate object.","{name} {performance} the challenge after identifying a Santa hat with bells attached to its pom-pom.","{name} {performance} the challenge after screaming when they touched a cold, squishy rubber brain wrapped in Christmas paper.","{name} {performance} the challenge after correctly identifying a miniature gingerbread house by feeling its candy-covered roof.","{name} {performance} the challenge after confusing a Christmas ornament shaped like a reindeer with a miniature moose.","{name} {performance} the challenge after mistaking a Christmas gift bow for an oversized fake eyelash.","{name} {performance} the challenge after identifying a Christmas stocking decorated with fluffy snowflakes.","{name} {performance} the challenge after screaming when a mechanical Santa hand suddenly grabbed their fingers.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a festive cupcake.","{name} {performance} the challenge after confusing a Christmas tree ornament shaped like a gingerbread man with a tiny doll.","{name} {performance} the challenge after mistaking a rubber Christmas ham for an oversized stress ball.","{name} {performance} the challenge after identifying a Christmas wreath with miniature candy canes attached.","{name} {performance} the challenge after screaming when they touched a rubber eyeball hidden inside Santa's sack.","{name} {performance} the challenge after correctly identifying a Christmas ornament shaped like a tiny Santa hat.","{name} {performance} the challenge after confusing a miniature Christmas tree with a tiny feather duster.","{name} {performance} the challenge after mistaking a giant Christmas bauble for a bowling ball.","{name} {performance} the challenge after identifying a Christmas bell by feeling its decorative handle.","{name} {performance} the challenge after screaming when they discovered the mysterious object was a fake rubber tongue covered in cranberry sauce."],"random":true},{"id":"mini12","name":"Twerk the Halls","description":"Contestants must twerk to Christmas music while trying to shake ornaments off their outfits.","weights":{},"comments":["{name} {performance} the challenge after twerking so aggressively that their entire Christmas tree costume fell apart.","{name} {performance} the challenge after struggling to shake even one ornament off their padded backside.","{name} {performance} the challenge after performing an impressive twerking routine while ornaments flew across the stage.","{name} {performance} the challenge after accidentally losing their wig while trying to shake off their final ornament.","{name} {performance} the challenge after twerking in perfect rhythm to \"Jingle Bells\" and clearing their outfit of decorations.","{name} {performance} the challenge after spending more time adjusting their outfit than actually shaking off ornaments.","{name} {performance} the challenge after bouncing their backside so quickly that the judges could barely keep track of the falling ornaments.","{name} {performance} the challenge after getting a Christmas bauble stuck between their butt pads.","{name} {performance} the challenge after shaking off several ornaments while performing a dramatic hair flip.","{name} {performance} the challenge after attempting to twerk in high heels and repeatedly losing their balance.","{name} {performance} the challenge after turning their ornament-shaking routine into a full-blown Christmas striptease.","{name} {performance} the challenge after accidentally knocking over a Christmas tree with their enormous padded backside.","{name} {performance} the challenge after shaking every ornament off their outfit without missing a single beat.","{name} {performance} the challenge after trying to twerk while wearing a restrictive Mrs. Claus corset.","{name} {performance} the challenge after performing a hilarious booty-shaking routine dressed as a giant Christmas pudding.","{name} {performance} the challenge after getting their Christmas ornaments tangled in their fishnet stockings.","{name} {performance} the challenge after twerking so enthusiastically that their Santa hat flew into the audience.","{name} {performance} the challenge after managing to shake off three ornaments with a single powerful booty bounce.","{name} {performance} the challenge after accidentally shaking off their entire skirt instead of the Christmas decorations.","{name} {performance} the challenge after performing a series of impressive squats while shaking ornaments off their thighs.","{name} {performance} the challenge after struggling to move their hips in an enormous inflatable Santa costume.","{name} {performance} the challenge after twerking against a giant Christmas present to knock the ornaments loose.","{name} {performance} the challenge after sending a Christmas bauble flying directly toward the judges' table.","{name} {performance} the challenge after shaking off their ornaments while doing an exaggerated dancehall routine.","{name} {performance} the challenge after accidentally getting a Christmas ornament caught in their wig.","{name} {performance} the challenge after spending the entire challenge twerking with absolutely no ornaments falling off.","{name} {performance} the challenge after performing an energetic booty-shaking routine while dressed as a naughty Christmas elf.","{name} {performance} the challenge after shaking off their ornaments while maintaining a glamorous runway expression.","{name} {performance} the challenge after accidentally breaking a heel during an enthusiastic twerking session.","{name} {performance} the challenge after attempting to shake ornaments off their chest instead of their backside.","{name} {performance} the challenge after performing a ridiculous booty battle against an imaginary Christmas reindeer.","{name} {performance} the challenge after shaking so violently that their Christmas lights became tangled around their legs.","{name} {performance} the challenge after twerking to a dramatic remix of \"Deck the Halls\" while ornaments scattered everywhere.","{name} {performance} the challenge after trying to shake ornaments off their enormous hip pads without any success.","{name} {performance} the challenge after performing an impressive wall twerk while their Christmas decorations fell to the floor.","{name} {performance} the challenge after accidentally knocking a Pit Crew member's Santa hat off with their backside.","{name} {performance} the challenge after shaking every ornament off their outfit before the first chorus even finished.","{name} {performance} the challenge after turning their twerking routine into a ridiculous imitation of a malfunctioning Christmas robot.","{name} {performance} the challenge after getting distracted by the Pit Crew and forgetting to shake off their remaining ornaments.","{name} {performance} the challenge after performing a series of rapid booty pops that sent ornaments flying in every direction.","{name} {performance} the challenge after accidentally twerking their Christmas belt completely off.","{name} {performance} the challenge after trying to remove their ornaments with exaggerated shoulder shimmies.","{name} {performance} the challenge after performing a flawless Christmas-themed dance routine while clearing their outfit of decorations.","{name} {performance} the challenge after shaking so hard that their fake eyelashes began falling off.","{name} {performance} the challenge after attempting a death drop that sent several Christmas ornaments flying.","{name} {performance} the challenge after getting their ornaments stuck in the fabric of their Christmas bodysuit.","{name} {performance} the challenge after using exaggerated hip thrusts to shake ornaments off their waist.","{name} {performance} the challenge after twerking so fast that their padded backside started sliding out of place.","{name} {performance} the challenge after performing a synchronized booty-shaking routine alongside two Christmas elves.","{name} {performance} the challenge after accidentally shaking an ornament into another contestant's wig.","{name} {performance} the challenge after twerking while balancing a Christmas present on their head.","{name} {performance} the challenge after struggling to keep their enormous Christmas wig in place while shaking their hips.","{name} {performance} the challenge after performing an outrageous floor-twerking routine that sent ornaments rolling across the Werk Room.","{name} {performance} the challenge after accidentally knocking over their own bowl of Christmas decorations.","{name} {performance} the challenge after twerking in a giant gingerbread costume that barely allowed their hips to move.","{name} {performance} the challenge after managing to shake off every ornament using nothing but rapid hip movements.","{name} {performance} the challenge after turning their twerking routine into an elaborate Christmas burlesque performance.","{name} {performance} the challenge after accidentally getting their Christmas tinsel tangled between their legs.","{name} {performance} the challenge after shaking off their ornaments while performing an impressive series of high kicks.","{name} {performance} the challenge after spending half the challenge trying to figure out how to move their padded backside.","{name} {performance} the challenge after shaking their booty so dramatically that their Christmas bow snapped in half.","{name} {performance} the challenge after performing a hilarious twerking routine inspired by Santa's reindeer.","{name} {performance} the challenge after trying to shake off ornaments while wearing an enormous Christmas tree skirt.","{name} {performance} the challenge after performing a rapid series of booty pops that cleared their outfit in seconds.","{name} {performance} the challenge after accidentally losing one of their breast pads during a particularly enthusiastic shake.","{name} {performance} the challenge after twerking while pretending to seduce Santa Claus.","{name} {performance} the challenge after getting an ornament stuck under their Christmas boot and repeatedly slipping on it.","{name} {performance} the challenge after shaking off several ornaments while performing a dramatic spin.","{name} {performance} the challenge after attempting to twerk upside down against the wall.","{name} {performance} the challenge after performing a ridiculous Christmas-themed lap dance while trying to dislodge their ornaments.","{name} {performance} the challenge after accidentally knocking their Christmas headpiece off with a powerful booty bounce.","{name} {performance} the challenge after shaking their hips so aggressively that their entire outfit started falling apart.","{name} {performance} the challenge after twerking to \"Rockin' Around the Christmas Tree\" while ornaments bounced across the floor.","{name} {performance} the challenge after struggling to remove the last ornament stuck to their backside.","{name} {performance} the challenge after performing a glamorous slow-motion twerk that barely moved any ornaments.","{name} {performance} the challenge after shaking off every decoration while dressed as a glamorous snow queen.","{name} {performance} the challenge after accidentally sending an ornament flying into a Christmas stocking.","{name} {performance} the challenge after using exaggerated belly dancing movements to shake ornaments off their outfit.","{name} {performance} the challenge after getting their entire Christmas garland tangled around their thighs.","{name} {performance} the challenge after twerking so aggressively that the judges started cheering for their booty.","{name} {performance} the challenge after attempting to shake ornaments off their outfit while doing the splits.","{name} {performance} the challenge after accidentally ripping their Christmas shorts during a vigorous twerking routine.","{name} {performance} the challenge after turning their ornament-shaking performance into a ridiculous aerobics workout.","{name} {performance} the challenge after shaking their backside against a giant inflatable snowman.","{name} {performance} the challenge after accidentally getting a Christmas bell stuck inside their costume.","{name} {performance} the challenge after performing a high-energy twerking routine while dressed as a glamorous reindeer.","{name} {performance} the challenge after trying to shake ornaments off their shoulders with an exaggerated shimmy.","{name} {performance} the challenge after managing to clear their entire outfit of ornaments with a single dramatic booty shake.","{name} {performance} the challenge after accidentally throwing themselves off balance while shaking their hips.","{name} {performance} the challenge after twerking while holding a giant candy cane like a stripper pole.","{name} {performance} the challenge after shaking their ornaments off while performing a chaotic Christmas dance remix.","{name} {performance} the challenge after struggling to twerk because their Christmas costume was stuffed with too much padding.","{name} {performance} the challenge after performing a hilarious booty-shaking routine while dressed as a Christmas turkey.","{name} {performance} the challenge after accidentally knocking a Christmas ornament into the judges' drinks.","{name} {performance} the challenge after shaking their hips so quickly that their wig started spinning around their head.","{name} {performance} the challenge after getting their ornaments caught in their Christmas fringe.","{name} {performance} the challenge after twerking their way across the entire stage while decorations fell behind them.","{name} {performance} the challenge after performing an impressive series of booty rolls that sent ornaments tumbling to the floor.","{name} {performance} the challenge after accidentally losing their Santa beard during a particularly aggressive twerk.","{name} {performance} the challenge after struggling to shake ornaments off their enormous Christmas bustle.","{name} {performance} the challenge after turning their routine into a parody of a Christmas music video.","{name} {performance} the challenge after shaking off the final ornament with a dramatic hip thrust.","{name} {performance} the challenge after performing a ridiculous reindeer mating dance while attempting to dislodge their decorations.","{name} {performance} the challenge after accidentally covering the stage in loose tinsel and ornaments.","{name} {performance} the challenge after twerking so hard that their oversized Christmas earrings flew off.","{name} {performance} the challenge after trying to shake off their ornaments while sitting on Santa's lap.","{name} {performance} the challenge after performing a fierce booty-shaking routine to a Christmas hip-hop remix.","{name} {performance} the challenge after accidentally pulling their Christmas tights down while shaking their hips.","{name} {performance} the challenge after removing almost every ornament but failing to shake off the final one.","{name} {performance} the challenge after attempting an acrobatic handstand twerk that ended in a chaotic tumble.","{name} {performance} the challenge after shaking every ornament off their costume while maintaining perfect choreography.","{name} {performance} the challenge after accidentally losing their entire Christmas tree headpiece during a dramatic booty bounce.","{name} {performance} the challenge after twerking so enthusiastically that the Pit Crew started dancing along.","{name} {performance} the challenge after struggling to shake off their decorations while wearing an oversized Christmas present costume.","{name} {performance} the challenge after performing a hilarious slow-motion booty shake that sent only one ornament rolling away.","{name} {performance} the challenge after clearing their outfit of ornaments while throwing in a dramatic dip.","{name} {performance} the challenge after accidentally getting a Christmas ornament lodged inside their padded bra.","{name} {performance} the challenge after twerking while spinning in circles like a human Christmas ornament.","{name} {performance} the challenge after shaking so hard that their Christmas garland snapped and scattered across the stage.","{name} {performance} the challenge after performing a ridiculous booty-shaking routine while pretending to be a malfunctioning Santa toy.","{name} {performance} the challenge after losing precious time trying to untangle an ornament from their fishnets.","{name} {performance} the challenge after twerking so fiercely that their Christmas costume became completely unrecognizable."],"random":true},{"id":"mini13","name":"Snowball Fight","description":"Contestants must throw fake snowballs at moving targets featuring hilarious pictures of their fellow competitors.","weights":{},"comments":["{name} {performance} the challenge after repeatedly missing a giant target featuring {name2}'s face.","{name} {performance} the challenge after throwing a snowball directly at {name2}'s embarrassing childhood photo.","{name} {performance} the challenge after accidentally hitting a Pit Crew member instead of the moving targets.","{name} {performance} the challenge after knocking down three targets in a row with perfectly aimed snowballs.","{name} {performance} the challenge after throwing snowballs so aggressively that they lost their Christmas wig.","{name} {performance} the challenge after hitting a target featuring {name2}'s disastrous runway look.","{name} {performance} the challenge after spending half the challenge laughing at the ridiculous pictures instead of throwing snowballs.","{name} {performance} the challenge after hitting {name2}'s face right between the eyes on their first attempt.","{name} {performance} the challenge after missing every moving target despite standing directly in front of them.","{name} {performance} the challenge after knocking down a target featuring {name2}'s makeup-free morning selfie.","{name} {performance} the challenge after accidentally throwing a snowball backward into the Christmas decorations.","{name} {performance} the challenge after hitting five targets in rapid succession while maintaining perfect aim.","{name} {performance} the challenge after aiming exclusively at {name2}'s picture and ignoring every other target.","{name} {performance} the challenge after throwing a snowball so dramatically that they spun themselves off balance.","{name} {performance} the challenge after hitting a target featuring {name2} with a ridiculous double chin.","{name} {performance} the challenge after repeatedly throwing snowballs at the same target without realizing it was already knocked down.","{name} {performance} the challenge after successfully hitting a tiny moving target featuring {name2}'s worst Snatch Game impression.","{name} {performance} the challenge after accidentally knocking over an entire stack of unused snowballs.","{name} {performance} the challenge after hitting a target featuring {name2}'s wig falling off during a performance.","{name} {performance} the challenge after throwing snowballs with the intensity of someone getting revenge on their ex.","{name} {performance} the challenge after completely missing a target featuring {name2}'s face despite several attempts.","{name} {performance} the challenge after hitting a moving target while performing a dramatic runway walk.","{name} {performance} the challenge after accidentally launching a fake snowball directly into Michelle Visage's lap.","{name} {performance} the challenge after hitting a target featuring {name2} looking completely ridiculous in an ugly Christmas sweater.","{name} {performance} the challenge after throwing their snowballs so weakly that none of them reached the targets.","{name} {performance} the challenge after knocking down a target featuring {name2}'s most embarrassing lip sync moment.","{name} {performance} the challenge after screaming insults at every target before throwing a snowball.","{name} {performance} the challenge after hitting a moving target featuring {name2}'s terrible makeup from their drag beginnings.","{name} {performance} the challenge after accidentally throwing two snowballs at once and missing both targets.","{name} {performance} the challenge after knocking down nearly every target before the timer ran out.","{name} {performance} the challenge after missing a target featuring {name2}'s face and blaming the moving mechanism.","{name} {performance} the challenge after hitting a target featuring {name2} making an extremely unflattering facial expression.","{name} {performance} the challenge after accidentally slipping on a pile of fake snowballs while preparing their next throw.","{name} {performance} the challenge after knocking down a target featuring {name2}'s exaggerated mugshot.","{name} {performance} the challenge after throwing snowballs while pretending to be an angry Mrs. Claus.","{name} {performance} the challenge after hitting a target featuring {name2}'s disastrous sewing challenge outfit.","{name} {performance} the challenge after getting distracted by the Pit Crew and throwing a snowball in the completely wrong direction.","{name} {performance} the challenge after hitting three moving targets with three consecutive throws.","{name} {performance} the challenge after throwing a snowball at {name2}'s picture and shouting that it was long overdue.","{name} {performance} the challenge after accidentally hitting a Christmas tree instead of the moving targets.","{name} {performance} the challenge after knocking down a target featuring {name2} crying dramatically in the Werk Room.","{name} {performance} the challenge after repeatedly missing the easiest target in the entire challenge.","{name} {performance} the challenge after hitting a target featuring {name2}'s most questionable wig choice.","{name} {performance} the challenge after throwing snowballs so quickly that the Pit Crew struggled to reload the targets.","{name} {performance} the challenge after knocking down a target featuring {name2} with an exaggerated bald head.","{name} {performance} the challenge after accidentally hitting their own picture and pretending it was intentional.","{name} {performance} the challenge after successfully hitting a fast-moving target featuring {name2}'s shocked elimination face.","{name} {performance} the challenge after throwing a snowball directly into a Christmas stocking hanging beside the targets.","{name} {performance} the challenge after hitting a target featuring {name2}'s disastrous attempt at a death drop.","{name} {performance} the challenge after missing every target while making ridiculously dramatic throwing poses.","{name} {performance} the challenge after knocking down a target featuring {name2} dressed as a giant Christmas turkey.","{name} {performance} the challenge after accidentally throwing a snowball into their own face.","{name} {performance} the challenge after hitting a moving target featuring {name2}'s ridiculous celebrity impersonation.","{name} {performance} the challenge after spending the entire challenge yelling at {name2}'s picture without actually hitting it.","{name} {performance} the challenge after knocking down several targets while wearing an enormous Santa Claus costume.","{name} {performance} the challenge after hitting a target featuring {name2}'s face stretched into a ridiculous caricature.","{name} {performance} the challenge after accidentally throwing a snowball into the judges' Christmas decorations.","{name} {performance} the challenge after knocking down a target featuring {name2}'s disastrous talent show performance.","{name} {performance} the challenge after throwing snowballs while performing an exaggerated baseball pitch.","{name} {performance} the challenge after hitting a target featuring {name2}'s face photoshopped onto a reindeer's body.","{name} {performance} the challenge after repeatedly hitting the wall behind the targets instead of the targets themselves.","{name} {performance} the challenge after knocking down a target featuring {name2}'s most unflattering confessionals.","{name} {performance} the challenge after accidentally losing a high heel while throwing a particularly aggressive snowball.","{name} {performance} the challenge after hitting a moving target featuring {name2} wearing a ridiculous Santa beard.","{name} {performance} the challenge after throwing a snowball at {name2}'s picture with such force that the target spun completely around.","{name} {performance} the challenge after failing to hit a target featuring {name2}'s face despite several desperate attempts.","{name} {performance} the challenge after knocking down every target on the left side of the stage.","{name} {performance} the challenge after hitting a target featuring {name2}'s wig photoshopped onto a Christmas ham.","{name} {performance} the challenge after accidentally throwing their entire basket of snowballs onto the floor.","{name} {performance} the challenge after hitting a target featuring {name2}'s face with giant cartoon teeth.","{name} {performance} the challenge after throwing snowballs while pretending to be a professional Olympic athlete.","{name} {performance} the challenge after knocking down a target featuring {name2}'s embarrassing runway trip.","{name} {performance} the challenge after repeatedly aiming for {name2}'s picture and hitting everyone else's instead.","{name} {performance} the challenge after hitting a tiny moving target featuring {name2}'s face on a gingerbread man's body.","{name} {performance} the challenge after accidentally throwing a snowball over the entire target display.","{name} {performance} the challenge after knocking down a target featuring {name2}'s most embarrassing dance move.","{name} {performance} the challenge after attempting to throw snowballs while doing the splits.","{name} {performance} the challenge after hitting a target featuring {name2}'s face photoshopped onto the Grinch.","{name} {performance} the challenge after throwing snowballs so slowly that the moving targets easily passed by.","{name} {performance} the challenge after hitting a target featuring {name2}'s ridiculous Christmas-themed mugshot.","{name} {performance} the challenge after knocking down several targets while making hilarious insults about each picture.","{name} {performance} the challenge after accidentally hitting the same target twice and wasting a perfectly good snowball.","{name} {performance} the challenge after hitting a target featuring {name2} with a badly drawn mustache.","{name} {performance} the challenge after attempting a dramatic spin before throwing and completely missing the target.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face on a shirtless elf's body.","{name} {performance} the challenge after accidentally throwing a fake snowball into their own Christmas wig.","{name} {performance} the challenge after hitting a moving target featuring {name2} wearing a crooked beauty pageant crown.","{name} {performance} the challenge after aiming for {name2}'s face and repeatedly hitting the target's Christmas hat instead.","{name} {performance} the challenge after knocking down a target featuring {name2}'s worst runway makeup.","{name} {performance} the challenge after throwing snowballs with impressive precision while wearing oversized Christmas gloves.","{name} {performance} the challenge after missing an enormous target featuring {name2}'s face and blaming their eyelashes.","{name} {performance} the challenge after hitting a target featuring {name2} looking completely confused during Snatch Game.","{name} {performance} the challenge after accidentally knocking down a target with their elbow instead of a snowball.","{name} {performance} the challenge after hitting a target featuring {name2}'s face photoshopped onto a Christmas ornament.","{name} {performance} the challenge after throwing snowballs while screaming that Santa owed them a crown.","{name} {performance} the challenge after knocking down a target featuring {name2}'s disastrous quick-drag look.","{name} {performance} the challenge after repeatedly missing the targets because their oversized Christmas sleeves kept getting in the way.","{name} {performance} the challenge after hitting a moving target featuring {name2}'s face on a giant snowman's body.","{name} {performance} the challenge after accidentally hitting a Pit Crew member's Santa hat.","{name} {performance} the challenge after knocking down several targets with an impressive series of rapid throws.","{name} {performance} the challenge after hitting a target featuring {name2}'s most embarrassing facial expression during a lip sync.","{name} {performance} the challenge after attempting to throw snowballs backward over their shoulder and missing spectacularly.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face on an oversized Christmas pudding.","{name} {performance} the challenge after getting so excited about hitting one target that they forgot to keep throwing.","{name} {performance} the challenge after hitting a moving target featuring {name2} wearing an enormous pair of fake eyelashes.","{name} {performance} the challenge after accidentally throwing a snowball directly into their own basket.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face photoshopped onto a donkey.","{name} {performance} the challenge after throwing snowballs while pretending to be a furious Christmas villain.","{name} {performance} the challenge after hitting a target featuring {name2}'s disastrous attempt at a Christmas runway.","{name} {performance} the challenge after repeatedly throwing snowballs at a target that had stopped moving.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face with exaggerated cartoon wrinkles.","{name} {performance} the challenge after accidentally hitting the Christmas countdown clock instead of the targets.","{name} {performance} the challenge after successfully hitting the fastest moving target on the stage.","{name} {performance} the challenge after missing a target featuring {name2}'s face despite standing only a few feet away.","{name} {performance} the challenge after hitting a target featuring {name2}'s head photoshopped onto a roast turkey.","{name} {performance} the challenge after throwing a snowball while doing an exaggerated runway pose.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face on a cheap Christmas ornament.","{name} {performance} the challenge after accidentally sending a snowball flying into the audience.","{name} {performance} the challenge after hitting a target featuring {name2}'s most embarrassing audition photo.","{name} {performance} the challenge after pretending that every target was an ex-boyfriend who had ruined Christmas.","{name} {performance} the challenge after knocking down several moving targets without missing a single throw.","{name} {performance} the challenge after hitting a target featuring {name2}'s face photoshopped onto a giant candy cane.","{name} {performance} the challenge after repeatedly missing a stationary target while successfully hitting the moving ones.","{name} {performance} the challenge after hitting a target featuring {name2}'s face with giant cartoon eyebrows.","{name} {performance} the challenge after accidentally throwing their final snowball into the ceiling.","{name} {performance} the challenge after knocking down a target featuring {name2}'s most unfortunate Christmas costume.","{name} {performance} the challenge after delivering a dramatic insult to {name2}'s picture before hitting it perfectly.","{name} {performance} the challenge after hitting a target featuring {name2}'s face photoshopped onto Santa's enormous belly.","{name} {performance} the challenge after missing nearly every target because they kept laughing at the pictures.","{name} {performance} the challenge after knocking down a target featuring {name2}'s face on a giant Christmas gift box.","{name} {performance} the challenge after accidentally hitting a target featuring their own picture."],"random":true}];
@@ -2896,6 +3154,7 @@
       input.checked = state.seasonSetup.specialChallenges.has(input.value);
     });
     syncRuPaulModeUi();
+    renderPremiereChallengeControls();
     const cmmMode=isCallMeMother();
     if(!cmmMode){els.castSize.closest(".range-card").hidden=false;if(els.presetBtn)els.presetBtn.hidden=false;for(const id of ["cmmParentSection"]){const el=document.getElementById(id);if(el)el.hidden=true;}}
     else {cmmAdjustCastUi();}
@@ -3172,6 +3431,8 @@
         holislayMaxiId: state.seasonSetup.holislayMaxiId || "maxi1",
         eliminationFormat: state.seasonSetup.eliminationFormat,
         premiereFormat: state.seasonSetup.premiereFormat,
+        premiereChallengeCategories: [...(state.seasonSetup.premiereChallengeCategories || [])],
+        premiereChallengeFormat: state.seasonSetup.premiereChallengeFormat || "",
         finaleFormat: state.seasonSetup.finaleFormat,
         comebackFormat: state.seasonSetup.comebackFormat,
         randomReturnAmount: Math.max(1, Math.min(7, Number(state.seasonSetup.randomReturnAmount) || 1)),
@@ -3296,6 +3557,8 @@
       state.seasonSetup.holislayMaxiId = HOLISLAY_MAXIS.some((m) => m.id === saved.seasonSetup.holislayMaxiId) ? saved.seasonSetup.holislayMaxiId : "maxi1";
       state.seasonSetup.eliminationFormat = saved.seasonSetup.eliminationFormat || "regular";
       state.seasonSetup.premiereFormat = PREMIERE_FORMATS[saved.seasonSetup.premiereFormat] ? saved.seasonSetup.premiereFormat : "regular";
+      state.seasonSetup.premiereChallengeCategories = Array.isArray(saved.seasonSetup.premiereChallengeCategories) ? [...saved.seasonSetup.premiereChallengeCategories] : [];
+      state.seasonSetup.premiereChallengeFormat = String(saved.seasonSetup.premiereChallengeFormat || "");
       state.seasonSetup.finaleFormat = saved.seasonSetup.finaleFormat || "regular";
       state.seasonSetup.comebackFormat = saved.seasonSetup.comebackFormat || "none";
       state.seasonSetup.randomReturnAmount = Math.max(1, Math.min(7, Number(saved.seasonSetup.randomReturnAmount) || 1));
@@ -3980,7 +4243,7 @@
   }
 
   function updateProceedButton() {
-    const ready = isCallMeMother() ? (cmmSetup().parentIds.length === cmmSetup().parentCount && state.selectedIds.length === state.castSize && state.selectedIds.length >= cmmSetup().parentCount * 4) : (state.selectedIds.length === state.castSize &&
+    const ready = isCallMeMother() ? (cmmSetup().parentIds.length === cmmSetup().parentCount && state.selectedIds.length === state.castSize && state.selectedIds.length >= cmmSetup().parentCount * (cmmSetup().parentCount === 4 ? 3 : 4)) : (state.selectedIds.length === state.castSize &&
       state.selectedIds.length >= (state.simulatorMode === "track-builder" ? 1 : 6));
     els.proceedWrap.hidden = !ready;
   }
@@ -4451,7 +4714,7 @@
   }
 
   const TRACK_BUILDER_DRAG_RACE_VALUES = [
-    "WIN", "TOP2", "HIGH", "HIGH TEAM", "SAFE", "LOW", "BTM", "ELIM",
+    "WIN", "TOP2", "TOP3", "TOP4", "TOP5", "HIGH", "HIGH TEAM", "SAFE", "LOW", "BTM", "ELIM",
     "WINNER", "RUNNER UP", "TOP 2", "TOP 3", "TOP 4",
     "QUIT", "DEPT", "DISQ", "CHOC", "BEAV", "BAG", "HEART",
     "RTRN", "WIN+RTRN", "RUN", "OUT", "ADV", "LOSS", "GUEST", "MISS CON",
@@ -4547,9 +4810,16 @@
     return ppePointsForResult(display);
   }
 
-  function trackBuilderWritePlacement(element, displayed) {
+  function trackBuilderWritePlacement(element, displayed, customText = false) {
     element.replaceChildren();
     if (!displayed) return;
+    if (customText) {
+      String(displayed).split(/\n/).forEach((line, index) => {
+        if (index) element.append(document.createElement("br"));
+        element.append(document.createTextNode(line));
+      });
+      return;
+    }
     if (displayed === "HIGH TEAM") {
       element.append(document.createTextNode("HIGH"), document.createElement("br"), document.createTextNode("TEAM"));
       return;
@@ -4724,6 +4994,59 @@
     trackBuilderPicker = null;
   }
 
+  function openTrackBuilderTextEditor(anchor, contestantId, episodeIndex) {
+    closeTrackBuilderPicker();
+    if (!trackBuilderDraft || !trackBuilderCanonicalPlacement(trackBuilderDraft.placements[contestantId]?.[episodeIndex])) return;
+    const picker = document.createElement("div");
+    picker.className = "track-builder-picker track-builder-text-editor";
+    picker.setAttribute("role", "dialog");
+    picker.setAttribute("aria-label", "Edit placement display text");
+    const input = document.createElement("textarea");
+    input.className = "track-builder-text-input";
+    input.rows = 2;
+    input.maxLength = 60;
+    input.placeholder = "CUSTOM LABEL";
+    input.setAttribute("aria-label", "Cell display text");
+    input.value = trackBuilderDraft.displayOverrides?.[contestantId]?.[episodeIndex] || trackBuilderDisplayPlacement(trackBuilderDraft.placements[contestantId][episodeIndex], episodeIndex);
+    const actions = document.createElement("div");
+    actions.className = "track-builder-rank-actions";
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.textContent = "DEFAULT";
+    const apply = document.createElement("button");
+    apply.type = "button";
+    apply.textContent = "SET";
+    apply.className = "is-primary";
+    const commit = (value) => {
+      if (!trackBuilderDraft) return;
+      if (!trackBuilderDraft.displayOverrides) trackBuilderDraft.displayOverrides = {};
+      if (!trackBuilderDraft.displayOverrides[contestantId]) trackBuilderDraft.displayOverrides[contestantId] = {};
+      const cleaned = String(value || "").replace(/\r/g, "").split("\n").map((line) => line.trim()).filter(Boolean).join("\n").slice(0, 60);
+      const original = trackBuilderDisplayPlacement(trackBuilderDraft.placements[contestantId]?.[episodeIndex], episodeIndex);
+      if (cleaned && cleaned !== original) trackBuilderDraft.displayOverrides[contestantId][episodeIndex] = cleaned;
+      else delete trackBuilderDraft.displayOverrides[contestantId][episodeIndex];
+      closeTrackBuilderPicker();
+      renderTrackBuilder();
+    };
+    reset.addEventListener("click", () => commit(""));
+    apply.addEventListener("click", () => commit(input.value));
+    input.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); commit(input.value); }
+    });
+    actions.append(reset, apply);
+    picker.append(input, actions);
+    document.body.append(picker);
+    trackBuilderPicker = picker;
+    const width = 220;
+    const height = 144;
+    const rect = anchor.getBoundingClientRect();
+    const left = Math.max(8, Math.min(window.innerWidth - width - 8, rect.left));
+    const top = rect.bottom + height > window.innerHeight - 8 ? Math.max(8, rect.top - height - 5) : rect.bottom + 5;
+    Object.assign(picker.style, { left: `${left}px`, top: `${top}px`, width: `${width}px` });
+    input.focus();
+    input.select();
+  }
+
   function openTrackBuilderPicker(anchor, contestantId, episodeIndex) {
     closeTrackBuilderPicker();
     if (!trackBuilderDraft) return;
@@ -4743,11 +5066,21 @@
         if (!trackBuilderDraft.placements[contestantId]) trackBuilderDraft.placements[contestantId] = {};
         if (value) trackBuilderDraft.placements[contestantId][episodeIndex] = trackBuilderCanonicalPlacement(value);
         else delete trackBuilderDraft.placements[contestantId][episodeIndex];
+        if (trackBuilderDraft.displayOverrides?.[contestantId]) delete trackBuilderDraft.displayOverrides[contestantId][episodeIndex];
         closeTrackBuilderPicker();
         renderTrackBuilder();
       });
       parent.append(item);
     };
+    const currentPlacement = trackBuilderCanonicalPlacement(trackBuilderDraft.placements[contestantId]?.[episodeIndex]);
+    if (currentPlacement) {
+      const edit = document.createElement("button");
+      edit.type = "button";
+      edit.className = "track-builder-choice track-builder-edit-text";
+      edit.textContent = "EDIT TEXT";
+      edit.addEventListener("click", () => openTrackBuilderTextEditor(anchor, contestantId, episodeIndex));
+      picker.append(edit);
+    }
     addChoice(picker, "Clear", "");
     const groups = [
       ["DRAG RACE", TRACK_BUILDER_DRAG_RACE_VALUES],
@@ -4827,6 +5160,7 @@
           remove.addEventListener("click", () => {
             trackBuilderDraft.episodes.pop();
             Object.values(trackBuilderDraft.placements).forEach(placements => delete placements[index]);
+            Object.values(trackBuilderDraft.displayOverrides || {}).forEach(labels => delete labels[index]);
             renderTrackBuilder();
           });
           th.append(remove);
@@ -4966,21 +5300,22 @@
       let judgedEpisodes = 0;
       trackBuilderDraft.episodes.forEach((episode, episodeIndex) => {
         const value = trackBuilderCanonicalPlacement(trackBuilderDraft.placements[id]?.[episodeIndex]);
-        const displayed = trackBuilderDisplayPlacement(value, episodeIndex);
+        const overrideText = value ? trackBuilderDraft.displayOverrides?.[id]?.[episodeIndex] : "";
+        const displayed = overrideText || trackBuilderDisplayPlacement(value, episodeIndex);
         const td = document.createElement("td");
         const emphasized = /(?:^|\+)(?:WIN|ELIM)(?=\+|$)/.test(value);
         const afterExit = !value && trackBuilderPostExitBlank(id, episodeIndex);
         td.className = `track-record__placement track-builder-placement ${value ? `placement-${trackBuilderPlacementClass(value, episodeIndex)}` : (afterExit ? "is-post-elimination" : "is-inactive")}${emphasized ? " has-strong-result" : ""}`;
         const text = document.createElement("span");
         text.className = "track-record__placement-main";
-        trackBuilderWritePlacement(text, displayed);
+        trackBuilderWritePlacement(text, displayed, Boolean(overrideText));
         if (forExport) {
           td.append(text);
         } else {
           const button = document.createElement("button");
           button.type = "button";
           button.className = "track-builder-placement-button";
-          button.setAttribute("aria-label", `${queen.nickname || queen.fullName}, episode ${episodeIndex + 1}, ${value ? trackBuilderPlacementLabel(value) : "choose placement"}`);
+          button.setAttribute("aria-label", `${queen.nickname || queen.fullName}, episode ${episodeIndex + 1}, ${value ? displayed : "choose placement"}`);
           button.append(text);
           button.addEventListener("click", () => openTrackBuilderPicker(button, id, episodeIndex));
           td.append(button);
@@ -5060,6 +5395,7 @@
         contestants: [...state.selectedIds],
         episodes: [{ challengeType: "" }],
         placements: {},
+        displayOverrides: {},
         rankOverrides: {},
         showRank: true,
         showFlag: true,
@@ -5192,6 +5528,7 @@
     }
 
     state.seasonRuntime = freshSeasonRuntimeState();
+    if (state.seasonSetup?.productionMode) state.seasonSetup.productionConfirmed = false;
 
     goldenBaguetteHolder = null;
     pendingBaguetteGivers = [];
@@ -5316,13 +5653,95 @@
     persistState();
   }
 
+  const PREMIERE_CHALLENGE_CATEGORY_OPTIONS = [
+    ["talent_show", "TALENT SHOW"],
+    ["girl_group", "GIRL GROUPS"],
+    ["rumix", "RUMIX"],
+    ["design", "DESIGN"],
+    ["runway", "RUNWAY"],
+    ["ball", "BALL"],
+    ["rusical", "RUSICAL"],
+  ];
+
+  function premiereChallengeSlotCount() {
+    return ["season6", "season12", "season14", "rateaqueen", "rateaqueen17", "porkchop"].includes(state.seasonSetup.premiereFormat) ? 2 : 1;
+  }
+
+  function ensurePremiereChallengeCategories() {
+    if (isDragulaMode()) return;
+    const setup = state.seasonSetup;
+    const format = String(setup.premiereFormat || "regular");
+    const count = premiereChallengeSlotCount();
+    const allowed = new Set(PREMIERE_CHALLENGE_CATEGORY_OPTIONS.map(([value]) => value));
+    let categories = Array.isArray(setup.premiereChallengeCategories) ? [...setup.premiereChallengeCategories] : [];
+    if (setup.premiereChallengeFormat !== format) categories = [];
+    while (categories.length < count) {
+      const pool = PREMIERE_CHALLENGE_CATEGORY_OPTIONS.map(([value]) => value).filter((value) => value !== categories.at(-1));
+      categories.push(pickRandom(pool));
+    }
+    setup.premiereChallengeCategories = categories.slice(0, count).map((value) => allowed.has(value) ? value : "design");
+    setup.premiereChallengeFormat = format;
+  }
+
+  function renderPremiereChallengeControls() {
+    const root = document.getElementById("premiereChallengeControls");
+    if (root) root.hidden = true;
+  }
+
+  function appendFirstEpisodeChallengeChoices() {
+    if (isDragulaMode() || isHoliSlayMode() || state.seasonSetup.productionMode) return;
+    ensurePremiereChallengeCategories();
+    const count = premiereChallengeSlotCount();
+    const wrapper = document.createElement("section");
+    wrapper.className = "premiere-first-episode-choices";
+    const heading = document.createElement("h2");
+    heading.textContent = count > 1 ? "PREMIERE CHALLENGES" : "FIRST EPISODE CHALLENGE";
+    wrapper.append(heading);
+    for (let index = 0; index < count; index++) {
+      if (count > 1) {
+        const groupHeading = document.createElement("h3");
+        groupHeading.textContent = state.seasonSetup.premiereFormat === "porkchop"
+          ? (index === 0 ? "WINNERS' GROUP" : "LOSERS' GROUP")
+          : `PREMIERE ${index + 1}`;
+        wrapper.append(groupHeading);
+      }
+      const grid = document.createElement("div");
+      grid.className = "all-stars-first-episode-grid";
+      PREMIERE_CHALLENGE_CATEGORY_OPTIONS.forEach(([value, label]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "setup-option all-stars-first-episode-option";
+        button.classList.toggle("is-selected", state.seasonSetup.premiereChallengeCategories[index] === value);
+        button.textContent = label;
+        button.addEventListener("click", () => {
+          state.seasonSetup.premiereChallengeCategories[index] = value;
+          if (index === 0) state.premiereSetup.firstEpisodeCategory = value;
+          invalidateSeasonRuntime();
+          persistState();
+          renderPremiereSetup();
+        });
+        grid.append(button);
+      });
+      wrapper.append(grid);
+    }
+    els.premiereSetupContent.append(wrapper);
+  }
+
+  function applyPlannedPremiereCategory(descriptor) {
+    if (isDragulaMode() || state.seasonSetup.productionMode) return descriptor;
+    ensurePremiereChallengeCategories();
+    const index = Math.max(0, Math.min(premiereChallengeSlotCount()-1, (Number(descriptor.groupNumber) || 1)-1));
+    const category = state.seasonSetup.premiereChallengeCategories[index];
+    return category ? { ...descriptor, forcedCategory: category, forceSolo: Boolean(descriptor.forceSolo) } : descriptor;
+  }
+
   function premiereFormatConfig(format = state.seasonSetup.premiereFormat) {
     return PREMIERE_FORMATS[format] || PREMIERE_FORMATS.regular;
   }
 
   function premiereRequiresSetup(format = state.seasonSetup.premiereFormat) {
-    if (isAllStarsStyleFormat() && format === "regular") return true;
-    return premiereFormatConfig(format).setup !== "none";
+    if (isDragulaMode() || isHoliSlayMode() || state.seasonSetup.productionMode) return false;
+    return true;
   }
 
   function splitPremiereTargetSize() {
@@ -5378,13 +5797,11 @@
       option.disabled = state.castSize < minCast || goldenBeaverConflict || goldenBaguetteConflict || heartSuccessorConflict;
     });
 
-    const selectedOption = select.options[select.selectedIndex];
-    if (selectedOption?.disabled) {
-      state.seasonSetup.premiereFormat = "regular";
-      select.value = "regular";
-      resetPremiereSetupForFormat("regular");
-      invalidateSeasonRuntime();
-      persistState();
+    const selectedOption = [...select.options].find((option) => option.value === state.seasonSetup.premiereFormat);
+    const warning = document.getElementById("premiereFormatWarning");
+    if (warning) {
+      warning.hidden = !selectedOption?.disabled;
+      warning.textContent = selectedOption?.disabled ? "This premiere is not compatible with the current cast size or elimination format. Please change your settings." : "";
     }
   }
 
@@ -5408,13 +5825,9 @@
       return Boolean(state.premiereSetup.lateEntrantId);
     }
 
-    if (isAllStarsStyleFormat() && state.seasonSetup.premiereFormat === "regular") {
-      return ["design", "runway", "talent_show", "girl_group"].includes(
-        state.premiereSetup.firstEpisodeCategory
-      );
-    }
-
-    return true;
+    ensurePremiereChallengeCategories();
+    return state.seasonSetup.premiereChallengeCategories.length === premiereChallengeSlotCount() &&
+      state.seasonSetup.premiereChallengeCategories.every((value) => PREMIERE_CHALLENGE_CATEGORY_OPTIONS.some(([category]) => category === value));
   }
 
   function makePremiereSetupPortrait(queen) {
@@ -5442,37 +5855,9 @@
     els.premiereSetupContent.replaceChildren();
     els.premiereSetupValidation.textContent = '';
 
-    if (isAllStarsStyleFormat() && format === "regular") {
-      els.premiereSetupTitle.textContent = "FIRST EPISODE";
-      els.premiereSetupCopy.textContent = "Choose what is the first episode of the season!";
-
-      const choices = [
-        ["design", "DESIGN"],
-        ["runway", "RUNWAY"],
-        ["talent_show", "TALENT SHOW"],
-        ["girl_group", "GIRL GROUPS"],
-      ];
-      const grid = document.createElement("div");
-      grid.className = "all-stars-first-episode-grid";
-
-      choices.forEach(([value, label]) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "setup-option all-stars-first-episode-option";
-        button.classList.toggle("is-selected", state.premiereSetup.firstEpisodeCategory === value);
-        button.textContent = label;
-        button.addEventListener("click", () => {
-          state.premiereSetup.firstEpisodeCategory = value;
-          state.premiereSetup.completed = true;
-          invalidateSeasonRuntime();
-          persistState();
-          renderPremiereSetup();
-        });
-        grid.append(button);
-      });
-
-      els.premiereSetupContent.append(grid);
-    } else if (config.setup === 'split') {
+    els.premiereSetupTitle.textContent = "FIRST EPISODE";
+    els.premiereSetupCopy.textContent = "Choose the opening challenge for your season.";
+    if (config.setup === 'split') {
       els.premiereSetupTitle.textContent = 'PREMIERES';
       els.premiereSetupCopy.textContent = '';
 
@@ -5692,6 +6077,7 @@
       paintPortrait();
     }
 
+    appendFirstEpisodeChallengeChoices();
     els.continuePremiereBtn.disabled = !premiereSetupIsValid();
   }
 
@@ -6491,14 +6877,16 @@
   }
 
   function transitionToTournamentSetup() {
-    if (state.activeScreen !== "relationships") return;
+    if (!["relationships", "premiere"].includes(state.activeScreen)) return;
     ensureTournamentSetupState();
-    transitionBetweenScreens(els.relationshipsScreen, els.tournamentSetupScreen, "tournament", renderTournamentSetup);
+    const from = state.activeScreen === "premiere" ? els.premiereSetupScreen : els.relationshipsScreen;
+    transitionBetweenScreens(from, els.tournamentSetupScreen, "tournament", renderTournamentSetup);
   }
 
   function transitionBackToRelationshipsFromTournament() {
     if (state.activeScreen !== "tournament") return;
-    transitionBetweenScreens(els.tournamentSetupScreen, els.relationshipsScreen, "relationships", renderRelationshipTable);
+    const goPremiere = premiereRequiresSetup();
+    transitionBetweenScreens(els.tournamentSetupScreen, goPremiere ? els.premiereSetupScreen : els.relationshipsScreen, goPremiere ? "premiere" : "relationships", goPremiere ? renderPremiereSetup : renderRelationshipTable);
   }
 
   function finalizeTournamentSetupAndStart() {
@@ -6522,6 +6910,14 @@
   }
 
   function continuePreSeasonFlow() {
+    if (isTournamentFormat() && state.activeScreen === "premiere") {
+      transitionToTournamentSetup();
+      return;
+    }
+    if (isTeamsFormat() && state.activeScreen === "premiere") {
+      transitionToTeamSetup();
+      return;
+    }
     if (goldenChocolateChoosableMode()) {
       transitionToChocolateSetup();
       return;
@@ -6552,14 +6948,16 @@
   }
 
   function transitionToTeamSetup() {
-    if (state.activeScreen !== "relationships") return;
+    if (!["relationships", "premiere"].includes(state.activeScreen)) return;
     ensureTeamSetupState();
-    transitionBetweenScreens(els.relationshipsScreen, els.teamSetupScreen, "teams", renderTeamSetup);
+    const from = state.activeScreen === "premiere" ? els.premiereSetupScreen : els.relationshipsScreen;
+    transitionBetweenScreens(from, els.teamSetupScreen, "teams", renderTeamSetup);
   }
 
   function transitionBackToRelationshipsFromTeam() {
     if (state.activeScreen !== "teams") return;
-    transitionBetweenScreens(els.teamSetupScreen, els.relationshipsScreen, "relationships", renderRelationshipTable);
+    const goPremiere = premiereRequiresSetup();
+    transitionBetweenScreens(els.teamSetupScreen, goPremiere ? els.premiereSetupScreen : els.relationshipsScreen, goPremiere ? "premiere" : "relationships", goPremiere ? renderPremiereSetup : renderRelationshipTable);
   }
 
   function finalizeTeamSetupAndStart() {
@@ -6624,19 +7022,8 @@
       }
     }
 
-    if (isTournamentFormat()) {
-      discardGeneratedSeason({ restoreRelationships: true, persist: true });
-      transitionToTournamentSetup();
-      return;
-    }
-
-    if (isTeamsFormat()) {
-      if (state.selectedIds.length % 2 !== 0) {
-        window.alert("Teams format requires an even number of contestants.");
-        return;
-      }
-      discardGeneratedSeason({ restoreRelationships: true, persist: true });
-      transitionToTeamSetup();
+    if (isTeamsFormat() && state.selectedIds.length % 2 !== 0) {
+      window.alert("Teams format requires an even number of contestants.");
       return;
     }
 
@@ -6662,6 +7049,8 @@
         state.seasonSetup[key] = select.value;
         if (key === "premiereFormat" || key === "eliminationFormat") {
           resetPremiereSetupForFormat(state.seasonSetup.premiereFormat || "regular");
+          renderPremiereChallengeControls();
+          state.seasonSetup.productionConfirmed = false;
         }
         if (key === "comebackFormat" && isDragulaMode()) {
           syncFinalistsSizeForFormat();
@@ -7543,8 +7932,8 @@
     setCheckbox(
       "productionControl",
       "force-slayers",
-      !(allWinners || allStars9 || legacy || assassin || thailand || baguette || heart),
-      "Force a Slayers Episode is not available with this elimination format."
+      !(allWinners || allStars9 || teams),
+      "Force a Slayers Episode is not available with Teams, All Winners, or All Stars 9."
     );
 
     syncMusicVideoSemifinalAvailability();
@@ -8449,6 +8838,9 @@
     } = context;
 
     const contestantCount = participants.length;
+    const planned = !episode?.specialChallenge ? productionSelectedEntry() : null;
+    const plannedFormat = productionFormatForChallenge(planned, contestantCount);
+    const plannedChallenge = planned && plannedFormat ? planned.challenge : null;
 
     let category = forcedCategory || specialMaxiCategoryForEpisode({
       episode,
@@ -8456,6 +8848,7 @@
       categoryCounts,
       contestantCount,
     });
+    if (plannedChallenge) category = plannedChallenge.type;
     const isSpecial = Boolean(category);
 
     if (!category) {
@@ -8469,7 +8862,9 @@
 
     let challenge;
 
-    if (category === "talent_show") {
+    if (plannedChallenge && plannedChallenge.source && (!forceSolo || plannedChallenge.source.formats?.includes("solo"))) {
+      challenge = plannedChallenge.source;
+    } else if (category === "talent_show") {
       challenge = {
         type: "talent_show",
         formats: ["solo"],
@@ -8517,7 +8912,7 @@
 
     const format = forceSolo
       ? "solo"
-      : chooseMaxiFormat(
+      : plannedChallenge ? plannedFormat : chooseMaxiFormat(
           challenge,
           contestantCount,
           previousWasCollaborative,
@@ -8898,7 +9293,8 @@
     const placements = {};
     const specialRows = [];
     participants.forEach((queen) => {
-      const requested = String(assignments[queen.id] || "SAFE").trim().toUpperCase();
+      const manualKey = Object.keys(assignments).find((id) => normalizeContestantId(id) === normalizeContestantId(queen.id));
+      const requested = String(manualKey !== undefined ? assignments[manualKey] : (maxi.rupaulChosenPlacements?.[queen.id] || maxi.placements?.[queen.id] || "SAFE")).trim().toUpperCase();
       const value = maxi.judgedAsTeams && requested === "HIGH" ? "HIGH TEAM" : requested;
       if (["DISQ", "QUIT", "MED"].includes(value)) {
         placements[queen.id] = "SAFE";
@@ -9050,6 +9446,7 @@
     const losers = performerIds.filter((id) => !winnerKeys.has(normalizeContestantId(id)));
 
     if (sync.purpose === "win" || sync.purpose === "all-winners" || sync.purpose === "all-stars-9" || sync.resultType === "top2-win" || sync.resultType === "top2-double-win") {
+      if (!winners.length) return false;
       sync.resultType = winners.length > 1 ? "top2-double-win" : "top2-win";
       sync.winnerIds = [...winners];
       sync.loserIds = [...losers];
@@ -9071,7 +9468,7 @@
     sync.trackResults = {};
     const survivorBottomResult = losers.length === 0 ? ` ${bottomLabel}` : bottomLabel;
     winners.forEach((id) => { sync.trackResults[id] = survivorBottomResult; });
-    losers.forEach((id) => { sync.trackResults[id] = "ELIM"; });
+    losers.forEach((id) => { sync.trackResults[id] = !winners.length && losers.length > 1 ? " ELIM " : "ELIM"; });
     if (seasonFlags && !winners.length) seasonFlags.doubleSashayUsed = true;
     if (seasonFlags && !losers.length) seasonFlags.doubleShantayUsed = true;
     sync.resultRevealed = false;
@@ -9086,12 +9483,13 @@
     const winnerKeys = new Set(requested.map(normalizeContestantId));
     const winners = performerIds.filter((id) => winnerKeys.has(normalizeContestantId(id)));
     const losers = performerIds.filter((id) => !winnerKeys.has(normalizeContestantId(id)));
+    if (!winners.length) return false;
     const bottomIds = episode.legacyJudging?.eligibleBottomIds || [];
     const trackResults = {};
     const bottomLabel = bottomIds.length > 1 ? `BTM${bottomIds.length}` : (bottomIds.length === 1 ? "BTM1" : "BTM");
     bottomIds.forEach((id) => { trackResults[id] = bottomLabel; });
     performerIds.forEach((id) => {
-      trackResults[id] = winners.some((winnerId) => normalizeContestantId(winnerId) === normalizeContestantId(id)) ? "WIN" : "TOP2";
+      trackResults[id] = winners.some((winnerId) => normalizeContestantId(winnerId) === normalizeContestantId(id)) ? "WIN" : "WIN ";
     });
     const victimIds = [...new Map(winners
       .map((winnerId) => legacyLipstickTargetForTop(episode.legacyLipsticks, winnerId))
@@ -9118,6 +9516,7 @@
     const winnerKeys = new Set(requested.map(normalizeContestantId));
     const winners = performerIds.filter((id) => winnerKeys.has(normalizeContestantId(id)));
     const losers = performerIds.filter((id) => !winnerKeys.has(normalizeContestantId(id)));
+    if (!winners.length) return false;
     const topId = sync.topAllStarId;
     const assassinId = sync.assassinId;
     const topWon = winners.some((id) => normalizeContestantId(id) === normalizeContestantId(topId));
@@ -10454,7 +10853,23 @@
       maxi.judgedIds = participants.filter((queen) => activeKeys.has(normalizeContestantId(queen.id))).map((queen) => queen.id);
       maxi.safeIds = participants.filter((queen) => !activeKeys.has(normalizeContestantId(queen.id))).map((queen) => queen.id);
     }
-    maxi.placementIntegrityVersion = 1;
+    if (!maxi.judgedAsTeams && !maxi.judgedAsPairs && !maxi.rivalPairs && !episode?.specialJudgingEvent) {
+      const byKey = new Map((maxi.performances || []).map((item) => [normalizeContestantId(item.id), item]));
+      const rank = { SLAY: 0, GREAT: 1, GOOD: 2, BAD: 3, FLOP: 4 };
+      const safe = participants.map((queen) => queen.id).filter((id) => placements[id] === "SAFE").map((id) => byKey.get(normalizeContestantId(id))).filter(Boolean);
+      participants.forEach((queen) => {
+        if (!/^BTM\d*$/.test(String(placements[queen.id] || ""))) return;
+        const item = byKey.get(normalizeContestantId(queen.id));
+        if (!item) return;
+        const betterSafe = safe.filter((other) => Number(other.score) <= Number(item.score) && rank[other.commentBracket] !== undefined);
+        if (!betterSafe.length) return;
+        const minimumRank = Math.max(...betterSafe.map((other) => rank[other.commentBracket]));
+        if (rank[item.commentBracket] !== undefined && rank[item.commentBracket] < minimumRank) {
+          item.commentBracket = Object.keys(rank).find((label) => rank[label] === minimumRank);
+        }
+      });
+    }
+    maxi.placementIntegrityVersion = 2;
     maxi.competitiveReputationVersion = 1;
     maxi.placements = placements;
   }
@@ -14677,7 +15092,7 @@
         version: 1, stage: "legacy-results", kind: "win-quit", result: "WIN + QUIT", annotation: "Quit", originalPlacement: "WIN", wasBottom: false,
         messageLines: [`${name}, you're a winner, baby!`, "Ru, I'm going home.", `${name}, you will always be an All Star, now, sashay away...`],
       });
-      performers.forEach((queen) => { trackResults[queen.id] = queen.id === winnerId ? "WIN + QUIT" : "TOP2"; });
+      performers.forEach((queen) => { trackResults[queen.id] = queen.id === winnerId ? "WIN + QUIT" : "WIN "; });
       return {
         occurs: true, legacy: true, purpose: "legacy",
         song: { id: song.id, song: song.song, artist: song.artist, genres: [...(song.genres || [])] },
@@ -14687,7 +15102,7 @@
       };
     }
 
-    performers.forEach((queen) => { trackResults[queen.id] = winnerKeys.has(normalizeContestantId(queen.id)) ? "WIN" : "TOP2"; });
+    performers.forEach((queen) => { trackResults[queen.id] = winnerKeys.has(normalizeContestantId(queen.id)) ? "WIN" : "WIN "; });
     const victimIds = [...new Map(winnerIds
       .map((winnerId) => legacyLipstickTargetForTop(lipsticks, winnerId))
       .filter(Boolean)
@@ -18694,24 +19109,12 @@
     }
 
     if (mode === "slayers") {
-      const badIds = sorted.filter((id) => scoreForPremiereId(maxi, id) >= 26);
-      const lowIds = badIds.length >= 2
-        ? badIds.slice(-Math.min(judgedPoolSizes(participants.length).bottom, badIds.length))
-        : [];
-
-      const topCount = lowIds.length
-        ? Math.max(3, Math.min(4, participants.length - lowIds.length))
-        : Math.max(2, Math.ceil(participants.length / 2));
-      const topIds = sorted.filter((id) => !lowIds.includes(id)).slice(0, topCount);
+      const topIds = sorted.slice(0, Math.max(2, Math.ceil(participants.length / 2)));
       const top2 = topIds.slice(0, 2);
-
       top2.forEach((id) => { placements[id] = "TOP2"; });
       topIds.slice(2).forEach((id) => { placements[id] = "HIGH"; });
-      lowIds.forEach((id) => { placements[id] = "LOW"; });
-
-      const judged = [...topIds, ...lowIds];
-      const safe = sorted.filter((id) => !judged.includes(id));
-      setPremierePlacements(maxi, participants, placements, judged, safe);
+      const safe = sorted.filter((id) => !topIds.includes(id));
+      setPremierePlacements(maxi, participants, placements, topIds, safe);
       episode.premiereTop2Ids = top2;
       return;
     }
@@ -22414,9 +22817,7 @@
     }
 
     if (isAllStarsStyleFormat() && format === "regular") {
-      const forcedCategory = ["design", "runway", "talent_show", "girl_group"].includes(
-        state.premiereSetup?.firstEpisodeCategory
-      )
+      const forcedCategory = PREMIERE_CHALLENGE_CATEGORY_OPTIONS.some(([type]) => type === state.premiereSetup?.firstEpisodeCategory)
         ? state.premiereSetup.firstEpisodeCategory
         : "design";
       return [{
@@ -23476,7 +23877,10 @@
       while (activeTeams.length > 2 && episodeNumber <= 40) {
         const participants = activeTeams.flatMap((team) => team.memberIds).map((id) => resolveContestantById(id, cast)).filter(Boolean);
         let forcedCategory = "";
-        if (episodeNumber === 1) forcedCategory = "design";
+        if (episodeNumber === 1) {
+          ensurePremiereChallengeCategories();
+          forcedCategory = state.seasonSetup.premiereChallengeCategories[0] || "design";
+        }
         else if (activeTeams.length === 5 && !categoryCounts.snatch_game) forcedCategory = "snatch_game";
         else if (activeTeams.length === 3 && !categoryCounts.ball) forcedCategory = "ball";
         const episode = {
@@ -23508,7 +23912,7 @@
           usedChallengeNames,
           totalEpisodes: Math.max(3, teamObjects.length + 1),
           forcedCategory,
-          forceSolo: Boolean(forcedCategory),
+          forceSolo: false,
         });
         const maxi = configureTeamMaxi(episode, participants);
         episode.lipSync = generateTeamsLipSyncForEpisode({ episode, activeTeams, participants, priorEpisodes: episodes, usedSongIds: usedLipSyncSongs });
@@ -24069,7 +24473,11 @@
         for(let localEpisode=1;localEpisode<=setup.episodesPerBracket;localEpisode++){
           const episode={number:episodeNumber,isPremiere:episodeNumber===1,isFinale:false,tournamentFormat:true,tournamentPhase:"groups",tournamentBracketId:bracket.id,tournamentBracketName:bracket.name,tournamentBracketColor:bracket.color,tournamentBracketEpisode:localEpisode,tournamentBracketEpisodeCount:setup.episodesPerBracket,estimatedRemaining:participants.length,castIds:participants.map(q=>q.id),competitionCastIds:participants.map(q=>q.id),remainingCastIds:participants.map(q=>q.id),premiereMode:"tournament-group",miniChallenge:null,maxiChallenge:null};
           const bracketChallengeBucket=bracketBucketPlan[localEpisode-1]||"looks";
-          const bracketForcedCategory=tournamentBracketCategoryForBucket(bracketChallengeBucket,participants.length,categoryCounts);
+          let bracketForcedCategory=tournamentBracketCategoryForBucket(bracketChallengeBucket,participants.length,categoryCounts);
+          if (episodeNumber === 1 && !state.seasonSetup.productionMode) {
+            ensurePremiereChallengeCategories();
+            bracketForcedCategory = state.seasonSetup.premiereChallengeCategories[0] || bracketForcedCategory;
+          }
           episode.tournamentChallengeBucket=bracketChallengeBucket;
           episode.maxiChallenge=generateMaxiChallengeStructure({episode,participants,originalCastSize:state.castSize,categoryCounts,previousCategory,previousWasCollaborative,usedChallengeNames,totalEpisodes:setup.brackets.length*setup.episodesPerBracket,forcedCategory:bracketForcedCategory,forceSolo:false}); const rupaulMaxiChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"maxiChallenge"); if(rupaulMaxiChoice)applyRuPaulMaxiChallengeChoice(episode,participants,rupaulMaxiChoice,previousWasCollaborative); assignSnatchGameCharacters(episode,participants,usedSnatchGameCharacters);assignTalentShowActs(episode,participants);episode.miniChallenge=generateMiniChallengeForEpisode(episode,participants,state.castSize,readingChallengePlan);const rupaulMiniChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"miniChallenge");if(rupaulMiniChoice)applyRuPaulMiniChallengeChoice(episode.miniChallenge,rupaulMiniChoice,participants);const rupaulMiniWinners=rupaulPlayerDecision(rupaulOverrides,episode.number,"miniWinner");if(Array.isArray(rupaulMiniWinners)&&rupaulMiniWinners.length)applyRuPaulMiniWinnerChoice(episode.miniChallenge,rupaulMiniWinners,participants);finalizeMaxiTeamDraft(episode,participants);const rupaulJudgingUnitChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"judgingUnit");if(rupaulJudgingUnitChoice)applyRuPaulJudgingUnitChoice(episode,rupaulJudgingUnitChoice);assignRunwayTheme(episode,participants.length,usedRunwayThemes);const rupaulRunwayChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"runwayTheme");if(rupaulRunwayChoice)applyRuPaulRunwayChoice(episode,rupaulRunwayChoice,usedRunwayThemes);finalizeMaxiChallengeScores(episode,participants,episodes);
           const ranked=tournamentRankIds(participants.map(q=>q.id),episode);
@@ -24195,6 +24603,7 @@
           const rupaulOutcomeChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"lipSyncOutcome");if(rupaulOutcomeChoice)applyRuPaulLipSyncOutcomeChoice(episode.lipSync,rupaulOutcomeChoice,{doubleShantayUsed:true,doubleSashayUsed:true});
           episode.sections=[...(mergeEpisodeIndex===1&&mergeWildcard?["Wildcard Lottery"]:[]),...(mergeEpisodeIndex===1?["Merge"]:[]),...(episode.miniChallenge?.occurs?["Mini-Challenge"]:[]),"Maxi-Challenge",...(episode.maxiChallenge?.separateRunway?["Runway"]:[]),"Judging","Rate-A-Queen","Placements","Untucked","Lip Sync","Results","Track Record"];
         } else {const rupaulPlacements=rupaulPlayerDecision(rupaulOverrides,episode.number,"placements");if(rupaulPlacements)applyRuPaulPlacementChoice(episode,participants,rupaulPlacements,{doubleShantayUsed:false,doubleSashayUsed:false,disqOrDept:false,specialExitUsed:false,goldBarHolderId:null,goldBarUsed:false},null);episode.lipSync=generateLipSyncForEpisode({episode,participants,activeContestants:participants,priorEpisodes:episodes,usedSongIds:usedLipSyncSongs,seasonFlags:{doubleShantayUsed:false,doubleSashayUsed:false,disqOrDept:false,specialExitUsed:false,goldBarHolderId:null,goldBarUsed:false}});const rupaulSongChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"lipSyncSong");if(rupaulSongChoice)applyRuPaulLipSyncSongChoice(episode.lipSync,rupaulSongChoice,participants);const rupaulOutcomeChoice=rupaulPlayerDecision(rupaulOverrides,episode.number,"lipSyncOutcome");if(rupaulOutcomeChoice)applyRuPaulLipSyncOutcomeChoice(episode.lipSync,rupaulOutcomeChoice,{doubleShantayUsed:false,doubleSashayUsed:false});episode.sections=[...(mergeEpisodeIndex===1&&mergeWildcard?["Wildcard Lottery"]:[]),...(mergeEpisodeIndex===1?["Merge"]:[]),...(episode.miniChallenge?.occurs?["Mini-Challenge"]:[]),"Maxi-Challenge",...(episode.maxiChallenge?.separateRunway?["Runway"]:[]),"Judging","Placements","Untucked","Lip Sync","Results","Track Record"]; }
+        tournamentLimitMergeEliminations(episode, participants, finaleTrigger);
         const eliminated=episode.lipSync?.eliminatedIds||[]; const keys=new Set(eliminated.map(normalizeContestantId));activeCast=activeCast.filter(q=>!keys.has(normalizeContestantId(q.id)));eliminated.forEach(id=>{if(!eliminatedIds.some(x=>normalizeContestantId(x)===normalizeContestantId(id)))eliminatedIds.push(id);});episode.remainingCastIds=activeCast.map(q=>q.id);register(episode);episodes.push(episode);episodeNumber+=1;
       }
       let finaleWildcard = null;
@@ -24202,6 +24611,28 @@
       if(activeCast.length){const finale={number:episodeNumber,isPremiere:false,isFinale:true,tournamentFormat:true,tournamentPhase:"finale",estimatedRemaining:activeCast.length,castIds:activeCast.map(q=>q.id),remainingCastIds:activeCast.map(q=>q.id),miniChallenge:{occurs:false,reason:"tournament-finale"},maxiChallenge:null,lipSync:{occurs:false,reason:"tournament-finale",resultRevealed:false}};if(finaleWildcard) finale.wildcard=structuredClone(finaleWildcard); finale.finale=generateTournamentFinaleRuntime(activeCast,episodes,usedLipSyncSongs,cast,episodeNumber);finale.sections=[...(finaleWildcard?["Wildcard Lottery"]:[]),"Tournament Finale","Tournament Lip Syncs","Final Results","Track Record"];episodes.push(finale);}
       state.seasonRuntime={...state.seasonRuntime,started:true,episodes,currentEpisode:0,currentSection:0,introCompleted:false,introTime:0,entrances:[],entranceIndex:0,entrancesSettled:false,statisticsOpen:false,locked:true,pendingResimulation:false,tournamentRuntimeVersion:2,tournamentSetupSnapshot:setup,tournamentRecords:records,simulationSeed,rupaulMode:rupaulModeEnabled(),rupaulOverrides,rupaulHighestUnlockedEpisode:rupaulModeEnabled()?Math.max(0,Number(previousRuntime.rupaulHighestUnlockedEpisode)||0):0,rupaulUnlockedSections:rupaulModeEnabled()?structuredClone(previousRuntime.rupaulUnlockedSections||{}):{},rupaulSeasonComplete:rupaulModeEnabled()?Boolean(previousRuntime.rupaulSeasonComplete):true,relationshipBaseline:structuredClone(state.relationships||{}),relationshipFinal:structuredClone(state.relationships||{}),statisticsView:"track-record"};
     } finally {Math.random=nativeRandom;} persistState();
+  }
+
+  function tournamentLimitMergeEliminations(episode, participants, finaleTrigger) {
+    const sync = episode?.lipSync;
+    if (!sync?.occurs || !Array.isArray(sync.eliminatedIds)) return;
+    const maximum = Math.max(0, participants.length - finaleTrigger);
+    if (sync.eliminatedIds.length <= maximum) return;
+    const eliminatedKeys = new Set(sync.eliminatedIds.map(normalizeContestantId));
+    const eliminated = (sync.performerIds || []).filter((id) => eliminatedKeys.has(normalizeContestantId(id)));
+    const performanceScore = (id) => Number((sync.performances || []).find((p) => normalizeContestantId(p.id) === normalizeContestantId(id))?.finalScore || 0);
+    const ordered = [...eliminated].sort((a, b) => performanceScore(a) - performanceScore(b));
+    const allowed = ordered.slice(0, maximum);
+    const allowedKeys = new Set(allowed.map(normalizeContestantId));
+    const saved = eliminated.filter((id) => !allowedKeys.has(normalizeContestantId(id)));
+    sync.eliminatedIds = allowed;
+    sync.winnerIds = [...new Set([...(sync.winnerIds || []), ...saved])];
+    sync.loserIds = allowed;
+    sync.resultType = allowed.length === 0 ? "double-shantay" : (allowed.length > 1 ? "double-sashay" : "normal");
+    if (!sync.trackResults) sync.trackResults = {};
+    const bottomLabel = `BTM${(sync.performerIds || []).length || 2}`;
+    saved.forEach((id) => { sync.trackResults[id] = allowed.length ? bottomLabel : ` ${bottomLabel}`; });
+    allowed.forEach((id) => { sync.trackResults[id] = allowed.length > 1 ? " ELIM " : "ELIM"; });
   }
 
   function dragulaNormalizedFloorCategory(type) {
@@ -24529,7 +24960,12 @@
         if (solo.length) pool = solo;
       }
     }
-    const show = pickRandom(pool) || DRAGULA_FLOOR_SHOWS.find(matchesEpisodeRules) || DRAGULA_FLOOR_SHOWS[0];
+    const planned = productionSelectedEntry();
+    const plannedFormat = productionFormatForChallenge(planned, count);
+    const plannedShow = planned?.challenge?.source;
+    const suitablePlan = plannedShow && plannedFormat && (!firstEpisode || ["design", "runway"].includes(plannedShow.type));
+    const show = suitablePlan ? { ...plannedShow, format: plannedFormat } :
+      (pickRandom(pool) || DRAGULA_FLOOR_SHOWS.find(matchesEpisodeRules) || DRAGULA_FLOOR_SHOWS[0]);
     if (show?.id) usedIds.add(show.id);
     return structuredClone(show);
   }
@@ -27078,6 +27514,7 @@
   }
 
   function buildDragulaSeasonRuntime(options = {}) {
+    productionPlanCursor = 0;
     if (String(state.seasonSetup?.eliminationFormat || "regular") === "resurrection") {
       buildDragulaResurrectionSeasonRuntime(options);
       return;
@@ -28210,6 +28647,7 @@
   }
 
   function buildSeasonRuntime(options = {}) {
+    productionPlanCursor = 0;
     if (isHoliSlayMode()) { buildHoliSlayRuntime(options); return; }
     if (isDragulaMode()) {
       buildDragulaSeasonRuntime(options);
@@ -29573,6 +30011,7 @@
     };
 
     const createCompetitiveEpisode = (descriptor, isOpeningPremiere = false) => {
+      if (isOpeningPremiere) descriptor = applyPlannedPremiereCategory(descriptor);
       const activeKeysAtStart = new Set(activeCast.map((queen) => normalizeContestantId(queen.id)));
       const presentParticipants = descriptor.castIds
         .map((id) => resolveContestantById(id, cast))
@@ -29829,7 +30268,7 @@
           counts[bracket] = (counts[bracket] || 0) + 1;
         });
         automaticSpecialEvent = { kind: rupaulJudgingChoice, counts, manual: true };
-      } else if (!rupaulJudgingChoice && !episode.maxiChallenge?.rivalPairs && !isLuckyCoinFormat() && !episode.conjoinedTwinsEvent?.activated && !episode.allWinners && !episode.allStars9 && !episode.allStarsLegacy && !episode.allStarsAssassin && !episode.thailandFormat && !episode.goldenBaguetteFormat && !episode.heartSuccessorFormat && episode.forcedProductionControl === "force-slayers") {
+      } else if (!rupaulJudgingChoice && !episode.maxiChallenge?.rivalPairs && !episode.conjoinedTwinsEvent?.activated && !episode.allWinners && !episode.allStars9 && episode.forcedProductionControl === "force-slayers") {
         const counts = { SLAY: 0, GREAT: 0, GOOD: 0, BAD: 0, FLOP: 0 };
         (episode.maxiChallenge?.performances || []).forEach((performance) => {
           const bracket = performanceBracket(Number(performance.score));
@@ -29857,6 +30296,28 @@
             episode.maxiChallenge.specialJudgingEvent.forced = true;
           }
         }
+      }
+      if (episode.specialJudgingEvent?.kind === "slayers") {
+        episode.allStarsLegacy = false;
+        episode.allStarsAssassin = false;
+        episode.thailandFormat = false;
+        episode.goldenBeaverFormat = false;
+        episode.goldenDamFormat = false;
+        episode.goldenBaguetteFormat = false;
+        episode.heartSuccessorFormat = false;
+        episode.luckyCoinFormat = false;
+        episode.woodenBeaverActive = false;
+        episode.goldenDam = null;
+        episode.goldenBeaver = null;
+        episode.woodenBeaver = null;
+        episode.goldenBaguette = null;
+        episode.fullHeart = null;
+        episode.luckyCoin = null;
+        episode.legacyJudging = null;
+        episode.assassinJudging = null;
+        episode.maxiChallenge.luckyCoinActive = false;
+        episode.maxiChallenge.judgedAsTeams = false;
+        episode.maxiChallenge.judgedAsPairs = false;
       }
       const rupaulPlacements = rupaulPlacementsSupported(episode)
         ? rupaulPlayerDecision(rupaulOverrides, episode.number, "placements")
@@ -29893,7 +30354,7 @@
         applyClassicImmunityForEpisode(episode, participants, episodes);
       }
 
-      if (isLuckyCoinFormat() && episode.maxiChallenge?.luckyCoinActive) {
+      if (episode.luckyCoinFormat && episode.maxiChallenge?.luckyCoinActive) {
         applyLuckyCoinJudging(episode, participants);
         if (rupaulPlacements) applyRuPaulPlacementChoice(episode, participants, rupaulPlacements, seasonFlags, allWinnersSeasonState);
       }
@@ -30041,16 +30502,7 @@
         episode.untucked = generateUntuckedForEpisode(episode, untuckedParticipants);
       }
 
-      if (episode.allWinners || episode.allStars9 || episode.allStarsLegacy || episode.allStarsAssassin) {
-      } else if (episode.woodenBeaver?.used) {
-        episode.lipSync = generateWoodenBeaverLipSync({
-          episode,
-          participants,
-          priorEpisodes: episodes,
-          usedSongIds: usedLipSyncSongs,
-          seasonFlags,
-        });
-      } else if (episode.specialJudgingEvent?.kind === "slayers") {
+      if (episode.specialJudgingEvent?.kind === "slayers") {
         episode.topLipSync = generateTop2LipSyncForWin({
           episode,
           participants,
@@ -30065,6 +30517,15 @@
           occurs: false, purpose: "none", reason: "slayers-no-elimination",
           winnerIds: [], eliminatedIds: [], trackResults: {}, resultRevealed: true,
         };
+      } else if (episode.allWinners || episode.allStars9 || episode.allStarsLegacy || episode.allStarsAssassin) {
+      } else if (episode.woodenBeaver?.used) {
+        episode.lipSync = generateWoodenBeaverLipSync({
+          episode,
+          participants,
+          priorEpisodes: episodes,
+          usedSongIds: usedLipSyncSongs,
+          seasonFlags,
+        });
       } else if (episode.specialJudgingEvent?.kind === "bottom6") {
         episode.lipSync = generateLargeBottomLipSync({
           episode,
@@ -30288,7 +30749,9 @@
         sections.push("Runway");
       }
 
-      if (episode.woodenBeaver?.used) {
+      if (episode.specialJudgingEvent?.kind === "slayers") {
+        sections.push("Judging", "Placements", "Untucked", "Lip Sync for the Win", "Results", "Track Record");
+      } else if (episode.woodenBeaver?.used) {
         sections.push("Judging", "Untucked", "Lip Sync", "Results", "Track Record");
       } else if (episode.goldenDam?.used) {
         sections.push("Judging", "Placements", "Golden Dam", "Untucked", "Lip Sync", "Results", "Track Record");
@@ -30332,8 +30795,6 @@
           "Untucked",
           "Track Record"
         );
-      } else if (episode.specialJudgingEvent?.kind === "slayers") {
-        sections.push("Judging", "Placements", "Untucked", "Lip Sync for the Win", "Results", "Track Record");
       } else if (episode.specialJudgingEvent?.kind === "lalaparuza") {
         sections.push("Judging", "Placements", "Untucked", "Track Record");
       } else if (episode.premiereMode === "rateaqueen17") {
@@ -30769,6 +31230,7 @@
       forcedProductionQueue.push({
         kind: "force-slayers",
         targetCastSize: pickRandom(slayersCastSizes) || earliestReachableSlayersCount,
+        targetEpisode: firstForcedEpisodeNumber + randomIntInclusive(3, 5),
       });
     }
 
@@ -30783,13 +31245,12 @@
       const slayersItem = forcedProductionQueue.find((item) => item.kind === "force-slayers");
       const slayersWindowOpen = Boolean(
         slayersItem &&
-        activeCast.length <= 9 &&
         activeCast.length >= 4 &&
         activeCast.length > competitiveFinalistTarget
       );
       const slayersDue = Boolean(
         slayersWindowOpen &&
-        activeCast.length <= Number(slayersItem.targetCastSize || 9)
+        (activeCast.length <= Number(slayersItem.targetCastSize || 9) || episodeNumber >= Number(slayersItem.targetEpisode || firstForcedEpisodeNumber + 4))
       );
 
       const timedDue = forcedProductionQueue.filter((item) =>
@@ -31776,6 +32237,8 @@
       seasonSetupSnapshot: {
         eliminationFormat: state.seasonSetup.eliminationFormat,
         premiereFormat: state.seasonSetup.premiereFormat,
+        premiereChallengeCategories: [...(state.seasonSetup.premiereChallengeCategories || [])],
+        premiereChallengeFormat: state.seasonSetup.premiereChallengeFormat || "",
         finaleFormat: state.seasonSetup.finaleFormat,
         comebackFormat: state.seasonSetup.comebackFormat,
         randomReturnAmount: Math.max(1, Math.min(7, Number(state.seasonSetup.randomReturnAmount) || 1)),
@@ -40381,7 +40844,8 @@
     }
 
     if (trimmed.startsWith("RTRN + ")) return placementClassName(trimmed.slice(7));
-    if (/^WIN\s*\+?\s*BTM\d+$/.test(trimmed)) return "thailand-winbtm-special";
+    if (/^\sBTM\d+\s*$/.test(raw) && raw.startsWith(" ")) return "double-shantay";
+    if (/^WIN(?:\s+|\s*\+\s*)BTM\d+$/.test(trimmed)) return "thailand-winbtm-special";
     if (/^WIN\s*\+?\s*EXT$/.test(trimmed)) return "thailand-winelim-special";
     if (/^BTM\d+$/.test(trimmed)) return "btm";
     if (trimmed === "LOW+ELIM") return "elim";
@@ -40395,6 +40859,11 @@
     if (trimmed === "WIN+RTRN" || trimmed === "WIN + RTRN") return "win-rtrn";
     if (trimmed === "RTRN") return "rtrn";
     if (trimmed === "BTM2 + QUIT") return "btm2-quit";
+    if (/^WIN\s*\+\s*QUIT$/.test(trimmed)) return "win-quit";
+    if (/^WIN\s*\+\s*(HIGH|LOW|BTM\d*|ELIM|EXT|CHOC|DISQ|DEPT|QUIT)$/.test(trimmed)) {
+      const other = trimmed.split("+").pop().trim();
+      return ({ HIGH: "thailand-winhigh", LOW: "thailand-winlow", ELIM: "thailand-winelim-special", EXT: "thailand-winelim-special", CHOC: "thailand-winchoc", DISQ: "thailand-windisq", DEPT: "thailand-windept", QUIT: "thailand-winquit" })[other] || (other.startsWith("BTM") ? "thailand-winbtm-special" : "win");
+    }
     if (trimmed === "WIN + QUIT") return "win-quit";
     if (trimmed === "QUIT") return "quit";
     if (trimmed === "ADV") return "adv";
@@ -40547,11 +41016,12 @@
         (id) => normalizeContestantId(id) === normalizeContestantId(queenId)
       );
       const result = resultKey ? finale.trackResults[resultKey] : "";
-      const baseColor = result === "WINNER"
+      const placement = String(result || "").trim().toUpperCase();
+      const baseColor = /^WINNER(?:$|\s*\+)/.test(placement)
         ? "#FFFF00"
-        : result === "RUNNER UP"
+        : /^RUNNER UP(?:$|\s*\+)/.test(placement)
           ? "#C0C0C0"
-          : result === "ELIMINATED"
+          : /^ELIMINATED(?:$|\s*\+)/.test(placement)
             ? "#A0522D"
             : null;
       if (baseColor) colors.unshift(baseColor);
@@ -40620,19 +41090,28 @@
     );
   }
 
-  function normalizeTrackRecordDoubleShantayCell(episode, result) {
+  function normalizeTrackRecordDoubleShantayCell(episode, result, queenId) {
     const raw = String(result || "");
-    if (!raw || !episodeHasAnyTrackRecordDeparture(episode)) return result;
-
-    if (/^ BTM\d+$/.test(raw)) return raw.trim();
-    return result;
+    if (!/^\s*BTM\d+\s*$/.test(raw)) return result;
+    if (raw.startsWith(" ")) return raw;
+    const key = normalizeContestantId(queenId);
+    const lip = episode?.lipSync;
+    const extermination = episode?.extermination;
+    const bottomIds = lip?.performerIds || extermination?.bottomIds || [];
+    if (!bottomIds.some((id) => normalizeContestantId(id) === key)) return result;
+    const isDouble = ["double-shantay", "premiere-double-shantay", "lucky-cow-save"].includes(lip?.resultType) || extermination?.resultType === "double-save";
+    const abnormal = lip?.abnormalExit || extermination?.abnormalExit || episode?.abnormalExit || episode?.rupaulSpecialExit;
+    const departed = new Set([abnormal?.queenId, abnormal?.id, abnormal?.contestantId].filter(Boolean).map(normalizeContestantId));
+    const eliminated = [...(lip?.eliminatedIds || extermination?.eliminatedIds || [])];
+    const noOrdinaryElimination = Boolean(abnormal) && eliminated.every((id) => departed.has(normalizeContestantId(id)));
+    return isDouble || noOrdinaryElimination ? ` ${raw.trim()}` : result;
   }
 
   function makeTrackRecordPlacementCell(episode, queenId, result) {
     const cell = document.createElement("td");
     cell.className = "track-record__placement";
 
-    result = normalizeTrackRecordDoubleShantayCell(episode, result);
+    result = normalizeTrackRecordDoubleShantayCell(episode, result, queenId);
 
     if (!result) {
       cell.classList.add("is-inactive");
@@ -40974,7 +41453,7 @@
       resultText.textContent = "TOP 3";
     } else if (rawResult === "FAME GAMES CON") {
       resultText.innerHTML = "MISS CON<br>&<br>FAME GAMES WINNER";
-    } else if (thailandDisplayValue && displayResult.includes(" + ")) {
+    } else if ((thailandDisplayValue || /^WIN\s*\+\s*(HIGH|LOW|ELIM|EXT|CHOC|DISQ|DEPT|QUIT|BTM\d+)$/i.test(displayResult)) && displayResult.includes(" + ")) {
       const [, secondPlacement = ""] = displayResult.split(" + ");
       resultText.innerHTML = `WIN+<br>${secondPlacement}`;
     } else if (/^(LOW|SAFE|HIGH)\+(BTM\d+|EXT|ELIM)$/.test(displayResult)) {
@@ -41057,7 +41536,8 @@
     if (/^SAFE\+(BTM\d+|EXT)$/.test(normalized)) return 3;
     if (/^LOW\+(BTM\d+|EXT)$/.test(normalized)) return 2;
     if (normalized === "SAFE + ELIM") return 3;
-    if (["WIN", "WIN ", " WIN", "WIN TIE", "WINFAME", "LOSSFAME", "WIN+RTRN", "WIN + RTRN"].includes(normalized)) return 5;
+    if (normalized === "WIN ") return 4.5;
+    if (["WIN", " WIN", "WIN TIE", "WINFAME", "LOSSFAME", "WIN+RTRN", "WIN + RTRN"].includes(normalized)) return 5;
     if (/^TOP\d+$/.test(normalized)) return 4.5;
     if (normalized === "HIGH" || normalized === "HIGH TEAM") return 4;
     if (normalized === "SAFE" || normalized === "SAFEFAME" || normalized === " SAFE" || normalized.startsWith("SAFE (Round ")) return 3;
@@ -41558,7 +42038,7 @@
     const style = getComputedStyle(cell);
 
     const gridThickness = 0.55;
-    const accentThickness = 1.25;
+    const accentThickness = 3;
     const borders = [
       ["borderTopWidth", "borderTopColor", x, y, width, "top"],
       ["borderRightWidth", "borderRightColor", x + width, y, height, "right"],
@@ -41576,8 +42056,8 @@
       if (side === "right") context.fillRect(bx - size, by, size, length);
     }
     const border = [
-      ["is-tournament-mvq", "#d4b56f", accentThickness],
       ["is-immunity-save", "#FE4EDA", accentThickness],
+      ["is-classic-immunity-active", "#FE4EDA", accentThickness],
       ["is-fright-feat-immunity", "#D4AF37", accentThickness],
       ["is-dragula-danger-border", "#C41E3A", accentThickness],
       ["is-lucky-cow-save", "#FFD700", accentThickness],
@@ -41585,7 +42065,8 @@
       ["is-badonka-save", "#FFD700", accentThickness],
       ["is-loteria-save", "#FFD700", accentThickness],
       ["is-lucky-coin-save", "#FFD700", accentThickness],
-      ["is-golden-baguette-holder", "#FFD700", accentThickness],
+      ["is-lucky-coin-danger", "#C41E3A", accentThickness],
+      ["is-golden-baguette-holder", "#D4AF37", accentThickness],
     ].find(([name]) => cell.classList.contains(name));
     if (border) {
       const [, color, thickness] = border;
@@ -41962,7 +42443,7 @@
         ? "PPE - Stars"
         : (runtimeHasAllStars9Format()
           ? "PPE - Badges"
-          : (runtimeHasTournamentFormat() ? "PPE - MVQ" : "PPE"));
+          : (runtimeHasTournamentFormat() ? "PPE" : "PPE"));
       numbersRow.append(ppeHead);
     }
 
@@ -42112,14 +42593,7 @@
         const badges = episodes.reduce((total, ep) => total + Number(ep?.allStars9Judging?.starDeltas?.[row.id] || 0), 0);
         ppeCell.textContent = `${ppe.value} - ${badges}`;
       } else if (runtimeHasTournamentFormat()) {
-        const tournamentPoints = episodes.reduce((total, ep) => {
-          if (!ep?.tournamentPoints) return total;
-          const key = Object.keys(ep.tournamentPoints).find(
-            (id) => normalizeContestantId(id) === normalizeContestantId(row.id)
-          );
-          return total + Number(key ? ep.tournamentPoints[key]?.total : 0);
-        }, 0);
-        ppeCell.textContent = `${ppe.value} - ${tournamentPoints}`;
+        ppeCell.textContent = ppe.value;
       } else {
         ppeCell.textContent = ppe.value;
       }
@@ -49474,7 +49948,7 @@
 
         const placement = recordsPlacementLabel(episode, id);
 
-        if (placement === "WIN" || placement === "WIN TIE") maxiWins[id] += 1;
+        if (statisticsChallengeWinnerIds(episode).some((winnerId) => normalizeContestantId(winnerId) === normalizeContestantId(id))) maxiWins[id] += 1;
         if (["WIN", "WIN TIE", "HIGH", "HIGH TEAM"].includes(placement)) topCounts[id] += 1;
         if (placement === "SAFE") safeCounts[id] += 1;
         if (placement === "LOW" || /^BTM\d*$/.test(placement)) bottomCounts[id] += 1;
@@ -50415,6 +50889,16 @@
 
     const placements = episode?.maxiChallenge?.placements || {};
     const castIds = episode?.castIds || [];
+    if (episode?.allStarsLegacy) {
+      const legacyTopIds = episode.legacyJudging?.top2Ids || episode.maxiChallenge?.legacyTop2Ids || [];
+      const identified = legacyTopIds.length ? legacyTopIds : Object.entries(placements)
+        .filter(([, placement]) => String(placement || "").trim() === "TOP2")
+        .map(([id]) => id);
+      if (identified.length) {
+        const keys = new Set(identified.map(normalizeContestantId));
+        return castIds.filter((id, index, ids) => keys.has(normalizeContestantId(id)) && ids.findIndex((other) => normalizeContestantId(other) === normalizeContestantId(id)) === index);
+      }
+    }
     const candidates = [];
 
     castIds.forEach((id) => {
@@ -50426,15 +50910,18 @@
       if (value.includes("+BLOCKED")) value = value.split("+BLOCKED")[0];
       if (value.includes("+CUT")) value = value.split("+CUT")[0];
       const normalized = value.trim();
-      if (/^TOP\d+$/.test(normalized) || normalized === "WIN" || normalized === "WIN TIE") {
+      if (/^WIN(?:$|\s|\+|HIGH|LOW|BTM\d*|ELIM|EXT|CHOC|DISQ|DEPT|QUIT)/.test(normalized) && !/^WINNER/.test(normalized)) {
         candidates.push(id);
       }
     });
 
-    return uniqueValidParticipantIds(
-      candidates,
-      castIds.map((id) => resolveContestantById(id, getSelectedQueens())).filter(Boolean)
-    );
+    const seen = new Set();
+    return candidates.filter((id) => {
+      const key = normalizeContestantId(id);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }
 
   function statisticsChallengeTypeTitle(value) {
@@ -53400,13 +53887,13 @@
 
   function rupaulPlacementCategories(episode) {
     const kind = episode?.specialJudgingEvent?.kind || "";
+    if (kind === "slayers") return ["TOP2", "HIGH", "SAFE"];
     if (episode?.goldenBeaverFormat || episode?.goldenDamFormat || episode?.goldenBaguetteFormat || episode?.heartSuccessorFormat || episode?.luckyCoinFormat) return ["WIN", "HIGH", "SAFE", "LOW", "BTM3"];
     if (episode?.tournamentFormat && episode?.tournamentPhase === "groups") return ["TOP2", "HIGH", "SAFE"];
     if (episode?.allWinners || episode?.allStars9) return ["TOP2", "HIGH", "SAFE"];
     if (episode?.allStarsLegacy) return ["TOP2", "HIGH", "SAFE", "LOW", "BTM"];
     if (episode?.allStarsAssassin) return ["WIN", "HIGH", "SAFE", "LOW", "BTM"];
     if (episode?.thailandFormat) return ["WIN", "HIGH", "SAFE", "LOW", "BTM2"];
-    if (kind === "slayers") return ["TOP2", "HIGH", "SAFE"];
     if (kind === "floppers") return ["SAFE", "LOW", "BTM2"];
     if (kind === "bottom6") return ["WIN", "HIGH", "SAFE", "BTM6"];
     if (kind === "lalaparuza") return ["WIN", "BTM"];
@@ -53425,6 +53912,7 @@
   }
 
   function syncRuPaulSpecialFormatPlacementState(episode, participants, seasonState = null) {
+    if (episode?.specialJudgingEvent?.kind === "slayers") return;
     const placements = episode?.maxiChallenge?.placements || {};
     const idsFor = (...labels) => Object.entries(placements).filter(([, value]) => labels.includes(String(value || "").trim())).map(([id]) => id);
     const top2Ids = idsFor("TOP2");
@@ -54700,6 +55188,7 @@
 
     const options = [{ value: "regular", label: "REGULAR" }];
     if (count >= 4) options.push({ value: "slayers", label: "SLAYERS" });
+    if (episode?.allStarsLegacy || episode?.allStarsAssassin || episode?.goldenBeaverFormat || episode?.goldenDamFormat || episode?.goldenBaguetteFormat || episode?.heartSuccessorFormat || episode?.luckyCoinFormat || episode?.thailandFormat) return options;
     if (count >= 8) options.push({ value: "floppers", label: "FLOPPERS" });
     if (count >= 10) options.push({ value: "bottom6", label: "BOTTOM 6" });
     if ((count === 8 || count === 9) && !used.has("lalaparuza") && !state.seasonSetup?.specialChallenges?.has?.("lalaparuza-smackdown")) {
@@ -55047,29 +55536,35 @@
     const contestants = (sync.performerIds || []).map(queenFromId).filter(Boolean);
     appendDirectorLipSyncRecap(els.rupaulChoiceContent, sync);
     let chosen = [];
+    const forWin = ["win", "all-winners", "all-stars-9"].includes(sync.purpose) || ["top2-win", "top2-double-win"].includes(sync.resultType) || Boolean(sync.legacy);
     let exitControls = null;
     const updateValidity = () => {
-      els.rupaulConfirmBtn.disabled = Boolean(exitControls && !exitControls.isValid());
+      els.rupaulConfirmBtn.disabled = ((forWin || cannotDoubleEliminate) && chosen.length === 0) || Boolean(exitControls && !exitControls.isValid());
     };
+    const minimumFinalists = episode?.tournamentFormat && episode?.tournamentPhase === "merge"
+      ? Math.max(3, Number(state.seasonRuntime?.tournamentSetupSnapshot?.finaleSize || state.tournamentSetup?.finaleSize || state.finalistsSize || 4) - (state.seasonRuntime?.tournamentSetupSnapshot?.wildcardLottery && state.seasonRuntime?.tournamentSetupSnapshot?.wildcardAtFinale ? 1 : 0))
+      : 0;
+    const cannotDoubleEliminate = !forWin && minimumFinalists > 0 && (episode.castIds || []).length - (sync.performerIds || []).length < minimumFinalists;
     const picker = createRuPaulContestantPicker({
-      contestants, selectedIds: [], minimum: 0, maximum: contestants.length,
+      contestants, selectedIds: [], minimum: forWin || cannotDoubleEliminate ? 1 : 0, maximum: contestants.length,
       onChange(ids) { chosen = ids; rupaulModalContext.simulatorFilled = false; updateValidity(); updatePresets(); },
     });
     els.rupaulChoiceContent.append(picker.shell);
     const presetWrap = document.createElement("div");
     presetWrap.className = "rupaul-lipsync-outcome-presets";
-    const shantay = document.createElement("button"); shantay.type = "button"; shantay.className = "rupaul-lipsync-outcome-preset"; shantay.textContent = "DOUBLE SHANTAY";
+    const shantay = document.createElement("button"); shantay.type = "button"; shantay.className = "rupaul-lipsync-outcome-preset"; shantay.textContent = forWin ? "DOUBLE WIN" : "DOUBLE SHANTAY";
     const sashay = document.createElement("button"); sashay.type = "button"; sashay.className = "rupaul-lipsync-outcome-preset"; sashay.textContent = "DOUBLE SASHAY";
     const updatePresets = () => {
       shantay.classList.toggle("is-selected", chosen.length === contestants.length && contestants.length > 0);
       sashay.classList.toggle("is-selected", chosen.length === 0);
     };
     shantay.onclick = () => picker.setSelected(contestants.map((queen) => queen.id), false);
-    sashay.onclick = () => picker.setSelected([], false);
-    presetWrap.append(shantay, sashay);
+    sashay.onclick = () => { if (!cannotDoubleEliminate) picker.setSelected([], false); };
+    presetWrap.append(shantay);
+    if (!forWin && !cannotDoubleEliminate) presetWrap.append(sashay);
     els.rupaulChoiceContent.append(presetWrap);
     updatePresets();
-    if (!episode?.rupaulSpecialExit) {
+    if (!forWin && !episode?.rupaulSpecialExit) {
       exitControls = appendDirectorSpecialExitControls(els.rupaulChoiceContent, rupaulRuntimeParticipants(episode), {
         ordinaryElements: [picker.shell, presetWrap], onChange: updateValidity,
       });
@@ -55759,7 +56254,7 @@
         openRuPaulJudgingUnitDecision(episode);
         return true;
       }
-      const canChooseJudgingType = episode.premiereMode === "normal" && (!episode.forcedProductionControl || episode.forcedProductionControl === "force-slayers") && !episode.allWinners && !episode.allStars9 && !episode.allStarsLegacy && !episode.allStarsAssassin && !episode.thailandFormat && !episode.tournamentFormat && !episode.goldenBeaverFormat && !episode.goldenDamFormat && !episode.goldenBaguetteFormat && !episode.heartSuccessorFormat && !episode.luckyCoinFormat;
+      const canChooseJudgingType = episode.premiereMode === "normal" && (!episode.forcedProductionControl || episode.forcedProductionControl === "force-slayers") && !episode.allWinners && !episode.allStars9 && !episode.tournamentFormat && !episode.maxiChallenge?.rivalPairs && !episode.conjoinedTwinsEvent?.activated;
       if (canChooseJudgingType && !rupaulDecisionExists(episode, "judgingType")) {
         openRuPaulJudgingDecision(episode, contestants);
         return true;
@@ -56121,6 +56616,17 @@
     if (state.activeScreen === "premiere" && !premiereSetupIsValid()) return;
     if (state.activeScreen === "teams" && (!state.teamSetup?.completed || !isTeamsFormat())) return;
     if (state.activeScreen === "chocolate" && (!goldenChocolateEnabled() || !state.chocolateSetup?.completed)) return;
+    const chosenPremiere = document.querySelector('#premiereFormat');
+    const selectedPremiereOption = [...(chosenPremiere?.options || [])].find((option) => option.value === state.seasonSetup.premiereFormat);
+    if (!isDragulaMode() && selectedPremiereOption?.disabled) {
+      window.alert("The selected premiere is incompatible with this season. Choose a compatible format before starting.");
+      return;
+    }
+    if (state.seasonSetup.productionMode && !state.seasonSetup.productionConfirmed) {
+      syncCloudContentIntoSimulator();
+      openProductionPlanner();
+      return;
+    }
 
     if (goldenChocolateEnabled() && !goldenChocolateChoosableMode()) {
       ensureChocolateSetupState();
@@ -56232,6 +56738,7 @@
   let cloudLoading = false;
   let cloudBound = false;
   let customContestantEditId = null;
+  let customContestantFormDraft = null;
   let cloudAttributeView = "runways";
   let cloudAttributeEditId = null;
   let universeSelectedFranchiseId = null;
@@ -57135,6 +57642,8 @@
     page.append(header);
 
     const editing = cloudData.customContestants.find((row) => String(row.id) === String(customContestantEditId)) || null;
+    const draftKey = String(editing?.id || "new");
+    if (customContestantFormDraft?.key !== draftKey) customContestantFormDraft = null;
     const formCard = document.createElement("section");
     formCard.className = "cloud-form-card";
     const title = document.createElement("h2");
@@ -57187,7 +57696,7 @@
       cancel.type = "button";
       cancel.className = "cloud-btn";
       cancel.textContent = "CANCEL";
-      cancel.addEventListener("click", () => { customContestantEditId = null; renderCustomContestantsPanel(); });
+      cancel.addEventListener("click", () => { customContestantEditId = null; customContestantFormDraft = null; renderCustomContestantsPanel(); });
       actions.append(cancel);
     }
     const submit = document.createElement("button");
@@ -57202,6 +57711,50 @@
     form.querySelector("#customQueenCountry").value = editing?.country || "";
     form.querySelector("#customQueenFlag").value = editing?.flag || "";
     form.querySelector("#customQueenImageUrl").value = editing?.image_path ? "" : (editing?.image_url || "");
+    if (customContestantFormDraft) {
+      for (const [id, value] of Object.entries(customContestantFormDraft.fields || {})) {
+        const input = form.querySelector(`#${id}`);
+        if (input) input.value = value;
+      }
+      form.querySelectorAll("[data-skill]").forEach((input) => {
+        const value = customContestantFormDraft.skills?.[input.dataset.skill];
+        if (value !== undefined) input.value = value;
+        input.closest("label")?.querySelector(".cloud-skill-value")?.replaceChildren(String(input.value));
+      });
+    }
+    const preview = document.createElement("img");
+    preview.className = "cloud-contestant-image-preview";
+    preview.alt = "Contestant image preview";
+    const previewWrap = document.createElement("div");
+    previewWrap.className = "cloud-contestant-preview-wrap";
+    previewWrap.append(preview);
+    form.querySelector("#customQueenImageFile").closest("label")?.append(previewWrap);
+    const refreshImagePreview = () => {
+      const file = customContestantFormDraft?.file;
+      const pasted = form.querySelector("#customQueenImageUrl").value.trim();
+      const url = customContestantFormDraft?.previewUrl || pasted || editing?.image_url || "";
+      preview.src = url;
+      previewWrap.hidden = !url && !file;
+      preview.alt = file ? `Selected: ${file.name}` : "Contestant image preview";
+    };
+    const captureDraft = () => {
+      const file = form.querySelector("#customQueenImageFile").files?.[0] || customContestantFormDraft?.file || null;
+      const previousUrl = customContestantFormDraft?.previewUrl || "";
+      const previousFile = customContestantFormDraft?.file;
+      const previewUrl = file && file !== previousFile ? URL.createObjectURL(file) : previousUrl;
+      if (previousUrl && file !== previousFile) URL.revokeObjectURL(previousUrl);
+      const fields = {};
+      ["customQueenName", "customQueenNickname", "customQueenCountry", "customQueenFlag", "customQueenImageUrl"].forEach((id) => {
+        fields[id] = form.querySelector(`#${id}`)?.value || "";
+      });
+      const skillValues = {};
+      form.querySelectorAll("[data-skill]").forEach((input) => { skillValues[input.dataset.skill] = input.value; });
+      customContestantFormDraft = { key: draftKey, fields, skills: skillValues, file, previewUrl };
+      refreshImagePreview();
+    };
+    form.addEventListener("input", captureDraft);
+    form.addEventListener("change", captureDraft);
+    refreshImagePreview();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -57210,7 +57763,7 @@
       let uploaded = null;
       try {
         const id = editing?.id || crypto.randomUUID();
-        const file = form.querySelector("#customQueenImageFile").files?.[0] || null;
+        const file = form.querySelector("#customQueenImageFile").files?.[0] || customContestantFormDraft?.file || null;
         const pastedUrl = form.querySelector("#customQueenImageUrl").value.trim();
         let imageUrl = editing?.image_url || "";
         let imagePath = editing?.image_path || null;
@@ -57247,6 +57800,8 @@
           await cloudClient.storage.from("contestant-images").remove([editing.image_path]);
         }
         customContestantEditId = null;
+        if (customContestantFormDraft?.previewUrl) URL.revokeObjectURL(customContestantFormDraft.previewUrl);
+        customContestantFormDraft = null;
         await refreshCloudData({ rerender: false });
         renderCustomContestantsPanel();
       } catch (error) {
@@ -57326,7 +57881,7 @@
   }
 
   function renderCustomAttributesPanel() {
-    if (!els.customAttributesPanel || !cloudSession) return;
+    if (!els.customAttributesPanel || !cloudSession || state.simulatorMode === "track-builder") return;
     const panel = els.customAttributesPanel;
     panel.replaceChildren();
     const page = document.createElement("div");
@@ -57337,9 +57892,9 @@
     page.append(header);
 
     const availableTabs = isDragulaMode()
-      ? [["runways", "RUNWAY THEMES"], ["challenges", "CHALLENGES"]]
+      ? [["challenges", "CHALLENGES"]]
       : [["runways", "RUNWAY THEMES"], ["challenges", "CHALLENGES"], ["songs", "LIP SYNC SONGS"]];
-    if (!availableTabs.some(([key]) => key === cloudAttributeView)) cloudAttributeView = "runways";
+    if (!availableTabs.some(([key]) => key === cloudAttributeView)) cloudAttributeView = availableTabs[0][0];
 
     const tabs = document.createElement("div");
     tabs.className = "attribute-tabs";
@@ -57518,6 +58073,19 @@
     page.append(list);
   }
 
+  function cloudFinaleAppearanceForQueen(queenId, episodes) {
+    const key = normalizeContestantId(queenId);
+    return (episodes || []).some((episode) => {
+      if (!episode?.isFinale) return false;
+      const finale = episode.finale || {};
+      const explicit = finale.allWinnersFinalistIds || finale.allStars9FinalistIds || finale.finalistIds || finale.finalists || finale.topFourIds || null;
+      if (Array.isArray(explicit) && explicit.length) return explicit.some((id) => normalizeContestantId(id?.id || id) === key);
+      const result = String(finaleTrackResultPreview(finale, queenId) || "").toUpperCase();
+      if (/^(WINNER|RUNNER UP|TOP [234]|LOST [1234](?:ST|ND|RD|TH) ROUND)/.test(result)) return true;
+      return (episode.castIds || []).some((id) => normalizeContestantId(id) === key) && !/^(GUEST|OUT)/.test(result);
+    });
+  }
+
   function aggregateFranchiseContestants(franchiseId) {
     const seasonMap = new Map(cloudSeasonRowsForFranchise(franchiseId).map((season) => [String(season.id), season]));
     const map = new Map();
@@ -57536,6 +58104,7 @@
           highs: 0,
           bottoms: 0,
           crowns: 0,
+          finaleAppearances: 0,
           appearances: [],
         });
       }
@@ -57543,13 +58112,15 @@
       item.snapshot = row.contestant_snapshot || item.snapshot;
       item.seasons += 1;
       item.episodes += Number(stats.episodes || 0);
-      item.challengeWins += Number(stats.challengeWins || 0);
+      const season = seasonMap.get(String(row.season_id));
+      const savedEpisodes = season ? savedSeasonEpisodes(season) : [];
+      item.challengeWins += savedEpisodes.length ? cloudChallengeWinsForQueen(row.contestant_id, savedEpisodes) : Number(stats.challengeWins || 0);
+      item.finaleAppearances += savedEpisodes.length ? Number(cloudFinaleAppearanceForQueen(row.contestant_id, savedEpisodes)) : Number(stats.finaleAppearance || 0);
       item.lipSyncWins += Number(stats.lipSyncWins || 0);
       item.lipSyncs += Number(stats.lipSyncs || 0);
       item.highs += Number(stats.highs || 0);
       item.bottoms += Number(stats.bottoms || 0);
       if (row.is_winner) item.crowns += 1;
-      const season = seasonMap.get(String(row.season_id));
       item.appearances.push({
         seasonId: row.season_id,
         title: season?.title || "Season",
@@ -57892,7 +58463,7 @@
     ppeHead.rowSpan = 2;
     ppeHead.textContent = allWinners
       ? "PPE - Stars"
-      : (allStars9 ? "PPE - Badges" : (tournament ? "PPE - MVQ" : "PPE"));
+      : (allStars9 ? "PPE - Badges" : (tournament ? "PPE" : "PPE"));
     numbersRow.append(ppeHead);
 
     const categoryRow = document.createElement("tr");
@@ -58017,11 +58588,7 @@
         );
         ppeCell.textContent = `${ppe.value} - ${badges}`;
       } else if (tournament) {
-        const mvq = episodes.reduce((total, episode) => {
-          const points = normalizedObjectValue(episode?.tournamentPoints, id);
-          return total + Number(points?.total || 0);
-        }, 0);
-        ppeCell.textContent = `${ppe.value} - ${mvq}`;
+        ppeCell.textContent = ppe.value;
       } else {
         ppeCell.textContent = ppe.value;
       }
@@ -58193,10 +58760,16 @@
       const firstSeason = Math.min(...item.appearances.map((appearance) => Number(appearance.seasonNumber) || 999));
       const meta = document.createElement("p");
       meta.textContent = `${item.seasons} season${item.seasons === 1 ? "" : "s"} · ${item.episodes} episodes${Number.isFinite(firstSeason) && firstSeason < 999 ? ` · Debut S${firstSeason}` : ""}${item.crowns ? ` · ${item.crowns} crown${item.crowns === 1 ? "" : "s"}` : ""}`;
-      copy.append(name, meta);
+      const placements = document.createElement("p");
+      placements.className = "universe-contestant-card__placements";
+      placements.textContent = [...item.appearances]
+        .sort((a, b) => (Number(a.seasonNumber) || 999) - (Number(b.seasonNumber) || 999))
+        .map((entry) => `${entry.title}: ${entry.placement}`)
+        .join(" · ");
+      copy.append(name, meta, placements);
       const wins = document.createElement("div");
       wins.className = "universe-contestant-card__wins";
-      wins.textContent = `${item.challengeWins} CHALLENGE WINS`;
+      wins.textContent = `${item.challengeWins} CHALLENGE WINS · ${item.finaleAppearances} FINALES`;
       card.append(img, copy, wins);
       card.addEventListener("click", () => { universeDetail = { type: "contestant", id: item.id }; renderUniversePanel(); });
       list.append(card);
@@ -58213,6 +58786,7 @@
       ["MOST EPISODES", "episodes"],
       ["MOST BOTTOM PLACEMENTS", "bottoms"],
       ["MOST CROWNS", "crowns"],
+      ["MOST FINALE APPEARANCES", "finaleAppearances"],
     ];
     const list = document.createElement("div");
     list.className = "universe-record-list";
@@ -58293,7 +58867,7 @@
 
     const stats = document.createElement("div");
     stats.className = "universe-profile-stats";
-    [["SEASONS", item.seasons], ["EPISODES", item.episodes], ["CHALLENGE WINS", item.challengeWins], ["LIP SYNC WINS", item.lipSyncWins], ["LIP SYNCS", item.lipSyncs], ["HIGHS", item.highs], ["BOTTOMS", item.bottoms], ["CROWNS", item.crowns]].forEach(([labelText, value]) => {
+    [["SEASONS", item.seasons], ["EPISODES", item.episodes], ["FINALES", item.finaleAppearances], ["CHALLENGE WINS", item.challengeWins], ["LIP SYNC WINS", item.lipSyncWins], ["LIP SYNCS", item.lipSyncs], ["HIGHS", item.highs], ["BOTTOMS", item.bottoms], ["CROWNS", item.crowns]].forEach(([labelText, value]) => {
       const card = document.createElement("div");
       card.className = "universe-profile-stat";
       const label = document.createElement("span");
@@ -58890,6 +59464,7 @@
           stats: {
             episodes: episodeCount,
             challengeWins: cloudChallengeWinsForQueen(id, episodes),
+            finaleAppearance: cloudFinaleAppearanceForQueen(id, episodes) ? 1 : 0,
             lipSyncWins: cloudLipSyncWinsForQueen(id),
             lipSyncs: cloudLipSyncCountForQueen(id),
             exterminations: runtimeHasDragulaFormat()
@@ -58944,7 +59519,7 @@
   });
 
   const CMM_TEAL = '#19B7B0';
-  const CMM_HOUSE_COLORS = ['#19B7B0','#e95d9b','#f3a452'];
+  const CMM_HOUSE_COLORS = ['#19B7B0','#e95d9b','#f3a452','#9A83E9'];
   const CMM_RUNWAYS = `My Drag Journey|Dynasty|Classic Horror|Burn Baby, Burn|Musicals|Drag'n'Travel|Family Photo|Safe Sex|Social Media Monsters|Not My Drag|Me and My Show|Queer Joy|Born This Way|Before I Was Me|My Drag Evolution|Home Sweet Home|Like Mother, Like Child|Family Jewels|Mother Nature|Art of Drag|Liquid Luxury|Paper Dolls|Golden Age|Plastic Fantastic|The Big Reveal|Hot Mess Express|Clowning Around|Bedtime Stories|Fairy Tale Fantasy|Supernatural Superstars|My Biggest Fear|Heavy Metal|Sheer Madness|Power Suit|Pearls of Wisdom|In Stitches|Sugar, Spice and Everything Nice|Denim|Rubber|Naughty or Nice|Gods and Goddesses|Enchanted Forest|Underworld|Broadway Babies|Toy Story|Zodiac Sign|Elements of Drag|Murder on the Runway|The Great Outdoors|Birds of a Feather|A Night at the Opera|Under the Sea|Glam Rock|The Black Parade|Space Age Glamour|Wild, Wild West|Fallen Angels|Neon Nights|Tarot Cards|From Rags to Riches|Velvet|Pretty in Plaid|Mad Hatter's Tea Party|Leather and Lace|Candyland|Disco|Steampunk|Gothic Romance|Garden of Eden|Burlesque Beauties|Four Seasons|Y2K|Black and Gold|Tropical Paradise|Ice Ice Baby|Tulle|Drag in Armor|Baroque|Retro Futurism|Faux Fur Fantasy|Patchwork Perfection|Surrealist Dreams`.split('|');
   const CMM_MINIS = `Create a cake that looks like your House Mother|Put together a quick drag look incorporating sports equipment, platform shoes and breastplates|Do their makeup with your non-dominant hand|Tease a wig as high as they can|Turn themselves into the childhood doll of their dreams|Create a logo, t-shirt and additional merch|Create a Mother and Me Doll|Blue Ball Bingo - Sex Trivia|Recreate another contestant's makeup|Style a wig using Wella Hair products|Make a performance ready garment in 15 minutes|Make padding and create a character for a photoshoot in a morphsuit and Daftboy harness|Transform an ordinary pair of sunglasses into an extravagant drag accessory|Create a dramatic headpiece using only household cleaning supplies|Give a mannequin head a complete drag makeover in 10 minutes|Recreate an iconic celebrity hairstyle using only one wig and a handful of accessories|Create the longest possible pair of wearable eyelashes using unconventional materials|Transform a basic pair of white heels into a pair of outrageous drag shoes|Create a glamorous set of press-on nails inspired by their House Mother|Transform a plain white T-shirt into a fabulous drag garment using scissors, glue, and decorations|Give the worst possible drag advice while pretending to host a glamorous advice hotline|Perform a dramatic death scene inspired by a randomly assigned household object|Create a 30-second soap opera scene using three randomly assigned words|Build the tallest freestanding tower possible using empty wig boxes and hair products|Create a drag-themed Valentine's Day card for a randomly assigned contestant|Compete in a drag trivia game covering makeup, fashion, queer pop culture, and drag history|Create a fascinator using only items found in a dollar-store mystery bag|Turn a basic kitchen apron into a fashionable drag accessory|Deliver a weather forecast while dressed as a television meteorologist|Act out a randomly assigned emotion while walking down the runway|Identify mystery beauty products using only their sense of smell|Guess which House Mother owns various mystery objects from their dressing rooms|Compete in a blindfolded jewelry-making challenge|Balance as many drag accessories as possible on their body while walking a short runway|Play a drag-themed version of Pictionary using makeup brushes instead of pencils|Stack as many wig heads as possible without letting the tower collapse|Compete in a drag-themed game of musical chairs while wearing platform heels|Compete in a high-heel relay race while carrying a tray of plastic champagne glasses|Create a 30-second audition tape for a fictional reality television show|Deliver a fake apology video for a randomly assigned drag scandal|Perform a lip sync using only facial expressions, without moving their body`.split('|');
   const CMM_SHOWCASES = [
@@ -59030,6 +59605,8 @@
       counter.value=String(setup.parentCount);
       const three=counter.querySelector('option[value="3"]');
       if(three)three.disabled=state.castSize<12;
+      const four=counter.querySelector('option[value="4"]');
+      if(four)four.disabled=state.castSize<12;
     }
     if(els.presetBtn)els.presetBtn.hidden=false;
     for(const [id,modeName] of [['cmmTargetParents','parents'],['cmmTargetCast','cast']]){
@@ -59038,9 +59615,9 @@
       button.classList.toggle('is-selected',selected);button.setAttribute('aria-pressed',String(selected));
     }
   }
-  function cmmSetParentCount(n){const setup=cmmSetup();setup.parentCount=(n===2||state.castSize<12)?2:3;setup.parentIds=setup.parentIds.slice(0,setup.parentCount);cmmInitialHouses();invalidateSeasonRuntime();renderCast();renderSearchResults();}
+  function cmmSetParentCount(n){const setup=cmmSetup();setup.parentCount=state.castSize<12?2:Math.max(2,Math.min(4,n));setup.parentIds=setup.parentIds.slice(0,setup.parentCount);cmmInitialHouses();invalidateSeasonRuntime();renderCast();renderSearchResults();}
   function cmmSelectTarget(target){cmmSetup().selectionStep=target==='parents'?'parents':'cast';renderCast();renderSearchResults();}
-  function cmmAvailableAdoptionSizes(){const s=cmmSetup();const max=Math.floor(state.selectedIds.length/Math.max(1,s.parentCount));return Array.from({length:Math.max(0,max-3)},(_,i)=>i+4);}
+  function cmmAvailableAdoptionSizes(){const s=cmmSetup();const min=s.parentCount===4?3:4;const max=Math.min(s.parentCount===4?5:99,Math.floor(state.selectedIds.length/Math.max(1,s.parentCount)));return Array.from({length:Math.max(0,max-min+1)},(_,i)=>i+min);}
   function cmmSyncAdoptionChoices(){const s=cmmSetup();cmmInitialHouses();const available=cmmAvailableAdoptionSizes();s.perHouse=available.includes(s.perHouse)?s.perHouse:(available.includes(Math.floor((state.selectedIds.length-1)/s.parentCount))?Math.floor((state.selectedIds.length-1)/s.parentCount):available[available.length-1]||4);for(const [id,houseId] of Object.entries(s.assignments||{})){if(!state.selectedIds.includes(id)||!s.houses.some(h=>h.id===houseId))delete s.assignments[id];}}
   function cmmUpdateSetup(){
     const s=cmmSetup();cmmSyncAdoptionChoices();const content=document.getElementById('cmmSetupContent');if(!content)return;
@@ -59906,6 +60483,7 @@
   function cmmBackFromRuntime(){if(!isCallMeMother())return false;discardGeneratedSeason({restoreRelationships:false});transitionBetweenScreens(els.runtimeScreen,document.getElementById('cmmSetupScreen'),'cmm-setup',cmmUpdateSetup);return true;}
 
   els.castSize.addEventListener("input", () => {
+    if (state.seasonSetup?.productionMode) state.seasonSetup.productionConfirmed = false;
     state.castSize = Math.max(state.simulatorMode === "track-builder" ? 1 : (isCallMeMother()?10:6), Math.min(state.simulatorMode === "track-builder" ? 50 : (isDragulaMode() ? 14 : 24), Number(els.castSize.value)));
     els.castSizeValue.textContent = state.castSize;
     els.targetCount.textContent = state.castSize;
@@ -59942,6 +60520,7 @@
   });
 
   els.finalistsSize.addEventListener("input", () => {
+    if (state.seasonSetup?.productionMode) state.seasonSetup.productionConfirmed = false;
     const minimum = (isLipSyncForTheCrownFinale() || isLipSyncForTheFinaleFinale() || isTeamsFormat() || isHellboundShowdownFormat())
       ? 4
       : ((isAllStarsLegacyFormat() || isJuryFinale()) ? 3 : 2);
@@ -62432,6 +63011,7 @@
     trackBuilderDraft.contestants = [...state.selectedIds];
     trackBuilderDraft.episodes = [{ challengeType: "" }];
     trackBuilderDraft.placements = {};
+    trackBuilderDraft.displayOverrides = {};
     trackBuilderDraft.rankOverrides = {};
     trackBuilderDraft.showRank = true;
     trackBuilderDraft.showFlag = true;
