@@ -10091,7 +10091,7 @@ window.QUEENS = [
   image: "images/deja.webp",
   skills: { acting: 9, comedy: 11, dance: 14, design: 10, improv: 6, runway: 12, lipsync: 11 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10101,7 +10101,7 @@ window.QUEENS = [
   image: "images/mrs_tan.webp",
   skills: { acting: 12, comedy: 11, dance: 10, design: 14, improv: 13, runway: 14, lipsync: 15 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10111,7 +10111,7 @@ window.QUEENS = [
   image: "images/moi.webp",
   skills: { acting: 9, comedy: 13, dance: 9, design: 9, improv: 14, runway: 10, lipsync: 12 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10121,7 +10121,7 @@ window.QUEENS = [
   image: "images/feyvah_fatale.webp",
   skills: { acting: 13, comedy: 13, dance: 11, design: 8, improv: 8, runway: 9, lipsync: 12 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10131,7 +10131,7 @@ window.QUEENS = [
   image: "images/russia_fox.webp",
   skills: { acting: 10, comedy: 9, dance: 5, design: 12, improv: 5, runway: 15, lipsync: 7 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10141,7 +10141,7 @@ window.QUEENS = [
   image: "images/margaux.webp",
   skills: { acting: 7, comedy: 5, dance: 7, design: 11, improv: 6, runway: 10, lipsync: 7 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10151,7 +10151,7 @@ window.QUEENS = [
   image: "images/jean_vilogue.webp",
   skills: { acting: 7, comedy: 5, dance: 8, design: 6, improv: 7, runway: 7, lipsync: 10 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10161,7 +10161,7 @@ window.QUEENS = [
   image: "images/elvira.webp",
   skills: { acting: 10, comedy: 8, dance: 11, design: 9, improv: 7, runway: 6, lipsync: 14 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10171,7 +10171,7 @@ window.QUEENS = [
   image: "images/marlyn.webp",
   skills: { acting: 5, comedy: 4, dance: 9, design: 11, improv: 5, runway: 8, lipsync: 7 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 {
@@ -10181,7 +10181,7 @@ window.QUEENS = [
   image: "images/maria_lava.webp",
   skills: { acting: 8, comedy: 12, dance: 7, design: 8, improv: 10, runway: 8, lipsync: 5 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [1] },
+  seasonsByShow: { "Drag Den": [2] },
   country: "Philippines",
 },
 
@@ -10192,7 +10192,7 @@ window.QUEENS = [
   image: "images/naia.webp",
   skills: { acting: 10, comedy: 12, dance: 14, design: 7, improv: 12, runway: 9, lipsync: 12 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10202,7 +10202,7 @@ window.QUEENS = [
   image: "images/shewarma.webp",
   skills: { acting: 13, comedy: 7, dance: 12, design: 10, improv: 9, runway: 12, lipsync: 10 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10212,7 +10212,7 @@ window.QUEENS = [
   image: "images/maria_cristina.webp",
   skills: { acting: 12, comedy: 14, dance: 10, design: 10, improv: 10, runway: 12, lipsync: 11 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10222,7 +10222,7 @@ window.QUEENS = [
   image: "images/barbie_q_ph.webp",
   skills: { acting: 8, comedy: 7, dance: 15, design: 12, improv: 7, runway: 13, lipsync: 13 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10232,7 +10232,7 @@ window.QUEENS = [
   image: "images/lady_gagita.webp",
   skills: { acting: 11, comedy: 12, dance: 12, design: 9, improv: 11, runway: 11, lipsync: 14 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10242,7 +10242,7 @@ window.QUEENS = [
   image: "images/aries_night.webp",
   skills: { acting: 9, comedy: 11, dance: 9, design: 12, improv: 11, runway: 13, lipsync: 11 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10252,7 +10252,7 @@ window.QUEENS = [
   image: "images/o_a.webp",
   skills: { acting: 8, comedy: 10, dance: 8, design: 10, improv: 14, runway: 10, lipsync: 10 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
@@ -10262,7 +10262,7 @@ window.QUEENS = [
   image: "images/pura_luka_vega.webp",
   skills: { acting: 10, comedy: 11, dance: 6, design: 13, improv: 12, runway: 12, lipsync: 7 },
   shows: ["Drag Den"],
-  seasonsByShow: { "Drag Den": [2] },
+  seasonsByShow: { "Drag Den": [1] },
   country: "Philippines",
 },
 {
