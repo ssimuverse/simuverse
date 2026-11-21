@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="style.css?v=20261118-slayers-premiere-v19" rel="stylesheet"/>
+<link href="style.css?v=20261122-multiple-winners" rel="stylesheet"/>
 </head>
 <body data-simulator="drag-race">
 <header class="topbar">
@@ -88,6 +88,8 @@
 <input autocomplete="off" id="queenSearch" placeholder="Search contestants" type="search"/>
 </label>
 <button aria-pressed="false" class="control-btn" id="filterBtn" type="button">FILTER: OFF</button>
+<button class="control-btn control-btn--browser" id="browseAllContestantsBtn" type="button">BROWSE ALL CONTESTANTS</button>
+<button class="control-btn control-btn--all-stars" id="castAllStarsBtn" type="button">CAST ALL STARS</button>
 <button class="control-btn" id="presetBtn" type="button">PRE-SET CAST</button>
 <button class="control-btn control-btn--accent" id="randomizeBtn" type="button">RANDOMIZE</button>
 <button class="control-btn" id="addRandomBtn" type="button">ADD RANDOM</button>
@@ -96,6 +98,7 @@
 <div class="cast-summary">
 <span><strong id="selectedCount">0</strong> / <span id="targetCount">14</span></span>
 </div>
+<div class="all-stars-cast-summary" id="allStarsCastSummary" hidden></div>
 <div aria-live="polite" class="cast-grid" id="castGrid"></div>
 <div class="search-results" hidden="" id="searchResults">
 <div class="search-results__header">
@@ -213,8 +216,10 @@
 <option data-min-cast="6" value="thailand">THAILAND FORMAT</option>
 <option data-min-cast="6" value="team">TEAMS</option>
 <option data-min-cast="6" value="tournament">TOURNAMENT</option>
+<option data-min-cast="10" value="format-switch">FORMAT SWITCH</option>
 </select>
 </div>
+<div id="formatSwitchSettings" hidden><label class="random-return-setting"><span>STARTING FORMAT</span><div class="select-wrap"><select class="setup-select" id="formatSwitchStart" data-setup-select="formatSwitchStart"><option value="regular">REGULAR</option><option value="all-stars-legacy">LEGACY</option><option value="lipsync-assassin">ASSASSIN</option><option value="lucky-coin">LUCKY COIN</option><option value="heart-successor">HEART SUCCESSOR</option><option value="golden-beaver">GOLDEN BEAVER</option><option value="golden-dam">GOLDEN DAM</option><option value="golden-baguette">GOLDEN BAGUETTE</option></select></div></label><label class="random-return-setting"><span>SECOND FORMAT</span><div class="select-wrap"><select class="setup-select" id="formatSwitchEnd" data-setup-select="formatSwitchEnd"><option value="regular">REGULAR</option><option value="all-stars-legacy">LEGACY</option><option value="lipsync-assassin">ASSASSIN</option></select></div></label></div>
 <div class="assassin-filter-control" hidden="" id="assassinFilterControl">
 <button class="control-btn assassin-filter-btn" id="assassinFilterBtn" type="button">FILTER ASSASSINS</button>
 <span class="assassin-filter-summary" id="assassinFilterSummary"></span>
@@ -297,6 +302,8 @@
 <option data-min-cast="8" value="porkchop">PORKCHOP PREMIERE</option>
 <option data-min-cast="6" value="uk3">UK3 PREMIERE</option>
 <option value="par">DOUBLE SHANTAY PREMIERE</option>
+<option data-min-cast="6" value="roses-thorns">ROSES &amp; THORNS</option>
+<option data-min-cast="6" value="leg-up">LIP SYNC FOR A LEG UP</option>
 <option data-min-cast="6" value="nonelimtop2">NON-ELIMINATION TOP 2 PREMIERE</option>
 <option data-min-cast="6" value="nonelimrateaqueen">NON-ELIMINATION RATE-A-QUEEN</option>
 <option value="slayers">SLAYERS PREMIERE</option>
@@ -445,11 +452,37 @@
 <span aria-hidden="true" class="setup-check__box"></span>
 <span>Music Video Semi-Final</span>
 </label>
+<div id="manualLalaparuzaScheduleRow" class="lalaparuza-schedule-setting" hidden>
+<label class="setup-card__label" for="manualLalaparuzaTop">SCHEDULE ALL-BOTTOM LALAPARUZA</label>
+<div class="select-wrap"><select class="setup-select" id="manualLalaparuzaTop" data-setup-select="lalaparuzaTop">
+<option value="0">DO NOT SCHEDULE</option>
+<option value="11">AT TOP 11</option>
+<option value="10">AT TOP 10</option>
+<option value="9">AT TOP 9</option>
+<option value="8">AT TOP 8</option>
+<option value="7">AT TOP 7</option>
+</select></div>
+<p class="lalaparuza-schedule-note">RuPaul Mode only. Uses the first compatible solo episode at or below the selected Top count. You can also select All-Bottom Lalaparuza directly when choosing judging.</p>
+</div>
 <label class="setup-check">
 <input data-setup-check="specialChallenge" type="checkbox" value="lalaparuza-smackdown"/>
 <span aria-hidden="true" class="setup-check__box"></span>
 <span>LaLaPaRuza Smackdown</span>
 </label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="choose-your-own-adventure"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Choose Your Own Adventure</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="specialChallenge" type="checkbox" value="nonelim-lalaparuza"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Non-Elimination LaLaPaRuZa</span>
+</label>
+<div id="nonelimLalaparuzaScheduleRow" class="lalaparuza-schedule-setting" hidden>
+<label class="setup-card__label" for="nonelimLalaparuzaTop">WHEN DOES IT OCCUR?</label>
+<div class="select-wrap"><select class="setup-select" id="nonelimLalaparuzaTop" data-setup-select="nonelimLalaparuzaTop"><option value="5">AT TOP 5</option><option value="6">AT TOP 6</option><option value="7">AT TOP 7</option><option value="8" selected>AT TOP 8</option><option value="9">AT TOP 9</option><option value="10">AT TOP 10</option><option value="11">AT TOP 11</option><option value="12">AT TOP 12</option><option value="13">AT TOP 13</option><option value="14">AT TOP 14</option><option value="15">AT TOP 15</option><option value="16">AT TOP 16</option><option value="17">AT TOP 17</option><option value="18">AT TOP 18</option><option value="19">AT TOP 19</option><option value="20">AT TOP 20</option><option value="21">AT TOP 21</option><option value="22">AT TOP 22</option><option value="23">AT TOP 23</option><option value="24">AT TOP 24</option></select></div>
+</div>
 <label class="setup-check">
 <input data-setup-check="specialChallenge" type="checkbox" value="reunion-lipsync-smackdown"/>
 <span aria-hidden="true" class="setup-check__box"></span>
@@ -505,6 +538,11 @@
 <input data-setup-check="productionControl" type="checkbox" value="disable-lipsync-riggory"/>
 <span aria-hidden="true" class="setup-check__box"></span>
 <span>Disable Lip Sync Riggory</span>
+</label>
+<label class="setup-check">
+<input data-setup-check="productionControl" type="checkbox" value="no-double"/>
+<span aria-hidden="true" class="setup-check__box"></span>
+<span>Disable Double Shantays &amp; Sashays</span>
 </label>
 <label class="setup-check">
 <input data-setup-check="productionControl" type="checkbox" value="force-double-shantay"/>
@@ -857,6 +895,21 @@
 </div>
 <div class="cloud-popover__body" id="authContent"></div>
 </aside>
+<aside aria-hidden="true" aria-modal="true" role="dialog" aria-label="Browse All Contestants" class="popover cloud-popover contestant-directory-popover" id="contestantDirectoryPopover">
+<div class="popover__topline"><div><span class="popover__kicker">CAST SELECTION</span><h2>BROWSE ALL CONTESTANTS</h2></div><button aria-label="Close contestant browser" class="icon-btn" data-close-popover="contestantDirectoryPopover" type="button">×</button></div>
+<div class="contestant-directory" id="contestantDirectory"></div>
+</aside>
+<aside aria-hidden="true" aria-modal="true" role="dialog" aria-label="Import Custom Contestants" class="popover cloud-popover custom-import-popover" id="customImportPopover">
+<div class="popover__topline"><div><span class="popover__kicker">CUSTOM CONTESTANTS</span><h2>IMPORT JSON</h2></div><button aria-label="Close JSON import" class="icon-btn" data-close-popover="customImportPopover" type="button">×</button></div>
+<div class="custom-import-body" id="customImportBody"></div>
+</aside>
+<aside aria-hidden="true" aria-modal="true" role="dialog" aria-label="Cast All Stars" class="popover cloud-popover all-stars-popover" id="allStarsPopover">
+<div class="popover__topline">
+<div><span class="popover__kicker">MY UNIVERSE</span><h2>CAST ALL STARS</h2></div>
+<button aria-label="Close All Stars casting" class="icon-btn" data-close-popover="allStarsPopover" type="button">×</button>
+</div>
+<div class="all-stars-browser" id="allStarsBrowser"></div>
+</aside>
 <aside aria-hidden="true" class="popover cloud-popover season-save-popover" id="seasonSavePopover">
 <div class="popover__topline">
 <div>
@@ -886,6 +939,6 @@ window.THE_CROWN_SUPABASE = {
 </script>
 <script src="../drag_race_data.js"></script>
 <script src="exterminations_data.js"></script>
-<script src="simulator.js?v=20261118-slayers-premiere-v19"></script>
+<script src="simulator.js?v=20261122-multiple-winners"></script>
 </body>
 </html>
