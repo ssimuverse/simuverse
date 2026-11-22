@@ -64939,8 +64939,8 @@ function renderRunwaySection() {
             episodes: episodeCount,
             challengeWins: cloudChallengeWinsForQueen(id, episodes),
             finaleAppearance: cloudFinaleAppearanceForQueen(id, episodes) ? 1 : 0,
-            lipSyncWins: cloudLipSyncWinsForQueen(id),
-            lipSyncs: cloudLipSyncCountForQueen(id),
+            lipSyncWins: cloudLipSyncWinsForQueen(id, episodes),
+            lipSyncs: cloudLipSyncCountForQueen(id, episodes),
             exterminations: runtimeHasDragulaFormat()
               ? episodes.filter((episode) => (episode?.extermination?.bottomIds || []).some((bottomId) => normalizeContestantId(bottomId) === normalizeContestantId(id))).length
               : 0,
