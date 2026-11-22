@@ -3473,7 +3473,7 @@ window.QUEENS = [
     fullName: "Suki Doll",
     nickname: "Suki",
     image: "images/suki_doll.webp",
-    skills: { acting: 8, comedy: 7, dance: 6, design: 9, improv: 5, runway: 9, lipsync: 5 },
+    skills: { acting: 8, comedy: 7, dance: 6, design: 11, improv: 5, runway: 13, lipsync: 5 },
     shows: ["Canada's Drag Race", "Drag Race Philippines: Slaysian Royale"],
     seasonsByShow: { "Canada's Drag Race": [2], "Drag Race Philippines: Slaysian Royale": [1] },
     country: "Canada",
