@@ -60837,6 +60837,9 @@ function renderRunwaySection() {
   const CLOUD_DRAGULA_RUNWAY_PREFIX = "__TC_DRAGULA__:";
   let cloudArchivedContestants = [];
   const cloudSeasonCache = new Map();
+  const cloudSeasonLoadPromises = new Map();
+  const CLOUD_SEASON_ARCHIVE_BUCKET = "season-archives";
+  const CLOUD_SEASON_ARCHIVE_ENCODING = "gzip-json-v1";
 
   const cloudData = {
     profile: null,
@@ -61181,7 +61184,7 @@ function renderRunwaySection() {
         cloudClient.from("custom_songs").select("*").eq("user_id", userId).order("created_at", { ascending: true }),
         cloudClient.from("franchises").select("*").eq("user_id", userId).order("created_at", { ascending: true }),
         cloudClient.from("seasons")
-          .select("id,user_id,franchise_id,title,season_number,season_type,rating,episode_ratings,winner_id,simulation_seed,setup,created_at")
+          .select("id,user_id,franchise_id,title,season_number,season_type,rating,episode_ratings,winner_id,simulation_seed,setup,snapshot_path,snapshot_encoding,created_at")
           .eq("user_id", userId)
           .order("created_at", { ascending: true }),
         cloudClient.from("season_contestants")
@@ -61253,6 +61256,7 @@ function renderRunwaySection() {
       cloudData.seasons = [];
       cloudData.seasonContestants = [];
       cloudSeasonCache.clear();
+      cloudSeasonLoadPromises.clear();
       cloudArchivedContestants = [];
       if (els.allStarsPopover) closePopover(els.allStarsPopover);
       allStarsBrowserState = null;
@@ -63150,7 +63154,15 @@ function renderRunwaySection() {
 
   function universeLogoMetadataPatch(season, logo) {
     const setup = structuredClone(season.setup && typeof season.setup === "object" ? season.setup : {});
-    const snapshot = structuredClone(season.snapshot && typeof season.snapshot === "object" ? season.snapshot : {});
+    const snapshotSource = season.snapshot_path
+      ? (season.__cloudDbSnapshot || {
+          archiveSchemaVersion: season.snapshot?.archiveSchemaVersion,
+          manualDataVersion: season.snapshot?.manualDataVersion,
+          archiveIntegrity: season.snapshot?.archiveIntegrity,
+          setup: season.setup || season.snapshot?.setup || {},
+        })
+      : season.snapshot;
+    const snapshot = structuredClone(snapshotSource && typeof snapshotSource === "object" ? snapshotSource : {});
     const archiveMeta = {
       ...(setup.archiveMeta && typeof setup.archiveMeta === "object" ? setup.archiveMeta : {}),
       logoUrl: String(logo?.url || ""),
@@ -63555,6 +63567,20 @@ function renderRunwaySection() {
     els.universePanel.append(page);
   }
 
+  async function cloudRemoveUnusedSeasonArchives(paths) {
+    const ownerPrefix = `${cloudSession?.user?.id || ""}/`;
+    if (ownerPrefix === "/") return;
+    const unique = [...new Set((paths || []).filter((path) =>
+      typeof path === "string" && path.startsWith(ownerPrefix) &&
+      !path.includes("..") && !path.includes("\\")
+    ))];
+    for (let start = 0; start < unique.length; start += 100) {
+      const { error } = await cloudClient.storage.from(CLOUD_SEASON_ARCHIVE_BUCKET)
+        .remove(unique.slice(start, start + 100));
+      if (error) throw error;
+    }
+  }
+
   function renderFranchisePage(franchiseId) {
     const franchise=cloudData.franchises.find((item)=>String(item.id)===String(franchiseId));if(!franchise){universeSelectedFranchiseId=null;renderUniversePanel();return;}
     const seasons=cloudSeasonRowsForFranchise(franchiseId);const contestants=aggregateFranchiseContestants(franchiseId);const page=document.createElement("div");page.className="cloud-page";
@@ -63562,7 +63588,7 @@ function renderRunwaySection() {
     const hero=document.createElement("section");hero.className="universe-hero";const franchiseLogo=franchiseLogoUrl(franchise);if(franchiseLogo){const logo=document.createElement("img");logo.className="universe-hero__logo";logo.src=franchiseLogo;logo.alt=`${franchise.name} logo`;logo.addEventListener("error",()=>logo.removeAttribute("src"),{once:true});hero.append(logo);}const copy=document.createElement("div");const name=document.createElement("h1");name.textContent=franchise.name;const meta=document.createElement("p");meta.textContent=`${seasons.length} SEASONS · ${contestants.length} UNIQUE CONTESTANTS · ${seasons.reduce((sum,s)=>sum+(Array.isArray(s.episode_ratings)?s.episode_ratings.length:0),0)} EPISODES`;copy.append(name,meta);const rating=document.createElement("div");rating.className="universe-rating-block";const label=document.createElement("span");label.textContent="FRANCHISE RATING";const strong=document.createElement("strong");const ratingValue=franchiseAverageRating(franchiseId);strong.textContent=ratingValue?ratingValue.toFixed(1):"—";rating.append(label,strong);hero.append(copy,rating);page.append(hero);
     const tabs=document.createElement("div");tabs.className="universe-tabs";[["overview","OVERVIEW"],["seasons","SEASONS"],["ratings","RATINGS"],["contestants","CONTESTANTS"],["records","RECORDS"]].forEach(([key,labelText])=>{const button=document.createElement("button");button.type="button";button.className="universe-tab";button.textContent=labelText;if(universeTab===key)button.classList.add("is-active");button.addEventListener("click",()=>{universeTab=key;renderUniversePanel();});tabs.append(button);});
     const editFranchise=document.createElement("button");editFranchise.type="button";editFranchise.className="universe-tab universe-tab--edit";editFranchise.textContent="EDIT FRANCHISE";editFranchise.addEventListener("click",()=>openUniverseEditDialog("franchise",franchise));tabs.append(editFranchise);
-    const deleteFranchise=document.createElement("button");deleteFranchise.type="button";deleteFranchise.className="universe-tab";deleteFranchise.textContent="DELETE FRANCHISE";deleteFranchise.addEventListener("click",async()=>{if(!confirm(`Delete ${franchise.name} and all of its saved seasons?`))return;const logo=franchiseLogoEntry(franchise.id);const{error}=await cloudClient.from("franchises").delete().eq("id",franchise.id);if(error)return alert(cloudErrorMessage(error));if(logo?.path)await cloudClient.storage.from("contestant-images").remove([logo.path]);try{await setFranchiseLogo(franchise.id,null);}catch(_error){}try{await setFranchiseSeasonOrder(franchise.id,[]);}catch(_error){}await refreshCloudData({rerender:false});universeSelectedFranchiseId=null;renderUniversePanel();});tabs.append(deleteFranchise);page.append(tabs);
+    const deleteFranchise=document.createElement("button");deleteFranchise.type="button";deleteFranchise.className="universe-tab";deleteFranchise.textContent="DELETE FRANCHISE";deleteFranchise.addEventListener("click",async()=>{if(!confirm(`Delete ${franchise.name} and all of its saved seasons?`))return;const logo=franchiseLogoEntry(franchise.id);const archived=seasons.filter((season)=>season.snapshot_path).map((season)=>({id:season.id,path:season.snapshot_path}));const{error}=await cloudClient.from("franchises").delete().eq("id",franchise.id);if(error)return alert(cloudErrorMessage(error));if(archived.length){try{const{data:remaining,error:checkError}=await cloudClient.from("seasons").select("id").in("id",archived.map((item)=>item.id));if(checkError)throw checkError;const stillSaved=new Set((remaining||[]).map((item)=>String(item.id)));await cloudRemoveUnusedSeasonArchives(archived.filter((item)=>!stillSaved.has(String(item.id))).map((item)=>item.path));}catch(cleanupError){console.warn("[THE CROWN] Archive files could not be verified or cleaned up after franchise deletion.",cleanupError);}}if(logo?.path)await cloudClient.storage.from("contestant-images").remove([logo.path]);try{await setFranchiseLogo(franchise.id,null);}catch(_error){}try{await setFranchiseSeasonOrder(franchise.id,[]);}catch(_error){}await refreshCloudData({rerender:false});universeSelectedFranchiseId=null;renderUniversePanel();});tabs.append(deleteFranchise);page.append(tabs);
     if(universeTab==="overview")renderFranchiseOverview(page,franchiseId,seasons,contestants);else if(universeTab==="seasons")renderFranchiseSeasons(page,franchiseId,seasons);else if(universeTab==="ratings")renderFranchiseRatings(page,franchiseId,seasons);else if(universeTab==="contestants")renderFranchiseContestants(page,franchiseId,contestants);else renderFranchiseRecords(page,franchiseId,contestants);
     els.universePanel.append(page);
   }
@@ -64347,29 +64373,124 @@ function renderRunwaySection() {
     if (appearances.length) loadArchive();
   }
 
-  async function fetchFullSeason(seasonId) {
-    let season = cloudSeasonCache.get(String(seasonId));
-    if (!season) {
-      const { data, error } = await cloudClient.from("seasons").select("*").eq("id", seasonId).single();
-      if (error) throw error;
-      season = data;
-      cloudSeasonCache.set(String(seasonId), season);
+  async function cloudCompressArchiveSnapshot(snapshot) {
+    if (typeof CompressionStream !== "function") {
+      throw new Error("This browser does not support archive compression.");
     }
-    if (season?.snapshot?.archiveIntegrity && cloudSession?.user?.id) {
-      try {
-        const { data: records, error } = await cloudClient.from("season_contestants").select("*")
-          .eq("user_id", cloudSession.user.id).eq("season_id", seasonId);
-        if (error) throw error;
-        if (!Array.isArray(records)) throw new Error("Missing archive contestant response.");
-        cloudData.seasonContestants = cloudData.seasonContestants
-          .filter((row) => String(row.season_id) !== String(seasonId)).concat(records);
-      } catch (error) {
-        console.warn("[THE CROWN] Could not verify the archived season contestants.", error);
-        cloudData.seasonContestants = cloudData.seasonContestants
-          .filter((row) => String(row.season_id) !== String(seasonId));
+    if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot) ||
+        !snapshot.runtime || typeof snapshot.runtime !== "object") {
+      throw new Error("The season snapshot is incomplete and cannot be compressed.");
+    }
+    const payload = new Blob([JSON.stringify(snapshot)], { type: "application/json" });
+    const stream = payload.stream().pipeThrough(new CompressionStream("gzip"));
+    return new Blob([await new Response(stream).arrayBuffer()], { type: "application/gzip" });
+  }
+
+  async function cloudDecodeArchiveSnapshot(blob, encoding) {
+    if (encoding !== CLOUD_SEASON_ARCHIVE_ENCODING) {
+      throw new Error("This season uses an unsupported compressed archive format.");
+    }
+    if (typeof DecompressionStream !== "function") {
+      throw new Error("This browser does not support compressed season archives.");
+    }
+    if (!blob || typeof blob.stream !== "function") {
+      throw new Error("The compressed season archive could not be downloaded.");
+    }
+    let snapshot;
+    try {
+      const stream = blob.stream().pipeThrough(new DecompressionStream("gzip"));
+      snapshot = JSON.parse(await new Response(stream).text());
+    } catch (_error) {
+      throw new Error("The compressed season archive could not be decoded. The saved archive has not been changed.");
+    }
+    if (!snapshot || typeof snapshot !== "object" || Array.isArray(snapshot) ||
+        !snapshot.runtime || typeof snapshot.runtime !== "object" ||
+        !Array.isArray((snapshot.runtime.seasonRuntime || snapshot.runtime).episodes)) {
+      throw new Error("The compressed season archive contains an invalid runtime.");
+    }
+    return snapshot;
+  }
+
+  async function cloudHydrateSeasonArchive(season) {
+    if (!season || typeof season !== "object") {
+      throw new Error("The saved season could not be found.");
+    }
+    const path = String(season.snapshot_path || "").trim();
+    if (!path) {
+      if (season.snapshot_encoding) {
+        throw new Error("The saved season is missing its compressed archive path.");
       }
+      return season;
     }
+    if (season.__cloudArchiveHydrated) return season;
+    const owner = String(season.user_id || "");
+    if (!owner || !path.startsWith(`${owner}/`) || path.includes("..") || path.includes("\\")) {
+      throw new Error("The saved season has an invalid archive location.");
+    }
+    if (season.snapshot_encoding !== CLOUD_SEASON_ARCHIVE_ENCODING) {
+      throw new Error("This season uses an unsupported compressed archive format.");
+    }
+    const { data, error } = await cloudClient.storage.from(CLOUD_SEASON_ARCHIVE_BUCKET).download(path);
+    if (error) throw new Error(`Could not load the saved season archive: ${cloudErrorMessage(error)}`);
+    const originalSnapshot = await cloudDecodeArchiveSnapshot(data, season.snapshot_encoding);
+    const databaseSnapshot = season.snapshot && typeof season.snapshot === "object" && !Array.isArray(season.snapshot)
+      ? structuredClone(season.snapshot)
+      : {};
+    const archiveMeta = season.setup?.archiveMeta || databaseSnapshot.setup?.archiveMeta;
+    if (archiveMeta && typeof archiveMeta === "object") {
+      originalSnapshot.setup = {
+        ...(originalSnapshot.setup || {}),
+        archiveMeta: structuredClone(archiveMeta),
+      };
+    }
+    Object.defineProperty(season, "__cloudDbSnapshot", {
+      value: databaseSnapshot,
+      writable: true,
+      configurable: true,
+    });
+    season.snapshot = originalSnapshot;
+    Object.defineProperty(season, "__cloudArchiveHydrated", {
+      value: true,
+      writable: true,
+      configurable: true,
+    });
     return season;
+  }
+
+  async function fetchFullSeason(seasonId) {
+    const id = String(seasonId);
+    if (cloudSeasonLoadPromises.has(id)) return cloudSeasonLoadPromises.get(id);
+    const load = (async () => {
+      let season = cloudSeasonCache.get(id);
+      if (!season) {
+        const { data, error } = await cloudClient.from("seasons").select("*").eq("id", seasonId).single();
+        if (error) throw error;
+        season = data;
+      }
+      await cloudHydrateSeasonArchive(season);
+      if (season?.snapshot?.archiveIntegrity && cloudSession?.user?.id) {
+        try {
+          const { data: records, error } = await cloudClient.from("season_contestants").select("*")
+            .eq("user_id", cloudSession.user.id).eq("season_id", seasonId);
+          if (error) throw error;
+          if (!Array.isArray(records)) throw new Error("Missing archive contestant response.");
+          cloudData.seasonContestants = cloudData.seasonContestants
+            .filter((row) => String(row.season_id) !== id).concat(records);
+        } catch (error) {
+          console.warn("[THE CROWN] Could not verify the archived season contestants.", error);
+          cloudData.seasonContestants = cloudData.seasonContestants
+            .filter((row) => String(row.season_id) !== id);
+        }
+      }
+      cloudSeasonCache.set(id, season);
+      return season;
+    })();
+    cloudSeasonLoadPromises.set(id, load);
+    try {
+      return await load;
+    } finally {
+      if (cloudSeasonLoadPromises.get(id) === load) cloudSeasonLoadPromises.delete(id);
+    }
   }
 
   function renderUniverseSeasonDetail(franchiseId, seasonId) {
@@ -64459,6 +64580,10 @@ function renderRunwaySection() {
         const logoPath = String(season?.setup?.archiveMeta?.logoPath || season?.snapshot?.setup?.archiveMeta?.logoPath || "");
         const { error } = await cloudClient.from("seasons").delete().eq("id", season.id);
         if (error) return alert(cloudErrorMessage(error));
+        if (season.snapshot_path) {
+          try { await cloudRemoveUnusedSeasonArchives([season.snapshot_path]); }
+          catch (cleanupError) { console.warn("[THE CROWN] Deleted season archive file could not be cleaned up.", cleanupError); }
+        }
         if (logoPath) await cloudClient.storage.from("contestant-images").remove([logoPath]);
         cloudSeasonCache.delete(String(season.id));
         try { await setFranchiseSeasonOrder(franchiseId, franchiseSeasonOrder(franchiseId).filter((id) => String(id) !== String(season.id))); } catch (_error) {}
@@ -64882,7 +65007,12 @@ function renderRunwaySection() {
       ? (runtimeHasDragulaTitansFormat() ? "titans" : "dragula")
       : seasonType;
 
+    const userId = cloudSession.user.id;
+    const archiveId = crypto.randomUUID();
+    const archivePath = `${userId}/${archiveId}.json.gz`;
     let uploadedLogo = null;
+    let archiveUploadAttempted = false;
+    let seasonInsertAttempted = false;
     let season = null;
 
     try {
@@ -64896,8 +65026,38 @@ function renderRunwaySection() {
         logoPath: uploadedLogo?.path || "",
       };
 
+      const completedIntegrity = { ...archiveIntegrity, status: "complete" };
+      const archiveSnapshot = cloudJsonSafe({
+        archiveSchemaVersion: ARCHIVE_SCHEMA_VERSION,
+        manualDataVersion: state.seasonRuntime?.manualIncremental ? ARCHIVE_MANUAL_VERSION : null,
+        archiveIntegrity: completedIntegrity,
+        setup: setupSnapshot,
+        runtime: runtimeSnapshot?.seasonRuntime || state.seasonRuntime,
+      });
+      const compressedArchive = await cloudCompressArchiveSnapshot(archiveSnapshot);
+      archiveUploadAttempted = true;
+      const { error: archiveUploadError } = await cloudClient.storage
+        .from(CLOUD_SEASON_ARCHIVE_BUCKET)
+        .upload(archivePath, compressedArchive, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: "application/gzip",
+        });
+      if (archiveUploadError) throw new Error(`Could not upload compressed season: ${cloudErrorMessage(archiveUploadError)}`);
+      const { data: verifiedFile, error: archiveDownloadError } = await cloudClient.storage
+        .from(CLOUD_SEASON_ARCHIVE_BUCKET)
+        .download(archivePath);
+      if (archiveDownloadError || !verifiedFile) {
+        throw new Error(`Could not verify compressed season: ${cloudErrorMessage(archiveDownloadError)}`);
+      }
+      const verifiedSnapshot = await cloudDecodeArchiveSnapshot(verifiedFile, CLOUD_SEASON_ARCHIVE_ENCODING);
+      if (JSON.stringify(verifiedSnapshot) !== JSON.stringify(archiveSnapshot)) {
+        throw new Error("Compressed season archive verification failed. The original season has not been changed.");
+      }
+
       const seasonPayload = {
-        user_id: cloudSession.user.id,
+        id: archiveId,
+        user_id: userId,
         franchise_id: franchiseId,
         title,
         season_number: seasonNumber,
@@ -64907,18 +65067,23 @@ function renderRunwaySection() {
         winner_id: winnerId ? normalizeContestantId(winnerId) : null,
         simulation_seed: String(state.seasonRuntime?.simulationSeed ?? ""),
         setup: cloudJsonSafe(setupSnapshot),
-        snapshot: cloudJsonSafe({
+        snapshot_path: archivePath,
+        snapshot_encoding: CLOUD_SEASON_ARCHIVE_ENCODING,
+        snapshot: {
           archiveSchemaVersion: ARCHIVE_SCHEMA_VERSION,
-          manualDataVersion: state.seasonRuntime?.manualIncremental ? ARCHIVE_MANUAL_VERSION : null,
+          manualDataVersion: archiveSnapshot.manualDataVersion,
           archiveIntegrity,
-          setup: setupSnapshot,
-          runtime: runtimeSnapshot?.seasonRuntime || state.seasonRuntime,
-        }),
+          setup: { archiveMeta: structuredClone(setupSnapshot.archiveMeta) },
+        },
         cast_snapshot: cloudJsonSafe(castSnapshots),
       };
 
+      seasonInsertAttempted = true;
       const insertResult = await cloudClient.from("seasons").insert(seasonPayload).select("*").single();
       if (insertResult.error) throw insertResult.error;
+      if (!insertResult.data || String(insertResult.data.id) !== archiveId) {
+        throw new Error("Could not confirm the saved season record.");
+      }
       season = insertResult.data;
 
       const rows = state.selectedIds.map((id) => {
@@ -64929,7 +65094,7 @@ function renderRunwaySection() {
         ).length;
 
         return {
-          user_id: cloudSession.user.id,
+          user_id: userId,
           season_id: season.id,
           contestant_id: normalizeContestantId(id),
           contestant_snapshot: cloudJsonSafe(cloudSnapshotQueen(queen)),
@@ -64957,7 +65122,7 @@ function renderRunwaySection() {
         if (rowsError) throw rowsError;
       }
       const { data: storedRows, error: verifyError } = await cloudClient.from("season_contestants")
-        .select("contestant_id").eq("user_id", cloudSession.user.id).eq("season_id", season.id);
+        .select("contestant_id").eq("user_id", userId).eq("season_id", season.id);
       if (verifyError) throw verifyError;
       const actualIds = Array.isArray(storedRows) ? storedRows.map((row) => normalizeContestantId(row.contestant_id)) : [];
       if (actualIds.length !== archiveIds.length || new Set(actualIds).size !== actualIds.length ||
@@ -64965,38 +65130,59 @@ function renderRunwaySection() {
         throw new Error("Season archive verification failed: the saved contestant records are incomplete.");
       }
       const committedSnapshot = { ...seasonPayload.snapshot,
-        archiveIntegrity: { ...archiveIntegrity, status: "complete" } };
+        archiveIntegrity: completedIntegrity };
       const { data: committedSeason, error: commitError } = await cloudClient.from("seasons")
-        .update({ snapshot: committedSnapshot }).eq("id", season.id).eq("user_id", cloudSession.user.id)
+        .update({ snapshot: committedSnapshot }).eq("id", season.id).eq("user_id", userId)
         .select("*").single();
       if (commitError || !committedSeason) throw commitError || new Error("Could not finalize the archive save.");
       season = committedSeason;
     } catch (error) {
-      if (season?.id) {
+      let databaseCleanupConfirmed = !seasonInsertAttempted;
+      if (seasonInsertAttempted) {
         try {
           const { error: rowCleanupError } = await cloudClient.from("season_contestants").delete()
-            .eq("season_id", season.id).eq("user_id", cloudSession.user.id);
+            .eq("season_id", archiveId).eq("user_id", userId);
           if (rowCleanupError) console.warn("[THE CROWN] Incomplete archive contestant rows could not be cleaned up.", rowCleanupError);
         } catch (rowCleanupError) {
           console.warn("[THE CROWN] Incomplete archive contestant rows could not be cleaned up.", rowCleanupError);
         }
         try {
           const { error: cleanupError } = await cloudClient.from("seasons").delete()
-            .eq("id", season.id).eq("user_id", cloudSession.user.id);
-          if (cleanupError) console.warn("[THE CROWN] Incomplete archive could not be cleaned up and will remain read-only.", cleanupError);
+            .eq("id", archiveId).eq("user_id", userId);
+          databaseCleanupConfirmed = !cleanupError;
+          if (cleanupError) console.warn("[THE CROWN] Incomplete archive record could not be cleaned up.", cleanupError);
         } catch (cleanupError) {
-          console.warn("[THE CROWN] Incomplete archive could not be cleaned up and will remain read-only.", cleanupError);
+          console.warn("[THE CROWN] Incomplete archive record could not be cleaned up.", cleanupError);
         }
       }
-      if (uploadedLogo?.path) {
+      if (databaseCleanupConfirmed && archiveUploadAttempted) {
+        try {
+          const { error: archiveCleanupError } = await cloudClient.storage
+            .from(CLOUD_SEASON_ARCHIVE_BUCKET).remove([archivePath]);
+          if (archiveCleanupError) console.warn("[THE CROWN] Unused compressed archive could not be cleaned up.", archiveCleanupError);
+        } catch (archiveCleanupError) {
+          console.warn("[THE CROWN] Unused compressed archive could not be cleaned up.", archiveCleanupError);
+        }
+      }
+      if (databaseCleanupConfirmed && uploadedLogo?.path) {
         try { await cloudClient.storage.from("contestant-images").remove([uploadedLogo.path]); }
         catch (cleanupError) { console.warn("[THE CROWN] Could not clean up unused season logo.", cleanupError); }
+      }
+      if (!databaseCleanupConfirmed) {
+        throw new Error(`${cloudErrorMessage(error)} The incomplete archive could not be removed automatically. Do not resave until the archive is checked.`);
       }
       throw error;
     }
 
     cloudSeasonCache.set(String(season.id), season);
-    await refreshCloudData({ rerender: false });
+    const savedIndex = cloudData.seasons.findIndex((item) => String(item.id) === String(season.id));
+    if (savedIndex >= 0) cloudData.seasons[savedIndex] = season;
+    else cloudData.seasons.push(season);
+    try {
+      await refreshCloudData({ rerender: false });
+    } catch (refreshError) {
+      console.warn("[THE CROWN] Season was saved but the Universe could not be refreshed.", refreshError);
+    }
   }
 
   els.sectionTabs.forEach((tab) => {
