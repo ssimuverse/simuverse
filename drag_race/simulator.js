@@ -60843,6 +60843,7 @@ function renderRunwaySection() {
   let cloudArchivedContestants = [];
   const cloudSeasonCache = new Map();
   const cloudSeasonLoadPromises = new Map();
+  const cloudMissingSeasonIds = new Set();
   const CLOUD_SEASON_ARCHIVE_BUCKET = "season-archives";
   const CLOUD_SEASON_ARCHIVE_ENCODING = "gzip-json-v1";
 
@@ -60953,12 +60954,31 @@ function renderRunwaySection() {
   function cloudErrorMessage(error, fallback = "Something went wrong.") {
     const raw = String(error?.message || error?.error_description || error?.details || fallback);
     if (/invalid login credentials/i.test(raw)) return "Incorrect username/email or password.";
-    if (/email not confirmed/i.test(raw)) return "Please confirm your email before logging in.";
+    if (/email not confirmed/i.test(raw)) return "Please confirm your email before logging in. You can resend the confirmation email below.";
+    if (/email rate limit|too many emails|over_email_send_rate_limit/i.test(raw)) return "Too many confirmation emails have been requested. Please try again later.";
+    if (cloudIsInvalidRefreshToken(error)) return "Your login session has expired. Please log in again.";
     if (/user already registered/i.test(raw)) return "An account with that email already exists.";
     if (/duplicate key|profiles_username_key|username/i.test(raw) && /duplicate|unique|already/i.test(raw)) {
       return "That username is already taken.";
     }
     return raw;
+  }
+
+  function cloudIsInvalidRefreshToken(error) {
+    const message = String(error?.message || error?.error_description || "");
+    const code = String(error?.code || "");
+    return /invalid refresh token|refresh token (?:not found|already used|expired|invalid)/i.test(message) ||
+      /refresh_token_not_found|refresh_token_already_used/i.test(code);
+  }
+
+  function cloudSeasonUnavailableError() {
+    const error = new Error("This season is no longer available to your account. Return to My Universe to see your current seasons.");
+    error.code = "CLOUD_SEASON_UNAVAILABLE";
+    return error;
+  }
+
+  function cloudIsSeasonUnavailable(error) {
+    return error?.code === "CLOUD_SEASON_UNAVAILABLE";
   }
 
   function cloudSetMessage(target, message, type = "") {
@@ -61207,6 +61227,15 @@ function renderRunwaySection() {
       for (const [name, result] of results) {
         cloudData[name] = name === "profile" ? (result.data || null) : (result.data || []);
       }
+      if (!requested || requested.has("seasons")) {
+        const currentIds = new Set(cloudData.seasons.map((row) => String(row.id)));
+        for (const id of cloudMissingSeasonIds) {
+          if (currentIds.has(id)) cloudMissingSeasonIds.delete(id);
+        }
+        for (const id of cloudSeasonCache.keys()) {
+          if (!currentIds.has(id)) cloudSeasonCache.delete(id);
+        }
+      }
       if (!requested) {
         cloudDataLoadedUserId = userId;
         cloudDataLastRefreshAt = Date.now();
@@ -61254,6 +61283,7 @@ function renderRunwaySection() {
     if (previousUserId && previousUserId !== nextUserId) {
       cloudSeasonCache.clear();
       cloudSeasonLoadPromises.clear();
+      cloudMissingSeasonIds.clear();
       cloudDataLoadedUserId = "";
       cloudDataLastRefreshAt = 0;
       cloudData.profile = null;
@@ -61313,6 +61343,7 @@ function renderRunwaySection() {
       cloudData.seasonContestants = [];
       cloudSeasonCache.clear();
       cloudSeasonLoadPromises.clear();
+      cloudMissingSeasonIds.clear();
       cloudArchivedContestants = [];
       if (els.allStarsPopover) closePopover(els.allStarsPopover);
       allStarsBrowserState = null;
@@ -61349,9 +61380,23 @@ function renderRunwaySection() {
       },
     });
 
-    const { data, error } = await cloudClient.auth.getSession();
-    if (error) console.warn("[THE CROWN] Could not restore cloud session.", error);
-    cloudSession = data?.session || null;
+    let restoredSession = null;
+    try {
+      const { data, error } = await cloudClient.auth.getSession();
+      if (error) {
+        if (cloudIsInvalidRefreshToken(error)) {
+          try { await cloudClient.auth.signOut({ scope: "local" }); }
+          catch (signOutError) { console.warn("[THE CROWN] Could not clear expired local session.", signOutError); }
+        } else {
+          console.warn("[THE CROWN] Could not restore cloud session.", error);
+        }
+      } else {
+        restoredSession = data?.session || null;
+      }
+    } catch (error) {
+      console.warn("[THE CROWN] Could not restore cloud session.", error);
+    }
+    cloudSession = restoredSession;
     if (cloudSession) {
       await refreshCloudData({ rerender: false, suppressSimulatorRender: true });
     } else {
@@ -61483,6 +61528,37 @@ function renderRunwaySection() {
       return;
     }
 
+    if (cloudAuthMode === "resend-confirmation") {
+      els.authPopoverTitle.textContent = "Resend confirmation email";
+      const form = document.createElement("form");
+      form.innerHTML = `
+        <div class="cloud-field"><span>Email</span><input class="cloud-input" id="cloudConfirmEmail" type="email" autocomplete="email" required></div>
+        <p class="cloud-help">Enter the email address used to create your account.</p>
+        <div class="cloud-message" id="cloudAuthMessage"></div>
+        <div class="cloud-actions"><button class="auth-link" id="cloudBackToLogin" type="button">Back to login</button><button class="cloud-btn cloud-btn--accent" type="submit">RESEND EMAIL</button></div>`;
+      form.querySelector("#cloudBackToLogin").addEventListener("click", () => { cloudAuthMode = "login"; renderAuthPopover(); });
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submit = form.querySelector('button[type="submit"]');
+        const message = form.querySelector("#cloudAuthMessage");
+        submit.disabled = true;
+        cloudSetMessage(message, "Sending confirmation email…");
+        try {
+          const email = form.querySelector("#cloudConfirmEmail").value.trim();
+          const emailRedirectTo = `${window.location.origin}${window.location.pathname}`;
+          const { error } = await cloudClient.auth.resend({ type: "signup", email, options: { emailRedirectTo } });
+          if (error) throw error;
+          cloudSetMessage(message, "If this account needs confirmation, a new email has been requested. Check your inbox and spam folder.", "success");
+        } catch (error) {
+          cloudSetMessage(message, cloudErrorMessage(error), "error");
+        } finally {
+          submit.disabled = false;
+        }
+      });
+      els.authContent.append(form);
+      return;
+    }
+
     const isRegister = cloudAuthMode === "register";
     els.authPopoverTitle.textContent = isRegister ? "Create account" : "Log in";
     const shell = document.createElement("div");
@@ -61512,8 +61588,15 @@ function renderRunwaySection() {
         <div class="cloud-field"><span>Username or email</span><input class="cloud-input" id="cloudIdentifier" autocomplete="username" required></div>
         <div class="cloud-field" style="margin-top:10px"><span>Password</span><input class="cloud-input" id="cloudPassword" type="password" autocomplete="current-password" required></div>
         <div class="cloud-message" id="cloudAuthMessage"></div>
-        <div class="cloud-actions"><button class="auth-link" id="cloudForgotPassword" type="button">Forgot password?</button><button class="cloud-btn cloud-btn--accent" type="submit">LOG IN</button></div>`;
+        <div class="cloud-actions"><button class="auth-link" id="cloudForgotPassword" type="button">Forgot password?</button><button class="cloud-btn cloud-btn--accent" type="submit">LOG IN</button></div>
+        <button class="auth-link" id="cloudResendConfirmation" type="button">Resend confirmation email</button>`;
       form.querySelector("#cloudForgotPassword").addEventListener("click", () => { cloudAuthMode = "forgot"; renderAuthPopover(); });
+      form.querySelector("#cloudResendConfirmation").addEventListener("click", () => {
+        const identifier = form.querySelector("#cloudIdentifier").value.trim();
+        cloudAuthMode = "resend-confirmation";
+        renderAuthPopover();
+        if (identifier.includes("@")) els.authContent.querySelector("#cloudConfirmEmail").value = identifier;
+      });
     }
 
     form.addEventListener("submit", async (event) => {
@@ -64536,12 +64619,23 @@ function renderRunwaySection() {
 
   async function fetchFullSeason(seasonId) {
     const id = String(seasonId);
+    if (cloudMissingSeasonIds.has(id)) throw cloudSeasonUnavailableError();
     if (cloudSeasonLoadPromises.has(id)) return cloudSeasonLoadPromises.get(id);
     const load = (async () => {
       let season = cloudSeasonCache.get(id);
       if (!season) {
-        const { data, error } = await cloudClient.from("seasons").select("*").eq("id", seasonId).single();
+        const requestedUserId = String(cloudSession?.user?.id || "");
+        const { data, error } = await cloudClient.from("seasons").select("*").eq("id", seasonId).maybeSingle();
         if (error) throw error;
+        if (String(cloudSession?.user?.id || "") !== requestedUserId) {
+          throw new Error("Your account changed while loading the season. Please try again.");
+        }
+        if (!data) {
+          cloudMissingSeasonIds.add(id);
+          cloudData.seasons = cloudData.seasons.filter((row) => String(row.id) !== id);
+          cloudSeasonCache.delete(id);
+          throw cloudSeasonUnavailableError();
+        }
         season = data;
       }
       await cloudHydrateSeasonArchive(season);
@@ -64598,6 +64692,7 @@ function renderRunwaySection() {
     els.universePanel.append(page);
 
     fetchFullSeason(seasonId).then((season) => {
+      if (!page.isConnected) return;
       page.replaceChildren(back);
       const hero = document.createElement("section");
       hero.className = "universe-hero";
@@ -64726,7 +64821,21 @@ function renderRunwaySection() {
       page.append(epTitle);
       if (Array.isArray(season.episode_ratings) && season.episode_ratings.length) renderSavedEpisodeRatingsTable(page, season.episode_ratings);
       else page.append(cloudEmpty("NO EPISODE RATINGS SAVED"));
-    }).catch((error) => { loading.textContent = cloudErrorMessage(error); });
+    }).catch((error) => {
+      if (!page.isConnected) return;
+      page.replaceChildren(back);
+      const notice = cloudEmpty(cloudErrorMessage(error));
+      notice.setAttribute("role", "status");
+      page.append(notice);
+      if (cloudIsSeasonUnavailable(error)) {
+        const returnButton = document.createElement("button");
+        returnButton.type = "button";
+        returnButton.className = "cloud-btn cloud-btn--accent";
+        returnButton.textContent = "BACK TO SEASONS";
+        returnButton.addEventListener("click", () => { universeDetail = null; universeTab = "seasons"; renderUniversePanel(); });
+        page.append(returnButton);
+      }
+    });
   }
 
   function applySavedSetupSnapshot(setup) {
