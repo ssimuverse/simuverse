@@ -60828,6 +60828,12 @@ function renderRunwaySection() {
   let cloudSessionRefreshPromise = null;
   let cloudSessionRefreshUserId = "";
   const CLOUD_AUTH_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+  const CLOUD_BOOTSTRAP_CACHE_KEY = "theCrownCloudBootstrap.v2";
+  const CLOUD_BOOTSTRAP_CACHE_TTL_MS = 3 * 60 * 1000;
+  const CLOUD_BOOTSTRAP_COLLECTIONS = ["profile", "customContestants", "runways", "challenges", "songs", "franchises"];
+  let cloudUniverseLoadedUserId = "";
+  let cloudUniverseLoadPromise = null;
+  let cloudUniverseLoadUserId = "";
   let cloudBound = false;
   let customContestantEditId = null;
   let customContestantFormDraft = null;
@@ -61196,10 +61202,42 @@ function renderRunwaySection() {
     updateUniverseSaveButton();
   }
 
-  async function refreshCloudData({ rerender = true, suppressSimulatorRender = false, collections = null } = {}) {
+  function cloudReadBootstrapCache(userId) {
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(CLOUD_BOOTSTRAP_CACHE_KEY) || "null");
+      if (!cached || cached.userId !== userId || !Number.isFinite(cached.savedAt) ||
+          Date.now() - cached.savedAt > CLOUD_BOOTSTRAP_CACHE_TTL_MS ||
+          cached.savedAt > Date.now() || !cached.data) return null;
+      if (!CLOUD_BOOTSTRAP_COLLECTIONS.every((name) =>
+          Object.prototype.hasOwnProperty.call(cached.data, name) &&
+          (name === "profile" || Array.isArray(cached.data[name])))) return null;
+      return cached.data;
+    } catch {
+      return null;
+    }
+  }
+
+  function cloudWriteBootstrapCache(userId) {
+    if (!userId || cloudSession?.user?.id !== userId) return;
+    try {
+      const data = Object.fromEntries(CLOUD_BOOTSTRAP_COLLECTIONS.map((name) => [name, cloudData[name]]));
+      sessionStorage.setItem(CLOUD_BOOTSTRAP_CACHE_KEY, JSON.stringify({ userId, savedAt: Date.now(), data }));
+    } catch {
+      try { sessionStorage.removeItem(CLOUD_BOOTSTRAP_CACHE_KEY); } catch {}
+    }
+  }
+
+  function cloudClearBootstrapCache() {
+    try { sessionStorage.removeItem(CLOUD_BOOTSTRAP_CACHE_KEY); } catch {}
+  }
+
+  async function refreshCloudData({ rerender = true, suppressSimulatorRender = false, collections = null, allowSessionCache = false } = {}) {
     if (!cloudClient || !cloudSession?.user?.id) return;
     const userId = cloudSession.user.id;
     const requested = Array.isArray(collections) ? new Set(collections) : null;
+    const isBootstrap = Boolean(requested && requested.size === CLOUD_BOOTSTRAP_COLLECTIONS.length &&
+      CLOUD_BOOTSTRAP_COLLECTIONS.every((name) => requested.has(name)));
+    const cached = allowSessionCache && isBootstrap ? cloudReadBootstrapCache(userId) : null;
     cloudLoading = true;
     try {
       const requests = [
@@ -61218,8 +61256,10 @@ function renderRunwaySection() {
           .eq("user_id", userId)
           .order("created_at", { ascending: true })],
       ];
-      const results = await Promise.all(requests.filter(([name]) => !requested || requested.has(name))
-        .map(async ([name, request]) => [name, await request]));
+      const results = cached
+        ? CLOUD_BOOTSTRAP_COLLECTIONS.map((name) => [name, { data: cached[name] }])
+        : await Promise.all(requests.filter(([name]) => !requested || requested.has(name))
+          .map(async ([name, request]) => [name, await request]));
       const failed = results.find(([, result]) => result?.error);
       if (failed?.[1]?.error) throw failed[1].error;
       if (cloudSession?.user?.id !== userId) return;
@@ -61236,9 +61276,16 @@ function renderRunwaySection() {
           if (!currentIds.has(id)) cloudSeasonCache.delete(id);
         }
       }
-      if (!requested) {
+      if (!requested || isBootstrap) {
         cloudDataLoadedUserId = userId;
         cloudDataLastRefreshAt = Date.now();
+      }
+      if (!requested || (requested.has("seasons") && requested.has("seasonContestants"))) {
+        cloudUniverseLoadedUserId = userId;
+      }
+      if (!cached && cloudDataLoadedUserId === userId &&
+          (!requested || CLOUD_BOOTSTRAP_COLLECTIONS.some((name) => requested.has(name)))) {
+        cloudWriteBootstrapCache(userId);
       }
 
       if (
@@ -61277,6 +61324,27 @@ function renderRunwaySection() {
     }
   }
 
+  function ensureCloudUniverseData() {
+    const userId = String(cloudSession?.user?.id || "");
+    if (!userId) return Promise.reject(new Error("Log in to access My Universe."));
+    if (cloudUniverseLoadedUserId === userId) return Promise.resolve();
+    if (cloudUniverseLoadPromise && cloudUniverseLoadUserId === userId) return cloudUniverseLoadPromise;
+    const load = refreshCloudData({
+      rerender: false,
+      suppressSimulatorRender: true,
+      collections: ["seasons", "seasonContestants"],
+    });
+    cloudUniverseLoadUserId = userId;
+    cloudUniverseLoadPromise = load;
+    load.finally(() => {
+      if (cloudUniverseLoadPromise === load) {
+        cloudUniverseLoadPromise = null;
+        cloudUniverseLoadUserId = "";
+      }
+    }).catch(() => {});
+    return load;
+  }
+
   async function handleCloudSession(session, { rerender = true } = {}) {
     const previousUserId = String(cloudSession?.user?.id || "");
     const nextUserId = String(session?.user?.id || "");
@@ -61286,6 +61354,10 @@ function renderRunwaySection() {
       cloudMissingSeasonIds.clear();
       cloudDataLoadedUserId = "";
       cloudDataLastRefreshAt = 0;
+      cloudUniverseLoadedUserId = "";
+      cloudUniverseLoadPromise = null;
+      cloudUniverseLoadUserId = "";
+      cloudClearBootstrapCache();
       cloudData.profile = null;
       cloudData.customContestants = [];
       cloudData.runways = [];
@@ -61318,7 +61390,7 @@ function renderRunwaySection() {
           if (activePanel === "universe") renderUniversePanel();
         }
       } else {
-        const load = refreshCloudData({ rerender });
+        const load = refreshCloudData({ rerender, collections: CLOUD_BOOTSTRAP_COLLECTIONS, allowSessionCache: true });
         cloudSessionRefreshPromise = load;
         cloudSessionRefreshUserId = nextUserId;
         try {
@@ -61333,6 +61405,10 @@ function renderRunwaySection() {
     } else {
       cloudDataLoadedUserId = "";
       cloudDataLastRefreshAt = 0;
+      cloudUniverseLoadedUserId = "";
+      cloudUniverseLoadPromise = null;
+      cloudUniverseLoadUserId = "";
+      cloudClearBootstrapCache();
       cloudData.profile = null;
       cloudData.customContestants = [];
       cloudData.runways = [];
@@ -61398,7 +61474,8 @@ function renderRunwaySection() {
     }
     cloudSession = restoredSession;
     if (cloudSession) {
-      await refreshCloudData({ rerender: false, suppressSimulatorRender: true });
+      await refreshCloudData({ rerender: false, suppressSimulatorRender: true,
+        collections: CLOUD_BOOTSTRAP_COLLECTIONS, allowSessionCache: true });
     } else {
       updateCloudLockState();
     }
@@ -61426,6 +61503,7 @@ function renderRunwaySection() {
         }
         if (event === "USER_UPDATED" && incomingUserId === currentUserId) {
           cloudDataLoadedUserId = "";
+          cloudClearBootstrapCache();
         }
         try {
           await handleCloudSession(session || null);
@@ -61743,7 +61821,7 @@ function renderRunwaySection() {
     if (!file || !String(file.type || "").startsWith("image/")) return file;
     try {
       const bitmap = await createImageBitmap(file);
-      const maxSide = 900;
+      const maxSide = 720;
       const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
       const width = Math.max(1, Math.round(bitmap.width * scale));
       const height = Math.max(1, Math.round(bitmap.height * scale));
@@ -61753,8 +61831,8 @@ function renderRunwaySection() {
       const ctx = canvas.getContext("2d");
       ctx.drawImage(bitmap, 0, 0, width, height);
       bitmap.close?.();
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.86));
-      return blob || file;
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.8));
+      return blob && blob.size < file.size ? blob : file;
     } catch (_error) {
       return file;
     }
@@ -61765,7 +61843,7 @@ function renderRunwaySection() {
     const extension = blob?.type === "image/webp" ? "webp" : (String(file.name || "image.jpg").split(".").pop() || "jpg").toLowerCase();
     const path = `${cloudSession.user.id}/${contestantId}/${Date.now()}.${extension}`;
     const { error } = await cloudClient.storage.from("contestant-images").upload(path, blob, {
-      cacheControl: "3600",
+      cacheControl: "31536000",
       upsert: false,
       contentType: blob?.type || file.type || "image/jpeg",
     });
@@ -61843,7 +61921,7 @@ function renderRunwaySection() {
       : (String(file.name || "logo.png").split(".").pop() || "png").toLowerCase();
     const path = `${cloudSession.user.id}/universe-logos/${category}/${itemId}/${Date.now()}.${extension}`;
     const { error } = await cloudClient.storage.from("contestant-images").upload(path, blob, {
-      cacheControl: "3600",
+      cacheControl: "31536000",
       upsert: false,
       contentType: blob?.type || file.type || "image/png",
     });
@@ -62468,6 +62546,8 @@ function renderRunwaySection() {
         card.className = "queen-card custom-contestant-card";
         const img = document.createElement("img");
         img.className = "queen-card__image";
+        img.loading = "lazy";
+        img.decoding = "async";
         img.src = row.image_url || "";
         img.alt = row.full_name || row.nickname || "Contestant";
         img.addEventListener("error", () => img.removeAttribute("src"), { once: true });
@@ -63027,12 +63107,20 @@ function renderRunwaySection() {
     return select;
   }
 
-  function openAllStarsCasting() {
+  async function openAllStarsCasting() {
     if (state.simulatorMode !== "drag-race") return;
     if (!cloudSession) {
       openAuthPopover("login");
       return;
     }
+    const userId = String(cloudSession.user.id);
+    try {
+      await ensureCloudUniverseData();
+    } catch (error) {
+      window.alert(`Could not load All Stars history: ${cloudErrorMessage(error)}`);
+      return;
+    }
+    if (String(cloudSession?.user?.id || "") !== userId) return;
     const history = allStarsHistory();
     allStarsBrowserState = {
       history,
@@ -63612,6 +63700,24 @@ function renderRunwaySection() {
 
   function renderUniversePanel() {
     if (!els.universePanel || !cloudSession) return;
+    const userId = String(cloudSession.user.id);
+    if (cloudUniverseLoadedUserId !== userId) {
+      els.universePanel.replaceChildren(cloudEmpty("LOADING MY UNIVERSE…"));
+      ensureCloudUniverseData().then(() => {
+        if (String(cloudSession?.user?.id || "") === userId) renderUniversePanel();
+      }).catch((error) => {
+        if (String(cloudSession?.user?.id || "") !== userId) return;
+        els.universePanel.replaceChildren();
+        const message = cloudEmpty(`Could not load My Universe: ${cloudErrorMessage(error)}`);
+        const retry = document.createElement("button");
+        retry.type = "button";
+        retry.className = "cloud-btn";
+        retry.textContent = "TRY AGAIN";
+        retry.addEventListener("click", renderUniversePanel);
+        els.universePanel.append(message, retry);
+      });
+      return;
+    }
     els.universePanel.replaceChildren();
     if (!universeSelectedFranchiseId) renderUniverseHome();
     else if (universeDetail?.type === "season") renderUniverseSeasonDetail(universeSelectedFranchiseId, universeDetail.id);
@@ -63696,7 +63802,7 @@ function renderRunwaySection() {
       if (logoUrl) {
         const logo = document.createElement("img");
         logo.className = "franchise-card__logo";
-        logo.src = logoUrl;
+        logo.loading = "lazy"; logo.decoding = "async"; logo.src = logoUrl;
         logo.alt = `${franchise.name} logo`;
         logo.addEventListener("error", () => logo.removeAttribute("src"), { once: true });
         card.classList.add("has-logo");
@@ -63761,7 +63867,7 @@ function renderRunwaySection() {
   }
 
   function makeUniverseSeasonCard(franchiseId, season, { reorderable = false } = {}) {
-    const card=document.createElement("article");card.className="universe-season-card";card.dataset.seasonId=String(season.id);const logoUrl=seasonLogoUrl(season);if(logoUrl){const logo=document.createElement("img");logo.className="universe-season-card__logo";logo.src=logoUrl;logo.alt=`${season.title} logo`;logo.addEventListener("error",()=>logo.removeAttribute("src"),{once:true});card.classList.add("has-logo");card.append(logo);}const copy=document.createElement("div");const title=document.createElement("h3");title.textContent=season.title;const p=document.createElement("p");const winner=cloudData.seasonContestants.find((row)=>String(row.season_id)===String(season.id)&&row.is_winner);p.textContent=`${String(season.season_type||"regular").replaceAll("-"," ").toUpperCase()}${winner?` · Winner: ${winner.contestant_snapshot?.fullName||winner.contestant_snapshot?.nickname||winner.contestant_id}`:""}`;copy.append(title,p);const rating=document.createElement("div");rating.className="universe-season-card__rating";rating.textContent=Number(season.rating)?`★ ${Number(season.rating).toFixed(1)}`:"—";card.append(copy,rating);
+    const card=document.createElement("article");card.className="universe-season-card";card.dataset.seasonId=String(season.id);const logoUrl=seasonLogoUrl(season);if(logoUrl){const logo=document.createElement("img");logo.className="universe-season-card__logo";logo.loading="lazy";logo.decoding="async";logo.src=logoUrl;logo.alt=`${season.title} logo`;logo.addEventListener("error",()=>logo.removeAttribute("src"),{once:true});card.classList.add("has-logo");card.append(logo);}const copy=document.createElement("div");const title=document.createElement("h3");title.textContent=season.title;const p=document.createElement("p");const winner=cloudData.seasonContestants.find((row)=>String(row.season_id)===String(season.id)&&row.is_winner);p.textContent=`${String(season.season_type||"regular").replaceAll("-"," ").toUpperCase()}${winner?` · Winner: ${winner.contestant_snapshot?.fullName||winner.contestant_snapshot?.nickname||winner.contestant_id}`:""}`;copy.append(title,p);const rating=document.createElement("div");rating.className="universe-season-card__rating";rating.textContent=Number(season.rating)?`★ ${Number(season.rating).toFixed(1)}`:"—";card.append(copy,rating);
     if(reorderable){card.classList.add("is-reorderable");const handle=document.createElement("button");handle.type="button";handle.className="universe-season-card__drag";handle.draggable=true;handle.setAttribute("aria-label",`Drag ${season.title} to reorder`);handle.title="Drag to reorder";handle.innerHTML="<span></span><span></span><span></span>";handle.addEventListener("click",(event)=>event.stopPropagation());card.append(handle);}
     card.addEventListener("click",(event)=>{if(event.target.closest(".universe-season-card__drag"))return;universeDetail={type:"season",id:season.id};renderUniversePanel();});return card;
   }
@@ -64336,6 +64442,8 @@ function renderRunwaySection() {
       const card = document.createElement("article");
       card.className = "universe-contestant-card";
       const img = document.createElement("img");
+      img.loading = "lazy";
+      img.decoding = "async";
       img.src = cloudSnapshotImageSrc(item.snapshot);
       img.alt = item.snapshot?.fullName || item.snapshot?.nickname || "Contestant";
       img.addEventListener("error", () => img.removeAttribute("src"), { once: true });
@@ -64398,7 +64506,9 @@ function renderRunwaySection() {
         holder.type = "button";
         holder.className = "universe-record-holder";
         const img = document.createElement("img");
-        img.src = cloudSnapshotImageSrc(item.snapshot);
+        img.loading = "lazy";
+      img.decoding = "async";
+      img.src = cloudSnapshotImageSrc(item.snapshot);
         img.alt = item.snapshot?.fullName || item.snapshot?.nickname || "Contestant";
         img.addEventListener("error", () => img.removeAttribute("src"), { once: true });
         const name = document.createElement("span");
@@ -64791,6 +64901,8 @@ function renderRunwaySection() {
         const card = document.createElement("article");
         card.className = "universe-contestant-card";
         const img = document.createElement("img");
+        img.loading = "lazy";
+        img.decoding = "async";
         img.src = cloudSnapshotImageSrc(row.contestant_snapshot);
         img.alt = row.contestant_snapshot?.fullName || "Contestant";
         img.addEventListener("error", () => img.removeAttribute("src"), { once: true });
@@ -64938,9 +65050,17 @@ function renderRunwaySection() {
     return Math.max(0, ...values) + 1;
   }
 
-  function openSeasonSavePopover() {
+  async function openSeasonSavePopover() {
     if (!cloudSession) return openAuthPopover("login");
     if (!els.seasonSaveContent) return;
+    const userId = String(cloudSession.user.id);
+    try {
+      await ensureCloudUniverseData();
+    } catch (error) {
+      window.alert(`Could not load your saved seasons: ${cloudErrorMessage(error)}`);
+      return;
+    }
+    if (String(cloudSession?.user?.id || "") !== userId) return;
 
     const draft = {
       franchiseId: cloudData.franchises.find((row) => String(row.id) === String(state.allStarsCasting?.destinationFranchiseId))?.id || cloudData.franchises[0]?.id || "",
@@ -66451,7 +66571,17 @@ function renderRunwaySection() {
     renderSearchResults();
   });
 
-  els.filterBtn.addEventListener("click", () => {
+  els.filterBtn.addEventListener("click", async () => {
+    const filterUserId = String(cloudSession?.user?.id || "");
+    if (filterUserId && cloudUniverseLoadedUserId !== filterUserId) {
+      try {
+        await ensureCloudUniverseData();
+      } catch (error) {
+        window.alert(`Could not load franchise filters: ${cloudErrorMessage(error)}`);
+        return;
+      }
+    }
+    if (String(cloudSession?.user?.id || "") !== filterUserId) return;
     state.draftFilters = structuredClone(state.filters);
     state.draftFranchiseFilter = structuredClone(state.franchiseFilter);
     state.draftCustomFilter = Boolean(state.customFilter);
@@ -69086,6 +69216,13 @@ function renderRunwaySection() {
 
   await initializeCloudSystem();
   await restoreState();
+  if (cloudSession && state.franchiseFilter?.franchiseId && ["only", "exclude"].includes(state.franchiseFilter.mode)) {
+    try {
+      await ensureCloudUniverseData();
+    } catch (error) {
+      console.warn("[THE CROWN] Franchise filter data could not be restored.", error);
+    }
+  }
   applySimulatorModeUi();
   if (
     !cloudSession ||
