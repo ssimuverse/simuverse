@@ -60852,6 +60852,37 @@ function renderRunwaySection() {
   const cloudMissingSeasonIds = new Set();
   const CLOUD_SEASON_ARCHIVE_BUCKET = "season-archives";
   const CLOUD_SEASON_ARCHIVE_ENCODING = "gzip-json-v1";
+  const CLOUD_LIMITS = Object.freeze({
+    franchises: 5,
+    seasonsPerFranchise: 50,
+    customContestants: 300,
+    runways: 150,
+    challenges: 150,
+    songs: 150,
+  });
+
+  function cloudAssertQuota(kind, { franchiseId = "", additional = 1 } = {}) {
+    let count = 0;
+    let maximum = 0;
+    let label = "items";
+    if (kind === "seasons") {
+      maximum = CLOUD_LIMITS.seasonsPerFranchise;
+      count = cloudData.seasons.filter((season) => String(season.franchise_id) === String(franchiseId)).length;
+      label = "seasons in this franchise";
+    } else {
+      maximum = CLOUD_LIMITS[kind];
+      count = Array.isArray(cloudData[kind]) ? cloudData[kind].length : 0;
+      label = {
+        franchises: "franchises", customContestants: "custom contestants",
+        runways: "runway themes", challenges: "custom challenges and exterminations",
+        songs: "custom songs",
+      }[kind] || kind;
+    }
+    if (!maximum) throw new Error("Unknown account limit.");
+    if (count + additional > maximum) {
+      throw new Error(`Account limit reached: ${maximum} ${label}. Delete an existing item to create another. Your existing saved data is unchanged.`);
+    }
+  }
 
   const cloudData = {
     profile: null,
@@ -60963,6 +60994,7 @@ function renderRunwaySection() {
     if (/email not confirmed/i.test(raw)) return "Please confirm your email before logging in. You can resend the confirmation email below.";
     if (/email rate limit|too many emails|over_email_send_rate_limit/i.test(raw)) return "Too many confirmation emails have been requested. Please try again later.";
     if (cloudIsInvalidRefreshToken(error)) return "Your login session has expired. Please log in again.";
+    if (/THE_CROWN_LIMIT|account limit reached/i.test(raw)) return raw.replace(/^.*THE_CROWN_LIMIT:\s*/i, "Account limit reached: ");
     if (/user already registered/i.test(raw)) return "An account with that email already exists.";
     if (/duplicate key|profiles_username_key|username/i.test(raw) && /duplicate|unique|already/i.test(raw)) {
       return "That username is already taken.";
@@ -61395,6 +61427,9 @@ function renderRunwaySection() {
         cloudSessionRefreshUserId = nextUserId;
         try {
           await load;
+          if (previousUserId !== nextUserId) {
+            cloudCleanPendingStorage().catch((error) => console.warn("[THE CROWN] Pending Storage cleanup will retry later.", error));
+          }
         } finally {
           if (cloudSessionRefreshPromise === load) {
             cloudSessionRefreshPromise = null;
@@ -61818,23 +61853,39 @@ function renderRunwaySection() {
   }
 
   async function compressContestantImage(file) {
-    if (!file || !String(file.type || "").startsWith("image/")) return file;
+    if (!file || !String(file.type || "").startsWith("image/")) throw new Error("Select an image file.");
+    if (file.size > 12 * 1024 * 1024) throw new Error("This image is over 12 MB. Resize it before uploading.");
+    if (file.type === "image/gif") {
+      if (file.size <= 300 * 1024) return file;
+      throw new Error("Animated GIFs must be under 300 KB. Upload a WebP, PNG or JPEG instead.");
+    }
+    if (file.size <= 100 * 1024) return file;
     try {
       const bitmap = await createImageBitmap(file);
-      const maxSide = 720;
-      const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
-      const width = Math.max(1, Math.round(bitmap.width * scale));
-      const height = Math.max(1, Math.round(bitmap.height * scale));
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(bitmap, 0, 0, width, height);
-      bitmap.close?.();
-      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.8));
-      return blob && blob.size < file.size ? blob : file;
-    } catch (_error) {
-      return file;
+      try {
+        let best = file;
+        for (const [maxSide, quality] of [[640, 0.76], [512, 0.68], [384, 0.6]]) {
+          const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+          const width = Math.max(1, Math.round(bitmap.width * scale));
+          const height = Math.max(1, Math.round(bitmap.height * scale));
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) throw new Error("Image compression is not supported in this browser.");
+          ctx.drawImage(bitmap, 0, 0, width, height);
+          const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
+          if (blob && blob.size < best.size) best = blob;
+          if (best.size <= 220 * 1024) break;
+        }
+        if (best.size > 350 * 1024) throw new Error("The image is still too large after compression. Try a smaller image.");
+        return best;
+      } finally {
+        bitmap.close?.();
+      }
+    } catch (error) {
+      if (file.size <= 350 * 1024) return file;
+      throw new Error(`Could not safely compress this image: ${error.message || "unsupported format"}`);
     }
   }
 
@@ -61956,6 +62007,7 @@ function renderRunwaySection() {
   }
 
   async function createUniverseFranchise({ name, logoUrl = "", logoFile = null }) {
+    cloudAssertQuota("franchises");
     const { data: franchise, error } = await cloudClient
       .from("franchises")
       .insert({ user_id: cloudSession.user.id, name })
@@ -62166,6 +62218,8 @@ function renderRunwaySection() {
     if (!cloudSession) throw new Error("Log in to import contestants.");
     const selected = rows.filter((row) => row.valid && row.selected && !row.imported);
     if (!selected.length) return;
+    try { cloudAssertQuota("customContestants", { additional: selected.length }); }
+    catch (error) { cloudSetMessage(message, cloudErrorMessage(error), "error"); return; }
     customImportDraft.busy = true;
     let imported = 0;
     const errors = [];
@@ -62476,6 +62530,7 @@ function renderRunwaySection() {
       cloudSetMessage(message, "Saving…");
       let uploaded = null;
       try {
+        if (!editing) cloudAssertQuota("customContestants");
         const id = editing?.id || crypto.randomUUID();
         const file = form.querySelector("#customQueenImageFile").files?.[0] || customContestantFormDraft?.file || null;
         const pastedUrl = form.querySelector("#customQueenImageUrl").value.trim();
@@ -62511,7 +62566,12 @@ function renderRunwaySection() {
         if (error) throw error;
 
         if (editing?.image_path && editing.image_path !== imagePath) {
-          await cloudClient.storage.from("contestant-images").remove([editing.image_path]);
+          try {
+            await cloudQueueStorageCleanup("contestant-images", editing.image_path);
+            await cloudCleanPendingStorage();
+          } catch (cleanupError) {
+            console.warn("[THE CROWN] Previous contestant image cleanup is pending.", cleanupError);
+          }
         }
         customContestantEditId = null;
         if (customContestantFormDraft?.previewUrl) URL.revokeObjectURL(customContestantFormDraft.previewUrl);
@@ -62532,7 +62592,7 @@ function renderRunwaySection() {
     const sectionTitle = document.createElement("div");
     sectionTitle.className = "cloud-section-title";
     const h2 = document.createElement("h2");
-    h2.textContent = `MY CONTESTANTS · ${cloudData.customContestants.length}`;
+    h2.textContent = `MY CONTESTANTS · ${cloudData.customContestants.length}/${CLOUD_LIMITS.customContestants}`;
     sectionTitle.append(h2);
     page.append(sectionTitle);
 
@@ -62589,9 +62649,10 @@ function renderRunwaySection() {
         remove.textContent = "×";
         remove.addEventListener("click", async () => {
           if (!window.confirm(`Delete ${row.full_name}? Saved seasons will keep their historical snapshot.`)) return;
-          const { error } = await cloudClient.from("custom_contestants").delete().eq("id", row.id);
+          const { error } = await cloudClient.from("custom_contestants").delete().eq("id", row.id).eq("user_id", cloudSession.user.id);
           if (error) return window.alert(cloudErrorMessage(error));
-          if (row.image_path) await cloudClient.storage.from("contestant-images").remove([row.image_path]);
+          try { await cloudCleanPendingStorage(); }
+          catch (cleanupError) { console.warn("[THE CROWN] Deleted contestant image cleanup is pending.", cleanupError); }
           customExportSelectedIds.delete(String(row.id));
           state.selectedIds = state.selectedIds.filter((id) => normalizeContestantId(id) !== `custom:${row.id}`);
           await refreshCloudData({ rerender: false , collections: ["customContestants"] });
@@ -62702,6 +62763,8 @@ function renderRunwaySection() {
     form.addEventListener("submit", async (event) => {
       event.preventDefault(); submit.disabled = true;
       const message = form.querySelector("#attributeMessage");
+      try { if (!editing) cloudAssertQuota("runways"); }
+      catch (error) { cloudSetMessage(message, cloudErrorMessage(error), "error"); submit.disabled = false; return; }
       const enteredTheme = form.querySelector("#customRunwayTheme").value.trim();
       const payload = { user_id: cloudSession.user.id, theme: isDragulaMode() ? `${CLOUD_DRAGULA_RUNWAY_PREFIX}${enteredTheme}` : enteredTheme, updated_at: new Date().toISOString() };
       if (editing) payload.id = editing.id;
@@ -62760,6 +62823,8 @@ function renderRunwaySection() {
     const submit=document.createElement("button"); submit.type="submit"; submit.className="cloud-btn cloud-btn--accent"; submit.textContent=editing?"SAVE":"CREATE CHALLENGE"; actions.append(submit); form.append(actions);
     form.addEventListener("submit", async (event) => {
       event.preventDefault(); if (updateTotal() !== 100) return cloudSetMessage(message, "Judging percentages must total exactly 100%.", "error"); submit.disabled = true;
+      try { if (!editing) cloudAssertQuota("challenges"); }
+      catch (error) { cloudSetMessage(message, cloudErrorMessage(error), "error"); submit.disabled = false; return; }
       const skillWeights = {}; weights.querySelectorAll("[data-weight-skill]").forEach((input) => { const value = Number(input.value) || 0; if (value > 0) skillWeights[input.dataset.weightSkill] = value / 100; });
       skillWeights.__simulatorMode = isDragulaMode() ? "dragula" : "drag-race";
       const payload = { user_id: cloudSession.user.id, name: nameField.querySelector("input").value.trim(), challenge_type: typeSelect.value, skills: skillWeights, updated_at: new Date().toISOString() }; if (editing) payload.id = editing.id;
@@ -62824,6 +62889,8 @@ function renderRunwaySection() {
         updated_at: new Date().toISOString(),
       };
       if (editing) payload.id = editing.id;
+      try { if (!editing) cloudAssertQuota("challenges"); }
+      catch (error) { cloudSetMessage(form.querySelector(".cloud-message"), cloudErrorMessage(error), "error"); submit.disabled = false; return; }
       const result = await cloudClient.from("custom_challenges").upsert(payload).select("id").single();
       if (result.error) {
         cloudSetMessage(form.querySelector(".cloud-message"), cloudErrorMessage(result.error), "error");
@@ -62865,7 +62932,7 @@ function renderRunwaySection() {
     const actions=document.createElement("div");actions.className="cloud-actions";
     if(editing){const cancel=document.createElement("button");cancel.type="button";cancel.className="cloud-btn";cancel.textContent="CANCEL";cancel.addEventListener("click",()=>{cloudAttributeEditId=null;renderCustomAttributesPanel();});actions.append(cancel);}
     const submit=document.createElement("button");submit.type="submit";submit.className="cloud-btn cloud-btn--accent";submit.textContent=editing?"SAVE":"CREATE SONG";actions.append(submit);form.append(actions);
-    form.addEventListener("submit",async(event)=>{event.preventDefault();submit.disabled=true;const payload={user_id:cloudSession.user.id,song:form.querySelector("#customSongName").value.trim(),artist:form.querySelector("#customSongArtist").value.trim(),genre:genre.value,updated_at:new Date().toISOString()};if(editing)payload.id=editing.id;const result=await cloudClient.from("custom_songs").upsert(payload).select("id").single();if(result.error){cloudSetMessage(form.querySelector("#attributeMessage"),cloudErrorMessage(result.error),"error");submit.disabled=false;return;}rememberCloudAttributeMode("songs",result.data?.id||editing?.id,"drag-race");cloudAttributeEditId=null;await refreshCloudData({rerender:false, collections: ["songs"] });renderCustomAttributesPanel();});
+    form.addEventListener("submit",async(event)=>{event.preventDefault();submit.disabled=true;try{if(!editing)cloudAssertQuota("songs");}catch(error){cloudSetMessage(form.querySelector("#attributeMessage"),cloudErrorMessage(error),"error");submit.disabled=false;return;}const payload={user_id:cloudSession.user.id,song:form.querySelector("#customSongName").value.trim(),artist:form.querySelector("#customSongArtist").value.trim(),genre:genre.value,updated_at:new Date().toISOString()};if(editing)payload.id=editing.id;const result=await cloudClient.from("custom_songs").upsert(payload).select("id").single();if(result.error){cloudSetMessage(form.querySelector("#attributeMessage"),cloudErrorMessage(result.error),"error");submit.disabled=false;return;}rememberCloudAttributeMode("songs",result.data?.id||editing?.id,"drag-race");cloudAttributeEditId=null;await refreshCloudData({rerender:false, collections: ["songs"] });renderCustomAttributesPanel();});
     card.append(form);page.append(card);
     const list=document.createElement("div");list.className="attribute-list";if(!rows.length)list.append(cloudEmpty("NO CUSTOM LIP SYNC SONGS YET"));
     rows.forEach((row)=>list.append(attributeRow(`"${row.song}" by ${row.artist}`,"",{edit:()=>{cloudAttributeEditId=row.id;renderCustomAttributesPanel();},remove:async()=>{if(!confirm(`Delete “${row.song}”?`))return;const{error}=await cloudClient.from("custom_songs").delete().eq("id",row.id);if(error)return alert(cloudErrorMessage(error));forgetCloudAttributeMode("songs",row.id);await refreshCloudData({rerender:false, collections: ["songs"] });renderCustomAttributesPanel();}})));
@@ -63465,7 +63532,10 @@ function renderRunwaySection() {
       throw error;
     }
     if (logoChanged && oldLogo?.path && oldLogo.path !== nextLogo?.path) {
-      try { await cloudClient.storage.from("contestant-images").remove([oldLogo.path]); } catch (_error) {}
+      try {
+        await cloudQueueStorageCleanup("contestant-images", oldLogo.path);
+        await cloudCleanPendingStorage();
+      } catch (cleanupError) { console.warn("[THE CROWN] Previous franchise logo cleanup is pending.", cleanupError); }
     }
     return existing;
   }
@@ -63502,7 +63572,10 @@ function renderRunwaySection() {
       const index = cloudData.seasons.findIndex((item) => String(item.id) === String(season.id));
       if (index >= 0) cloudData.seasons[index] = { ...cloudData.seasons[index], ...data };
       if (logoChanged && oldLogo.path && oldLogo.path !== nextLogo?.path) {
-        try { await cloudClient.storage.from("contestant-images").remove([oldLogo.path]); } catch (_error) {}
+        try {
+          await cloudQueueStorageCleanup("contestant-images", oldLogo.path);
+          await cloudCleanPendingStorage();
+        } catch (cleanupError) { console.warn("[THE CROWN] Previous season logo cleanup is pending.", cleanupError); }
       }
       return data;
     } catch (error) {
@@ -63776,13 +63849,17 @@ function renderRunwaySection() {
       }
     });
 
+    if (cloudData.franchises.length >= CLOUD_LIMITS.franchises) {
+      form.querySelector('button[type="submit"]').disabled = true;
+      cloudSetMessage(form.querySelector("#franchiseMessage"), `You have reached the limit of ${CLOUD_LIMITS.franchises} franchises. Existing franchises are safe; delete one to create another.`, "error");
+    }
     create.append(form);
     page.append(create);
 
     const title = document.createElement("div");
     title.className = "cloud-section-title";
     const h = document.createElement("h2");
-    h.textContent = `YOUR FRANCHISES · ${cloudData.franchises.length}`;
+    h.textContent = `YOUR FRANCHISES · ${cloudData.franchises.length}/${CLOUD_LIMITS.franchises}`;
     title.append(h);
     page.append(title);
 
@@ -63847,6 +63924,39 @@ function renderRunwaySection() {
     }
   }
 
+  async function cloudQueueStorageCleanup(bucket, path) {
+    if (!path) return;
+    const { error } = await cloudClient.rpc("the_crown_queue_storage", { p_bucket: bucket, p_path: path });
+    if (error) throw error;
+  }
+
+  async function cloudCleanPendingStorage() {
+    if (!cloudClient || !cloudSession?.user?.id) return 0;
+    const { data: entries, error } = await cloudClient.from("the_crown_storage_cleanup")
+      .select("id,bucket_id,object_path")
+      .eq("user_id", cloudSession.user.id)
+      .order("id", { ascending: true })
+      .limit(100);
+    if (error) throw error;
+    let removed = 0;
+    for (const item of entries || []) {
+      if (!item.object_path?.startsWith(`${cloudSession.user.id}/`)) continue;
+      const { error: removeError } = await cloudClient.storage.from(item.bucket_id).remove([item.object_path]);
+      if (removeError) {
+        console.warn("[THE CROWN] Storage cleanup will be retried on the next login.", removeError);
+        continue;
+      }
+      const { error: acknowledgeError } = await cloudClient.from("the_crown_storage_cleanup")
+        .delete().eq("id", item.id).eq("user_id", cloudSession.user.id);
+      if (acknowledgeError) {
+        console.warn("[THE CROWN] Storage cleanup acknowledgement will be retried.", acknowledgeError);
+      } else {
+        removed += 1;
+      }
+    }
+    return removed;
+  }
+
   function renderFranchisePage(franchiseId) {
     const franchise=cloudData.franchises.find((item)=>String(item.id)===String(franchiseId));if(!franchise){universeSelectedFranchiseId=null;renderUniversePanel();return;}
     const seasons=cloudSeasonRowsForFranchise(franchiseId);const contestants=aggregateFranchiseContestants(franchiseId);const page=document.createElement("div");page.className="cloud-page";
@@ -63854,7 +63964,35 @@ function renderRunwaySection() {
     const hero=document.createElement("section");hero.className="universe-hero";const franchiseLogo=franchiseLogoUrl(franchise);if(franchiseLogo){const logo=document.createElement("img");logo.className="universe-hero__logo";logo.src=franchiseLogo;logo.alt=`${franchise.name} logo`;logo.addEventListener("error",()=>logo.removeAttribute("src"),{once:true});hero.append(logo);}const copy=document.createElement("div");const name=document.createElement("h1");name.textContent=franchise.name;const meta=document.createElement("p");meta.textContent=`${seasons.length} SEASONS · ${contestants.length} UNIQUE CONTESTANTS · ${seasons.reduce((sum,s)=>sum+(Array.isArray(s.episode_ratings)?s.episode_ratings.length:0),0)} EPISODES`;copy.append(name,meta);const rating=document.createElement("div");rating.className="universe-rating-block";const label=document.createElement("span");label.textContent="FRANCHISE RATING";const strong=document.createElement("strong");const ratingValue=franchiseAverageRating(franchiseId);strong.textContent=ratingValue?ratingValue.toFixed(1):"—";rating.append(label,strong);hero.append(copy,rating);page.append(hero);
     const tabs=document.createElement("div");tabs.className="universe-tabs";[["overview","OVERVIEW"],["seasons","SEASONS"],["ratings","RATINGS"],["contestants","CONTESTANTS"],["records","RECORDS"]].forEach(([key,labelText])=>{const button=document.createElement("button");button.type="button";button.className="universe-tab";button.textContent=labelText;if(universeTab===key)button.classList.add("is-active");button.addEventListener("click",()=>{universeTab=key;renderUniversePanel();});tabs.append(button);});
     const editFranchise=document.createElement("button");editFranchise.type="button";editFranchise.className="universe-tab universe-tab--edit";editFranchise.textContent="EDIT FRANCHISE";editFranchise.addEventListener("click",()=>openUniverseEditDialog("franchise",franchise));tabs.append(editFranchise);
-    const deleteFranchise=document.createElement("button");deleteFranchise.type="button";deleteFranchise.className="universe-tab";deleteFranchise.textContent="DELETE FRANCHISE";deleteFranchise.addEventListener("click",async()=>{if(!confirm(`Delete ${franchise.name} and all of its saved seasons?`))return;const logo=franchiseLogoEntry(franchise.id);const archived=seasons.filter((season)=>season.snapshot_path).map((season)=>({id:season.id,path:season.snapshot_path}));const{error}=await cloudClient.from("franchises").delete().eq("id",franchise.id);if(error)return alert(cloudErrorMessage(error));if(archived.length){try{const{data:remaining,error:checkError}=await cloudClient.from("seasons").select("id").in("id",archived.map((item)=>item.id));if(checkError)throw checkError;const stillSaved=new Set((remaining||[]).map((item)=>String(item.id)));await cloudRemoveUnusedSeasonArchives(archived.filter((item)=>!stillSaved.has(String(item.id))).map((item)=>item.path));}catch(cleanupError){console.warn("[THE CROWN] Archive files could not be verified or cleaned up after franchise deletion.",cleanupError);}}if(logo?.path)await cloudClient.storage.from("contestant-images").remove([logo.path]);try{await setFranchiseLogo(franchise.id,null);}catch(_error){}try{await setFranchiseSeasonOrder(franchise.id,[]);}catch(_error){}await refreshCloudData({rerender:false, collections: ["franchises", "seasons", "seasonContestants"] });universeSelectedFranchiseId=null;renderUniversePanel();});tabs.append(deleteFranchise);page.append(tabs);
+    const deleteFranchise = document.createElement("button");
+    deleteFranchise.type = "button";
+    deleteFranchise.className = "universe-tab";
+    deleteFranchise.textContent = "DELETE FRANCHISE";
+    deleteFranchise.addEventListener("click", async () => {
+      if (!confirm(`Permanently delete ${franchise.name} and all its saved seasons? This cannot be undone.`)) return;
+      deleteFranchise.disabled = true;
+      const logo = franchiseLogoEntry(franchise.id);
+      const { error } = await cloudClient.rpc("the_crown_delete_franchise", { p_franchise_id: franchise.id });
+      if (error) { deleteFranchise.disabled = false; alert(cloudErrorMessage(error)); return; }
+      const warnings = [];
+      if (logo?.path) {
+        try { await cloudQueueStorageCleanup("contestant-images", logo.path); }
+        catch (cleanupError) { warnings.push(`Franchise logo cleanup could not be queued: ${cloudErrorMessage(cleanupError)}`); }
+      }
+      try { await setFranchiseLogo(franchise.id, null); }
+      catch (cleanupError) { warnings.push(`Logo preference cleanup: ${cloudErrorMessage(cleanupError)}`); }
+      try { await setFranchiseSeasonOrder(franchise.id, []); }
+      catch (cleanupError) { warnings.push(`Season ordering cleanup: ${cloudErrorMessage(cleanupError)}`); }
+      try { await cloudCleanPendingStorage(); }
+      catch (cleanupError) { warnings.push(`Storage cleanup is pending: ${cloudErrorMessage(cleanupError)}`); }
+      await refreshCloudData({ rerender: false, collections: ["franchises", "seasons", "seasonContestants"] });
+      universeSelectedFranchiseId = null;
+      universeDetail = null;
+      renderUniversePanel();
+      if (warnings.length) alert(`The franchise was deleted, but some cleanup needs attention. ${warnings.join(" ")}`);
+    });
+    tabs.append(deleteFranchise);
+    page.append(tabs);
     if(universeTab==="overview")renderFranchiseOverview(page,franchiseId,seasons,contestants);else if(universeTab==="seasons")renderFranchiseSeasons(page,franchiseId,seasons);else if(universeTab==="ratings")renderFranchiseRatings(page,franchiseId,seasons);else if(universeTab==="contestants")renderFranchiseContestants(page,franchiseId,contestants);else renderFranchiseRecords(page,franchiseId,contestants);
     els.universePanel.append(page);
   }
@@ -64873,14 +65011,10 @@ function renderRunwaySection() {
       remove.textContent = "DELETE SEASON";
       remove.addEventListener("click", async () => {
         if (!confirm(`Delete ${season.title}?`)) return;
-        const logoPath = String(season?.setup?.archiveMeta?.logoPath || season?.snapshot?.setup?.archiveMeta?.logoPath || "");
-        const { error } = await cloudClient.from("seasons").delete().eq("id", season.id);
+        const { error } = await cloudClient.rpc("the_crown_delete_season", { p_season_id: season.id });
         if (error) return alert(cloudErrorMessage(error));
-        if (season.snapshot_path) {
-          try { await cloudRemoveUnusedSeasonArchives([season.snapshot_path]); }
-          catch (cleanupError) { console.warn("[THE CROWN] Deleted season archive file could not be cleaned up.", cleanupError); }
-        }
-        if (logoPath) await cloudClient.storage.from("contestant-images").remove([logoPath]);
+        try { await cloudCleanPendingStorage(); }
+        catch (cleanupError) { alert(`Season deleted from the database. File cleanup is pending and will be retried: ${cloudErrorMessage(cleanupError)}`); }
         cloudSeasonCache.delete(String(season.id));
         try { await setFranchiseSeasonOrder(franchiseId, franchiseSeasonOrder(franchiseId).filter((id) => String(id) !== String(season.id))); } catch (_error) {}
         await refreshCloudData({ rerender: false , collections: ["seasons", "seasonContestants"] });
@@ -65310,6 +65444,8 @@ function renderRunwaySection() {
     if (!cloudClient || !cloudSession) throw new Error("Log in before saving a season.");
     if (!seasonCompleteForUniverse()) throw new Error("Finish the season before saving it.");
     if (currentSeasonAlreadySaved()) throw new Error("This simulation has already been saved to your Universe.");
+    await ensureCloudUniverseData();
+    cloudAssertQuota("seasons", { franchiseId });
 
     const episodes = state.seasonRuntime.episodes || [];
     const tvStats = buildTVStats();
